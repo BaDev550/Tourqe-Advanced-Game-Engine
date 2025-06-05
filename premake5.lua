@@ -1,6 +1,6 @@
 workspace "TAGE"
    architecture "x64"
-   startproject "Engine"
+   startproject "Sandbox"
 
    configurations
    {
@@ -11,6 +11,7 @@ workspace "TAGE"
    outputdir = "%{cfg.buildcfg}-%{cfg.system}-%{cfg.architecture}"
 
    IncludeDir = {}
+   IncludeDir["Engine"] = "Engine/src/"
    IncludeDir["GLFW"] =   "vendor/GLFW/include"
    IncludeDir["GLAD"] =   "vendor/GLAD/include"
    IncludeDir["Assimp"] = "vendor/assimp/include"
@@ -26,4 +27,8 @@ workspace "TAGE"
 
     group "Engine"
         include "Engine/"
+    group ""
+
+    group "Game"
+        include "Sandbox/"
     group ""
