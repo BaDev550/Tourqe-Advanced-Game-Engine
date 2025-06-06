@@ -4,6 +4,13 @@
 namespace TAGE::Renderer {
 	void Animator::Update(float deltaTime)
 	{
+        if (!_animation || !_skeleton) return;
+
+        _currentTime += deltaTime * _animation->TicksPerSecond;
+        _currentTime = fmod(_currentTime, _animation->Duration);
+
+        /*const auto& rootBoneIndices = */
+        CalculateBoneTransform(0, glm::mat4(1.0f));
 	}
 
 	void Animator::CalculateBoneTransform(int index, const glm::mat4& parentTransform)
@@ -19,10 +26,8 @@ namespace TAGE::Renderer {
 
         _finalBoneMatrices[index] = globalTransform * bone.OffsetMatrix;
 
-        for (int i = 0; i < _skeleton->GetBoneCount(); ++i) {
-            if (_skeleton->GetBones()[i].ParentIndex == index) {
-                CalculateBoneTransform(i, globalTransform);
-            }
+        for (int childIndex : bone.ChildrenIndices) {
+            CalculateBoneTransform(childIndex, globalTransform);
         }
 	}
 }

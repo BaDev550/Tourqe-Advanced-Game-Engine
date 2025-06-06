@@ -15,11 +15,7 @@ namespace TAGE::Renderer {
 			_shaders.clear();
 		};
 
-		static MEM::Ref<Shader> Add(const std::string& name, const char* vertexPath, const char* fragmentPath) {
-			MEM::Ref<Shader> shader = MEM::MakeRef<Shader>(vertexPath, fragmentPath);
-			_shaders[name] = shader;
-			return _shaders[name];
-		}
+		static MEM::Ref<Shader> Add(const std::string& name, const char* vertexPath, const char* fragmentPath);
 		static void Remove(const std::string& name) {
 			_shaders.erase(name);
 		}

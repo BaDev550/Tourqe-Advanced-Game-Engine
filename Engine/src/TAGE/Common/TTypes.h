@@ -24,6 +24,13 @@ struct SkinedVertexData {
 	glm::vec3 Bitangent;
 	uint BoneIDs[MAX_BONE_INFLUENCES];
 	float BoneWeights[MAX_BONE_INFLUENCES];
+
+	SkinedVertexData() {
+	    for(int i = 0; i < MAX_BONE_INFLUENCES; ++i) {
+	        BoneIDs[i] = 0;
+			BoneWeights[i] = 0.0f;
+	    }
+	}
 };
 
 struct Bone {
@@ -32,6 +39,7 @@ struct Bone {
 	glm::mat4 OffsetMatrix = glm::mat4(1.0f);
 	glm::mat4 LocalTransform = glm::mat4(1.0f);
 	glm::mat4 GlobalTransform = glm::mat4(1.0f);
+	std::vector<int> ChildrenIndices;
 };
 
 struct Keyframe {
@@ -86,15 +94,6 @@ struct BoneAnimation {
 
 		return translation * rotation * scaling;
 	}
-};
-
-
-class AnimationClip {
-public:
-	std::string Name;
-	float Duration = 0.0f;
-	float TicksPerSecond = 25.0f;
-	std::unordered_map<std::string, BoneAnimation> BoneAnimations;
 };
 
 struct Light {

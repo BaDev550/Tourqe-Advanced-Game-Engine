@@ -3,7 +3,7 @@
 #include "TAGE/Common/TEnums.h"
 #include "TAGE/Common/TTypes.h"
 #include "TAGE/Utilities/Memory.h"
-#include "TAGE/Renderer/Texture/Texture2D.h"
+#include "TAGE/Renderer/Texture/Texture.h"
 #include "TAGE/Renderer/Shader/Shader.h"
 
 #include <array>

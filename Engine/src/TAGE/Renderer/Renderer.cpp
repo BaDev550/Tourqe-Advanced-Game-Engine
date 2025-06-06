@@ -9,10 +9,13 @@ namespace TAGE::Renderer {
 	{
 		_MainShader = ShaderLibrary::Add("MainShader", "../Engine/shaders/main_vertex.glsl", "../Engine/shaders/main_fragment.glsl");
 		_GridShader = ShaderLibrary::Add("GridShader", "../Engine/shaders/grid_vertex.glsl", "../Engine/shaders/grid_fragment.glsl");
+		_SkyboxShader = ShaderLibrary::Add("SkyBoxShader", "../Engine/shaders/skybox_vertex.glsl", "../Engine/shaders/skybox_fragment.glsl");
 		_PostProcessPass = MEM::MakeScope<PostProcessPass>(width, height);
 		_BloomPass = MEM::MakeScope<BloomPass>(width, height);
 		_ShadowPass = MEM::MakeScope<ShadowPass>(1028, 1028);
+		_SkyBox = MEM::MakeScope<Skybox>();
 
+		_Deferred = MEM::MakeScope<DeferredRendering>(width, height);
 #if DEBUG_RENDERER_LIGHTS
 		_LightDebuggerRenderer = MEM::MakeScope<Debugger::Debugger_Light>();
 		_LightDebuggerRenderer->Init();
@@ -31,7 +34,7 @@ namespace TAGE::Renderer {
 		_SceneData.ViewMatrix = cam->GetViewMatrix();
 		_SceneData.ProjectionMatrix = cam->GetProjectionMatrix();
 		_SceneData.ViewProjectionMatrix = cam->GetViewProjectionMatrix();
-
+		
 		_PostProcessPass->Begin();
 
 		_SceneData.Lights.clear();
@@ -66,8 +69,19 @@ namespace TAGE::Renderer {
 			lightIndex++;
 		}
 
+		_SkyBox->DrawSkybox(_SceneData.ViewMatrix, _SceneData.ProjectionMatrix);
+
 		if(DEBUG_RENDERER_USE_GRID && _SceneData.DrawGrid)
 			_EndlessGrid.Render(cam);
+	}
+
+	void GL_Renderer::BeginGBuffer(const MEM::Ref<Camera>& cam)
+	{
+		_Deferred->BeginGeometryPass();
+		_Deferred->GetShader()->Use();
+		_Deferred->GetShader()->SetUniform("u_View", cam->GetViewMatrix());
+		_Deferred->GetShader()->SetUniform("u_Projection", cam->GetProjectionMatrix());
+		_Deferred->RenderGeometryPass();
 	}
 
 	void GL_Renderer::EndFrame()
@@ -76,7 +90,6 @@ namespace TAGE::Renderer {
 
 		//_BloomPass->ExtractBloom(_PostProcessPass->GetColorAttachment());
 		//_BloomPass->End();
-
 		_PostProcessPass->Render();
 	}
 

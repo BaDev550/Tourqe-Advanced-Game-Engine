@@ -59,7 +59,9 @@ namespace TAGE
 	{
 		ImGuiIO& io = ImGui::GetIO();
 		Application* app = Application::Get();
-		io.DisplaySize = ImVec2((float)app->GetWindow()->GetWidth(), (float)app->GetWindow()->GetHeight());
+
+		auto* window = app->GetWindow();
+		io.DisplaySize = ImVec2(static_cast<float>(window->GetWidth()), static_cast<float>(window->GetHeight()));
 
 		ImGui::Render();
 		ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
@@ -67,9 +69,14 @@ namespace TAGE
 		if (io.ConfigFlags & ImGuiConfigFlags_ViewportsEnable)
 		{
 			GLFWwindow* backup_current_context = glfwGetCurrentContext();
+
 			ImGui::UpdatePlatformWindows();
 			ImGui::RenderPlatformWindowsDefault();
-			glfwMakeContextCurrent(backup_current_context);
+
+			if (backup_current_context != glfwGetCurrentContext())
+			{
+				glfwMakeContextCurrent(backup_current_context);
+			}
 		}
 	}
 }

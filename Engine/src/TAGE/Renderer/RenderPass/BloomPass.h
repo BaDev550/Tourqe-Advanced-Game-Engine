@@ -5,7 +5,7 @@
 #include "TAGE/Utilities/Memory.h"
 #include "TAGE/Renderer/Framebuffer/Framebuffer.h"
 #include "TAGE/Renderer/Shader/ShaderLibrary.h"
-#include "TAGE/Renderer/Texture/Texture2D.h"
+#include "TAGE/Renderer/Texture/Texture.h"
 
 namespace TAGE::Renderer {
 	class BloomPass : public RenderPass
@@ -14,7 +14,7 @@ namespace TAGE::Renderer {
 		BloomPass(int width, int height)
 			: _Framebuffer(MEM::MakeScope<Framebuffer>(width, height, true))
 		{
-			_BloomShader = ShaderLibrary::Add("Bloom", "../Engine/shaders/bloom_vertex.glsl", "../Engine/shaders/bloom_fragment.glsl");
+			_BloomShader = ShaderLibrary::Add("Bloom", "../Engine/shaders/Screen/bloom_vertex.glsl", "../Engine/shaders/Screen/bloom_fragment.glsl");
 		}
 
 		virtual void Begin() override {

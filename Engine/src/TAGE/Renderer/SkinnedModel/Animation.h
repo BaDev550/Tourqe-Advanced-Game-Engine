@@ -5,6 +5,7 @@
 namespace TAGE::Renderer {
     class Animation {
     public:
+        std::string Name;
         float Duration = 0.0f;
         float TicksPerSecond = 25.0f;
         std::unordered_map<std::string, BoneAnimation> BoneAnimations;

@@ -47,7 +47,7 @@ namespace TAGE::Renderer
 			glGetShaderiv(shader, GL_COMPILE_STATUS, &success);
 			if (!success) {
 				glGetShaderInfoLog(shader, 1024, nullptr, infoLog);
-				LOG_ERROR("Shader compilation error in ", type, ":\n", infoLog);
+				LOG_ERROR("Shader compilation error in {}: {}\n", type, infoLog);
 			}
 			else {
 			}
@@ -56,7 +56,7 @@ namespace TAGE::Renderer
 			glGetProgramiv(shader, GL_LINK_STATUS, &success);
 			if (!success) {
 				glGetProgramInfoLog(shader, 1024, nullptr, infoLog);
-				LOG_ERROR("Program linking error:\n", infoLog);
+				LOG_ERROR("Program linking error: {}\n", infoLog);
 			}
 			else {
 			}

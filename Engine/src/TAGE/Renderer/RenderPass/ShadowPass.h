@@ -5,7 +5,7 @@
 #include "TAGE/Utilities/Memory.h"
 #include "TAGE/Renderer/Framebuffer/Framebuffer.h"
 #include "TAGE/Renderer/Shader/ShaderLibrary.h"
-#include "TAGE/Renderer/Texture/Texture2D.h"
+#include "TAGE/Renderer/Texture/Texture.h"
 #include "TAGE/Renderer/Shadow/ShadowMap.h"
 
 namespace TAGE::Renderer {

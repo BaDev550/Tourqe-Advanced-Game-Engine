@@ -62,6 +62,15 @@ namespace TAGE::Renderer
 		_transform = transform;
 	}
 
+	const std::vector<Animation>& Model::GetAnimations() const { return _animations; }
+	const Animation* Model::GetAnimationByName(const std::string& name) const {
+		for (const auto& anim : _animations) {
+			if (anim.Name == name)
+				return &anim;
+		}
+		return nullptr;
+	}
+
 	void Model::ProcessNode(aiNode* node, const aiScene* scene)
 	{
 		for (uint i = 0; i < node->mNumMeshes; ++i)
@@ -76,6 +85,8 @@ namespace TAGE::Renderer
 		{
 			ProcessNode(node->mChildren[i], scene);
 		}
+		if (_Type == ModelType::SKINNED_MODEL)
+			LoadAnimations(scene);
 	}
 
 	aiTextureType ToAiTextureType(TextureType type) {
@@ -216,6 +227,7 @@ namespace TAGE::Renderer
 				indices.push_back(face.mIndices[j]);
 			}
 		}
+
 		MEM::Scope<Material> material = MEM::MakeScope<Material>(mesh->mName.C_Str(), "MainShader");
 		if (mesh->mMaterialIndex >= 0)
 		{
@@ -230,5 +242,59 @@ namespace TAGE::Renderer
 		}
 
 		return MEM::MakeScope<SkinnedMesh>(std::move(vertices), std::move(indices), std::move(material));
+	}
+	void Model::LoadAnimations(const aiScene* scene)
+	{
+		_animations.clear();
+		for (uint i = 0; i < _scene->mNumAnimations; ++i)
+		{
+			aiAnimation* aiAnim = _scene->mAnimations[i];
+			Animation animation;
+			animation.Name = aiAnim->mName.C_Str();
+			animation.Duration = static_cast<float>(aiAnim->mDuration);
+			animation.TicksPerSecond = static_cast<float>(aiAnim->mTicksPerSecond != 0.0 ? aiAnim->mTicksPerSecond : 25.0f); // fallback
+
+			for (uint j = 0; j < aiAnim->mNumChannels; ++j)
+			{
+				aiNodeAnim* channel = aiAnim->mChannels[j];
+				BoneAnimation boneAnim;
+				boneAnim.BoneName = channel->mNodeName.C_Str();
+
+				for (uint k = 0; k < channel->mNumPositionKeys; ++k)
+				{
+					Keyframe pos;
+					pos.Position = glm::vec3(channel->mPositionKeys[k].mValue.x,
+						channel->mPositionKeys[k].mValue.y,
+						channel->mPositionKeys[k].mValue.z);
+					pos.Time = static_cast<float>(channel->mPositionKeys[k].mTime);
+					boneAnim.PositionKeys.push_back(pos);
+				}
+
+				for (uint k = 0; k < channel->mNumRotationKeys; ++k)
+				{
+					Keyframe rot;
+					rot.Rotation = glm::quat(channel->mRotationKeys[k].mValue.w,
+						channel->mRotationKeys[k].mValue.x,
+						channel->mRotationKeys[k].mValue.y,
+						channel->mRotationKeys[k].mValue.z);
+					rot.Time = static_cast<float>(channel->mRotationKeys[k].mTime);
+					boneAnim.RotationKeys.push_back(rot);
+				}
+
+				for (uint k = 0; k < channel->mNumScalingKeys; ++k)
+				{
+					Keyframe scale;
+					scale.Scale = glm::vec3(channel->mScalingKeys[k].mValue.x,
+						channel->mScalingKeys[k].mValue.y,
+						channel->mScalingKeys[k].mValue.z);
+					scale.Time = static_cast<float>(channel->mScalingKeys[k].mTime);
+					boneAnim.ScaleKeys.push_back(scale);
+				}
+
+				animation.BoneAnimations[boneAnim.BoneName] = boneAnim;
+			}
+
+			_animations.push_back(std::move(animation));
+		}
 	}
 }

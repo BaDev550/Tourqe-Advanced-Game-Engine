@@ -13,6 +13,9 @@
 #include "RenderPass/PostProcessPass.h"
 #include "RenderPass/BloomPass.h"
 #include "RenderPass/ShadowPass.h"
+#include "Deferred/DeferredRendering.h"
+
+#include "Skybox/Skybox.h"
 
 namespace TAGE::Renderer {
 	struct SceneData
@@ -37,6 +40,7 @@ namespace TAGE::Renderer {
 
 		void Shutdown();
 		void BeginFrame(const MEM::Ref<Camera>& cam, const std::vector<Light>& lights);
+		void BeginGBuffer(const MEM::Ref<Camera>& cam);
 		void EndFrame();
 
 		void SetViewport(int x, int y, int width, int height) { _Width = width; _Height = height;
@@ -56,6 +60,7 @@ namespace TAGE::Renderer {
 		ShadowPass* GetShadowPass() const { return _ShadowPass.get(); }
 		BloomPass* GetBloomPass() const { return _BloomPass.get(); }
 		PostProcessPass* GetPostProcessPass() const { return _PostProcessPass.get(); }
+		DeferredRendering* GetDeferredRenderer() const { return _Deferred.get(); }
 
 		void CalculateDirectLightVPMatrix();
 	private:
@@ -66,12 +71,15 @@ namespace TAGE::Renderer {
 		DebugRenderMode _DebugMode;
 		EndlessGrid _EndlessGrid;
 
+		MEM::Scope<DeferredRendering> _Deferred;
 		MEM::Scope<PostProcessPass> _PostProcessPass;
 		MEM::Scope<BloomPass> _BloomPass;
 		MEM::Scope<ShadowPass> _ShadowPass;
+		MEM::Scope<Skybox> _SkyBox;
 
 		MEM::Ref<Shader> _MainShader;
 		MEM::Ref<Shader> _GridShader;
+		MEM::Ref<Shader> _SkyboxShader;
 
 	public:
 		void SetShadingMode(ShadingMode mode)

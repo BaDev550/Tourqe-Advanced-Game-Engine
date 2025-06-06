@@ -13,6 +13,8 @@
 #include "TAGE/Renderer/Camera/FreeCamera.h"
 #include "TAGE/Renderer/Model/Model.h"
 
+#include "TAGE/Thread/ThreadWarpper.h"
+
 namespace TAGE {
     using namespace Renderer;
     class Application
@@ -28,6 +30,8 @@ namespace TAGE {
         void PushOverlay(Layer* layer) { _LayerStack.PushOverlay(layer); }
     public:
         Window* GetWindow() const { return _Window.get(); }
+        Renderer::GL_Renderer* GetRenderer() const { return _Renderer.get(); }
+        Threading::ThreadPool* GetThreadPool() const { return _ThreadPool.get(); }
         ApplicationState& GetApplicationState() { return _ApplicationState; }
     private:
         void OnEvent(Event& event);
@@ -39,6 +43,7 @@ namespace TAGE {
         MEM::Scope<GL_Renderer> _Renderer;
         MEM::Scope<ImGuiLayer> _ImGuiLayer;
         MEM::Scope<FreeCamera> _FreeCam;
+        MEM::Scope<Threading::ThreadPool> _ThreadPool;
         LayerStack _LayerStack;
 
         Model _Test;

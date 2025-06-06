@@ -13,7 +13,7 @@ namespace TAGE::Renderer {
 	void Material::Use() const
 	{
 		if (_Shader) {
-			_Shader->Use();
+			//_Shader->Use();
 
 			static MEM::Scope<Texture2D> fallbackTexture = MEM::MakeScope<Texture2D>("");
 

@@ -1,5 +1,5 @@
 #include "tagepch.h"
-#include "Texture2D.h"
+#include "Texture.h"
 #include "stb/stb_image.h"
 
 namespace TAGE::Renderer {
