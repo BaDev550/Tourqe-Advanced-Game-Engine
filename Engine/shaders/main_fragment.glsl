@@ -36,12 +36,20 @@ void main()
     for (int i = 0; i < u_LightCount; ++i)
         Lo += CalculatePBRLight(u_Lights[i], normal, viewDir, fragPos, albedo, metallic, roughness, F0);
 
-    float shadow = 0.0;
-    if (u_Lights[u_ShadowLightIndex].type == LIGHT_TYPE_DIRECTIONAL)
-        shadow = ShadowCalculation(u_ShadowMap, v_FragPosLightSpace, fragPos, normal);
-
     vec3 ambient = vec3(0.1) * albedo * (1.0 - metallic);
-    vec3 color = ambient + (1.0f - shadow) * Lo;
+    float shadow = ShadowCalculation(u_ShadowMap, v_FragPosLightSpace, fragPos, normal);
+    vec3 color = ambient + Lo * (1.0f - shadow);
+
+    #ifdef DEBUG_DEPTH
+        float depthValue = texture(u_ShadowMap, v_TexCoord).r;
+        FragColor = vec4(vec3(depthValue), 1.0);
+        return;
+    #endif
+
+    #ifdef DEBUG_SHADOW
+        FragColor = vec4(vec3(1.0f - shadow), 1.0);
+        return;
+    #endif
 
     FragColor = vec4(color, 1.0);
 }

@@ -19,6 +19,7 @@ namespace TAGE::Renderer {
 		}
 
 		virtual void Begin() override {
+			_ShadowShader->Use();
 			_Framebuffer->Bind();
 		}
 

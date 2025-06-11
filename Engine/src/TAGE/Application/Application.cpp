@@ -25,10 +25,23 @@ namespace TAGE {
 		_FreeCam = MEM::MakeScope<FreeCamera>();
 
 		_ThreadPool = MEM::MakeScope<Threading::ThreadPool>(4);
-		_Test.LoadFromFile("models/weapons/AR/scene.gltf");
+		_Test.LoadFromFile("assets/models/weapons/AR/scene.gltf");
+		_Floor.LoadFromFile("assets/models/Cube/cube.obj");
 
 		_ImGuiLayer = MEM::MakeScope<ImGuiLayer>();
 		PushOverlay(_ImGuiLayer.get());
+
+		lightManager.AddLight(Light(
+			LightType::DIRECTIONAL,
+			{ 0.0f, 0.0f, 0.0f },
+			{ 1.0f, 1.0f, 1.0f },
+			{ 1.0f, 1.0f, 1.0f },
+			6.0f
+		));
+		lightManager.AddLight(Light(
+			LightType::POINT,
+			{ 1.0f, 1.0f, 1.0f }
+		));
 	}
 
 	Application::~Application()
@@ -45,6 +58,7 @@ namespace TAGE {
 	void Application::Run()
 	{
 		Timer timer;
+
 		while (!_Window->ShouldClose() && _ApplicationState == ApplicationState::RUNNING) {
 			float time = timer.Elapsed();
 			_DeltaTime = time - _LastFrame;
@@ -54,13 +68,27 @@ namespace TAGE {
 
 			for (const auto& layer : _LayerStack)
 				layer->OnUpdate(_DeltaTime);
+			_Test.SetTransform(glm::mat4(1.0f));
+			glm::mat4 floor = glm::mat4(1.0f);
+			floor = glm::translate(floor, glm::vec3(0.0f, -2.5f, 0.0f));
+			floor = glm::scale(floor, glm::vec3(10.0f, 0.2f, 10.0f));
+			_Floor.SetTransform(floor);
 
 			_Renderer->BeginGBuffer(_FreeCam->GetCamera());
-			_Test.SetTransform(glm::mat4(1.0f));
 			_Test.Draw("DeferredShader");
-			_Renderer->BeginFrame(_FreeCam->GetCamera(), {});
-			_Test.SetTransform(glm::mat4(1.0f));
+			_Floor.Draw("DeferredShader");
+			_Renderer->EndGBuffer();
+
+			_Renderer->CalculateLights(lightManager.GetLights());
+
+			_Renderer->BeginShadowMap();
+			_Test.Draw("ShadowShader");
+			_Floor.Draw("ShadowShader");
+			_Renderer->EndShadowMap();
+
+			_Renderer->BeginFrame(_FreeCam->GetCamera());
 			_Test.Draw("MainShader");
+			_Floor.Draw("MainShader");
 			_Renderer->EndFrame();
 
 			_ImGuiLayer->Begin();

@@ -13,17 +13,17 @@ namespace TAGE::Renderer {
 	void Material::Use() const
 	{
 		if (_Shader) {
-			//_Shader->Use();
-
 			static MEM::Scope<Texture2D> fallbackTexture = MEM::MakeScope<Texture2D>("");
 
 			for (uint i = 0; i < static_cast<uint>(TextureType::COUNT); ++i) {
+				if (i == SHADOW_MAP_TEXTURE_SLOT) continue;
+
 				const auto& texture = _Textures[i];
 				if (texture)
 					texture->Bind(i);
 				else if (_Textures[0])
 					_Textures[0]->Bind(i);
-				else 
+				else
 					fallbackTexture->Bind(i);
 			}
 

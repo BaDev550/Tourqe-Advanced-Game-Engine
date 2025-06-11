@@ -27,6 +27,14 @@ enum class ShadingMode {
 	WIREFRAME
 };
 
+enum class RenderMode : uint {
+	DEFAULT = 0,
+	POSITIONS,
+	NORMALS,
+	ALBEDO,
+	LIGHTS
+};
+
 enum class DebugRenderMode {
 	NONE = 0,
 	WIREFRAME,

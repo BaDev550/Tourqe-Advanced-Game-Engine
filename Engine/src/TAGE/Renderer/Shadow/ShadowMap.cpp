@@ -31,6 +31,7 @@ namespace TAGE::Renderer {
     }
     void ShadowMap::BindDepthTexture(int slot)
 	{
+        ASSERT(_DepthMap!= 0, "Depth map is invalid!");
         glBindTextureUnit(slot, _DepthMap);
 	}
     void ShadowMap::Unbind() const
@@ -42,7 +43,6 @@ namespace TAGE::Renderer {
     {
         glBindFramebuffer(GL_FRAMEBUFFER, _Framebuffer);
         glViewport(0, 0, _Width, _Height);
-        glClear(GL_DEPTH_BUFFER_BIT);
         glCullFace(GL_FRONT);
     }
 }

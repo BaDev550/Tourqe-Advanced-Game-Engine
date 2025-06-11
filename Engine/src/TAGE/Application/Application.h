@@ -14,6 +14,7 @@
 #include "TAGE/Renderer/Model/Model.h"
 
 #include "TAGE/Thread/ThreadWarpper.h"
+#include "TAGE/Renderer/Light/LightManager.h"
 
 namespace TAGE {
     using namespace Renderer;
@@ -33,6 +34,7 @@ namespace TAGE {
         Renderer::GL_Renderer* GetRenderer() const { return _Renderer.get(); }
         Threading::ThreadPool* GetThreadPool() const { return _ThreadPool.get(); }
         ApplicationState& GetApplicationState() { return _ApplicationState; }
+        LightManager& GetLightManager() { return lightManager; }
     private:
         void OnEvent(Event& event);
     private:
@@ -47,6 +49,8 @@ namespace TAGE {
         LayerStack _LayerStack;
 
         Model _Test;
+        Model _Floor;
+        LightManager lightManager;
 
         float _LastFrame = 0.0f;
         float _DeltaTime = 0.0f;

@@ -47,6 +47,7 @@ namespace TAGE::Renderer {
 	{
 		MEM::Ref<Shader> shader = ShaderLibrary::Get(Sshader);
 		shader->Use();
+
 		glBindVertexArray(_QuadVAO);
 		glDisable(GL_DEPTH_TEST);
 

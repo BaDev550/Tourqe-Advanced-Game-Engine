@@ -6,6 +6,7 @@ namespace TAGE::Renderer {
 	DeferredRendering::DeferredRendering(int width, int height)
 	{
         _DeferredShader = ShaderLibrary::Add("DeferredShader", "../Engine/shaders/Deferred/deferred_vertex.glsl", "../Engine/shaders/Deferred/deferred_fragment.glsl");
+        _LightDeferredShader = ShaderLibrary::Add("LightDeferredShader", "../Engine/shaders/Deferred/deferred_lighting_vertex.glsl", "../Engine/shaders/Deferred/deferred_lighting_fragment.glsl");
 		uint gPosition;
 		uint gNormal;
 		uint gAlbedoSpec;
@@ -69,5 +70,22 @@ namespace TAGE::Renderer {
         _DeferredShader->SetUniform("u_gNorm", 1);
         _gAlbedoTex->Bind(2);
         _DeferredShader->SetUniform("u_gAlb", 2);
+    }
+
+    void DeferredRendering::RenderLightPass(const glm::vec3& lightPos, const glm::vec3& lightColor, const glm::vec3& cameraPos)
+    {
+        glBindFramebuffer(GL_FRAMEBUFFER, 0);
+        
+        _LightDeferredShader->Use();
+        _gPositionTex->Bind(0);
+        _LightDeferredShader->SetUniform("u_gPos", 0);
+        _gNormalTex->Bind(1);
+        _LightDeferredShader->SetUniform("u_gNorm", 1);
+        _gAlbedoTex->Bind(2);
+        _LightDeferredShader->SetUniform("u_gAlb", 2);
+
+        _LightDeferredShader->SetUniform("u_LightPos", lightPos);
+        _LightDeferredShader->SetUniform("u_LightColor", lightColor);
+        _LightDeferredShader->SetUniform("u_CameraPos", cameraPos);
     }
 }

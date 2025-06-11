@@ -27,11 +27,13 @@ namespace TAGE::Renderer {
 
 		void BeginGeometryPass();
 		void RenderGeometryPass();
+		void RenderLightPass(const glm::vec3& lightPos, const glm::vec3& lightColor, const glm::vec3& cameraPos);
 		MEM::Ref<Shader>& GetShader() { return _DeferredShader; }
 	private:
 		uint gBuffer;
 
 		MEM::Ref<Shader> _DeferredShader;
+		MEM::Ref<Shader> _LightDeferredShader;
 		MEM::Scope<Texture2D> _gPositionTex;
 		MEM::Scope<Texture2D> _gNormalTex;
 		MEM::Scope<Texture2D> _gAlbedoTex;

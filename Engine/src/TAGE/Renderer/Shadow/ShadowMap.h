@@ -1,5 +1,6 @@
 #pragma once
 #include "TAGE/Common/TDefines.h"
+#include "TAGE/Renderer/Texture/Texture.h"
 
 namespace TAGE::Renderer {
 	class ShadowMap

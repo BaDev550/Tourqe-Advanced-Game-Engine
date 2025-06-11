@@ -11,7 +11,11 @@ namespace TAGE::Renderer {
 	public:
 		LightManager() = default;
 		~LightManager() { ClearLights(); }
-		void AddLight(const Light& light) { GetLightCount() > MAX_LIGHTS ? LOG_WARN("Maximum lights") : _Lights.push_back(light); }
+
+		void AddLight(const Light& light) { 
+			_Lights.push_back(light);
+		}
+
 		void RemoveLight(uint index) {
 			if (index < _Lights.size()) {
 				_Lights.erase(_Lights.begin() + index);

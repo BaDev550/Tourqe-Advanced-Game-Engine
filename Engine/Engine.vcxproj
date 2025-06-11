@@ -101,7 +101,6 @@
     </Lib>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClInclude Include="src\TAGE\Renderer\Deferred\DeferredRendering.h" />
     <ClInclude Include="src\TAGE\Application\Application.h" />
     <ClInclude Include="src\TAGE\Application\EntryPoint.h" />
     <ClInclude Include="src\TAGE\Common\TDefines.h" />
@@ -119,6 +118,7 @@
     <ClInclude Include="src\TAGE\Renderer\Camera\Camera.h" />
     <ClInclude Include="src\TAGE\Renderer\Camera\FreeCamera.h" />
     <ClInclude Include="src\TAGE\Renderer\Camera\FrustumCulling.h" />
+    <ClInclude Include="src\TAGE\Renderer\Deferred\DeferredRendering.h" />
     <ClInclude Include="src\TAGE\Renderer\Framebuffer\Framebuffer.h" />
     <ClInclude Include="src\TAGE\Renderer\Light\LightManager.h" />
     <ClInclude Include="src\TAGE\Renderer\Material\Material.h" />
@@ -141,6 +141,7 @@
     <ClInclude Include="src\TAGE\Renderer\SkinnedModel\SkinnedMesh.h" />
     <ClInclude Include="src\TAGE\Renderer\Skybox\Skybox.h" />
     <ClInclude Include="src\TAGE\Renderer\Texture\Texture.h" />
+    <ClInclude Include="src\TAGE\Thread\ThreadWarpper.h" />
     <ClInclude Include="src\TAGE\Utilities\Logger.h" />
     <ClInclude Include="src\TAGE\Utilities\Memory.h" />
     <ClInclude Include="src\TAGE\Utilities\TimeStep.h" />
@@ -148,7 +149,6 @@
     <ClInclude Include="src\TAGE\Utilities\UUID.h" />
     <ClInclude Include="src\TAGE\Window\Window.h" />
     <ClInclude Include="src\tagepch.h" />
-    <ClInclude Include="src\TAGE\Thread\ThreadWarpper.h" />
     <ClInclude Include="vendor\glm\glm\common.hpp" />
     <ClInclude Include="vendor\glm\glm\detail\_features.hpp" />
     <ClInclude Include="vendor\glm\glm\detail\_fixes.hpp" />
@@ -569,7 +569,6 @@
     <ClInclude Include="vendor\stb\stb_image.h" />
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="src\TAGE\Renderer\Deferred\DeferredRendering.cpp" />
     <ClCompile Include="src\TAGE\Application\Application.cpp" />
     <ClCompile Include="src\TAGE\Input\Input.cpp" />
     <ClCompile Include="src\TAGE\Layers\ImGuiBuild.cpp" />
@@ -577,6 +576,7 @@
     <ClCompile Include="src\TAGE\Layers\LayerStack.cpp" />
     <ClCompile Include="src\TAGE\Renderer\Camera\Camera.cpp" />
     <ClCompile Include="src\TAGE\Renderer\Camera\FreeCamera.cpp" />
+    <ClCompile Include="src\TAGE\Renderer\Deferred\DeferredRendering.cpp" />
     <ClCompile Include="src\TAGE\Renderer\Framebuffer\Framebuffer.cpp" />
     <ClCompile Include="src\TAGE\Renderer\Material\Material.cpp" />
     <ClCompile Include="src\TAGE\Renderer\Model\EndlessGrid.cpp" />
@@ -609,15 +609,17 @@
     <None Include="shaders\Debugger\debug_fragment.glsl" />
     <None Include="shaders\Debugger\debug_vertex.glsl" />
     <None Include="shaders\Deferred\deferred_fragment.glsl" />
+    <None Include="shaders\Deferred\deferred_lighting_fragment.glsl" />
+    <None Include="shaders\Deferred\deferred_lighting_vertex.glsl" />
     <None Include="shaders\Deferred\deferred_vertex.glsl" />
     <None Include="shaders\Screen\bloom_fragment.glsl" />
     <None Include="shaders\Screen\bloom_vertex.glsl" />
+    <None Include="shaders\Screen\postprocess_fragment.glsl" />
+    <None Include="shaders\Screen\postprocess_vertex.glsl" />
     <None Include="shaders\grid_Fragment.glsl" />
     <None Include="shaders\grid_Vertex.glsl" />
     <None Include="shaders\main_fragment.glsl" />
     <None Include="shaders\main_vertex.glsl" />
-    <None Include="shaders\Screen\postprocess_fragment.glsl" />
-    <None Include="shaders\Screen\postprocess_vertex.glsl" />
     <None Include="shaders\shadow_fragment.glsl" />
     <None Include="shaders\shadow_vertex.glsl" />
     <None Include="shaders\skybox_fragment.glsl" />

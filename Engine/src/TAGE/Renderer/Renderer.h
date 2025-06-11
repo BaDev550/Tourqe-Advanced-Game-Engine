@@ -28,7 +28,6 @@ namespace TAGE::Renderer {
 		glm::mat4 ViewProjectionMatrix;
 		glm::mat4 LightViewProjectionMatrix;
 		std::vector<Light> Lights;
-		int ShadowLightIndex = 0;
 
 		bool DrawGrid = true;
 	};
@@ -39,20 +38,17 @@ namespace TAGE::Renderer {
 		GL_Renderer(int width, int height);
 
 		void Shutdown();
-		void BeginFrame(const MEM::Ref<Camera>& cam, const std::vector<Light>& lights);
+		void BeginFrame(const MEM::Ref<Camera>& cam);
 		void BeginGBuffer(const MEM::Ref<Camera>& cam);
+		void EndGBuffer();
+		void BeginShadowMap();
+		void EndShadowMap();
 		void EndFrame();
+		void CalculateLights(const std::vector<Light>& lights);
 
-		void SetViewport(int x, int y, int width, int height) { _Width = width; _Height = height;
-			glViewport(x, y, width, height);
-		}
-
-		void SetClearColor(const glm::vec4& color) {
-			glClearColor(color.r, color.g, color.b, color.a);
-		}
-		void Clear(int clear) {
-			glClear(clear);
-		}
+		void SetViewport(int x, int y, int width, int height) { _Width = width; _Height = height; glViewport(x, y, width, height); }
+		void SetClearColor(const glm::vec4& color) { glClearColor(color.r, color.g, color.b, color.a); }
+		void Clear(int clear) { glClear(clear); }
 
 		SceneData& GetSceneData() { return _SceneData; }
 		ShadingMode GetShadingMode() const { return _Mode; }
@@ -61,13 +57,12 @@ namespace TAGE::Renderer {
 		BloomPass* GetBloomPass() const { return _BloomPass.get(); }
 		PostProcessPass* GetPostProcessPass() const { return _PostProcessPass.get(); }
 		DeferredRendering* GetDeferredRenderer() const { return _Deferred.get(); }
-
-		void CalculateDirectLightVPMatrix();
 	private:
 		int _Width;	
 		int _Height;
 		SceneData _SceneData;
 		ShadingMode _Mode;
+		RenderMode _RenderMode;
 		DebugRenderMode _DebugMode;
 		EndlessGrid _EndlessGrid;
 

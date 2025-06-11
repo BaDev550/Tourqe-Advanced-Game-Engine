@@ -10,6 +10,12 @@
     <Filter Include="shaders\Debugger">
       <UniqueIdentifier>{43A859F7-2FA1-7849-58D3-5DCE442B5855}</UniqueIdentifier>
     </Filter>
+    <Filter Include="shaders\Deferred">
+      <UniqueIdentifier>{9FF992FF-8BF2-B151-B424-97D6A07C915D}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="shaders\Screen">
+      <UniqueIdentifier>{FE293E11-EAF7-3117-D38B-A23DBFF80D7C}</UniqueIdentifier>
+    </Filter>
     <Filter Include="src">
       <UniqueIdentifier>{2DAB880B-99B4-887C-2230-9F7C8E38947C}</UniqueIdentifier>
     </Filter>
@@ -37,6 +43,9 @@
     <Filter Include="src\TAGE\Renderer\Camera">
       <UniqueIdentifier>{1BB81EB0-07DD-6D30-3028-53C01CAC6C4E}</UniqueIdentifier>
     </Filter>
+    <Filter Include="src\TAGE\Renderer\Deferred">
+      <UniqueIdentifier>{132C8442-FF3B-3013-68F5-943154241FAC}</UniqueIdentifier>
+    </Filter>
     <Filter Include="src\TAGE\Renderer\Framebuffer">
       <UniqueIdentifier>{B7122FCA-232B-16F4-ECD7-A58D58AFAA8D}</UniqueIdentifier>
     </Filter>
@@ -61,8 +70,14 @@
     <Filter Include="src\TAGE\Renderer\SkinnedModel">
       <UniqueIdentifier>{8F318D87-7B57-57EE-649D-DCB950627CBA}</UniqueIdentifier>
     </Filter>
+    <Filter Include="src\TAGE\Renderer\Skybox">
+      <UniqueIdentifier>{B2BE2CD6-9EE3-7B56-C72E-61E6B3B27A74}</UniqueIdentifier>
+    </Filter>
     <Filter Include="src\TAGE\Renderer\Texture">
       <UniqueIdentifier>{63BDB7DA-CF7F-EB64-1830-7AF18431C442}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="src\TAGE\Thread">
+      <UniqueIdentifier>{84B41CB6-F03F-8A7A-F950-0D6F655BE67A}</UniqueIdentifier>
     </Filter>
     <Filter Include="src\TAGE\Utilities">
       <UniqueIdentifier>{68514E97-5435-0FED-BD95-0940A998F96E}</UniqueIdentifier>
@@ -147,6 +162,9 @@
     <ClInclude Include="src\TAGE\Renderer\Camera\FrustumCulling.h">
       <Filter>src\TAGE\Renderer\Camera</Filter>
     </ClInclude>
+    <ClInclude Include="src\TAGE\Renderer\Deferred\DeferredRendering.h">
+      <Filter>src\TAGE\Renderer\Deferred</Filter>
+    </ClInclude>
     <ClInclude Include="src\TAGE\Renderer\Framebuffer\Framebuffer.h">
       <Filter>src\TAGE\Renderer\Framebuffer</Filter>
     </ClInclude>
@@ -207,8 +225,14 @@
     <ClInclude Include="src\TAGE\Renderer\SkinnedModel\SkinnedMesh.h">
       <Filter>src\TAGE\Renderer\SkinnedModel</Filter>
     </ClInclude>
+    <ClInclude Include="src\TAGE\Renderer\Skybox\Skybox.h">
+      <Filter>src\TAGE\Renderer\Skybox</Filter>
+    </ClInclude>
     <ClInclude Include="src\TAGE\Renderer\Texture\Texture.h">
       <Filter>src\TAGE\Renderer\Texture</Filter>
+    </ClInclude>
+    <ClInclude Include="src\TAGE\Thread\ThreadWarpper.h">
+      <Filter>src\TAGE\Thread</Filter>
     </ClInclude>
     <ClInclude Include="src\TAGE\Utilities\Logger.h">
       <Filter>src\TAGE\Utilities</Filter>
@@ -1485,9 +1509,6 @@
     <ClInclude Include="vendor\stb\stb_image.h">
       <Filter>vendor\stb</Filter>
     </ClInclude>
-    <ClInclude Include="src\TAGE\Thread\ThreadWarpper.h" />
-    <ClInclude Include="src\TAGE\Renderer\Skybox\Skybox.h" />
-    <ClInclude Include="src\TAGE\Renderer\Deferred\DeferredRendering.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\TAGE\Application\Application.cpp">
@@ -1510,6 +1531,9 @@
     </ClCompile>
     <ClCompile Include="src\TAGE\Renderer\Camera\FreeCamera.cpp">
       <Filter>src\TAGE\Renderer\Camera</Filter>
+    </ClCompile>
+    <ClCompile Include="src\TAGE\Renderer\Deferred\DeferredRendering.cpp">
+      <Filter>src\TAGE\Renderer\Deferred</Filter>
     </ClCompile>
     <ClCompile Include="src\TAGE\Renderer\Framebuffer\Framebuffer.cpp">
       <Filter>src\TAGE\Renderer\Framebuffer</Filter>
@@ -1535,6 +1559,9 @@
     <ClCompile Include="src\TAGE\Renderer\Shader\Shader.cpp">
       <Filter>src\TAGE\Renderer\Shader</Filter>
     </ClCompile>
+    <ClCompile Include="src\TAGE\Renderer\Shader\ShaderLibrary.cpp">
+      <Filter>src\TAGE\Renderer\Shader</Filter>
+    </ClCompile>
     <ClCompile Include="src\TAGE\Renderer\Shader\ShaderPreprocessor.cpp">
       <Filter>src\TAGE\Renderer\Shader</Filter>
     </ClCompile>
@@ -1547,10 +1574,16 @@
     <ClCompile Include="src\TAGE\Renderer\SkinnedModel\Skeleton.cpp">
       <Filter>src\TAGE\Renderer\SkinnedModel</Filter>
     </ClCompile>
+    <ClCompile Include="src\TAGE\Renderer\Skybox\Skybox.cpp">
+      <Filter>src\TAGE\Renderer\Skybox</Filter>
+    </ClCompile>
     <ClCompile Include="src\TAGE\Renderer\Texture\FallbackTexture.cpp">
       <Filter>src\TAGE\Renderer\Texture</Filter>
     </ClCompile>
     <ClCompile Include="src\TAGE\Renderer\Texture\Texture2D.cpp">
+      <Filter>src\TAGE\Renderer\Texture</Filter>
+    </ClCompile>
+    <ClCompile Include="src\TAGE\Renderer\Texture\TextureCubeMap.cpp">
       <Filter>src\TAGE\Renderer\Texture</Filter>
     </ClCompile>
     <ClCompile Include="src\TAGE\Utilities\UUID.cpp">
@@ -1568,10 +1601,6 @@
     <ClCompile Include="vendor\stb\stb_image.cpp">
       <Filter>vendor\stb</Filter>
     </ClCompile>
-    <ClCompile Include="src\TAGE\Renderer\Shader\ShaderLibrary.cpp" />
-    <ClCompile Include="src\TAGE\Renderer\Skybox\Skybox.cpp" />
-    <ClCompile Include="src\TAGE\Renderer\Texture\TextureCubeMap.cpp" />
-    <ClCompile Include="src\TAGE\Renderer\Deferred\DeferredRendering.cpp" />
   </ItemGroup>
   <ItemGroup>
     <None Include="shaders\Common\Material.glsl">
@@ -1589,11 +1618,29 @@
     <None Include="shaders\Debugger\debug_vertex.glsl">
       <Filter>shaders\Debugger</Filter>
     </None>
+    <None Include="shaders\Deferred\deferred_fragment.glsl">
+      <Filter>shaders\Deferred</Filter>
+    </None>
+    <None Include="shaders\Deferred\deferred_lighting_fragment.glsl">
+      <Filter>shaders\Deferred</Filter>
+    </None>
+    <None Include="shaders\Deferred\deferred_lighting_vertex.glsl">
+      <Filter>shaders\Deferred</Filter>
+    </None>
+    <None Include="shaders\Deferred\deferred_vertex.glsl">
+      <Filter>shaders\Deferred</Filter>
+    </None>
     <None Include="shaders\Screen\bloom_fragment.glsl">
-      <Filter>shaders</Filter>
+      <Filter>shaders\Screen</Filter>
     </None>
     <None Include="shaders\Screen\bloom_vertex.glsl">
-      <Filter>shaders</Filter>
+      <Filter>shaders\Screen</Filter>
+    </None>
+    <None Include="shaders\Screen\postprocess_fragment.glsl">
+      <Filter>shaders\Screen</Filter>
+    </None>
+    <None Include="shaders\Screen\postprocess_vertex.glsl">
+      <Filter>shaders\Screen</Filter>
     </None>
     <None Include="shaders\grid_Fragment.glsl">
       <Filter>shaders</Filter>
@@ -1605,12 +1652,6 @@
       <Filter>shaders</Filter>
     </None>
     <None Include="shaders\main_vertex.glsl">
-      <Filter>shaders</Filter>
-    </None>
-    <None Include="shaders\Screen\postprocess_fragment.glsl">
-      <Filter>shaders</Filter>
-    </None>
-    <None Include="shaders\Screen\postprocess_vertex.glsl">
       <Filter>shaders</Filter>
     </None>
     <None Include="shaders\shadow_fragment.glsl">
@@ -1625,7 +1666,5 @@
     <None Include="shaders\skybox_vertex.glsl">
       <Filter>shaders</Filter>
     </None>
-    <None Include="shaders\Deferred\deferred_vertex.glsl" />
-    <None Include="shaders\Deferred\deferred_fragment.glsl" />
   </ItemGroup>
 </Project>

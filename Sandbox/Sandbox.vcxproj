@@ -70,6 +70,11 @@
       <SubSystem>Console</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
     </Link>
+    <PostBuildEvent>
+      <Command>IF EXIST assets\ (xcopy /Q /E /Y /I assets bin\Debug-windows-x86_64\Sandbox\assets &gt; nul) ELSE (xcopy /Q /Y /I assets bin\Debug-windows-x86_64\Sandbox\assets &gt; nul)
+IF EXIST ..\Engine\shaders\ (xcopy /Q /E /Y /I ..\Engine\shaders bin\Debug-windows-x86_64\Sandbox\shaders &gt; nul) ELSE (xcopy /Q /Y /I ..\Engine\shaders bin\Debug-windows-x86_64\Sandbox\shaders &gt; nul)
+IF EXIST ..\Engine\assets\ (xcopy /Q /E /Y /I ..\Engine\assets bin\Debug-windows-x86_64\Sandbox\assets &gt; nul) ELSE (xcopy /Q /Y /I ..\Engine\assets bin\Debug-windows-x86_64\Sandbox\assets &gt; nul)</Command>
+    </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <ClCompile>
@@ -91,6 +96,11 @@
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
       <OptimizeReferences>true</OptimizeReferences>
     </Link>
+    <PostBuildEvent>
+      <Command>IF EXIST assets\ (xcopy /Q /E /Y /I assets bin\Release-windows-x86_64\Sandbox\assets &gt; nul) ELSE (xcopy /Q /Y /I assets bin\Release-windows-x86_64\Sandbox\assets &gt; nul)
+IF EXIST ..\Engine\shaders\ (xcopy /Q /E /Y /I ..\Engine\shaders bin\Release-windows-x86_64\Sandbox\shaders &gt; nul) ELSE (xcopy /Q /Y /I ..\Engine\shaders bin\Release-windows-x86_64\Sandbox\shaders &gt; nul)
+IF EXIST ..\Engine\assets\ (xcopy /Q /E /Y /I ..\Engine\assets bin\Release-windows-x86_64\Sandbox\assets &gt; nul) ELSE (xcopy /Q /Y /I ..\Engine\assets bin\Release-windows-x86_64\Sandbox\assets &gt; nul)</Command>
+    </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="src\main.cpp" />

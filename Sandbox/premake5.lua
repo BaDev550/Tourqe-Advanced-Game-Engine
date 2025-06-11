@@ -37,3 +37,8 @@ project "Sandbox"
     filter "configurations:Release"
         runtime "Release"
         optimize "on"
+        postbuildcommands {
+            "{COPY} assets %{cfg.targetdir}/assets",
+            "{COPY} ../Engine/shaders %{cfg.targetdir}/shaders",
+            "{COPY} ../Engine/assets %{cfg.targetdir}/assets"
+        }
