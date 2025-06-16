@@ -2,9 +2,10 @@
 #include "TAGE/Common/TDefines.h"
 
 #include <iostream>
-#include "GLAD/glad.h"
-#include <GLFW/glfw3.h>
+#include "TARE/Common/RenderContext.h"
 #include "TAGE/Events/Event.h"
+#include "TAGE/Utilities/Memory.h"
+#include <GLFW/glfw3.h>
 
 namespace TAGE {
 	using EventCallbackFn = std::function<void(Event&)>;
@@ -66,5 +67,7 @@ namespace TAGE {
 
 		GLFWmonitor* _Monitor;
 		const GLFWvidmode* _VideoMode = nullptr;
+
+		MEM::Scope<TARE::RenderContext> _RenderContext;
 	};
 }

@@ -24,22 +24,54 @@ float ShadowCalculation(sampler2D shadowMap, vec4 fragPosLightSpace, vec3 normal
 {
     vec3 projCoords = fragPosLightSpace.xyz / fragPosLightSpace.w;
     projCoords = projCoords * 0.5 + 0.5;
-    if (projCoords.z > 1.0) return 0.0;
 
-    float bias = max(0.05 * (1.0 - dot(normal, lightDir)), 0.005);
+    if (projCoords.x < 0.0 || projCoords.x > 1.0 || projCoords.y < 0.0 || projCoords.y > 1.0 || projCoords.z > 1.0)
+        return 0.0;
 
-    float shadow = 0.0;
+    float bias = max(0.001 * (1.0 - dot(normal, lightDir)), 0.0025);
     vec2 texelSize = 1.0 / textureSize(shadowMap, 0);
-    
-    for (int x = -1; x <= 1; ++x)
+
+    float avgBlockerDepth = 0.0;
+    int blockerCount = 0;
+    int searchRadius = 3; // Initial search area
+    for (int x = -searchRadius; x <= searchRadius; ++x)
     {
-        for (int y = -1; y <= 1; ++y)
+        for (int y = -searchRadius; y <= searchRadius; ++y)
         {
-            float closestDepth = texture(shadowMap, projCoords.xy + vec2(x, y) * texelSize).r;
-            shadow += (projCoords.z - bias > closestDepth) ? 1.0 : 0.0;
+            float sampleDepth = texture(shadowMap, projCoords.xy + vec2(x, y) * texelSize).r;
+            if (sampleDepth < projCoords.z - bias)
+            {
+                avgBlockerDepth += sampleDepth;
+                blockerCount++;
+            }
         }
     }
 
-    shadow /= 9.0;
+    float shadow = 0.0;
+
+    if (blockerCount == 0)
+    {
+        shadow = 0.0; // No blockers — fully lit
+    }
+    else
+    {
+        avgBlockerDepth /= blockerCount;
+
+        float penumbra = clamp((projCoords.z - avgBlockerDepth) * 80.0, 1.0, 5.0);
+        int filterRadius = int(penumbra);
+
+        for (int x = -filterRadius; x <= filterRadius; ++x)
+        {
+            for (int y = -filterRadius; y <= filterRadius; ++y)
+            {
+                float sampleDepth = texture(shadowMap, projCoords.xy + vec2(x, y) * texelSize).r;
+                shadow += projCoords.z - bias > sampleDepth ? 1.0 : 0.0;
+            }
+        }
+
+        float filterArea = pow(2.0 * float(filterRadius) + 1.0, 2.0);
+        shadow /= filterArea;
+    }
+
     return shadow;
 }

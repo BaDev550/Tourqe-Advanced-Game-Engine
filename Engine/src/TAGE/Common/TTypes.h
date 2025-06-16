@@ -8,14 +8,6 @@
 #define GLM_ENABLE_EXPERIMENTAL
 #include <glm/gtx/quaternion.hpp>
 
-struct VertexData {
-	glm::vec3 Position;  
-	glm::vec3 Normal; 
-	glm::vec2 TexCoord;
-	glm::vec3 Tangent;
-	glm::vec3 Bitangent;
-};
-
 struct SkinedVertexData {
 	glm::vec3 Position;
 	glm::vec3 Normal;
@@ -31,6 +23,14 @@ struct SkinedVertexData {
 			BoneWeights[i] = 0.0f;
 	    }
 	}
+};
+
+struct VertexData {
+	int16 pos[3];
+	uint16 uv[2];
+	int8 normal[3];
+	int8 tangent[3];
+	int8 bitangent[3];
 };
 
 struct Bone {

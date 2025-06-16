@@ -9,15 +9,11 @@
 #include "TAGE/Events/Event.h"
 #include "TAGE/Events/ApplicationEvents.h"
 
-#include "TAGE/Renderer/Renderer.h"
-#include "TAGE/Renderer/Camera/FreeCamera.h"
-#include "TAGE/Renderer/Model/Model.h"
-
 #include "TAGE/Thread/ThreadWarpper.h"
-#include "TAGE/Renderer/Light/LightManager.h"
+#include "TAGE/AssetManager/AssetManager.h"
+#include "TAGE/World/Scene/Scene.h"
 
 namespace TAGE {
-    using namespace Renderer;
     class Application
     {
     public:
@@ -26,15 +22,15 @@ namespace TAGE {
         void Run();
 
         static Application* Get() { return s_Instance; }
+        const float GetDeltaTime() const { return _DeltaTime; }
+        ApplicationState& GetApplicationState() { return _ApplicationState; }
 
         void PushLayer(Layer* layer) { _LayerStack.PushLayer(layer); }
         void PushOverlay(Layer* layer) { _LayerStack.PushOverlay(layer); }
     public:
+        Scene* GetScene() const { return _ActiveScene.get(); }
         Window* GetWindow() const { return _Window.get(); }
-        Renderer::GL_Renderer* GetRenderer() const { return _Renderer.get(); }
         Threading::ThreadPool* GetThreadPool() const { return _ThreadPool.get(); }
-        ApplicationState& GetApplicationState() { return _ApplicationState; }
-        LightManager& GetLightManager() { return lightManager; }
     private:
         void OnEvent(Event& event);
     private:
@@ -42,15 +38,10 @@ namespace TAGE {
         ApplicationState _ApplicationState = ApplicationState::RUNNING;
 
         MEM::Scope<Window> _Window;
-        MEM::Scope<GL_Renderer> _Renderer;
         MEM::Scope<ImGuiLayer> _ImGuiLayer;
-        MEM::Scope<FreeCamera> _FreeCam;
         MEM::Scope<Threading::ThreadPool> _ThreadPool;
+        MEM::Scope<Scene> _ActiveScene;
         LayerStack _LayerStack;
-
-        Model _Test;
-        Model _Floor;
-        LightManager lightManager;
 
         float _LastFrame = 0.0f;
         float _DeltaTime = 0.0f;

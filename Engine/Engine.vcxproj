@@ -58,7 +58,7 @@
       <PrecompiledHeaderFile>tagepch.h</PrecompiledHeaderFile>
       <WarningLevel>Level3</WarningLevel>
       <PreprocessorDefinitions>_CRT_SECURE_NO_WARNINGS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <AdditionalIncludeDirectories>src;vendor;vendor\spdlog;vendor\GLFW\include;vendor\GLAD\include;vendor\assimp\include;vendor\imgui;vendor\glm;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>src;vendor;vendor\spdlog;vendor\GLFW\include;vendor\GLAD\include;vendor\assimp\include;vendor\imgui;vendor\glm;vendor\entt\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <DebugInformationFormat>EditAndContinue</DebugInformationFormat>
       <Optimization>Disabled</Optimization>
       <RuntimeLibrary>MultiThreadedDebugDLL</RuntimeLibrary>
@@ -80,7 +80,7 @@
       <PrecompiledHeaderFile>tagepch.h</PrecompiledHeaderFile>
       <WarningLevel>Level3</WarningLevel>
       <PreprocessorDefinitions>_CRT_SECURE_NO_WARNINGS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <AdditionalIncludeDirectories>src;vendor;vendor\spdlog;vendor\GLFW\include;vendor\GLAD\include;vendor\assimp\include;vendor\imgui;vendor\glm;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>src;vendor;vendor\spdlog;vendor\GLFW\include;vendor\GLAD\include;vendor\assimp\include;vendor\imgui;vendor\glm;vendor\entt\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <Optimization>Full</Optimization>
       <FunctionLevelLinking>true</FunctionLevelLinking>
       <IntrinsicFunctions>true</IntrinsicFunctions>
@@ -101,46 +101,28 @@
     </Lib>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClInclude Include="src\Platform\OpenGL\OpenGL_VertexArrayBuffer.h" />
+    <ClInclude Include="src\Platform\OpenGL\OpenGL_Buffers.h" />
+    <ClInclude Include="src\TARE\Buffers\Buffers.h" />
+    <ClInclude Include="src\Platform\OpenGL\OpenGL_RenderAPI.h" />
+    <ClInclude Include="src\Platform\OpenGL\OpenGL_RenderContext.h" />
     <ClInclude Include="src\TAGE\Application\Application.h" />
     <ClInclude Include="src\TAGE\Application\EntryPoint.h" />
+    <ClInclude Include="src\TAGE\AssetManager\AssetManager.h" />
+    <ClInclude Include="src\TAGE\AssetManager\AssetSerializers\AssetSerializer.h" />
     <ClInclude Include="src\TAGE\Common\TDefines.h" />
     <ClInclude Include="src\TAGE\Common\TEnums.h" />
     <ClInclude Include="src\TAGE\Common\TTypes.h" />
     <ClInclude Include="src\TAGE\Events\ApplicationEvents.h" />
     <ClInclude Include="src\TAGE\Events\Event.h" />
     <ClInclude Include="src\TAGE\Events\InputEvents.h" />
+    <ClInclude Include="src\TAGE\Events\ObjectEvents.h" />
     <ClInclude Include="src\TAGE\Input\Input.h" />
     <ClInclude Include="src\TAGE\Input\KeyCodes.h" />
     <ClInclude Include="src\TAGE\Input\MouseCodes.h" />
     <ClInclude Include="src\TAGE\Layers\ImGuiLayer.h" />
     <ClInclude Include="src\TAGE\Layers\Layer.h" />
     <ClInclude Include="src\TAGE\Layers\LayerStack.h" />
-    <ClInclude Include="src\TAGE\Renderer\Camera\Camera.h" />
-    <ClInclude Include="src\TAGE\Renderer\Camera\FreeCamera.h" />
-    <ClInclude Include="src\TAGE\Renderer\Camera\FrustumCulling.h" />
-    <ClInclude Include="src\TAGE\Renderer\Deferred\DeferredRendering.h" />
-    <ClInclude Include="src\TAGE\Renderer\Framebuffer\Framebuffer.h" />
-    <ClInclude Include="src\TAGE\Renderer\Light\LightManager.h" />
-    <ClInclude Include="src\TAGE\Renderer\Material\Material.h" />
-    <ClInclude Include="src\TAGE\Renderer\Model\EndlessGrid.h" />
-    <ClInclude Include="src\TAGE\Renderer\Model\Mesh.h" />
-    <ClInclude Include="src\TAGE\Renderer\Model\Model.h" />
-    <ClInclude Include="src\TAGE\Renderer\Model\Primitives.h" />
-    <ClInclude Include="src\TAGE\Renderer\RenderPass\BloomPass.h" />
-    <ClInclude Include="src\TAGE\Renderer\RenderPass\PostProcessPass.h" />
-    <ClInclude Include="src\TAGE\Renderer\RenderPass\RenderPass.h" />
-    <ClInclude Include="src\TAGE\Renderer\RenderPass\ShadowPass.h" />
-    <ClInclude Include="src\TAGE\Renderer\Renderer.h" />
-    <ClInclude Include="src\TAGE\Renderer\Shader\Shader.h" />
-    <ClInclude Include="src\TAGE\Renderer\Shader\ShaderLibrary.h" />
-    <ClInclude Include="src\TAGE\Renderer\Shader\ShaderPreprocessor.h" />
-    <ClInclude Include="src\TAGE\Renderer\Shadow\ShadowMap.h" />
-    <ClInclude Include="src\TAGE\Renderer\SkinnedModel\Animation.h" />
-    <ClInclude Include="src\TAGE\Renderer\SkinnedModel\Animator.h" />
-    <ClInclude Include="src\TAGE\Renderer\SkinnedModel\Skeleton.h" />
-    <ClInclude Include="src\TAGE\Renderer\SkinnedModel\SkinnedMesh.h" />
-    <ClInclude Include="src\TAGE\Renderer\Skybox\Skybox.h" />
-    <ClInclude Include="src\TAGE\Renderer\Texture\Texture.h" />
     <ClInclude Include="src\TAGE\Thread\ThreadWarpper.h" />
     <ClInclude Include="src\TAGE\Utilities\Logger.h" />
     <ClInclude Include="src\TAGE\Utilities\Memory.h" />
@@ -148,6 +130,14 @@
     <ClInclude Include="src\TAGE\Utilities\Timer.h" />
     <ClInclude Include="src\TAGE\Utilities\UUID.h" />
     <ClInclude Include="src\TAGE\Window\Window.h" />
+    <ClInclude Include="src\TAGE\World\Components\BaseComponents.h" />
+    <ClInclude Include="src\TAGE\World\Components\RenderComponents.h" />
+    <ClInclude Include="src\TAGE\World\Objects\Object.h" />
+    <ClInclude Include="src\TAGE\World\Scene\Scene.h" />
+    <ClInclude Include="src\TAGE\World\Systems\System_Base.h" />
+    <ClInclude Include="src\TAGE\World\Systems\System_Renderer.h" />
+    <ClInclude Include="src\TARE\Common\RenderAPI.h" />
+    <ClInclude Include="src\TARE\Common\RenderContext.h" />
     <ClInclude Include="src\tagepch.h" />
     <ClInclude Include="vendor\glm\glm\common.hpp" />
     <ClInclude Include="vendor\glm\glm\detail\_features.hpp" />
@@ -567,40 +557,36 @@
     <ClInclude Include="vendor\glm\glm\vec4.hpp" />
     <ClInclude Include="vendor\glm\glm\vector_relational.hpp" />
     <ClInclude Include="vendor\stb\stb_image.h" />
+    <ClInclude Include="vendor\stb\stb_image_write.h" />
+    <ClInclude Include="src\TARE\Buffers\VertexArrayBuffer.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="src\Platform\OpenGL\OpenGL_VertexArrayBuffer.cpp" />
+    <ClCompile Include="src\Platform\OpenGL\OpenGL_Buffers.cpp" />
+    <ClCompile Include="src\TARE\Buffers\Buffers.cpp" />
+    <ClCompile Include="src\Platform\OpenGL\OpenGL_RenderAPI.cpp" />
+    <ClCompile Include="src\Platform\OpenGL\OpenGL_RenderContext.cpp" />
     <ClCompile Include="src\TAGE\Application\Application.cpp" />
+    <ClCompile Include="src\TAGE\AssetManager\AssetManager.cpp" />
+    <ClCompile Include="src\TAGE\AssetManager\AssetSerializers\Serializer_Material.cpp" />
+    <ClCompile Include="src\TAGE\AssetManager\AssetSerializers\Serializer_Model.cpp" />
+    <ClCompile Include="src\TAGE\AssetManager\Importer_Model.cpp" />
+    <ClCompile Include="src\TAGE\AssetManager\Importer_Texture.cpp" />
     <ClCompile Include="src\TAGE\Input\Input.cpp" />
     <ClCompile Include="src\TAGE\Layers\ImGuiBuild.cpp" />
     <ClCompile Include="src\TAGE\Layers\ImGuiLayer.cpp" />
     <ClCompile Include="src\TAGE\Layers\LayerStack.cpp" />
-    <ClCompile Include="src\TAGE\Renderer\Camera\Camera.cpp" />
-    <ClCompile Include="src\TAGE\Renderer\Camera\FreeCamera.cpp" />
-    <ClCompile Include="src\TAGE\Renderer\Deferred\DeferredRendering.cpp" />
-    <ClCompile Include="src\TAGE\Renderer\Framebuffer\Framebuffer.cpp" />
-    <ClCompile Include="src\TAGE\Renderer\Material\Material.cpp" />
-    <ClCompile Include="src\TAGE\Renderer\Model\EndlessGrid.cpp" />
-    <ClCompile Include="src\TAGE\Renderer\Model\Mesh.cpp" />
-    <ClCompile Include="src\TAGE\Renderer\Model\Model.cpp" />
-    <ClCompile Include="src\TAGE\Renderer\Model\Primitives.cpp" />
-    <ClCompile Include="src\TAGE\Renderer\Renderer.cpp" />
-    <ClCompile Include="src\TAGE\Renderer\Shader\Shader.cpp" />
-    <ClCompile Include="src\TAGE\Renderer\Shader\ShaderLibrary.cpp" />
-    <ClCompile Include="src\TAGE\Renderer\Shader\ShaderPreprocessor.cpp" />
-    <ClCompile Include="src\TAGE\Renderer\Shadow\ShadowMap.cpp" />
-    <ClCompile Include="src\TAGE\Renderer\SkinnedModel\Animator.cpp" />
-    <ClCompile Include="src\TAGE\Renderer\SkinnedModel\Skeleton.cpp" />
-    <ClCompile Include="src\TAGE\Renderer\Skybox\Skybox.cpp" />
-    <ClCompile Include="src\TAGE\Renderer\Texture\FallbackTexture.cpp" />
-    <ClCompile Include="src\TAGE\Renderer\Texture\Texture2D.cpp" />
-    <ClCompile Include="src\TAGE\Renderer\Texture\TextureCubeMap.cpp" />
     <ClCompile Include="src\TAGE\Utilities\UUID.cpp" />
     <ClCompile Include="src\TAGE\Utilities\Utilities.cpp" />
     <ClCompile Include="src\TAGE\Window\Window.cpp" />
+    <ClCompile Include="src\TAGE\World\Scene\Scene.cpp" />
+    <ClCompile Include="src\TAGE\World\Systems\System_Renderer.cpp" />
+    <ClCompile Include="src\TARE\Common\RenderAPI.cpp" />
     <ClCompile Include="src\tagepch.cpp">
       <PrecompiledHeader>Create</PrecompiledHeader>
     </ClCompile>
     <ClCompile Include="vendor\stb\stb_image.cpp" />
+    <ClCompile Include="src\TARE\Buffers\VertexArrayBuffer.cpp" />
   </ItemGroup>
   <ItemGroup>
     <None Include="shaders\Common\Material.glsl" />

@@ -19,11 +19,23 @@
     <Filter Include="src">
       <UniqueIdentifier>{2DAB880B-99B4-887C-2230-9F7C8E38947C}</UniqueIdentifier>
     </Filter>
+    <Filter Include="src\Platform">
+      <UniqueIdentifier>{21CA02E5-0D2D-9289-B6B2-CA3FA2F45D0C}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="src\Platform\OpenGL">
+      <UniqueIdentifier>{35A49437-A105-7245-2A73-B8F796D3A804}</UniqueIdentifier>
+    </Filter>
     <Filter Include="src\TAGE">
       <UniqueIdentifier>{BD5C25CF-A929-80DA-D242-6E82BE6EB568}</UniqueIdentifier>
     </Filter>
     <Filter Include="src\TAGE\Application">
       <UniqueIdentifier>{009CF62F-EC2A-80F9-9549-94F481B7909F}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="src\TAGE\AssetManager">
+      <UniqueIdentifier>{67AC7A24-D318-361F-9C0C-CE7C08385887}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="src\TAGE\AssetManager\AssetSerializers">
+      <UniqueIdentifier>{43C6D7E0-2F18-AFD0-1837-ECE00428C8B9}</UniqueIdentifier>
     </Filter>
     <Filter Include="src\TAGE\Common">
       <UniqueIdentifier>{5513F18E-C19E-5E53-CAAF-E14736BABA53}</UniqueIdentifier>
@@ -37,45 +49,6 @@
     <Filter Include="src\TAGE\Layers">
       <UniqueIdentifier>{DC9CF8A2-4828-6667-5139-E95BBD43C267}</UniqueIdentifier>
     </Filter>
-    <Filter Include="src\TAGE\Renderer">
-      <UniqueIdentifier>{034545E7-6F5B-437D-B8D2-CE9E24281405}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="src\TAGE\Renderer\Camera">
-      <UniqueIdentifier>{1BB81EB0-07DD-6D30-3028-53C01CAC6C4E}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="src\TAGE\Renderer\Deferred">
-      <UniqueIdentifier>{132C8442-FF3B-3013-68F5-943154241FAC}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="src\TAGE\Renderer\Framebuffer">
-      <UniqueIdentifier>{B7122FCA-232B-16F4-ECD7-A58D58AFAA8D}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="src\TAGE\Renderer\Light">
-      <UniqueIdentifier>{EACE9053-5606-D9EA-5F10-3D0ECBC6FFE3}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="src\TAGE\Renderer\Material">
-      <UniqueIdentifier>{01C7937D-EDD6-3F4E-5690-A46C42BF2EE7}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="src\TAGE\Renderer\Model">
-      <UniqueIdentifier>{8324A653-EF5B-EEEA-F865-520E641C15E4}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="src\TAGE\Renderer\RenderPass">
-      <UniqueIdentifier>{49458923-3500-79CF-DEB7-F119CA51C35F}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="src\TAGE\Renderer\Shader">
-      <UniqueIdentifier>{4953E9D5-3578-3856-5EC3-1DE64A473774}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="src\TAGE\Renderer\Shadow">
-      <UniqueIdentifier>{9854E9D5-8479-3856-ADC4-1DE699483774}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="src\TAGE\Renderer\SkinnedModel">
-      <UniqueIdentifier>{8F318D87-7B57-57EE-649D-DCB950627CBA}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="src\TAGE\Renderer\Skybox">
-      <UniqueIdentifier>{B2BE2CD6-9EE3-7B56-C72E-61E6B3B27A74}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="src\TAGE\Renderer\Texture">
-      <UniqueIdentifier>{63BDB7DA-CF7F-EB64-1830-7AF18431C442}</UniqueIdentifier>
-    </Filter>
     <Filter Include="src\TAGE\Thread">
       <UniqueIdentifier>{84B41CB6-F03F-8A7A-F950-0D6F655BE67A}</UniqueIdentifier>
     </Filter>
@@ -84,6 +57,27 @@
     </Filter>
     <Filter Include="src\TAGE\Window">
       <UniqueIdentifier>{04132CBD-709E-9981-79AF-1C76E5B9F581}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="src\TAGE\World">
+      <UniqueIdentifier>{34D1800D-209F-7413-0933-E539F59F5078}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="src\TAGE\World\Components">
+      <UniqueIdentifier>{C90D589B-35D0-8B25-7E80-1AB2EA816403}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="src\TAGE\World\Objects">
+      <UniqueIdentifier>{ED63A8DC-D95D-D12E-C2CA-673FAE63379B}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="src\TAGE\World\Scene">
+      <UniqueIdentifier>{5155A68F-3DE4-2F59-E602-4454D27040FF}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="src\TAGE\World\Systems">
+      <UniqueIdentifier>{3B1BE346-2715-0C99-1082-A2A9FC1A7205}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="src\TARE">
+      <UniqueIdentifier>{285E25CF-142B-80DA-3D44-6E822970B568}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="src\TARE\Common">
+      <UniqueIdentifier>{60EE4990-CC79-B754-D58A-3A4941951355}</UniqueIdentifier>
     </Filter>
     <Filter Include="vendor">
       <UniqueIdentifier>{B3738122-9F15-ACF8-88D0-BF4C74113349}</UniqueIdentifier>
@@ -111,11 +105,23 @@
     </Filter>
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="src\Platform\OpenGL\OpenGL_RenderAPI.h">
+      <Filter>src\Platform\OpenGL</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Platform\OpenGL\OpenGL_RenderContext.h">
+      <Filter>src\Platform\OpenGL</Filter>
+    </ClInclude>
     <ClInclude Include="src\TAGE\Application\Application.h">
       <Filter>src\TAGE\Application</Filter>
     </ClInclude>
     <ClInclude Include="src\TAGE\Application\EntryPoint.h">
       <Filter>src\TAGE\Application</Filter>
+    </ClInclude>
+    <ClInclude Include="src\TAGE\AssetManager\AssetManager.h">
+      <Filter>src\TAGE\AssetManager</Filter>
+    </ClInclude>
+    <ClInclude Include="src\TAGE\AssetManager\AssetSerializers\AssetSerializer.h">
+      <Filter>src\TAGE\AssetManager\AssetSerializers</Filter>
     </ClInclude>
     <ClInclude Include="src\TAGE\Common\TDefines.h">
       <Filter>src\TAGE\Common</Filter>
@@ -135,6 +141,9 @@
     <ClInclude Include="src\TAGE\Events\InputEvents.h">
       <Filter>src\TAGE\Events</Filter>
     </ClInclude>
+    <ClInclude Include="src\TAGE\Events\ObjectEvents.h">
+      <Filter>src\TAGE\Events</Filter>
+    </ClInclude>
     <ClInclude Include="src\TAGE\Input\Input.h">
       <Filter>src\TAGE\Input</Filter>
     </ClInclude>
@@ -152,84 +161,6 @@
     </ClInclude>
     <ClInclude Include="src\TAGE\Layers\LayerStack.h">
       <Filter>src\TAGE\Layers</Filter>
-    </ClInclude>
-    <ClInclude Include="src\TAGE\Renderer\Camera\Camera.h">
-      <Filter>src\TAGE\Renderer\Camera</Filter>
-    </ClInclude>
-    <ClInclude Include="src\TAGE\Renderer\Camera\FreeCamera.h">
-      <Filter>src\TAGE\Renderer\Camera</Filter>
-    </ClInclude>
-    <ClInclude Include="src\TAGE\Renderer\Camera\FrustumCulling.h">
-      <Filter>src\TAGE\Renderer\Camera</Filter>
-    </ClInclude>
-    <ClInclude Include="src\TAGE\Renderer\Deferred\DeferredRendering.h">
-      <Filter>src\TAGE\Renderer\Deferred</Filter>
-    </ClInclude>
-    <ClInclude Include="src\TAGE\Renderer\Framebuffer\Framebuffer.h">
-      <Filter>src\TAGE\Renderer\Framebuffer</Filter>
-    </ClInclude>
-    <ClInclude Include="src\TAGE\Renderer\Light\LightManager.h">
-      <Filter>src\TAGE\Renderer\Light</Filter>
-    </ClInclude>
-    <ClInclude Include="src\TAGE\Renderer\Material\Material.h">
-      <Filter>src\TAGE\Renderer\Material</Filter>
-    </ClInclude>
-    <ClInclude Include="src\TAGE\Renderer\Model\EndlessGrid.h">
-      <Filter>src\TAGE\Renderer\Model</Filter>
-    </ClInclude>
-    <ClInclude Include="src\TAGE\Renderer\Model\Mesh.h">
-      <Filter>src\TAGE\Renderer\Model</Filter>
-    </ClInclude>
-    <ClInclude Include="src\TAGE\Renderer\Model\Model.h">
-      <Filter>src\TAGE\Renderer\Model</Filter>
-    </ClInclude>
-    <ClInclude Include="src\TAGE\Renderer\Model\Primitives.h">
-      <Filter>src\TAGE\Renderer\Model</Filter>
-    </ClInclude>
-    <ClInclude Include="src\TAGE\Renderer\RenderPass\BloomPass.h">
-      <Filter>src\TAGE\Renderer\RenderPass</Filter>
-    </ClInclude>
-    <ClInclude Include="src\TAGE\Renderer\RenderPass\PostProcessPass.h">
-      <Filter>src\TAGE\Renderer\RenderPass</Filter>
-    </ClInclude>
-    <ClInclude Include="src\TAGE\Renderer\RenderPass\RenderPass.h">
-      <Filter>src\TAGE\Renderer\RenderPass</Filter>
-    </ClInclude>
-    <ClInclude Include="src\TAGE\Renderer\RenderPass\ShadowPass.h">
-      <Filter>src\TAGE\Renderer\RenderPass</Filter>
-    </ClInclude>
-    <ClInclude Include="src\TAGE\Renderer\Renderer.h">
-      <Filter>src\TAGE\Renderer</Filter>
-    </ClInclude>
-    <ClInclude Include="src\TAGE\Renderer\Shader\Shader.h">
-      <Filter>src\TAGE\Renderer\Shader</Filter>
-    </ClInclude>
-    <ClInclude Include="src\TAGE\Renderer\Shader\ShaderLibrary.h">
-      <Filter>src\TAGE\Renderer\Shader</Filter>
-    </ClInclude>
-    <ClInclude Include="src\TAGE\Renderer\Shader\ShaderPreprocessor.h">
-      <Filter>src\TAGE\Renderer\Shader</Filter>
-    </ClInclude>
-    <ClInclude Include="src\TAGE\Renderer\Shadow\ShadowMap.h">
-      <Filter>src\TAGE\Renderer\Shadow</Filter>
-    </ClInclude>
-    <ClInclude Include="src\TAGE\Renderer\SkinnedModel\Animation.h">
-      <Filter>src\TAGE\Renderer\SkinnedModel</Filter>
-    </ClInclude>
-    <ClInclude Include="src\TAGE\Renderer\SkinnedModel\Animator.h">
-      <Filter>src\TAGE\Renderer\SkinnedModel</Filter>
-    </ClInclude>
-    <ClInclude Include="src\TAGE\Renderer\SkinnedModel\Skeleton.h">
-      <Filter>src\TAGE\Renderer\SkinnedModel</Filter>
-    </ClInclude>
-    <ClInclude Include="src\TAGE\Renderer\SkinnedModel\SkinnedMesh.h">
-      <Filter>src\TAGE\Renderer\SkinnedModel</Filter>
-    </ClInclude>
-    <ClInclude Include="src\TAGE\Renderer\Skybox\Skybox.h">
-      <Filter>src\TAGE\Renderer\Skybox</Filter>
-    </ClInclude>
-    <ClInclude Include="src\TAGE\Renderer\Texture\Texture.h">
-      <Filter>src\TAGE\Renderer\Texture</Filter>
     </ClInclude>
     <ClInclude Include="src\TAGE\Thread\ThreadWarpper.h">
       <Filter>src\TAGE\Thread</Filter>
@@ -251,6 +182,30 @@
     </ClInclude>
     <ClInclude Include="src\TAGE\Window\Window.h">
       <Filter>src\TAGE\Window</Filter>
+    </ClInclude>
+    <ClInclude Include="src\TAGE\World\Components\BaseComponents.h">
+      <Filter>src\TAGE\World\Components</Filter>
+    </ClInclude>
+    <ClInclude Include="src\TAGE\World\Components\RenderComponents.h">
+      <Filter>src\TAGE\World\Components</Filter>
+    </ClInclude>
+    <ClInclude Include="src\TAGE\World\Objects\Object.h">
+      <Filter>src\TAGE\World\Objects</Filter>
+    </ClInclude>
+    <ClInclude Include="src\TAGE\World\Scene\Scene.h">
+      <Filter>src\TAGE\World\Scene</Filter>
+    </ClInclude>
+    <ClInclude Include="src\TAGE\World\Systems\System_Base.h">
+      <Filter>src\TAGE\World\Systems</Filter>
+    </ClInclude>
+    <ClInclude Include="src\TAGE\World\Systems\System_Renderer.h">
+      <Filter>src\TAGE\World\Systems</Filter>
+    </ClInclude>
+    <ClInclude Include="src\TARE\Common\RenderAPI.h">
+      <Filter>src\TARE\Common</Filter>
+    </ClInclude>
+    <ClInclude Include="src\TARE\Common\RenderContext.h">
+      <Filter>src\TARE\Common</Filter>
     </ClInclude>
     <ClInclude Include="src\tagepch.h">
       <Filter>src</Filter>
@@ -1509,10 +1464,38 @@
     <ClInclude Include="vendor\stb\stb_image.h">
       <Filter>vendor\stb</Filter>
     </ClInclude>
+    <ClInclude Include="vendor\stb\stb_image_write.h">
+      <Filter>vendor\stb</Filter>
+    </ClInclude>
+    <ClInclude Include="src\TARE\Buffers\Buffers.h" />
+    <ClInclude Include="src\TARE\Buffers\VertexArrayBuffer.h" />
+    <ClInclude Include="src\Platform\OpenGL\OpenGL_Buffers.h" />
+    <ClInclude Include="src\Platform\OpenGL\OpenGL_VertexArrayBuffer.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="src\Platform\OpenGL\OpenGL_RenderAPI.cpp">
+      <Filter>src\Platform\OpenGL</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Platform\OpenGL\OpenGL_RenderContext.cpp">
+      <Filter>src\Platform\OpenGL</Filter>
+    </ClCompile>
     <ClCompile Include="src\TAGE\Application\Application.cpp">
       <Filter>src\TAGE\Application</Filter>
+    </ClCompile>
+    <ClCompile Include="src\TAGE\AssetManager\AssetManager.cpp">
+      <Filter>src\TAGE\AssetManager</Filter>
+    </ClCompile>
+    <ClCompile Include="src\TAGE\AssetManager\AssetSerializers\Serializer_Material.cpp">
+      <Filter>src\TAGE\AssetManager\AssetSerializers</Filter>
+    </ClCompile>
+    <ClCompile Include="src\TAGE\AssetManager\AssetSerializers\Serializer_Model.cpp">
+      <Filter>src\TAGE\AssetManager\AssetSerializers</Filter>
+    </ClCompile>
+    <ClCompile Include="src\TAGE\AssetManager\Importer_Model.cpp">
+      <Filter>src\TAGE\AssetManager</Filter>
+    </ClCompile>
+    <ClCompile Include="src\TAGE\AssetManager\Importer_Texture.cpp">
+      <Filter>src\TAGE\AssetManager</Filter>
     </ClCompile>
     <ClCompile Include="src\TAGE\Input\Input.cpp">
       <Filter>src\TAGE\Input</Filter>
@@ -1526,66 +1509,6 @@
     <ClCompile Include="src\TAGE\Layers\LayerStack.cpp">
       <Filter>src\TAGE\Layers</Filter>
     </ClCompile>
-    <ClCompile Include="src\TAGE\Renderer\Camera\Camera.cpp">
-      <Filter>src\TAGE\Renderer\Camera</Filter>
-    </ClCompile>
-    <ClCompile Include="src\TAGE\Renderer\Camera\FreeCamera.cpp">
-      <Filter>src\TAGE\Renderer\Camera</Filter>
-    </ClCompile>
-    <ClCompile Include="src\TAGE\Renderer\Deferred\DeferredRendering.cpp">
-      <Filter>src\TAGE\Renderer\Deferred</Filter>
-    </ClCompile>
-    <ClCompile Include="src\TAGE\Renderer\Framebuffer\Framebuffer.cpp">
-      <Filter>src\TAGE\Renderer\Framebuffer</Filter>
-    </ClCompile>
-    <ClCompile Include="src\TAGE\Renderer\Material\Material.cpp">
-      <Filter>src\TAGE\Renderer\Material</Filter>
-    </ClCompile>
-    <ClCompile Include="src\TAGE\Renderer\Model\EndlessGrid.cpp">
-      <Filter>src\TAGE\Renderer\Model</Filter>
-    </ClCompile>
-    <ClCompile Include="src\TAGE\Renderer\Model\Mesh.cpp">
-      <Filter>src\TAGE\Renderer\Model</Filter>
-    </ClCompile>
-    <ClCompile Include="src\TAGE\Renderer\Model\Model.cpp">
-      <Filter>src\TAGE\Renderer\Model</Filter>
-    </ClCompile>
-    <ClCompile Include="src\TAGE\Renderer\Model\Primitives.cpp">
-      <Filter>src\TAGE\Renderer\Model</Filter>
-    </ClCompile>
-    <ClCompile Include="src\TAGE\Renderer\Renderer.cpp">
-      <Filter>src\TAGE\Renderer</Filter>
-    </ClCompile>
-    <ClCompile Include="src\TAGE\Renderer\Shader\Shader.cpp">
-      <Filter>src\TAGE\Renderer\Shader</Filter>
-    </ClCompile>
-    <ClCompile Include="src\TAGE\Renderer\Shader\ShaderLibrary.cpp">
-      <Filter>src\TAGE\Renderer\Shader</Filter>
-    </ClCompile>
-    <ClCompile Include="src\TAGE\Renderer\Shader\ShaderPreprocessor.cpp">
-      <Filter>src\TAGE\Renderer\Shader</Filter>
-    </ClCompile>
-    <ClCompile Include="src\TAGE\Renderer\Shadow\ShadowMap.cpp">
-      <Filter>src\TAGE\Renderer\Shadow</Filter>
-    </ClCompile>
-    <ClCompile Include="src\TAGE\Renderer\SkinnedModel\Animator.cpp">
-      <Filter>src\TAGE\Renderer\SkinnedModel</Filter>
-    </ClCompile>
-    <ClCompile Include="src\TAGE\Renderer\SkinnedModel\Skeleton.cpp">
-      <Filter>src\TAGE\Renderer\SkinnedModel</Filter>
-    </ClCompile>
-    <ClCompile Include="src\TAGE\Renderer\Skybox\Skybox.cpp">
-      <Filter>src\TAGE\Renderer\Skybox</Filter>
-    </ClCompile>
-    <ClCompile Include="src\TAGE\Renderer\Texture\FallbackTexture.cpp">
-      <Filter>src\TAGE\Renderer\Texture</Filter>
-    </ClCompile>
-    <ClCompile Include="src\TAGE\Renderer\Texture\Texture2D.cpp">
-      <Filter>src\TAGE\Renderer\Texture</Filter>
-    </ClCompile>
-    <ClCompile Include="src\TAGE\Renderer\Texture\TextureCubeMap.cpp">
-      <Filter>src\TAGE\Renderer\Texture</Filter>
-    </ClCompile>
     <ClCompile Include="src\TAGE\Utilities\UUID.cpp">
       <Filter>src\TAGE\Utilities</Filter>
     </ClCompile>
@@ -1595,12 +1518,25 @@
     <ClCompile Include="src\TAGE\Window\Window.cpp">
       <Filter>src\TAGE\Window</Filter>
     </ClCompile>
+    <ClCompile Include="src\TAGE\World\Scene\Scene.cpp">
+      <Filter>src\TAGE\World\Scene</Filter>
+    </ClCompile>
+    <ClCompile Include="src\TAGE\World\Systems\System_Renderer.cpp">
+      <Filter>src\TAGE\World\Systems</Filter>
+    </ClCompile>
+    <ClCompile Include="src\TARE\Common\RenderAPI.cpp">
+      <Filter>src\TARE\Common</Filter>
+    </ClCompile>
     <ClCompile Include="src\tagepch.cpp">
       <Filter>src</Filter>
     </ClCompile>
     <ClCompile Include="vendor\stb\stb_image.cpp">
       <Filter>vendor\stb</Filter>
     </ClCompile>
+    <ClCompile Include="src\TARE\Buffers\Buffers.cpp" />
+    <ClCompile Include="src\TARE\Buffers\VertexArrayBuffer.cpp" />
+    <ClCompile Include="src\Platform\OpenGL\OpenGL_Buffers.cpp" />
+    <ClCompile Include="src\Platform\OpenGL\OpenGL_VertexArrayBuffer.cpp" />
   </ItemGroup>
   <ItemGroup>
     <None Include="shaders\Common\Material.glsl">

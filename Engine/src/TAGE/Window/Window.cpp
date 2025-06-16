@@ -4,15 +4,10 @@
 #include "TAGE/Events/ApplicationEvents.h"
 #include "TAGE/Events/InputEvents.h"
 
+#include "Platform/OpenGL/OpenGL_RenderContext.h"
+
 namespace TAGE
 {
-	void gladErrorCallback(GLenum source, GLenum type, GLuint id, GLenum severity, GLsizei length, const GLchar* message, const void* userParam)
-	{
-		if (severity == GL_DEBUG_SEVERITY_NOTIFICATION)
-			return;
-		LOG_ERROR("OpenGL Error: {}", message);
-	}
-
 	void Window::Create(SWindow properties)
 	{
 		glfwSetErrorCallback([](int error, const char* description) { LOG_ERROR("GLFW Error ({}): {}\n", std::to_string(error), description); });
@@ -26,11 +21,11 @@ namespace TAGE
 		glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
 		glfwWindowHint(GLFW_OPENGL_DEBUG_CONTEXT, true);
 		glfwWindowHint(GLFW_SAMPLES, 8);
-		glfwWindowHint(GLFW_RESIZABLE, GLFW_TRUE);
 		glfwWindowHint(GLFW_FOCUSED, GLFW_TRUE);
 #ifdef __APPLE__
 		glfwWindowHint(GLFW_OPENGL_FORWARD_COMPAT, GL_TRUE);
 #endif
+
 		_Monitor = glfwGetPrimaryMonitor();
 		ASSERT(_Monitor, "Failed to get primary monitor");
 		_VideoMode = glfwGetVideoMode(_Monitor);
@@ -132,33 +127,8 @@ namespace TAGE
 			data.EventCallback(event);
 			});
 
-		if (!gladLoadGLLoader((GLADloadproc)glfwGetProcAddress))
-		{
-			LOG_ERROR("Failed to initialize GLAD");
-			glfwDestroyWindow(_Window);
-			glfwTerminate();
-			return;
-		}
-		else {
-			LOG_INFO("GLAD initialized successfully");
-			LOG_INFO("OpenGL Version: {}.{}", GLVersion.major, GLVersion.minor);
-			LOG_INFO("OpenGL Renderer: {0}", reinterpret_cast<const char*>(glGetString(GL_RENDERER)));
-			LOG_INFO("OpenGL Version: {0}", reinterpret_cast<const char*>(glGetString(GL_VERSION)));
-			LOG_INFO("OpenGL Vendor: {0}", reinterpret_cast<const char*>(glGetString(GL_VENDOR)));
-		}
-		glViewport(0, 0, _Properties.Width, _Properties.Height);
-		glEnable(GL_DEPTH_TEST);
-		glEnable(GL_BLEND);
-		glEnable(GL_CULL_FACE);
-		glEnable(GL_MULTISAMPLE);
-		glEnable(GL_PROGRAM_POINT_SIZE);
-		glEnable(GL_FRAMEBUFFER_SRGB);
-		glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
-
-#ifdef DEBUG
-		glEnable(GL_DEBUG_OUTPUT);
-		glDebugMessageCallback(gladErrorCallback, nullptr);
-#endif
+		_RenderContext = MEM::MakeScope<TARE::OpenGL_RenderContext>(_Window);
+		_RenderContext->Init();
 	}
 
 	Window::Window(SWindow properties, WindowMode mode)
@@ -273,7 +243,7 @@ namespace TAGE
 
 	void Window::SwapBuffers()
 	{
-		glfwSwapBuffers(_Window);
+		_RenderContext->SwapBuffers();
 		glfwPollEvents();
 
 		_Properties.Focused = glfwGetWindowAttrib(_Window, GLFW_FOCUSED);

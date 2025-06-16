@@ -19,8 +19,8 @@ uniform sampler2D u_ShadowMap;
 
 void main()
 {
-    vec3 viewDir = v_TBN * normalize(v_ViewDir - v_FragPos);
-    vec3 fragPos = v_TBN * v_FragPos;
+    vec3 viewDir = normalize(v_ViewDir - v_FragPos);
+    vec3 fragPos = v_FragPos;
 
     vec3 normal = texture(u_Material.NormalTex, v_TexCoord).rgb;
     normal = normal * 2.0 - 1.0;
@@ -33,12 +33,16 @@ void main()
     vec3 F0 = mix(vec3(0.04), albedo, metallic);
 
     vec3 Lo = vec3(0.0);
-    for (int i = 0; i < u_LightCount; ++i)
+    vec3 lightDir = vec3(0.0);
+    for (int i = 0; i < u_LightCount; ++i){
         Lo += CalculatePBRLight(u_Lights[i], normal, viewDir, fragPos, albedo, metallic, roughness, F0);
+        if (u_Lights[i].type == LIGHT_TYPE_DIRECTIONAL)
+            lightDir = normalize(u_Lights[i].direction - fragPos);
+    }
 
-    vec3 ambient = vec3(0.1) * albedo * (1.0 - metallic);
-    float shadow = ShadowCalculation(u_ShadowMap, v_FragPosLightSpace, fragPos, normal);
-    vec3 color = ambient + Lo * (1.0f - shadow);
+    float shadow = ShadowCalculation(u_ShadowMap, v_FragPosLightSpace, normal, lightDir);
+    vec3 ambient = vec3(0.25) * (1.0f - shadow) * albedo;
+    vec3 color = ambient + Lo;
 
     #ifdef DEBUG_DEPTH
         float depthValue = texture(u_ShadowMap, v_TexCoord).r;

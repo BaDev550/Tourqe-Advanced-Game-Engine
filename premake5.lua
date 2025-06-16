@@ -17,6 +17,7 @@ workspace "TAGE"
    IncludeDir["Assimp"] = "vendor/assimp/include"
    IncludeDir["glm"] =    "vendor/glm/"
    IncludeDir["ImGui"] =  "vendor/imgui"
+   IncludeDir["entt"] =  "vendor/entt/include"
 
     group "Dependencies"
         include "Engine/vendor/imgui"

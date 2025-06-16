@@ -58,7 +58,7 @@
     <ClCompile>
       <PrecompiledHeader>NotUsing</PrecompiledHeader>
       <WarningLevel>Level3</WarningLevel>
-      <AdditionalIncludeDirectories>src;..\Engine\vendor\spdlog;..\Engine\src;..\Engine\vendor\GLFW\include;..\Engine\vendor\GLAD\include;..\Engine\vendor\imgui;..\Engine\vendor\assimp\include;..\Engine\vendor\glm;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>src;..\Engine\vendor\spdlog;..\Engine\src;..\Engine\vendor\GLFW\include;..\Engine\vendor\GLAD\include;..\Engine\vendor\imgui;..\Engine\vendor\assimp\include;..\Engine\vendor\glm;..\Engine\vendor\entt\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <DebugInformationFormat>EditAndContinue</DebugInformationFormat>
       <Optimization>Disabled</Optimization>
       <RuntimeLibrary>MultiThreadedDebugDLL</RuntimeLibrary>
@@ -70,17 +70,12 @@
       <SubSystem>Console</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
     </Link>
-    <PostBuildEvent>
-      <Command>IF EXIST assets\ (xcopy /Q /E /Y /I assets bin\Debug-windows-x86_64\Sandbox\assets &gt; nul) ELSE (xcopy /Q /Y /I assets bin\Debug-windows-x86_64\Sandbox\assets &gt; nul)
-IF EXIST ..\Engine\shaders\ (xcopy /Q /E /Y /I ..\Engine\shaders bin\Debug-windows-x86_64\Sandbox\shaders &gt; nul) ELSE (xcopy /Q /Y /I ..\Engine\shaders bin\Debug-windows-x86_64\Sandbox\shaders &gt; nul)
-IF EXIST ..\Engine\assets\ (xcopy /Q /E /Y /I ..\Engine\assets bin\Debug-windows-x86_64\Sandbox\assets &gt; nul) ELSE (xcopy /Q /Y /I ..\Engine\assets bin\Debug-windows-x86_64\Sandbox\assets &gt; nul)</Command>
-    </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <ClCompile>
       <PrecompiledHeader>NotUsing</PrecompiledHeader>
       <WarningLevel>Level3</WarningLevel>
-      <AdditionalIncludeDirectories>src;..\Engine\vendor\spdlog;..\Engine\src;..\Engine\vendor\GLFW\include;..\Engine\vendor\GLAD\include;..\Engine\vendor\imgui;..\Engine\vendor\assimp\include;..\Engine\vendor\glm;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>src;..\Engine\vendor\spdlog;..\Engine\src;..\Engine\vendor\GLFW\include;..\Engine\vendor\GLAD\include;..\Engine\vendor\imgui;..\Engine\vendor\assimp\include;..\Engine\vendor\glm;..\Engine\vendor\entt\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <Optimization>Full</Optimization>
       <FunctionLevelLinking>true</FunctionLevelLinking>
       <IntrinsicFunctions>true</IntrinsicFunctions>
@@ -97,7 +92,7 @@ IF EXIST ..\Engine\assets\ (xcopy /Q /E /Y /I ..\Engine\assets bin\Debug-windows
       <OptimizeReferences>true</OptimizeReferences>
     </Link>
     <PostBuildEvent>
-      <Command>IF EXIST assets\ (xcopy /Q /E /Y /I assets bin\Release-windows-x86_64\Sandbox\assets &gt; nul) ELSE (xcopy /Q /Y /I assets bin\Release-windows-x86_64\Sandbox\assets &gt; nul)
+      <Command>IF EXIST imported\ (xcopy /Q /E /Y /I imported bin\Release-windows-x86_64\Sandbox\imported &gt; nul) ELSE (xcopy /Q /Y /I imported bin\Release-windows-x86_64\Sandbox\imported &gt; nul)
 IF EXIST ..\Engine\shaders\ (xcopy /Q /E /Y /I ..\Engine\shaders bin\Release-windows-x86_64\Sandbox\shaders &gt; nul) ELSE (xcopy /Q /Y /I ..\Engine\shaders bin\Release-windows-x86_64\Sandbox\shaders &gt; nul)
 IF EXIST ..\Engine\assets\ (xcopy /Q /E /Y /I ..\Engine\assets bin\Release-windows-x86_64\Sandbox\assets &gt; nul) ELSE (xcopy /Q /Y /I ..\Engine\assets bin\Release-windows-x86_64\Sandbox\assets &gt; nul)</Command>
     </PostBuildEvent>

@@ -20,6 +20,7 @@ project "Sandbox"
         "../Engine/%{IncludeDir.ImGui}",
         "../Engine/%{IncludeDir.Assimp}",
         "../Engine/%{IncludeDir.glm}",
+        "../Engine/%{IncludeDir.entt}",
     }
 
     links {
@@ -38,7 +39,7 @@ project "Sandbox"
         runtime "Release"
         optimize "on"
         postbuildcommands {
-            "{COPY} assets %{cfg.targetdir}/assets",
+            "{COPY} imported %{cfg.targetdir}/imported",
             "{COPY} ../Engine/shaders %{cfg.targetdir}/shaders",
             "{COPY} ../Engine/assets %{cfg.targetdir}/assets"
         }

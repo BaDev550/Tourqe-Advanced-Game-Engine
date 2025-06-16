@@ -3,6 +3,9 @@
 #include "TAGE/Utilities/Timer.h"
 #include "TAGE/Input/Input.h"
 
+#include "TAGE/World/Systems/System_Renderer.h"
+#include "TAGE/World/Components/RenderComponents.h"
+
 namespace TAGE {
 	Application* Application::s_Instance = nullptr;
 
@@ -10,6 +13,7 @@ namespace TAGE {
 	{
 		s_Instance = this;
 		Logger::init();
+		LOG_INFO("TAGE Version - {}.{}", ENGINE_VERSION_MAJOR, ENGINE_VERSION_MINOR);
 
 		ASSERT(s_Instance, "Application already exists");
 
@@ -21,27 +25,10 @@ namespace TAGE {
 		width = _Window->GetWidth();
 		height = _Window->GetHeight();
 
-		_Renderer = MEM::MakeScope<GL_Renderer>(width, height);
-		_FreeCam = MEM::MakeScope<FreeCamera>();
-
 		_ThreadPool = MEM::MakeScope<Threading::ThreadPool>(4);
-		_Test.LoadFromFile("assets/models/weapons/AR/scene.gltf");
-		_Floor.LoadFromFile("assets/models/Cube/cube.obj");
 
 		_ImGuiLayer = MEM::MakeScope<ImGuiLayer>();
 		PushOverlay(_ImGuiLayer.get());
-
-		lightManager.AddLight(Light(
-			LightType::DIRECTIONAL,
-			{ 0.0f, 0.0f, 0.0f },
-			{ 1.0f, 1.0f, 1.0f },
-			{ 1.0f, 1.0f, 1.0f },
-			6.0f
-		));
-		lightManager.AddLight(Light(
-			LightType::POINT,
-			{ 1.0f, 1.0f, 1.0f }
-		));
 	}
 
 	Application::~Application()
@@ -64,32 +51,8 @@ namespace TAGE {
 			_DeltaTime = time - _LastFrame;
 			_LastFrame = time;
 
-			_FreeCam->Update(_DeltaTime);
-
 			for (const auto& layer : _LayerStack)
 				layer->OnUpdate(_DeltaTime);
-			_Test.SetTransform(glm::mat4(1.0f));
-			glm::mat4 floor = glm::mat4(1.0f);
-			floor = glm::translate(floor, glm::vec3(0.0f, -2.5f, 0.0f));
-			floor = glm::scale(floor, glm::vec3(10.0f, 0.2f, 10.0f));
-			_Floor.SetTransform(floor);
-
-			_Renderer->BeginGBuffer(_FreeCam->GetCamera());
-			_Test.Draw("DeferredShader");
-			_Floor.Draw("DeferredShader");
-			_Renderer->EndGBuffer();
-
-			_Renderer->CalculateLights(lightManager.GetLights());
-
-			_Renderer->BeginShadowMap();
-			_Test.Draw("ShadowShader");
-			_Floor.Draw("ShadowShader");
-			_Renderer->EndShadowMap();
-
-			_Renderer->BeginFrame(_FreeCam->GetCamera());
-			_Test.Draw("MainShader");
-			_Floor.Draw("MainShader");
-			_Renderer->EndFrame();
 
 			_ImGuiLayer->Begin();
 			for (const auto& layer : _LayerStack)

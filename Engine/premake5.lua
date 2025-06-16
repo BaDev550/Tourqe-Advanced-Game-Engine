@@ -27,7 +27,8 @@ project "Engine"
         "%{IncludeDir.GLAD}",
         "%{IncludeDir.Assimp}",
         "%{IncludeDir.ImGui}",
-        "%{IncludeDir.glm}"
+        "%{IncludeDir.glm}",
+        "%{IncludeDir.entt}"
    }
 
    defines 
