@@ -5,12 +5,13 @@
 #include "Platform/OpenGL/OpenGL_Buffers.h"
 
 namespace TARE {
-	VertexBufferObject* VertexBufferObject::Create(float* vertices, uint16 size)
+	TAGE::MEM::Ref<VertexBufferObject> VertexBufferObject::Create(void* data, size_t size)
 	{
 		switch (RenderAPI::GetRenderAPI())
 		{
 		case RAPI::UNDEFINED:
-		case RAPI::OPENGL: return new OpenGL_VertexBufferObject(vertices, size);
+		case RAPI::OPENGL: return TAGE::MEM::MakeRef<OpenGL_VertexBufferObject>(data, size);
+		case RAPI::DIRECTX11:
 		case RAPI::VULKAN:
 		default:
 			ASSERT_NOMSG(false);
@@ -19,12 +20,13 @@ namespace TARE {
 		return nullptr;
 	}
 
-	ElementBufferObject* ElementBufferObject::Create(uint* indices, uint size)
+	TAGE::MEM::Ref<ElementBufferObject> ElementBufferObject::Create(uint* indices, size_t size)
 	{
 		switch (RenderAPI::GetRenderAPI())
 		{
 		case RAPI::UNDEFINED:
-		case RAPI::OPENGL: return new OpenGL_ElementBufferObject(indices, size);
+		case RAPI::OPENGL: return TAGE::MEM::MakeRef<OpenGL_ElementBufferObject>(indices, size);
+		case RAPI::DIRECTX11:
 		case RAPI::VULKAN:
 		default:
 			ASSERT_NOMSG(false);

@@ -68,6 +68,6 @@ namespace TAGE {
 		GLFWmonitor* _Monitor;
 		const GLFWvidmode* _VideoMode = nullptr;
 
-		MEM::Scope<TARE::RenderContext> _RenderContext;
+		MEM::Ref<TARE::RenderContext> _RenderContext;
 	};
 }

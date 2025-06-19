@@ -7,6 +7,7 @@ namespace TAGE {
 	public:
 		virtual const char* GetName() const override { return "WindowClose"; }
 		virtual EEventType GetEventType() const override { return EEventType::WindowClose; }
+        EVENT_CLASS_CATEGORY(EventCategoryApplication)
 	};
 
     class WindowResizeEvent : public Event {
@@ -20,7 +21,7 @@ namespace TAGE {
 
         virtual EEventType GetEventType() const override { return EEventType::WindowResize; }
         virtual const char* GetName() const override { return "WindowResizeEvent"; }
-
+        EVENT_CLASS_CATEGORY(EventCategoryApplication)
     private:
         uint32_t m_Width, m_Height;
     };

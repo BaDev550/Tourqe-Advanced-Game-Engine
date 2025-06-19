@@ -5,7 +5,7 @@ namespace TARE {
 	class OpenGL_VertexBufferObject : public VertexBufferObject
 	{
 	public:
-		OpenGL_VertexBufferObject(float* vertices, uint16 size);
+		OpenGL_VertexBufferObject(void* data, size_t size);
 		virtual ~OpenGL_VertexBufferObject();
 
 		virtual void Bind() const override;
@@ -20,7 +20,7 @@ namespace TARE {
 	class OpenGL_ElementBufferObject : public ElementBufferObject
 	{
 	public:
-		OpenGL_ElementBufferObject(uint* indices, uint count);
+		OpenGL_ElementBufferObject(uint* indices, size_t count);
 		virtual ~OpenGL_ElementBufferObject();
 
 		virtual void Bind() const override;

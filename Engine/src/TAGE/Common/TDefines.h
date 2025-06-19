@@ -20,7 +20,7 @@ typedef unsigned long long	uint64;
 #define FAR_CLIP 250.0f
 
 #define USE_FALLBACK_TEXTURE 1
-#define SHADOW_MAP_TEXTURE_SLOT 15
+#define SHADOW_MAP_TEXTURE_SLOT 5
 
 #define MAX_LIGHTS 16
 #define MAX_BONES 124
@@ -45,8 +45,3 @@ extern uint32_t g_FallbackTextureID;
 
 #define BIT(x) (1 << (x))
 #define BIND_EVENT_FN(fn) std::bind(&fn, this, std::placeholders::_1)
-
-inline int8 QuantizeSigned(float value) { return static_cast<int8>(std::roundf(glm::clamp(value, -1.0f, 1.0f) * 127.0f)); }
-inline int16 QuantizePosition(float value) { return static_cast<int16>(value * 10000.0f); }
-inline uint16 QuantizeUV(float value) { return static_cast<uint16>(glm::clamp(value, 0.0f, 1.0f) * 65535.0f); }
-inline uint8 QuantizeWeight(float value) { return static_cast<uint8>(glm::clamp(value, 0.0f, 1.0f) * 255.0f); }

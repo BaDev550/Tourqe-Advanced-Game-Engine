@@ -13,11 +13,32 @@
 #include "TAGE/AssetManager/AssetManager.h"
 #include "TAGE/World/Scene/Scene.h"
 
+#include "TARE/TARE.h"
+#include "TARE/Camera/FreeCamera.h"
+
 namespace TAGE {
+    struct ApplicationCommandLineArgs {
+        int Count = 0;
+        char** Args = nullptr;
+
+        const char* operator[](int index) const
+        {
+            ASSERT_NOMSG(index < Count);
+            return Args[index];
+        }
+    };
+
+	struct ApplicationSpecifics
+	{
+		std::string AppName = "TAGE";
+		std::string WorkingDirectory;
+		ApplicationCommandLineArgs CommandLineArgs;
+	};
+
     class Application
     {
     public:
-        Application(const char* appName, int width, int height);
+        Application(const ApplicationSpecifics& spec);
         virtual ~Application();
         void Run();
 
@@ -27,25 +48,36 @@ namespace TAGE {
 
         void PushLayer(Layer* layer) { _LayerStack.PushLayer(layer); }
         void PushOverlay(Layer* layer) { _LayerStack.PushOverlay(layer); }
+
+		void Close() {
+			_ApplicationState = ApplicationState::STOPPED;
+			_Window->ForceClose();
+		}
+
     public:
-        Scene* GetScene() const { return _ActiveScene.get(); }
+        MEM::Ref<Scene> GetScene() const { return _ActiveScene; }
         Window* GetWindow() const { return _Window.get(); }
-        Threading::ThreadPool* GetThreadPool() const { return _ThreadPool.get(); }
+		TARE::TARE* GetRenderer() const { return _Renderer.get(); }
+		ImGuiLayer* GetImGuiLayer() const { return _ImGuiLayer.get(); }
     private:
         void OnEvent(Event& event);
     private:
         static Application* s_Instance;
         ApplicationState _ApplicationState = ApplicationState::RUNNING;
+		ApplicationSpecifics _AppSpecifics;
 
         MEM::Scope<Window> _Window;
+        MEM::Scope<TARE::TARE> _Renderer;
         MEM::Scope<ImGuiLayer> _ImGuiLayer;
-        MEM::Scope<Threading::ThreadPool> _ThreadPool;
-        MEM::Scope<Scene> _ActiveScene;
+        MEM::Ref<Scene> _ActiveScene;
         LayerStack _LayerStack;
+
+        MEM::Ref<TARE::Model> _Model;
+        MEM::Scope<TARE::FreeCamera> _Camera;
 
         float _LastFrame = 0.0f;
         float _DeltaTime = 0.0f;
     };
 
-    Application* CreateApplication();
+    Application* CreateApplication(ApplicationCommandLineArgs args);
 }

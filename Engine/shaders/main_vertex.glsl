@@ -31,7 +31,7 @@ void main()
     vec3 N = normalize(normalMatrix * aNormal);
     v_TBN = transpose(mat3(T, B, N));
 
-    v_FragPos = vec3(u_Model * vec4(aPos, 1.0));
+    v_FragPos = vec3(u_Model * vec4(aPos, 1.0) / 100.0f);
     v_ViewDir = normalize(u_CameraPosition - v_FragPos);
     v_TexCoord = aTexCoord;
     v_FragPosLightSpace = u_LightSpaceMatrix * vec4(v_FragPos, 1.0);

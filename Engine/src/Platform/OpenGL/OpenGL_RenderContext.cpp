@@ -35,12 +35,12 @@ namespace TARE {
 			LOG_INFO("OpenGL Vendor: {0}", reinterpret_cast<const char*>(glGetString(GL_VENDOR)));
 		}
 
-		glEnable(GL_DEPTH_TEST);
 		glEnable(GL_BLEND);
 		glEnable(GL_CULL_FACE);
+		glEnable(GL_DEPTH_TEST);
+		glDepthFunc(GL_LESS);    
+		glDepthMask(GL_TRUE);
 		glEnable(GL_MULTISAMPLE);
-		glEnable(GL_PROGRAM_POINT_SIZE);
-		glEnable(GL_FRAMEBUFFER_SRGB);
 		glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 #ifdef _DEBUG
 		glEnable(GL_DEBUG_OUTPUT);

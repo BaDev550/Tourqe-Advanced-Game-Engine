@@ -3,7 +3,7 @@ out vec4 FragColor;
 in vec2 v_TexCoord;
 
 uniform sampler2D u_ScreenTexture;
-uniform float exposure;
+uniform float exposure = 1.0f;
 
 void main()
 {

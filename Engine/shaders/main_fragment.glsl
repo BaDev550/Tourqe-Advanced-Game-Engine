@@ -55,5 +55,5 @@ void main()
         return;
     #endif
 
-    FragColor = vec4(color, 1.0);
+    FragColor = vec4(texture(u_Material.DiffuseTex, v_TexCoord).rgb, 1.0);
 }

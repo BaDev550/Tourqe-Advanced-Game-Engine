@@ -41,7 +41,16 @@ namespace TAGE
 
 	void ImGuiLayer::OnDetach()
 	{
+	}
 
+	void ImGuiLayer::OnEvent(Event& e)
+	{
+		if (_BlockEvents)
+		{
+			ImGuiIO& io = ImGui::GetIO();
+			e.bIsHandled |= e.IsInCategory(EventCategoryMouse) & io.WantCaptureMouse;
+			e.bIsHandled |= e.IsInCategory(EventCategoryKeyboard) & io.WantCaptureKeyboard;
+		}
 	}
 
 	void ImGuiLayer::OnImGuiRender()

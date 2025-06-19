@@ -4,8 +4,6 @@
 #include "TAGE/Events/ApplicationEvents.h"
 #include "TAGE/Events/InputEvents.h"
 
-#include "Platform/OpenGL/OpenGL_RenderContext.h"
-
 namespace TAGE
 {
 	void Window::Create(SWindow properties)
@@ -25,7 +23,6 @@ namespace TAGE
 #ifdef __APPLE__
 		glfwWindowHint(GLFW_OPENGL_FORWARD_COMPAT, GL_TRUE);
 #endif
-
 		_Monitor = glfwGetPrimaryMonitor();
 		ASSERT(_Monitor, "Failed to get primary monitor");
 		_VideoMode = glfwGetVideoMode(_Monitor);
@@ -127,7 +124,7 @@ namespace TAGE
 			data.EventCallback(event);
 			});
 
-		_RenderContext = MEM::MakeScope<TARE::OpenGL_RenderContext>(_Window);
+		_RenderContext = TARE::RenderContext::Create(_Window);
 		_RenderContext->Init();
 	}
 

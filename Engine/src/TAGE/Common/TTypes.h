@@ -6,6 +6,7 @@
 #include "TEnums.h"
 
 #define GLM_ENABLE_EXPERIMENTAL
+#define TAGE_ENABLE_GLM_VERTEX_DATA
 #include <glm/gtx/quaternion.hpp>
 
 struct SkinedVertexData {
@@ -25,13 +26,27 @@ struct SkinedVertexData {
 	}
 };
 
+#ifdef TAGE_ENABLE_GLM_VERTEX_DATA
+#pragma pack(push, 1)
+struct VertexData {
+	glm::vec3 pos;
+	glm::vec3 normal;
+	glm::vec2 uv;
+	glm::vec3 tangent;
+	glm::vec3 bitangent;
+};
+#pragma pack(pop)
+#else
+#pragma pack(push, 1)
 struct VertexData {
 	int16 pos[3];
-	uint16 uv[2];
 	int8 normal[3];
+	uint16 uv[2];
 	int8 tangent[3];
 	int8 bitangent[3];
 };
+#pragma pack(pop)
+#endif
 
 struct Bone {
 	std::string Name;
@@ -119,4 +134,28 @@ struct Light {
 		float outer = glm::radians(30.0f))
 		: type(type), position(pos), direction(dir), color(col), intensity(inten), range(rng), innerCone(inner), outerCone(outer) {}
 
+};
+
+struct FramebufferTextureSpecification {
+	FramebufferTextureFormat format = FramebufferTextureFormat::RGBA8;
+
+	FramebufferTextureSpecification() = default;
+	FramebufferTextureSpecification(FramebufferTextureFormat fmt) : format(fmt) { }
+};
+
+struct FramebufferAttachmentSpecification {
+	std::vector<FramebufferTextureSpecification> Attachments;
+
+	FramebufferAttachmentSpecification() = default;
+	FramebufferAttachmentSpecification(std::initializer_list<FramebufferTextureSpecification> attachments) : Attachments(attachments) {}
+};
+
+struct FramebufferSpecification
+{
+	uint Width = 0, Height = 0;
+	FramebufferAttachmentSpecification Attachments;
+	uint Samples = 1;
+
+	bool SwapChainTarget = false;
+	FramebufferSpecification(FramebufferAttachmentSpecification attachments, uint samples, uint width, uint height) : Attachments(attachments), Samples(samples), Width(width), Height(height) {}
 };

@@ -13,6 +13,7 @@ namespace TAGE {
         int GetKey() const { return m_Key; }
 
         EVENT_CLASS_TYPE(KeyPressed);
+        EVENT_CLASS_CATEGORY(EventCategoryKeyboard | EventCategoryInput)
     private:
         int m_Key;
     };
@@ -25,6 +26,7 @@ namespace TAGE {
 
         int GetKey() const { return m_Key; }
         EVENT_CLASS_TYPE(KeyReleased);
+        EVENT_CLASS_CATEGORY(EventCategoryKeyboard | EventCategoryInput)
     private:
         int m_Key;
     };
@@ -39,6 +41,7 @@ namespace TAGE {
         float GetY() const { return m_Y; }
 
         EVENT_CLASS_TYPE(MouseMoved);
+        EVENT_CLASS_CATEGORY(EventCategoryMouse | EventCategoryInput)
     private:
         float m_X, m_Y;
     };
@@ -52,6 +55,7 @@ namespace TAGE {
         int GetButton() const { return m_Button; }
 
         EVENT_CLASS_TYPE(MouseButtonPressed);
+        EVENT_CLASS_CATEGORY(EventCategoryMouse | EventCategoryInput)
     private:
         int m_Button;
     };
@@ -65,6 +69,7 @@ namespace TAGE {
         int GetButton() const { return m_Button; }
          
         EVENT_CLASS_TYPE(MouseButtonReleased);
+        EVENT_CLASS_CATEGORY(EventCategoryMouse | EventCategoryInput)
     private:
         int m_Button;
     };
@@ -79,6 +84,7 @@ namespace TAGE {
         float GetYOffset() const { return m_YOffset; }
 
         EVENT_CLASS_TYPE(MouseScrolled);
+        EVENT_CLASS_CATEGORY(EventCategoryMouse | EventCategoryInput)
     private:
         float m_XOffset, m_YOffset;
     };

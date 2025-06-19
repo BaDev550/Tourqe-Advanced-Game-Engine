@@ -3,11 +3,11 @@
 #include "GLAD/glad.h"
 
 namespace TARE {
-	OpenGL_VertexBufferObject::OpenGL_VertexBufferObject(float* vertices, uint16 size)
+	OpenGL_VertexBufferObject::OpenGL_VertexBufferObject(void* data, size_t size)
 	{
 		glCreateBuffers(1, &_ID);
 		glBindBuffer(GL_ARRAY_BUFFER, _ID);
-		glBufferData(GL_ARRAY_BUFFER, size, vertices, GL_STATIC_DRAW);
+		glBufferData(GL_ARRAY_BUFFER, size, data, GL_STATIC_DRAW);
 	}
 	OpenGL_VertexBufferObject::~OpenGL_VertexBufferObject()
 	{
@@ -16,12 +16,12 @@ namespace TARE {
 	void OpenGL_VertexBufferObject::Bind() const { glBindBuffer(GL_ARRAY_BUFFER, _ID); }
 	void OpenGL_VertexBufferObject::Unbind() const { glBindBuffer(GL_ARRAY_BUFFER, 0); }
 
-	OpenGL_ElementBufferObject::OpenGL_ElementBufferObject(uint* indices, uint count)
+	OpenGL_ElementBufferObject::OpenGL_ElementBufferObject(uint* indices, size_t count)
 		: _Count(count)
 	{
 		glCreateBuffers(1, &_ID);
 		glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, _ID);
-		glBufferData(GL_ELEMENT_ARRAY_BUFFER, count * sizeof(uint32_t), indices, GL_STATIC_DRAW);
+		glBufferData(GL_ELEMENT_ARRAY_BUFFER, count * sizeof(uint), indices, GL_STATIC_DRAW);
 	}
 	OpenGL_ElementBufferObject::~OpenGL_ElementBufferObject()
 	{

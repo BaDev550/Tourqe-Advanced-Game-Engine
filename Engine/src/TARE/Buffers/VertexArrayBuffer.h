@@ -15,6 +15,6 @@ namespace TARE {
 		virtual void SetIndexBuffer(const  TAGE::MEM::Ref<ElementBufferObject>& indexBuffer) = 0;
 		virtual TAGE::MEM::Ref<ElementBufferObject> GetIndexBuffer() const = 0;
 
-		static VertexArrayObject* Create();
+		static TAGE::MEM::Ref<VertexArrayObject> Create();
 	};
 }

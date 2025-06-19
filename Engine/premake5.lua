@@ -41,7 +41,10 @@ project "Engine"
         "GLAD",
         "GLFW",
         "assimp",
-        "ImGui"
+        "ImGui",
+        "d3d11.lib",
+        "dxgi.lib",
+        "d3dcompiler.lib"
        }
 
    buildoptions "/utf-8"

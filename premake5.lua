@@ -1,6 +1,6 @@
 workspace "TAGE"
    architecture "x64"
-   startproject "Sandbox"
+   startproject "Editor"
 
    configurations
    {
@@ -30,6 +30,6 @@ workspace "TAGE"
         include "Engine/"
     group ""
 
-    group "Game"
-        include "Sandbox/"
+    group "Editor"
+        include "Editor/"
     group ""

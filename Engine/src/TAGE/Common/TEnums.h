@@ -10,13 +10,19 @@ enum class ShaderDataType : uint8 {
 	VEC3,
 	VEC4,
 	MAT3,
-	MAT4
+	MAT4,
+	SHORT3,
+	USHORT2,
+	BYTE3,
+	BYTE3_NORM,
+	UBYTE2_NORM
 };
 
 enum class RAPI : uint8 {
 	UNDEFINED = 0,
 	OPENGL,
-	VULKAN
+	VULKAN,
+	DIRECTX11
 };
 
 enum class LoadingAssetType : uint8 {
@@ -43,6 +49,12 @@ enum ClearMode {
 	COLOR_STENCIL = COLOR | STENCIL,
 	DEPTH_STENCIL = DEPTH | STENCIL,
 	COLOR_DEPTH_STENCIL = COLOR | DEPTH | STENCIL
+};
+
+enum DrawPropeties {
+	DEPTH_TEST = 0x0B71,
+	CULL_TEST = 0x0B44,
+	BLEND = 0x0BE2,
 };
 
 enum class ShadingMode : uint8 {
@@ -118,8 +130,29 @@ enum class EEventType : uint8 {
 	MouseScrolled
 };
 
+enum EventCategory
+{
+	None = 0,
+	EventCategoryApplication = BIT(0),
+	EventCategoryInput = BIT(1),
+	EventCategoryKeyboard = BIT(2),
+	EventCategoryMouse = BIT(3),
+	EventCategoryMouseButton = BIT(4)
+};
+
 enum class SystemUpdateType : uint8 {
 	UPDATE = 0,
 	PAUSE,
 	RENDER_ONLY,
+};
+
+enum class FramebufferTextureFormat : uint8 {
+	NONE = 0,
+	RGBA,
+	RGBA8,
+	RGBA16F,
+	RED_INTEGER,
+	DEPTH24STENCIL8,
+	DEPTH32F,
+	DEPTH24,
 };

@@ -38,32 +38,32 @@ class SandboxLayer : public TAGE::Layer {
         //    ImGui::Image((ImTextureID)(void*)ShadowMap->GetDepthMap(), ImVec2(150, 150), ImVec2(0, 1), ImVec2(1, 0));
         //}
 
-        //auto scene = app->GetScene();
-        //for (auto& [id, object] : scene->GetObjects()) {
-        //    auto idenityC = object->GetComponent<TAGE::IdentityComponent>();
-        //    if (ImGui::Selectable(idenityC->Name.c_str())) {
-        //        _SelectedObject = object;
-        //    }
-        //}
+        auto scene = app->GetScene();
+        for (auto& [id, object] : scene->GetObjects()) {
+            auto idenityC = object->GetComponent<TAGE::IdentityComponent>();
+            if (ImGui::Selectable(idenityC->Name.c_str())) {
+                _SelectedObject = object;
+            }
+        }
 
-        //if (_SelectedObject) {
-        //    auto& transformC = _SelectedObject->GetTransform();
+        if (_SelectedObject) {
+            auto& transformC = _SelectedObject->GetTransform();
 
-        //    ImGui::DragFloat3("Position", glm::value_ptr(transformC.Position));
-        //    glm::vec3 euler = glm::eulerAngles(transformC.Rotation) * glm::degrees(1.0f);
-        //    if (ImGui::DragFloat3("Rotation", glm::value_ptr(euler))) {
-        //        transformC.Rotation = glm::quat(glm::radians(euler));
-        //    }
-        //    ImGui::DragFloat3("Scale", glm::value_ptr(transformC.Scale));
+            ImGui::DragFloat3("Position", glm::value_ptr(transformC.Position));
+            glm::vec3 euler = glm::eulerAngles(transformC.Rotation) * glm::degrees(1.0f);
+            if (ImGui::DragFloat3("Rotation", glm::value_ptr(euler))) {
+                transformC.Rotation = glm::quat(glm::radians(euler));
+            }
+            ImGui::DragFloat3("Scale", glm::value_ptr(transformC.Scale));
 
-        //    if (_SelectedObject->HasComponent<TAGE::LightComponent>()) {
-        //        auto& Light = _SelectedObject->GetComponent<TAGE::LightComponent>()->Handle;
-        //        ImGui::DragFloat3("Light Pos", glm::value_ptr(Light.position));
-        //        ImGui::DragFloat3("Light Direction", glm::value_ptr(Light.direction));
-        //        ImGui::ColorEdit3("Light Color", glm::value_ptr(Light.color));
-        //        ImGui::DragFloat("Light inte", &Light.intensity);
-        //    }
-        //}
+            if (_SelectedObject->HasComponent<TAGE::LightComponent>()) {
+                auto& Light = _SelectedObject->GetComponent<TAGE::LightComponent>()->Handle;
+                ImGui::DragFloat3("Light Pos", glm::value_ptr(Light.position));
+                ImGui::DragFloat3("Light Direction", glm::value_ptr(Light.direction));
+                ImGui::ColorEdit3("Light Color", glm::value_ptr(Light.color));
+                ImGui::DragFloat("Light inte", &Light.intensity);
+            }
+        }
     }
 
     virtual void OnEvent(TAGE::Event& event) {

@@ -14,6 +14,12 @@ namespace TAGE {
 		void OnImGuiRender() override;
 		void Begin();
 		void End();
+		void OnEvent(Event& e) override;
+
+		void BlockEvents(bool block) { _BlockEvents = block; }
+
+	private:
+		bool _BlockEvents = true;
 	};
 
 }
