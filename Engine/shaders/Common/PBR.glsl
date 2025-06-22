@@ -1,3 +1,6 @@
+#ifndef PBR_GLSL
+#define PBR_GLSL
+
 const float PI = 3.14159265359;
 
 float DistributionGGX(vec3 N, vec3 H, float roughness)
@@ -107,13 +110,24 @@ vec3 CalculatePBRLight(
     }
 
     vec3 radiance = light.color * intensity * attenuation;
-    vec3 specular = ComputeCookTorranceSpecular(normal, viewDir, lightDir, F0, roughness);
 
-    vec3 F = fresnelSchlick(max(dot(normalize(viewDir + lightDir), viewDir), 0.0), F0);
+    vec3 H = normalize(viewDir + lightDir);
+    float NDF = DistributionGGX(normal, H, roughness);
+    float G   = GeometrySmith(normal, viewDir, lightDir, roughness);
+    vec3 F    = fresnelSchlick(max(dot(H, viewDir), 0.0), F0);
+
+    float NdotL = max(dot(normal, lightDir), 0.0);
+    float NdotV = max(dot(normal, viewDir), 0.0);
+    float denom = 4.0 * NdotV * NdotL + 0.001;
+
+    vec3 specular = (NDF * G * F) / denom;
+
     vec3 kS = F;
     vec3 kD = (vec3(1.0) - kS) * (1.0 - metallic);
 
-    float NdotL = max(dot(normal, lightDir), 0.0);
+    vec3 diffuse = (kD * albedo) / PI;
 
-    return (kD * albedo / PI + specular) * radiance * NdotL;
+    return (diffuse + specular) * radiance * NdotL;
 }
+
+#endif

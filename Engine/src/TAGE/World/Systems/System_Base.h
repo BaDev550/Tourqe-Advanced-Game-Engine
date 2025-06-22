@@ -7,7 +7,8 @@ namespace TAGE {
 	class System {
 	public:
 		virtual ~System() = default;
-		virtual void Update(SystemUpdateType updateType, float deltaTime) = 0;
+		virtual void Update(float deltaTime) = 0;
+		virtual void UpdateEditor(float deltaTime) = 0;
 
 		void SetActiveScene(Scene* scene) { _Scene = scene; }
 	protected:

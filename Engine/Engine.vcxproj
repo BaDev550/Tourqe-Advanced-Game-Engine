@@ -58,7 +58,7 @@
       <PrecompiledHeaderFile>tagepch.h</PrecompiledHeaderFile>
       <WarningLevel>Level3</WarningLevel>
       <PreprocessorDefinitions>_CRT_SECURE_NO_WARNINGS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <AdditionalIncludeDirectories>src;vendor;vendor\spdlog;vendor\GLFW\include;vendor\GLAD\include;vendor\assimp\include;vendor\imgui;vendor\glm;vendor\entt\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>src;vendor;vendor\spdlog;vendor\GLFW\include;vendor\GLAD\include;vendor\assimp\include;vendor\imgui;vendor\ImGuizmo;vendor\glm;vendor\entt\include;vendor\yaml-cpp\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <DebugInformationFormat>EditAndContinue</DebugInformationFormat>
       <Optimization>Disabled</Optimization>
       <RuntimeLibrary>MultiThreadedDebugDLL</RuntimeLibrary>
@@ -80,7 +80,7 @@
       <PrecompiledHeaderFile>tagepch.h</PrecompiledHeaderFile>
       <WarningLevel>Level3</WarningLevel>
       <PreprocessorDefinitions>_CRT_SECURE_NO_WARNINGS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <AdditionalIncludeDirectories>src;vendor;vendor\spdlog;vendor\GLFW\include;vendor\GLAD\include;vendor\assimp\include;vendor\imgui;vendor\glm;vendor\entt\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>src;vendor;vendor\spdlog;vendor\GLFW\include;vendor\GLAD\include;vendor\assimp\include;vendor\imgui;vendor\ImGuizmo;vendor\glm;vendor\entt\include;vendor\yaml-cpp\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <Optimization>Full</Optimization>
       <FunctionLevelLinking>true</FunctionLevelLinking>
       <IntrinsicFunctions>true</IntrinsicFunctions>
@@ -101,13 +101,11 @@
     </Lib>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClInclude Include="src\TARE\Shadow\ShadowMap.h" />
-    <ClInclude Include="src\TARE\Deferred\DeferredRendering.h" />
-    <ClInclude Include="src\Platform\OpenGL\OpenGL_Framebuffer.h" />
-    <ClInclude Include="src\TARE\Buffers\Framebuffer.h" />
+    <ClInclude Include="src\TARE\Camera\EditorCamera.h" />
     <ClInclude Include="src\Platform\DirectX11\DirectX11_RenderContext.h" />
     <ClInclude Include="src\Platform\DirectX11\DirectX11_Shader.h" />
     <ClInclude Include="src\Platform\OpenGL\OpenGL_Buffers.h" />
+    <ClInclude Include="src\Platform\OpenGL\OpenGL_Framebuffer.h" />
     <ClInclude Include="src\Platform\OpenGL\OpenGL_RenderAPI.h" />
     <ClInclude Include="src\Platform\OpenGL\OpenGL_RenderContext.h" />
     <ClInclude Include="src\Platform\OpenGL\OpenGL_Shader.h" />
@@ -130,27 +128,32 @@
     <ClInclude Include="src\TAGE\Layers\ImGuiLayer.h" />
     <ClInclude Include="src\TAGE\Layers\Layer.h" />
     <ClInclude Include="src\TAGE\Layers\LayerStack.h" />
+    <ClInclude Include="src\TAGE\TAGE.h" />
     <ClInclude Include="src\TAGE\Thread\ThreadWarpper.h" />
     <ClInclude Include="src\TAGE\Utilities\Logger.h" />
     <ClInclude Include="src\TAGE\Utilities\Memory.h" />
+    <ClInclude Include="src\TAGE\Utilities\Platform.h" />
     <ClInclude Include="src\TAGE\Utilities\TimeStep.h" />
     <ClInclude Include="src\TAGE\Utilities\Timer.h" />
     <ClInclude Include="src\TAGE\Utilities\UUID.h" />
     <ClInclude Include="src\TAGE\Window\Window.h" />
     <ClInclude Include="src\TAGE\World\Components\BaseComponents.h" />
     <ClInclude Include="src\TAGE\World\Components\RenderComponents.h" />
-    <ClInclude Include="src\TAGE\World\Objects\Object.h" />
+    <ClInclude Include="src\TAGE\World\Objects\Entity.h" />
+    <ClInclude Include="src\TAGE\World\Objects\ScriptableEntity.h" />
     <ClInclude Include="src\TAGE\World\Scene\Scene.h" />
+    <ClInclude Include="src\TAGE\World\Scene\SceneSerializer.h" />
     <ClInclude Include="src\TAGE\World\Systems\System_Base.h" />
     <ClInclude Include="src\TAGE\World\Systems\System_Renderer.h" />
     <ClInclude Include="src\TARE\Buffers\Buffers.h" />
+    <ClInclude Include="src\TARE\Buffers\Framebuffer.h" />
     <ClInclude Include="src\TARE\Buffers\VertexArrayBuffer.h" />
     <ClInclude Include="src\TARE\Camera\Camera.h" />
-    <ClInclude Include="src\TARE\Camera\FreeCamera.h" />
     <ClInclude Include="src\TARE\Camera\FrustumCulling.h" />
     <ClInclude Include="src\TARE\Common\RenderAPI.h" />
     <ClInclude Include="src\TARE\Common\RenderCommands.h" />
     <ClInclude Include="src\TARE\Common\RenderContext.h" />
+    <ClInclude Include="src\TARE\Deferred\DeferredRendering.h" />
     <ClInclude Include="src\TARE\Material\Material.h" />
     <ClInclude Include="src\TARE\Model\EndlessGrid.h" />
     <ClInclude Include="src\TARE\Model\Mesh.h" />
@@ -159,7 +162,10 @@
     <ClInclude Include="src\TARE\Shader\Shader.h" />
     <ClInclude Include="src\TARE\Shader\ShaderLibrary.h" />
     <ClInclude Include="src\TARE\Shader\ShaderPreprocessor.h" />
+    <ClInclude Include="src\TARE\Shadow\ShadowMap.h" />
+    <ClInclude Include="src\TARE\Skybox\Skybox.h" />
     <ClInclude Include="src\TARE\TARE.h" />
+    <ClInclude Include="src\TARE\Texture\Bitmap.h" />
     <ClInclude Include="src\TARE\Texture\Texture.h" />
     <ClInclude Include="src\tagepch.h" />
     <ClInclude Include="vendor\glm\glm\common.hpp" />
@@ -583,18 +589,18 @@
     <ClInclude Include="vendor\stb\stb_image_write.h" />
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="src\TARE\Shadow\ShadowMap.cpp" />
-    <ClCompile Include="src\TARE\Deferred\DeferredRendering.cpp" />
-    <ClCompile Include="src\Platform\OpenGL\OpenGL_Framebuffer.cpp" />
-    <ClCompile Include="src\TARE\Buffers\Framebuffer.cpp" />
+    <ClCompile Include="src\TARE\Camera\EditorCamera.cpp" />
     <ClCompile Include="src\Platform\DirectX11\DirectX11_RenderContext.cpp" />
     <ClCompile Include="src\Platform\DirectX11\DirectX11_Shader.cpp" />
     <ClCompile Include="src\Platform\OpenGL\OpenGL_Buffers.cpp" />
+    <ClCompile Include="src\Platform\OpenGL\OpenGL_CubemapTexture.cpp" />
+    <ClCompile Include="src\Platform\OpenGL\OpenGL_Framebuffer.cpp" />
     <ClCompile Include="src\Platform\OpenGL\OpenGL_RenderAPI.cpp" />
     <ClCompile Include="src\Platform\OpenGL\OpenGL_RenderContext.cpp" />
     <ClCompile Include="src\Platform\OpenGL\OpenGL_Shader.cpp" />
     <ClCompile Include="src\Platform\OpenGL\OpenGL_Texture.cpp" />
     <ClCompile Include="src\Platform\OpenGL\OpenGL_VertexArrayBuffer.cpp" />
+    <ClCompile Include="src\Platform\Windows\WindowsPlatformUtils.cpp" />
     <ClCompile Include="src\TAGE\Application\Application.cpp" />
     <ClCompile Include="src\TAGE\AssetManager\AssetManager.cpp" />
     <ClCompile Include="src\TAGE\AssetManager\AssetSerializers\Serializer_Material.cpp" />
@@ -609,14 +615,16 @@
     <ClCompile Include="src\TAGE\Utilities\Utilities.cpp" />
     <ClCompile Include="src\TAGE\Window\Window.cpp" />
     <ClCompile Include="src\TAGE\World\Scene\Scene.cpp" />
+    <ClCompile Include="src\TAGE\World\Scene\SceneSerializer.cpp" />
     <ClCompile Include="src\TAGE\World\Systems\System_Renderer.cpp" />
     <ClCompile Include="src\TARE\Buffers\Buffers.cpp" />
+    <ClCompile Include="src\TARE\Buffers\Framebuffer.cpp" />
     <ClCompile Include="src\TARE\Buffers\VertexArrayBuffer.cpp" />
     <ClCompile Include="src\TARE\Camera\Camera.cpp" />
-    <ClCompile Include="src\TARE\Camera\FreeCamera.cpp" />
     <ClCompile Include="src\TARE\Common\RenderAPI.cpp" />
     <ClCompile Include="src\TARE\Common\RenderCommands.cpp" />
     <ClCompile Include="src\TARE\Common\RenderContext.cpp" />
+    <ClCompile Include="src\TARE\Deferred\DeferredRendering.cpp" />
     <ClCompile Include="src\TARE\Material\Material.cpp" />
     <ClCompile Include="src\TARE\Model\EndlessGrid.cpp" />
     <ClCompile Include="src\TARE\Model\Mesh.cpp" />
@@ -625,6 +633,8 @@
     <ClCompile Include="src\TARE\Shader\Shader.cpp" />
     <ClCompile Include="src\TARE\Shader\ShaderLibrary.cpp" />
     <ClCompile Include="src\TARE\Shader\ShaderPreprocessor.cpp" />
+    <ClCompile Include="src\TARE\Shadow\ShadowMap.cpp" />
+    <ClCompile Include="src\TARE\Skybox\Skybox.cpp" />
     <ClCompile Include="src\TARE\TARE.cpp" />
     <ClCompile Include="src\TARE\Texture\FallbackTexture.cpp" />
     <ClCompile Include="src\TARE\Texture\Texture.cpp" />
@@ -640,22 +650,23 @@
     <None Include="shaders\Debugger\debug_fragment.glsl" />
     <None Include="shaders\Debugger\debug_vertex.glsl" />
     <None Include="shaders\Deferred\gbuffer_fragment.glsl" />
+    <None Include="shaders\Deferred\gbuffer_vertex.glsl" />
     <None Include="shaders\Deferred\light_fragment.glsl" />
     <None Include="shaders\Deferred\light_vertex.glsl" />
-    <None Include="shaders\Deferred\gbuffer_vertex.glsl" />
-    <None Include="shaders\ScreenSpace\screen_space_ambient_occlusion.glsl" />
-    <None Include="shaders\ScreenSpace\screen_space_common.glsl" />
-    <None Include="shaders\ScreenSpace\screen_space_gi.glsl" />
     <None Include="shaders\Screen\bloom_fragment.glsl" />
     <None Include="shaders\Screen\bloom_vertex.glsl" />
     <None Include="shaders\Screen\postprocess_fragment.glsl" />
     <None Include="shaders\Screen\postprocess_vertex.glsl" />
+    <None Include="shaders\ScreenSpace\screen_space_ambient_occlusion.glsl" />
+    <None Include="shaders\ScreenSpace\screen_space_common.glsl" />
+    <None Include="shaders\ScreenSpace\screen_space_gi.glsl" />
+    <None Include="shaders\ScreenSpace\screen_space_reflection.glsl" />
+    <None Include="shaders\Shadow\shadow_fragment.glsl" />
+    <None Include="shaders\Shadow\shadow_vertex.glsl" />
     <None Include="shaders\grid_Fragment.glsl" />
     <None Include="shaders\grid_Vertex.glsl" />
     <None Include="shaders\main_fragment.glsl" />
     <None Include="shaders\main_vertex.glsl" />
-    <None Include="shaders\Shadow\shadow_fragment.glsl" />
-    <None Include="shaders\Shadow\shadow_vertex.glsl" />
     <None Include="shaders\skybox_fragment.glsl" />
     <None Include="shaders\skybox_vertex.glsl" />
   </ItemGroup>
@@ -671,6 +682,12 @@
     </ProjectReference>
     <ProjectReference Include="vendor\imgui\ImGui.vcxproj">
       <Project>{C0FF640D-2C14-8DBE-F595-301E616989EF}</Project>
+    </ProjectReference>
+    <ProjectReference Include="vendor\ImGuizmo\ImGuiGizmo.vcxproj">
+      <Project>{C64C7BA4-B204-BDF1-1B0C-964D07E357E2}</Project>
+    </ProjectReference>
+    <ProjectReference Include="vendor\yaml-cpp\yaml-cpp.vcxproj">
+      <Project>{88F1A057-74BE-FB62-9DD7-E90A890331F1}</Project>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

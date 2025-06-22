@@ -1,57 +1,83 @@
 #include "tagepch.h"
 #include "Scene.h"
+#include "TAGE/World/Objects/Entity.h"
+#include "TAGE/World/Components/BaseComponents.h"
+#include "TAGE/World/Components/RenderComponents.h"
+#include "TAGE/Application/Application.h"
 
 namespace TAGE {
-	Scene::Scene(const std::string& name) : _Name(name)
-	{
+	Scene::Scene(const std::string& name) : _Name(name) {
+		_RendererSystem = MEM::MakeRef<System_Renderer>(Application::Get()->GetRenderer());
+		_RendererSystem->SetActiveScene(this);
 	}
 
-	Object& Scene::CreateObject(const std::string& name)
+	Entity& Scene::CreateEntity(const std::string& name)
 	{
-		entt::entity handle = _Registry.create();
-		MEM::Ref<Object> NewObject = MEM::MakeRef<Object>(handle, &_Registry, name);
-		Object& objRef = *NewObject;
-		_Objects[handle] = std::move(NewObject);
-		_NamedObjects[name] = handle;
-		return objRef;
+		entt::entity entityHandle = _Registry.create();
+		MEM::Ref<Entity> entity = MEM::MakeRef<Entity>(entityHandle, this);
+		entity->AddComponent<IdentityComponent>(name);
+		entity->AddComponent<TransformComponent>();
+		_Entities[entityHandle] = entity;
+		return *entity;
 	}
 
-	bool Scene::DestroyObject(Object* object)
+	Entity& Scene::CreateEntityWithUUID(const std::string& name, entt::entity& ID)
 	{
-		if (!object)
-			return false;
-
-		entt::entity handle = object->GetHandle();
-		std::string name = object->GetName();
-
-		object->Destroy();
-		_Objects.erase(handle);
-		_NamedObjects.erase(name);
-
-		return true;
+		MEM::Ref<Entity> entity = MEM::MakeRef<Entity>(ID, this);
+		entity->AddComponent<IdentityComponent>(name);
+		entity->AddComponent<TransformComponent>();
+		_Entities[ID] = entity;
+		return *entity;
 	}
 
-	void Scene::Update(float DeltaTime, SystemUpdateType updateType)
+	Entity& Scene::GetEntityByID(const entt::entity& ID)
 	{
-		for (const auto& system : _Systems)
-			system->Update(updateType, DeltaTime);
+		if (_Entities[ID] != nullptr)
+			return *_Entities[ID];
 	}
 
-	Object* Scene::GetObjectByName(const std::string& name)
+	void Scene::OnUpdateRuntime(float DeltaTime)
 	{
-		auto it = _NamedObjects.find(name);
-		if (it != _NamedObjects.end()) {
-			auto objIt = _Objects.find(it->second);
-			if (objIt != _Objects.end())
-				return objIt->second.get();
+		{
+			_Registry.view<NativeScriptComponent>().each([=](auto entity, auto& nsc) {
+				if (!nsc.Instance)
+				{
+					nsc.Instance = nsc.InstantiateScript();
+					nsc.Instance->_Entity = Entity{ entity, this };
+					nsc.Instance->OnCreate();
+				}
+
+				nsc.Instance->OnUpdate(DeltaTime);
+			});
 		}
-		return nullptr;
+
+		_RendererSystem->Update(DeltaTime);
 	}
-	Object* Scene::GetObjectByID(const entt::entity& ID)
+
+	void Scene::OnUpdateEditor(float DeltaTime, const MEM::Ref<TARE::EditorCamera>& camera)
 	{
-		auto objIt = _Objects.find(ID);
-		if (objIt != _Objects.end())
-			return objIt->second.get();
-		return nullptr;
+		_RendererSystem->SetEditorCamera(camera);
+		_RendererSystem->UpdateEditor(DeltaTime);
+	}
+
+	void Scene::ClearEntities()
+	{
+		for (auto& [entityID, entity] : _Entities)
+		{
+			if (entity)
+				entity->Destroy();
+		}
+		_Entities.clear();
+	}
+
+	Entity Scene::GetPrimaryCamera() {
+		auto view = _Registry.view<IdentityComponent, CameraComponent>();
+		for (auto entity : view)
+		{
+			const auto& camera = view.get<CameraComponent>(entity);
+			if (camera.IsActive)
+				return Entity{ entity, this };
+		}
+		return {};
 	}
 }

@@ -14,6 +14,7 @@ namespace TARE {
 		virtual void Disable(uint properties) = 0;
 		virtual void BindTextureFromID(uint64 textureID, uint slot) = 0;
 		virtual void DrawFullScreenQuad() = 0;
+		virtual void SetCullingMode(CullMode mode) = 0;
 
 		static void SetShadingMode(ShadingMode mode) { s_Mode = mode; }
 		static void SetRenderMode(DebugRenderMode mode) { s_DebugRenderMode = mode; }

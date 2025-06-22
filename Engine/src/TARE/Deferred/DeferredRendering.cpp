@@ -1,7 +1,6 @@
 #include "tagepch.h"
 #include "DeferredRendering.h"
 #include "TARE/Common/RenderCommands.h"
-#include "imgui.h"
 
 namespace TARE {
 	DeferredRendering::DeferredRendering(int width, int height)
@@ -32,7 +31,8 @@ namespace TARE {
 	void DeferredRendering::RenderLightingPass(std::vector<Light>& lights, const glm::vec3& cameraPos) const
 	{
 		_LightingBuffer->Bind();
-		RenderCommand::Clear(COLOR);
+
+		_LightingBuffer->Clear(0, 0);
 
 		_LightShader->Use();
 		RenderCommand::BindTextureFromID(_GBuffer->GetColorAttachment(0), 1);
@@ -44,13 +44,22 @@ namespace TARE {
 		RenderCommand::BindTextureFromID(_GBuffer->GetColorAttachment(2), 3);
 		_LightShader->SetUniform("u_gAlb", 3);
 
+		RenderCommand::BindTextureFromID(_GBuffer->GetDepthAttachment(), 4);
+		_LightShader->SetUniform("u_gDepth", 4);
+
+		RenderCommand::BindTextureFromID(_LightingBuffer->GetColorAttachment(0), 5);
+		_LightShader->SetUniform("u_SceneColor", 5);
+
+		RenderCommand::BindTextureFromID(_GIBuffer->GetColorAttachment(0), 6);
+		_LightShader->SetUniform("u_PrevGI", 6);
+
 		_LightShader->SetUniform("u_CameraPos", cameraPos);
 		_LightShader->SetUniform("u_ScreenWidth", (float)_GBuffer->GetSpecification().Width);
 		_LightShader->SetUniform("u_ScreenHeight", (float)_GBuffer->GetSpecification().Height);
 
 		RenderCommand::DrawFullScreenQuad();
 
-		_LightingBuffer->Unbind();
+		_LightingBuffer->Blit(_GIBuffer);
 	}
 
 	void DeferredRendering::BlitToScreen() const
@@ -66,7 +75,7 @@ namespace TARE {
 	{
 		FramebufferSpecification spec(
 			FramebufferAttachmentSpecification({
-					FramebufferTextureFormat(FramebufferTextureFormat::RGBA8), // Position
+					FramebufferTextureFormat(FramebufferTextureFormat::RGBA16F), // Position
 					FramebufferTextureFormat(FramebufferTextureFormat::RGBA8), // Normal
 					FramebufferTextureFormat(FramebufferTextureFormat::RGBA8), // Albedo
 					FramebufferTextureFormat(FramebufferTextureFormat::DEPTH24), // Depth
@@ -76,6 +85,14 @@ namespace TARE {
 		_GBuffer = Framebuffer::Create(spec);
 		_GBufferShader = ShaderLibrary::Add("GBufferShader", "../Engine/shaders/Deferred/gbuffer_vertex", "../Engine/shaders/Deferred/gbuffer_fragment");
 
+		FramebufferSpecification GIspec(
+			FramebufferAttachmentSpecification({
+					FramebufferTextureFormat(FramebufferTextureFormat::RGBA16F)
+				}),
+				1, width, height
+				);
+		_GIBuffer = Framebuffer::Create(GIspec);
+
 		CreateLightingBuffer();
 	}
 
@@ -83,7 +100,8 @@ namespace TARE {
 	{
 		FramebufferSpecification spec(
 			FramebufferAttachmentSpecification({
-					FramebufferTextureFormat::RGBA16F // Lighting
+					FramebufferTextureFormat::RGBA, // Lighting
+					FramebufferTextureFormat::RED_INTEGER
 			}),
 			1, _GBuffer->GetSpecification().Width, _GBuffer->GetSpecification().Height
 		);

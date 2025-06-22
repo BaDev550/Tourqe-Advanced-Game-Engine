@@ -13,8 +13,10 @@
 #include "TAGE/AssetManager/AssetManager.h"
 #include "TAGE/World/Scene/Scene.h"
 
+#include "TAGE/World/Objects/Entity.h"
+#include "TAGE/World/Components/BaseComponents.h"
+
 #include "TARE/TARE.h"
-#include "TARE/Camera/FreeCamera.h"
 
 namespace TAGE {
     struct ApplicationCommandLineArgs {
@@ -55,7 +57,6 @@ namespace TAGE {
 		}
 
     public:
-        MEM::Ref<Scene> GetScene() const { return _ActiveScene; }
         Window* GetWindow() const { return _Window.get(); }
 		TARE::TARE* GetRenderer() const { return _Renderer.get(); }
 		ImGuiLayer* GetImGuiLayer() const { return _ImGuiLayer.get(); }
@@ -69,11 +70,7 @@ namespace TAGE {
         MEM::Scope<Window> _Window;
         MEM::Scope<TARE::TARE> _Renderer;
         MEM::Scope<ImGuiLayer> _ImGuiLayer;
-        MEM::Ref<Scene> _ActiveScene;
         LayerStack _LayerStack;
-
-        MEM::Ref<TARE::Model> _Model;
-        MEM::Scope<TARE::FreeCamera> _Camera;
 
         float _LastFrame = 0.0f;
         float _DeltaTime = 0.0f;

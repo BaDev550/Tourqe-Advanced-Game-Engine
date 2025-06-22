@@ -17,15 +17,17 @@ namespace TARE
 		bool LoadFromFile(const std::string& filePath);
 		void SetTransform(const glm::mat4& transform);
 
-		void Draw(const TAGE::MEM::Ref<Shader>& shader) const;
+		void Draw(TAGE::MEM::Ref<Shader>& shader) const;
 		void Draw(const std::string& shader) const;
 
+		std::string GetFilePath() const { return _FilePath; }
 		uint GetMeshCount() { return (uint)_meshes.size(); }
 		Mesh& GetMesh(int slot) { return *_meshes[slot]; }
 		void AddMesh(TAGE::MEM::Scope<Mesh> mesh) { _meshes.push_back(std::move(mesh)); }
 	private:
 		std::vector<TAGE::MEM::Scope<Mesh>> _meshes;
 		std::string _Directory;
+		std::string _FilePath;
 		ModelType _Type = ModelType::MODEL;
 
 		glm::mat4 _transform{ 1.0f };

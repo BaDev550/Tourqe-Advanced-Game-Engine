@@ -12,8 +12,6 @@ namespace TARE {
 
 		_depthShader = ShaderLibrary::Add("ShadowDepth", "../Engine/shaders/Shadow/shadow_vertex", "../Engine/shaders/Shadow/shadow_fragment");
 
-		SetLightDirection(glm::vec3(-2.0f, -4.0f, -1.0f));
-		SetOrthoBounds(-20, 20, -20, 20, 1.0f, 100.0f);
 		UpdateMatrices();
 	}
 
@@ -23,10 +21,12 @@ namespace TARE {
 		RenderCommand::Clear(DEPTH);
 		_depthShader->Use();
 		_depthShader->SetUniform("u_LightSpaceMatrix", lightViewProj);
+		RenderCommand::SetCullingMode(CullMode::FRONT);
 	}
 	void ShadowMap::EndRender()
 	{
 		_depthFBO->Unbind();
+		RenderCommand::SetCullingMode(CullMode::BACK);
 	}
 	void ShadowMap::BindTexture(uint slot) const
 	{

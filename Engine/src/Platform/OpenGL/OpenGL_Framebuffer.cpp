@@ -1,6 +1,6 @@
 #include "tagepch.h"
 #include "OpenGL_Framebuffer.h"
-#include "GLAD/glad.h"
+#include <GLAD/glad.h>
 
 namespace TARE {
 	static const uint s_MaxFramebufferSize = 8192;
@@ -72,6 +72,20 @@ namespace TARE {
 			case FramebufferTextureFormat::RGBA16F: return GL_RGBA16F;
 			case FramebufferTextureFormat::RGBA: return GL_RGBA;
 			case FramebufferTextureFormat::RED_INTEGER: return GL_RED_INTEGER;
+			}
+
+			ASSERT_NOMSG(false);
+			return 0;
+		}
+
+		static GLenum TextureFormatTo_OpenGLType(FramebufferTextureFormat format)
+		{
+			switch (format)
+			{
+			case FramebufferTextureFormat::RGBA8:         return GL_UNSIGNED_BYTE;
+			case FramebufferTextureFormat::RGBA16F:       return GL_HALF_FLOAT;
+			case FramebufferTextureFormat::RGBA:          return GL_FLOAT;
+			case FramebufferTextureFormat::RED_INTEGER:   return GL_INT;
 			}
 
 			ASSERT_NOMSG(false);
@@ -210,7 +224,33 @@ namespace TARE {
 	void OpenGL_Framebuffer::Clear(uint attachment, int value)
 	{
 		auto& spec = _ColorAttachmentSpecifications[attachment];
-		glClearTexImage(_ColorAttachments[attachment], 0,
-			Utils::TextureFormatTo_OpenGLFormat(spec.format), GL_INT, &value);
+		GLenum format = Utils::TextureFormatTo_OpenGLFormat(spec.format);
+		GLenum type = Utils::TextureFormatTo_OpenGLType(spec.format);
+
+		glClearTexImage(_ColorAttachments[attachment], 0, format, type, &value);
+	}
+
+	void OpenGL_Framebuffer::Blit(const TAGE::MEM::Ref<Framebuffer>& target) const
+	{
+		BindRead();
+		target->BindWrite();
+
+		glBlitFramebuffer(
+			0, 0, GetWidth(), GetHeight(),
+			0, 0, target->GetWidth(), target->GetHeight(),
+			GL_COLOR_BUFFER_BIT, GL_NEAREST
+		);
+
+		glBindFramebuffer(GL_FRAMEBUFFER, 0);
+	}
+
+	void OpenGL_Framebuffer::BindRead() const
+	{
+		glBindFramebuffer(GL_READ_FRAMEBUFFER, _BufferID);
+	}
+
+	void OpenGL_Framebuffer::BindWrite() const
+	{
+		glBindFramebuffer(GL_DRAW_FRAMEBUFFER, _BufferID);
 	}
 }

@@ -31,16 +31,17 @@ namespace TARE
 		if (_scene->HasSkeletons())
 			_Type = ModelType::SKINNED_MODEL;
 
+		_FilePath = filePath;
 		_Directory = filePath.substr(0, filePath.find_last_of('/'));
 		ProcessNode(_scene->mRootNode, _scene);
 		return true;
 	}
 
-	void Model::Draw(const TAGE::MEM::Ref<Shader>& shader) const
+	void Model::Draw(TAGE::MEM::Ref<Shader>& shader) const
 	{
 		shader->Use();
 		for (const auto& mesh : _meshes)
-			mesh->Draw();
+			mesh->Draw(shader);
 	}
 
 	void Model::Draw(const std::string& shader) const
@@ -49,7 +50,7 @@ namespace TARE
 		shaderRef->Use();
 		shaderRef->SetUniform("u_Model", _transform);
 		for (const auto& mesh : _meshes)
-			mesh->Draw();
+			mesh->Draw(shaderRef);
 	}
 
 	void Model::SetTransform(const glm::mat4& transform)
@@ -183,7 +184,7 @@ namespace TARE
 		std::string meshName = mesh->mName.C_Str();
 		if (meshName.empty()) meshName = "UnnamedMesh";
 
-		TAGE::MEM::Ref<Material> material = TAGE::MEM::MakeRef<Material>(meshName.c_str(), "GBufferShader");
+		TAGE::MEM::Ref<Material> material = TAGE::MEM::MakeRef<Material>(meshName.c_str());
 		if (mesh->mMaterialIndex >= 0)
 		{
 			aiMaterial* mat = scene->mMaterials[mesh->mMaterialIndex];

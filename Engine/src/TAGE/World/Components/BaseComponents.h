@@ -5,6 +5,8 @@
 #include <glm/glm.hpp>
 #define GLM_ENABLE_EXPERIMENTAL
 #include <glm/gtx/quaternion.hpp>
+#include <glm/gtc/matrix_transform.hpp>
+#include "TAGE/World/Objects/ScriptableEntity.h"
 
 namespace TAGE {
 	struct IdentityComponent {
@@ -18,5 +20,25 @@ namespace TAGE {
 		glm::vec3 Position{ 0.0f };
 		glm::quat Rotation{ 1.0f, 0.0f, 0.0f, 0.0f };
 		glm::vec3 Scale{ 1.0f };
+
+		glm::mat4 GetTransform() const {
+			glm::mat4 translation = glm::translate(glm::mat4(1.0f), Position);
+			glm::mat4 rotation = glm::mat4_cast(Rotation);
+			glm::mat4 scale = glm::scale(glm::mat4(1.0f), Scale);
+			return translation * rotation * scale;
+		}
+	};
+
+	struct NativeScriptComponent {
+		ScriptableEntity* Instance = nullptr;
+
+		ScriptableEntity*(*InstantiateScript)();
+		void (*DestroyScript)(NativeScriptComponent*);
+
+		template<typename T>
+		void Bind() {
+			InstantiateScript = []() { return static_cast<ScriptableEntity*>(new T()); };
+			DestroyScript = [](NativeScriptComponent* nsc) { delete nsc->Instance; nsc->Instance = nullptr; };
+		}
 	};
 }

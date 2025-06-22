@@ -21,6 +21,9 @@ namespace TARE {
 		virtual uint GetWidth() const override { return _Specification.Width; }
 		virtual uint GetHeight() const override { return _Specification.Height; }
 
+		virtual void Blit(const TAGE::MEM::Ref<Framebuffer>& target) const override;
+		virtual void BindRead() const override;
+		virtual void BindWrite() const override;
 	private:
 		uint _BufferID;
 

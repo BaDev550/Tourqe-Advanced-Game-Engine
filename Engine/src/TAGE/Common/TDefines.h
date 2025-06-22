@@ -20,8 +20,9 @@ typedef unsigned long long	uint64;
 #define FAR_CLIP 250.0f
 
 #define USE_FALLBACK_TEXTURE 1
-#define SHADOW_MAP_TEXTURE_SLOT 5
+#define SHADOW_MAP_TEXTURE_SLOT 15
 
+#define PI 3.14159265358979323846f
 #define MAX_LIGHTS 16
 #define MAX_BONES 124
 #define MAX_MATERIALS 32
@@ -29,6 +30,14 @@ typedef unsigned long long	uint64;
 #define MAX_BONE_INFLUENCES 4
 #define SCALE_FACTOR 0.01f
 #define SHADOW_MAP_RESOLUTION 2048
+
+#define CUBEMAP_FACE_NUM 6
+#define CUBEMAP_FACE_POSITIVE_X 0
+#define CUBEMAP_FACE_NEGATIVE_X 1
+#define CUBEMAP_FACE_POSITIVE_Y 2
+#define CUBEMAP_FACE_NEGATIVE_Y 3
+#define CUBEMAP_FACE_POSITIVE_Z 4
+#define CUBEMAP_FACE_NEGATIVE_Z 5
 
 #define DEBUG_RENDERER_USE_GRID true
 #define DEBUG_RENDERER_GRID_SIZE 100.0f
@@ -44,4 +53,5 @@ extern uint32_t g_FallbackTextureID;
 #endif
 
 #define BIT(x) (1 << (x))
-#define BIND_EVENT_FN(fn) std::bind(&fn, this, std::placeholders::_1)
+#define BIND_EVENT_FN(fn) [this](auto&&... args) -> decltype(auto) { return this->fn(std::forward<decltype(args)>(args)...); }
+#define CLAMP(x, min, max) ((x) < (min) ? (min) : ((x) > (max) ? (max) : (x)))

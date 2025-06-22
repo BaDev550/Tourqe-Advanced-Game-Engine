@@ -21,6 +21,7 @@ namespace TARE {
         void SetLightDirection(const glm::vec3& dir);
         void SetOrthoBounds(float left, float right, float bottom, float top, float near, float far);
 
+		TAGE::MEM::Ref<Framebuffer>& GetFramebuffer() { return _depthFBO; }
     private:
         TAGE::MEM::Ref<Framebuffer> _depthFBO;
         TAGE::MEM::Ref<Shader> _depthShader;

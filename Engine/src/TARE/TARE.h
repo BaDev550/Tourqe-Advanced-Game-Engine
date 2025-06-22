@@ -21,6 +21,7 @@ namespace TARE {
 			glm::vec3 CameraUp;
 			glm::mat4 ViewMatrix;
 			glm::mat4 ProjectionMatrix;
+			glm::mat4 PrevViewProjMatrix;
 			glm::mat4 ViewProjectionMatrix;
 			glm::mat4 LightViewProjectionMatrix;
 			std::vector<Light> Lights;
@@ -34,6 +35,16 @@ namespace TARE {
 
 		void BeginShadowPass();
 		void EndShadowPass();
+
+		void DrawGrid();
+
+		void Resize(int width, int height) {
+			_Width = width;
+			_Height = height;
+			_DeferredRendering->GetGBuffer()->Resize(width, height);
+			_DeferredRendering->GetGIBuffer()->Resize(width, height);
+			_DeferredRendering->GetLightingBuffer()->Resize(width, height);
+		}
 
 		void SetLights(const std::vector<Light>& lights);
 		SceneData& GetSceneData() { return _Data; }

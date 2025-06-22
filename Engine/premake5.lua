@@ -27,8 +27,10 @@ project "Engine"
         "%{IncludeDir.GLAD}",
         "%{IncludeDir.Assimp}",
         "%{IncludeDir.ImGui}",
+        "%{IncludeDir.ImGizmo}",
         "%{IncludeDir.glm}",
-        "%{IncludeDir.entt}"
+        "%{IncludeDir.entt}",
+        "%{IncludeDir.yaml}"
    }
 
    defines 
@@ -42,6 +44,8 @@ project "Engine"
         "GLFW",
         "assimp",
         "ImGui",
+        "ImGuiGizmo",
+        "yaml-cpp",
         "d3d11.lib",
         "dxgi.lib",
         "d3dcompiler.lib"

@@ -10,6 +10,7 @@
 #include "TARE/Material/Material.h"
 #include "TARE/Buffers/Buffers.h"
 #include "TARE/Buffers/VertexArrayBuffer.h"
+#include "TARE/Shader/Shader.h"
 #include <vector>
 
 namespace TARE {
@@ -21,7 +22,7 @@ namespace TARE {
 			TAGE::MEM::Ref<Material> material
 		);
 		Mesh() {}
-		void Draw() const;
+		void Draw(TAGE::MEM::Ref<Shader>& shaderName) const;
 		std::vector<VertexData> GetVertices() { return _vertices; }
 		std::vector<uint> GetIndices() { return _indices; }
 		TAGE::MEM::Ref<Material> GetMaterial() { return _material; }

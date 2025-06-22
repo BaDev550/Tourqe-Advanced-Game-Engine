@@ -1,18 +1,27 @@
 #pragma once
 
-#include "TAGE/Layers/Layer.h"
-#include "TAGE/Application/Application.h"
-#include "TAGE/Utilities/Timestep.h"
-#include "TAGE/Input/KeyCodes.h"
-#include "TAGE/Input/MouseCodes.h"
-#include "TAGE/Events/Event.h"
-#include "TAGE/Events/InputEvents.h"
-#include "TAGE/World/Objects/Object.h"
+#include "TAGE/TAGE.h"
 #include "Panels/SceneHierarchyPanel.h"
 
-#include "TARE/Camera/FreeCamera.h"
-
 namespace TourqeEditor {
+	enum class ViewportDebugMode
+	{
+		Default = 0,
+		GBuffer_Position,
+		GBuffer_Normal,
+		GBuffer_Albedo,
+		GBuffer_Depth,
+		Lighting,
+		ShadowMap,
+		GI
+	};
+
+	enum class SceneState
+	{
+		EDIT = 0,
+		PLAY = 1, 
+		SIMULATE = 2
+	};
 
 	class EditorLayer : public TAGE::Layer
 	{
@@ -25,26 +34,28 @@ namespace TourqeEditor {
 
 		void OnUpdate(float dt) override;
 		virtual void OnImGuiRender() override;
+		virtual void OnEvent(TAGE::Event& event) override;
 	private:
-		TARE::FreeCamera _FreeCamera;
-		TAGE::Object* _SelectedObject;
+		bool OnKeyPressed(TAGE::KeyPressedEvent& e);
 
-		bool m_ViewportFocused = false, m_ViewportHovered = false;
-		glm::vec2 m_ViewportSize = { 0.0f, 0.0f };
-		glm::vec2 m_ViewportBounds[2];
+		void NewScene();
+		void OpenScene();
+		void SaveSceneAs();
+	private:
+		TAGE::Entity* _SelectedObject;
+		TAGE::MEM::Ref<TARE::EditorCamera> _EditorCamera;
+		TAGE::MEM::Ref<TAGE::Scene> _ActiveScene;
 
-		glm::vec4 m_SquareColor = { 0.2f, 0.3f, 0.8f, 1.0f };
+		bool _ViewportFocused = false, _ViewportHovered = false, _ViewportMouseFocused = true;
+		glm::vec2 _ViewportSize = { 0.0f, 0.0f };
+		glm::vec2 _ViewportBounds[2];
+		glm::vec2 _LastViewportSize;
 
-		int m_GizmoType = -1;
+		int _GizmoType = -1;
+		SceneState _SceneState = SceneState::EDIT;
+		ViewportDebugMode debugMode = ViewportDebugMode::Default;
 
-		enum class SceneState
-		{
-			Edit = 0, Play = 1, Simulate = 2
-		};
-		SceneState m_SceneState = SceneState::Edit;
-
-		TAGE::MEM::Scope<SceneHierarchyPanel> m_SceneHierarchyPanel;
-		//TAGE::MEM::Scope<ContentBrowserPanel> m_ContentBrowserPanel;
+		TAGE::MEM::Scope<SceneHierarchyPanel> _SceneHierarchyPanel;
 	};
 
 }

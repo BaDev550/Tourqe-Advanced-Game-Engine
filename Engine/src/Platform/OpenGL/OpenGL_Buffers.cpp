@@ -1,6 +1,6 @@
 #include "tagepch.h"
 #include "OpenGL_Buffers.h"
-#include "GLAD/glad.h"
+#include <GLAD/glad.h>
 
 namespace TARE {
 	OpenGL_VertexBufferObject::OpenGL_VertexBufferObject(void* data, size_t size)

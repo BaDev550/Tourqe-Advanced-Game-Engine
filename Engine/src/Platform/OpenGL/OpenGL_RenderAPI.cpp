@@ -1,6 +1,6 @@
 #include "tagepch.h"
 #include "OpenGL_RenderAPI.h"
-#include "GLAD/glad.h"
+#include <GLAD/glad.h>
 
 namespace TARE {
 	void OpenGL_RenderAPI::SetClearColor(const glm::vec4& color) { glClearColor(color.r, color.g, color.b, color.a); }
@@ -13,7 +13,7 @@ namespace TARE {
 	}
 	void OpenGL_RenderAPI::DrawVertex(const TAGE::MEM::Ref<VertexArrayObject>& VAO) { 
 		VAO->Bind();
-		glDrawArrays(GL_TRIANGLES, 0, 6); // To-do: implement a count to vao
+		glDrawArrays(GL_TRIANGLES, 0, VAO->GetCount());
 	}
 
 	void OpenGL_RenderAPI::Enable(uint properties)
@@ -65,5 +65,22 @@ namespace TARE {
 		glDrawArrays(GL_TRIANGLES, 0, 6);
 		glBindVertexArray(0);
 		glEnable(GL_DEPTH_TEST);
+	}
+	void OpenGL_RenderAPI::SetCullingMode(CullMode mode)
+	{
+		switch (mode) {
+		case CullMode::BACK:
+			glCullFace(GL_BACK);
+			break;
+		case CullMode::FRONT:
+			glCullFace(GL_FRONT);
+			break;
+		case CullMode::NONE:
+			glDisable(GL_CULL_FACE);
+			break;
+		default:
+			LOG_ERROR("Unknown culling mode: {}", static_cast<int>(mode));
+			break;
+		}
 	}
 }

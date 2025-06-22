@@ -1,3 +1,6 @@
+#ifndef LIGHT_GLSL
+#define LIGHT_GLSL
+
 #define MAX_LIGHTS 16
 #include "Material.glsl"
 
@@ -75,3 +78,4 @@ float ShadowCalculation(sampler2D shadowMap, vec4 fragPosLightSpace, vec3 normal
 
     return shadow;
 }
+#endif

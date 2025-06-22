@@ -13,20 +13,17 @@ namespace TARE
 		InitGridBuffers();
 	}
 
-	void EndlessGrid::Render(const TAGE::MEM::Ref<Camera>& camera)
+	void EndlessGrid::Render(glm::mat4& view, glm::mat4& proj, glm::vec3& pos)
 	{
 		RenderCommand::Disable(DEPTH_TEST);
 		RenderCommand::Disable(CULL_TEST);
-
-		glm::mat4 view = camera->GetViewMatrix();
-		glm::mat4 proj = camera->GetProjectionMatrix();
 		glm::mat4 invViewProj = glm::inverse(proj * view);
 
 		_GridShader->Use();
 		_GridShader->SetUniform("u_View", view);
 		_GridShader->SetUniform("u_Projection", proj);
 		_GridShader->SetUniform("u_InverseViewProjection", invViewProj);
-		_GridShader->SetUniform("u_CameraPosition", camera->GetPosition());
+		_GridShader->SetUniform("u_CameraPosition", pos);
 		_GridShader->SetUniform("u_ViewportSize", glm::vec2(1280, 720));
 
 		_GridShader->SetUniform("u_Near", NEAR_CLIP);
@@ -44,7 +41,6 @@ namespace TARE
 			1.0f,  1.0f,  0.0f,
 		   -1.0f, -1.0f,  0.0f,
 		   -1.0f,  1.0f,  0.0f,
-
 		   -1.0f, -1.0f,  0.0f,
 			1.0f,  1.0f,  0.0f,
 			1.0f, -1.0f,  0.0f
@@ -58,5 +54,6 @@ namespace TARE
 		_VAO = VertexArrayObject::Create();
 		_VBO->SetLayout(layout);
 		_VAO->AddVertexBuffer(_VBO);
+		_VAO->SetCount(sizeof(vertices));
 	}
 }

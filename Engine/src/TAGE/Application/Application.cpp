@@ -26,28 +26,6 @@ namespace TAGE {
 		_Window->ToggleCursor(true);
 
 		Input::Init(_Window->GetGLFWWindow());
-		auto _RenderSystem = MEM::MakeRef<System_Renderer>(_Renderer.get());
-
-		_ActiveScene = MEM::MakeRef<Scene>("Test Scene - 1");
-		_ActiveScene->AddSystem(_RenderSystem);
-
-		_Camera = MEM::MakeScope<TARE::FreeCamera>();
-		Object camera = _ActiveScene->CreateObject("Camera");
-		camera.AddComponent<CameraComponent>(_Camera->GetCamera());
-
-		Object mario = _ActiveScene->CreateObject("Mario");
-		mario.AddComponent<MeshComponent>("assets/models/mario_2/mario_2.obj");
-
-		Object sponza = _ActiveScene->CreateObject("sponza");
-		sponza.AddComponent<MeshComponent>("assets/models/Sponza/Sponza.gltf");
-		sponza.GetComponent<TransformComponent>()->Scale = glm::vec3(0.01f, 0.01f, 0.01f);
-
-		Object testModel = _ActiveScene->CreateObject("testModel");
-		testModel.AddComponent<MeshComponent>("assets/models/SciFiHelmet/SciFiHelmet.gltf");
-
-		Light sun = Light(LightType::DIRECTIONAL, glm::vec3(0.0f, 10.0f, 0.0f), glm::vec3(1.0f, 1.0f, 1.0f));
-		Object sunLight = _ActiveScene->CreateObject("sunLight");
-		sunLight.AddComponent<LightComponent>(sun);
 
 		_ImGuiLayer = MEM::MakeScope<ImGuiLayer>();
 		PushOverlay(_ImGuiLayer.get());
@@ -73,12 +51,8 @@ namespace TAGE {
 			_DeltaTime = time - _LastFrame;
 			_LastFrame = time;
 
-			_Camera->Update(_DeltaTime);
-
 			for (const auto& layer : _LayerStack)
 				layer->OnUpdate(_DeltaTime);
-
-			_ActiveScene->Update(_DeltaTime);
 
 			_ImGuiLayer->Begin();
 			for (const auto& layer : _LayerStack)
@@ -92,10 +66,11 @@ namespace TAGE {
 
 	void Application::OnEvent(Event& event)
 	{
-		for (auto it = _LayerStack.end(); it != _LayerStack.begin();) {
-			(*--it)->OnEvent(event);
-			if (event.bIsHandled)
-				break;
+		for (auto it = _LayerStack.rbegin(); it != _LayerStack.rend(); ++it)
+		{
+			//if (event.bIsHandled)
+			//	break;
+			(*it)->OnEvent(event);
 		}
 	}
 }

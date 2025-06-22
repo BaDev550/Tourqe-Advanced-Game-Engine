@@ -1,6 +1,7 @@
 #include "SceneHierarchyPanel.h"
 #include "TAGE/World/Components/BaseComponents.h"
 #include "TAGE/World/Components/RenderComponents.h"
+#include "TAGE/Utilities/Platform.h"
 
 #include <imgui.h>
 #include <imgui_internal.h>
@@ -35,7 +36,7 @@ namespace TourqeEditor {
 			m_Context->GetRegistry().view<TAGE::IdentityComponent, TAGE::TransformComponent>().each(
 				[&](entt::entity entityID, TAGE::IdentityComponent& id, TAGE::TransformComponent& transform)
 				{
-					TAGE::Object* entity = m_Context->GetObjectByID(entityID);
+					TAGE::Entity* entity = &m_Context->GetEntityByID(entityID);
 					DrawEntityNode(entity);
 				});
 
@@ -46,7 +47,7 @@ namespace TourqeEditor {
 			if (ImGui::BeginPopupContextWindow(0, 1))
 			{
 				if (ImGui::MenuItem("Create Empty Entity"))
-					m_Context->CreateObject("Empty Entity");
+					m_Context->CreateEntity("Empty Entity");
 
 				ImGui::EndPopup();
 			}
@@ -63,14 +64,14 @@ namespace TourqeEditor {
 		ImGui::End();
 	}
 
-	void SceneHierarchyPanel::SetSelectedEntity(TAGE::Object* entity)
+	void SceneHierarchyPanel::SetSelectedEntity(TAGE::Entity* entity)
 	{
 		m_SelectionContext = entity;
 	}
 
-	void SceneHierarchyPanel::DrawEntityNode(TAGE::Object* entity)
+	void SceneHierarchyPanel::DrawEntityNode(TAGE::Entity* entity)
 	{
-		auto& tag = entity->GetComponent<TAGE::IdentityComponent>()->Name;
+		auto& tag = entity->GetComponent<TAGE::IdentityComponent>().Name;
 		
 		ImGuiTreeNodeFlags flags = ((m_SelectionContext == entity) ? ImGuiTreeNodeFlags_Selected : 0) | ImGuiTreeNodeFlags_OpenOnArrow;
 		flags |= ImGuiTreeNodeFlags_SpanAvailWidth;
@@ -100,7 +101,7 @@ namespace TourqeEditor {
 
 		if (entityDeleted)
 		{
-			m_Context->DestroyObject(entity);
+			m_SelectionContext->Destroy();
 			if (m_SelectionContext == entity)
 				m_SelectionContext = {};
 		}
@@ -123,7 +124,7 @@ namespace TourqeEditor {
 		ImGui::PushMultiItemsWidths(3, ImGui::CalcItemWidth());
 		ImGui::PushStyleVar(ImGuiStyleVar_ItemSpacing, ImVec2{ 0, 0 });
 
-		float lineHeight = GImGui->Font->FontSize + GImGui->Style.FramePadding.y * 2.0f;
+		float lineHeight = ImGui::GetFontSize() + ImGui::GetStyle().FramePadding.y * 2.0f;
 		ImVec2 buttonSize = { lineHeight + 3.0f, lineHeight };
 
 		ImGui::PushStyleColor(ImGuiCol_Button, ImVec4{ 0.8f, 0.1f, 0.15f, 1.0f });
@@ -189,16 +190,16 @@ namespace TourqeEditor {
 	}
 	
 	template<typename T, typename UIFunction>
-	static void DrawComponent(const std::string& name, TAGE::Object* entity, UIFunction uiFunction)
+	static void DrawComponent(const std::string& name, TAGE::Entity* entity, UIFunction uiFunction)
 	{
 		const ImGuiTreeNodeFlags treeNodeFlags = ImGuiTreeNodeFlags_DefaultOpen | ImGuiTreeNodeFlags_Framed | ImGuiTreeNodeFlags_SpanAvailWidth | ImGuiTreeNodeFlags_AllowItemOverlap | ImGuiTreeNodeFlags_FramePadding;
 		if (entity->HasComponent<T>())
 		{
-			auto& component = *entity->GetComponent<T>();
+			auto& component = entity->GetComponent<T>();
 			ImVec2 contentRegionAvailable = ImGui::GetContentRegionAvail();
 
 			ImGui::PushStyleVar(ImGuiStyleVar_FramePadding, ImVec2{ 4, 4 });
-			float lineHeight = GImGui->Font->FontSize + GImGui->Style.FramePadding.y * 2.0f;
+			float lineHeight = ImGui::GetFontSize() + ImGui::GetStyle().FramePadding.y * 2.0f;
 			ImGui::Separator();
 			bool open = ImGui::TreeNodeEx((void*)typeid(T).hash_code(), treeNodeFlags, name.c_str());
 			ImGui::PopStyleVar(
@@ -229,11 +230,11 @@ namespace TourqeEditor {
 		}
 	}
 
-	void SceneHierarchyPanel::DrawComponents(TAGE::Object* entity)
+	void SceneHierarchyPanel::DrawComponents(TAGE::Entity* entity)
 	{
 		if (entity->HasComponent<TAGE::IdentityComponent>())
 		{
-			auto& tag = entity->GetComponent<TAGE::IdentityComponent>()->Name;
+			auto& tag = entity->GetComponent<TAGE::IdentityComponent>().Name;
 
 			char buffer[256];
 			memset(buffer, 0, sizeof(buffer));
@@ -253,9 +254,9 @@ namespace TourqeEditor {
 		if (ImGui::BeginPopup("AddComponent"))
 		{
 			DisplayAddComponentEntry<TAGE::LightComponent>("Light");
-			//DisplayAddComponentEntry<TAGE::CameraComponent>("Camera");
-			//DisplayAddComponentEntry<ScriptComponent>("Script");
-			//DisplayAddComponentEntry<SpriteRendererComponent>("Sprite Renderer");
+			DisplayAddComponentEntry<TAGE::MeshComponent>("Mesh");
+			DisplayAddComponentEntry<TAGE::CameraComponent>("Camera");
+			DisplayAddComponentEntry<TAGE::SkyboxComponent>("Skybox");
 			//DisplayAddComponentEntry<CircleRendererComponent>("Circle Renderer");
 			//DisplayAddComponentEntry<Rigidbody2DComponent>("Rigidbody 2D");
 			//DisplayAddComponentEntry<BoxCollider2DComponent>("Box Collider 2D");
@@ -273,6 +274,77 @@ namespace TourqeEditor {
 				if (DrawVec3Control("Rotation", eulerDegrees))
 					component.Rotation = glm::quat(glm::radians(eulerDegrees));
 				DrawVec3Control("Scale", component.Scale, 1.0f);
+			});
+
+		DrawComponent<TAGE::MeshComponent>("Mesh", entity, [](auto& component)
+			{
+				if (component.Handle)
+				{
+					ImGui::Text("Mesh Path: %s", component.Handle->GetFilePath().c_str());
+				}
+				else
+				{
+					ImGui::Text("Mesh not loaded.");
+				}
+
+				if (ImGui::Button("Select Mesh"))
+				{
+					std::string selectedMesh = TAGE::Platform::FileDialog::OpenFile("Mesh Files (*.obj;*.gltf)\0*.obj;*.gltf\0");
+					if (!selectedMesh.empty())
+					{
+						if (!component.Handle)
+							component.Handle = TAGE::MEM::MakeRef<TARE::Model>();
+
+						component.Handle->LoadFromFile(selectedMesh);
+					}
+				}
+
+				ImGui::Checkbox("Visible", &component.IsVisible);
+				ImGui::Checkbox("Cast Shadows", &component.CastShadows);
+			});
+
+		DrawComponent<TAGE::CameraComponent>("Camera", entity, [](auto& component)
+			{
+				ImGui::Checkbox("Active", &component.IsActive);
+
+				float fov = component.Handle->GetFOV();
+				if (ImGui::DragFloat("FOV", &fov, 0.1f, 1.0f, 179.0f))
+				{
+					component.Handle->SetFOV(fov);
+				}
+
+				float nearClip = component.Handle->GetNearClip();
+				if (ImGui::DragFloat("Near Clip", &nearClip, 0.01f, 0.01f, 100.0f))
+				{
+					component.Handle->SetNearClip(nearClip);
+				}
+
+				float farClip = component.Handle->GetFarClip();
+				if (ImGui::DragFloat("Far Clip", &farClip, 0.1f, 0.1f, 10000.0f))
+				{
+					component.Handle->SetFarClip(farClip);
+				}
+			});
+
+		DrawComponent<TAGE::SkyboxComponent>("Skybox", entity, [](auto& component)
+			{
+				if (component.Handle)
+				{
+					ImGui::Text("Skybox Path: %s", component.Handle->GetTexture()->GetPath().c_str());
+				}
+				else
+				{
+					ImGui::Text("Skybox not loaded.");
+				}
+
+				if (ImGui::Button("Select Skybox"))
+				{
+					std::string selectedSkybox = TAGE::Platform::FileDialog::OpenFile("Cubemap Files (*.hdr;*.png;*.exr)\0*.hdr;*.exr;*.png\0");
+					if (!selectedSkybox.empty())
+					{
+						component.Handle = TAGE::MEM::MakeRef<TARE::Skybox>(selectedSkybox.c_str());
+					}
+				}
 			});
 
 		DrawComponent<TAGE::LightComponent>("Light", entity, [](auto& component)

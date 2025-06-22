@@ -1,7 +1,7 @@
 #include "tagepch.h"
 #include "OpenGL_Shader.h"
 #include "glm/gtc/type_ptr.hpp"
-#include "GLAD/glad.h"
+#include <GLAD/glad.h>
 
 namespace TARE {
 	OpenGL_Shader::OpenGL_Shader(const char* vertexPath, const char* fragmentPath)
@@ -44,6 +44,7 @@ namespace TARE {
 			return;
 		}
 
+		//LOG_INFO("SHADER CODE:\n{}", code);
 		glShaderSource(shader, 1, &code, nullptr);
 		glCompileShader(shader);
 		CheckCompileErrors(shader, type);

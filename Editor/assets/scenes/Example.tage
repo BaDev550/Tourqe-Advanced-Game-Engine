@@ -1,0 +1,78 @@
+Scene: Test Scene - 1
+Entities:
+  - Entity: 6
+    IdentityComponent:
+      Name: Camera
+    TransformComponent:
+      Position: [-5.5, 3.4000001, 0]
+      Rotation: [-0.0034903523, 0.0130895171, 4.56912312e-05, 0.999908268]
+      Scale: [1, 1, 1]
+    CameraComponent:
+      Camera:
+        AspectRatio: 1.31085038
+        FOV: 45
+        NearClip: 1
+        FarClip: 250
+      IsActive: true
+  - Entity: 5
+    IdentityComponent:
+      Name: Second Camera
+    TransformComponent:
+      Position: [0, 0, 0]
+      Rotation: [0, 0, 0, 1]
+      Scale: [1, 1, 1]
+    CameraComponent:
+      Camera:
+        AspectRatio: 1.77777779
+        FOV: 45
+        NearClip: 0.0500000007
+        FarClip: 250
+      IsActive: false
+  - Entity: 4
+    IdentityComponent:
+      Name: Mario
+    TransformComponent:
+      Position: [0, 1.39999998, 0]
+      Rotation: [0, 0, 0, 1]
+      Scale: [1, 1, 1]
+    MeshComponent:
+      MeshPath: assets/models/mario_2/mario_2.obj
+  - Entity: 3
+    IdentityComponent:
+      Name: sponza
+    TransformComponent:
+      Position: [0, 0, 0]
+      Rotation: [0, 0, 0, 1]
+      Scale: [0.00999999978, 0.00999999978, 0.00999999978]
+    MeshComponent:
+      MeshPath: assets/models/Sponza/Sponza.gltf
+  - Entity: 2
+    IdentityComponent:
+      Name: testModel
+    TransformComponent:
+      Position: [0, 0, 0]
+      Rotation: [0, 0, 0, 1]
+      Scale: [14.1999998, 0, 11.3999996]
+    MeshComponent:
+      MeshPath: assets/models/Cube/cube.obj
+  - Entity: 1
+    IdentityComponent:
+      Name: sunLight
+    TransformComponent:
+      Position: [0, 0, 0]
+      Rotation: [0, 0, 0, 1]
+      Scale: [1, 1, 1]
+    LightComponent:
+      Type: 1
+      Color: [1, 1, 1]
+      Range: 1
+      Intensity: 10
+    SkyboxComponent:
+      TexturePath: assets/textures/skyboxes/skybox_1.png
+  - Entity: 0
+    IdentityComponent:
+      Name: skybox
+    TransformComponent:
+      Position: [0, 0, 0]
+      Rotation: [0, 0, 0, 1]
+      Scale: [1, 1, 1]

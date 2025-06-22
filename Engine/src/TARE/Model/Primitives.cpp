@@ -9,7 +9,6 @@ namespace Primitives {
 	void CreateWireSphere(uint& vao, uint& vbo) {
 		std::vector<glm::vec3> vertices;
 		const int segments = 32;
-		const float PI = glm::pi<float>();
 
 		for (int i = 0; i <= segments; i++) {
 			float theta = 2.0f * PI * i / segments;
@@ -42,7 +41,6 @@ namespace Primitives {
 	void CreateWireCone(uint& vao, uint& vbo) {
 		std::vector<glm::vec3> vertices;
 		const int segments = 32;
-		const float PI = glm::pi<float>();
 
 		const glm::vec3 tip(0.0f, 0.0f, 1.0f);
 		const float radius = 1.0f;

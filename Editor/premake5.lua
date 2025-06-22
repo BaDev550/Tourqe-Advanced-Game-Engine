@@ -18,9 +18,11 @@ project "Editor"
         "../Engine/%{IncludeDir.GLFW}",
         "../Engine/%{IncludeDir.GLAD}",
         "../Engine/%{IncludeDir.ImGui}",
+        "../Engine/%{IncludeDir.ImGizmo}",
         "../Engine/%{IncludeDir.Assimp}",
         "../Engine/%{IncludeDir.glm}",
         "../Engine/%{IncludeDir.entt}",
+        "../Engine/%{IncludeDir.yaml}"
     }
 
     links {

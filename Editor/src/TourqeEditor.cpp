@@ -19,7 +19,7 @@ namespace TAGE {
 	Application* CreateApplication(ApplicationCommandLineArgs args)
 	{
 		ApplicationSpecifics spec;
-		spec.AppName = "Touqe Editor";
+		spec.AppName = "Tourqe Editor";
 		spec.CommandLineArgs = args;
 
 		return new TourqeEditor::TourqeEditor(spec);

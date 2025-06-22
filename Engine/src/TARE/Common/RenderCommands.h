@@ -33,6 +33,9 @@ namespace TARE {
 		inline static void DrawFullScreenQuad() {
 			_API->DrawFullScreenQuad();
 		}
+		inline static void SetCullingMode(CullMode mode) {
+			_API->SetCullingMode(mode);
+		}
 
 	private:
 		static RenderAPI* _API;

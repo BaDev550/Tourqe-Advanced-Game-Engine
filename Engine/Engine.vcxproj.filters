@@ -16,6 +16,12 @@
     <Filter Include="shaders\Screen">
       <UniqueIdentifier>{FE293E11-EAF7-3117-D38B-A23DBFF80D7C}</UniqueIdentifier>
     </Filter>
+    <Filter Include="shaders\ScreenSpace">
+      <UniqueIdentifier>{CA1E1B82-3680-F88F-BFED-3E422B4E2F4F}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="shaders\Shadow">
+      <UniqueIdentifier>{244F8F11-101D-8317-F9B0-F33DE51D5F7C}</UniqueIdentifier>
+    </Filter>
     <Filter Include="src">
       <UniqueIdentifier>{2DAB880B-99B4-887C-2230-9F7C8E38947C}</UniqueIdentifier>
     </Filter>
@@ -27,6 +33,9 @@
     </Filter>
     <Filter Include="src\Platform\OpenGL">
       <UniqueIdentifier>{35A49437-A105-7245-2A73-B8F796D3A804}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="src\Platform\Windows">
+      <UniqueIdentifier>{5B054582-4794-CE4B-F0B2-E246DC20DFF1}</UniqueIdentifier>
     </Filter>
     <Filter Include="src\TAGE">
       <UniqueIdentifier>{BD5C25CF-A929-80DA-D242-6E82BE6EB568}</UniqueIdentifier>
@@ -88,6 +97,9 @@
     <Filter Include="src\TARE\Common">
       <UniqueIdentifier>{60EE4990-CC79-B754-D58A-3A4941951355}</UniqueIdentifier>
     </Filter>
+    <Filter Include="src\TARE\Deferred">
+      <UniqueIdentifier>{D85E17A4-4475-153A-8DEC-A05BF941E6C1}</UniqueIdentifier>
+    </Filter>
     <Filter Include="src\TARE\Material">
       <UniqueIdentifier>{C6F926DF-3210-2575-7B87-B096E7DCF5FC}</UniqueIdentifier>
     </Filter>
@@ -96,6 +108,12 @@
     </Filter>
     <Filter Include="src\TARE\Shader">
       <UniqueIdentifier>{CE1017B5-3A9C-8479-43AD-076EAFB7E079}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="src\TARE\Shadow">
+      <UniqueIdentifier>{1D1217B5-899D-8479-92AE-076EFEB8E079}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="src\TARE\Skybox">
+      <UniqueIdentifier>{377C5AB5-A307-C879-AC18-4B6E1823247A}</UniqueIdentifier>
     </Filter>
     <Filter Include="src\TARE\Texture">
       <UniqueIdentifier>{882B9D9F-7424-BCF1-9D56-A17689AE9BFD}</UniqueIdentifier>
@@ -133,6 +151,9 @@
       <Filter>src\Platform\DirectX11</Filter>
     </ClInclude>
     <ClInclude Include="src\Platform\OpenGL\OpenGL_Buffers.h">
+      <Filter>src\Platform\OpenGL</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Platform\OpenGL\OpenGL_Framebuffer.h">
       <Filter>src\Platform\OpenGL</Filter>
     </ClInclude>
     <ClInclude Include="src\Platform\OpenGL\OpenGL_RenderAPI.h">
@@ -201,6 +222,9 @@
     <ClInclude Include="src\TAGE\Layers\LayerStack.h">
       <Filter>src\TAGE\Layers</Filter>
     </ClInclude>
+    <ClInclude Include="src\TAGE\TAGE.h">
+      <Filter>src\TAGE</Filter>
+    </ClInclude>
     <ClInclude Include="src\TAGE\Thread\ThreadWarpper.h">
       <Filter>src\TAGE\Thread</Filter>
     </ClInclude>
@@ -208,6 +232,9 @@
       <Filter>src\TAGE\Utilities</Filter>
     </ClInclude>
     <ClInclude Include="src\TAGE\Utilities\Memory.h">
+      <Filter>src\TAGE\Utilities</Filter>
+    </ClInclude>
+    <ClInclude Include="src\TAGE\Utilities\Platform.h">
       <Filter>src\TAGE\Utilities</Filter>
     </ClInclude>
     <ClInclude Include="src\TAGE\Utilities\TimeStep.h">
@@ -228,10 +255,16 @@
     <ClInclude Include="src\TAGE\World\Components\RenderComponents.h">
       <Filter>src\TAGE\World\Components</Filter>
     </ClInclude>
-    <ClInclude Include="src\TAGE\World\Objects\Object.h">
+    <ClInclude Include="src\TAGE\World\Objects\Entity.h">
+      <Filter>src\TAGE\World\Objects</Filter>
+    </ClInclude>
+    <ClInclude Include="src\TAGE\World\Objects\ScriptableEntity.h">
       <Filter>src\TAGE\World\Objects</Filter>
     </ClInclude>
     <ClInclude Include="src\TAGE\World\Scene\Scene.h">
+      <Filter>src\TAGE\World\Scene</Filter>
+    </ClInclude>
+    <ClInclude Include="src\TAGE\World\Scene\SceneSerializer.h">
       <Filter>src\TAGE\World\Scene</Filter>
     </ClInclude>
     <ClInclude Include="src\TAGE\World\Systems\System_Base.h">
@@ -243,13 +276,13 @@
     <ClInclude Include="src\TARE\Buffers\Buffers.h">
       <Filter>src\TARE\Buffers</Filter>
     </ClInclude>
+    <ClInclude Include="src\TARE\Buffers\Framebuffer.h">
+      <Filter>src\TARE\Buffers</Filter>
+    </ClInclude>
     <ClInclude Include="src\TARE\Buffers\VertexArrayBuffer.h">
       <Filter>src\TARE\Buffers</Filter>
     </ClInclude>
     <ClInclude Include="src\TARE\Camera\Camera.h">
-      <Filter>src\TARE\Camera</Filter>
-    </ClInclude>
-    <ClInclude Include="src\TARE\Camera\FreeCamera.h">
       <Filter>src\TARE\Camera</Filter>
     </ClInclude>
     <ClInclude Include="src\TARE\Camera\FrustumCulling.h">
@@ -263,6 +296,9 @@
     </ClInclude>
     <ClInclude Include="src\TARE\Common\RenderContext.h">
       <Filter>src\TARE\Common</Filter>
+    </ClInclude>
+    <ClInclude Include="src\TARE\Deferred\DeferredRendering.h">
+      <Filter>src\TARE\Deferred</Filter>
     </ClInclude>
     <ClInclude Include="src\TARE\Material\Material.h">
       <Filter>src\TARE\Material</Filter>
@@ -288,8 +324,17 @@
     <ClInclude Include="src\TARE\Shader\ShaderPreprocessor.h">
       <Filter>src\TARE\Shader</Filter>
     </ClInclude>
+    <ClInclude Include="src\TARE\Shadow\ShadowMap.h">
+      <Filter>src\TARE\Shadow</Filter>
+    </ClInclude>
+    <ClInclude Include="src\TARE\Skybox\Skybox.h">
+      <Filter>src\TARE\Skybox</Filter>
+    </ClInclude>
     <ClInclude Include="src\TARE\TARE.h">
       <Filter>src\TARE</Filter>
+    </ClInclude>
+    <ClInclude Include="src\TARE\Texture\Bitmap.h">
+      <Filter>src\TARE\Texture</Filter>
     </ClInclude>
     <ClInclude Include="src\TARE\Texture\Texture.h">
       <Filter>src\TARE\Texture</Filter>
@@ -1554,10 +1599,7 @@
     <ClInclude Include="vendor\stb\stb_image_write.h">
       <Filter>vendor\stb</Filter>
     </ClInclude>
-    <ClInclude Include="src\TARE\Buffers\Framebuffer.h" />
-    <ClInclude Include="src\Platform\OpenGL\OpenGL_Framebuffer.h" />
-    <ClInclude Include="src\TARE\Deferred\DeferredRendering.h" />
-    <ClInclude Include="src\TARE\Shadow\ShadowMap.h" />
+    <ClInclude Include="src\TARE\Camera\EditorCamera.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\Platform\DirectX11\DirectX11_RenderContext.cpp">
@@ -1567,6 +1609,12 @@
       <Filter>src\Platform\DirectX11</Filter>
     </ClCompile>
     <ClCompile Include="src\Platform\OpenGL\OpenGL_Buffers.cpp">
+      <Filter>src\Platform\OpenGL</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Platform\OpenGL\OpenGL_CubemapTexture.cpp">
+      <Filter>src\Platform\OpenGL</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Platform\OpenGL\OpenGL_Framebuffer.cpp">
       <Filter>src\Platform\OpenGL</Filter>
     </ClCompile>
     <ClCompile Include="src\Platform\OpenGL\OpenGL_RenderAPI.cpp">
@@ -1583,6 +1631,9 @@
     </ClCompile>
     <ClCompile Include="src\Platform\OpenGL\OpenGL_VertexArrayBuffer.cpp">
       <Filter>src\Platform\OpenGL</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Platform\Windows\WindowsPlatformUtils.cpp">
+      <Filter>src\Platform\Windows</Filter>
     </ClCompile>
     <ClCompile Include="src\TAGE\Application\Application.cpp">
       <Filter>src\TAGE\Application</Filter>
@@ -1626,19 +1677,22 @@
     <ClCompile Include="src\TAGE\World\Scene\Scene.cpp">
       <Filter>src\TAGE\World\Scene</Filter>
     </ClCompile>
+    <ClCompile Include="src\TAGE\World\Scene\SceneSerializer.cpp">
+      <Filter>src\TAGE\World\Scene</Filter>
+    </ClCompile>
     <ClCompile Include="src\TAGE\World\Systems\System_Renderer.cpp">
       <Filter>src\TAGE\World\Systems</Filter>
     </ClCompile>
     <ClCompile Include="src\TARE\Buffers\Buffers.cpp">
       <Filter>src\TARE\Buffers</Filter>
     </ClCompile>
+    <ClCompile Include="src\TARE\Buffers\Framebuffer.cpp">
+      <Filter>src\TARE\Buffers</Filter>
+    </ClCompile>
     <ClCompile Include="src\TARE\Buffers\VertexArrayBuffer.cpp">
       <Filter>src\TARE\Buffers</Filter>
     </ClCompile>
     <ClCompile Include="src\TARE\Camera\Camera.cpp">
-      <Filter>src\TARE\Camera</Filter>
-    </ClCompile>
-    <ClCompile Include="src\TARE\Camera\FreeCamera.cpp">
       <Filter>src\TARE\Camera</Filter>
     </ClCompile>
     <ClCompile Include="src\TARE\Common\RenderAPI.cpp">
@@ -1649,6 +1703,9 @@
     </ClCompile>
     <ClCompile Include="src\TARE\Common\RenderContext.cpp">
       <Filter>src\TARE\Common</Filter>
+    </ClCompile>
+    <ClCompile Include="src\TARE\Deferred\DeferredRendering.cpp">
+      <Filter>src\TARE\Deferred</Filter>
     </ClCompile>
     <ClCompile Include="src\TARE\Material\Material.cpp">
       <Filter>src\TARE\Material</Filter>
@@ -1674,6 +1731,12 @@
     <ClCompile Include="src\TARE\Shader\ShaderPreprocessor.cpp">
       <Filter>src\TARE\Shader</Filter>
     </ClCompile>
+    <ClCompile Include="src\TARE\Shadow\ShadowMap.cpp">
+      <Filter>src\TARE\Shadow</Filter>
+    </ClCompile>
+    <ClCompile Include="src\TARE\Skybox\Skybox.cpp">
+      <Filter>src\TARE\Skybox</Filter>
+    </ClCompile>
     <ClCompile Include="src\TARE\TARE.cpp">
       <Filter>src\TARE</Filter>
     </ClCompile>
@@ -1689,10 +1752,7 @@
     <ClCompile Include="vendor\stb\stb_image.cpp">
       <Filter>vendor\stb</Filter>
     </ClCompile>
-    <ClCompile Include="src\TARE\Buffers\Framebuffer.cpp" />
-    <ClCompile Include="src\Platform\OpenGL\OpenGL_Framebuffer.cpp" />
-    <ClCompile Include="src\TARE\Deferred\DeferredRendering.cpp" />
-    <ClCompile Include="src\TARE\Shadow\ShadowMap.cpp" />
+    <ClCompile Include="src\TARE\Camera\EditorCamera.cpp" />
   </ItemGroup>
   <ItemGroup>
     <None Include="shaders\Common\Material.glsl">
@@ -1713,13 +1773,13 @@
     <None Include="shaders\Deferred\gbuffer_fragment.glsl">
       <Filter>shaders\Deferred</Filter>
     </None>
+    <None Include="shaders\Deferred\gbuffer_vertex.glsl">
+      <Filter>shaders\Deferred</Filter>
+    </None>
     <None Include="shaders\Deferred\light_fragment.glsl">
       <Filter>shaders\Deferred</Filter>
     </None>
     <None Include="shaders\Deferred\light_vertex.glsl">
-      <Filter>shaders\Deferred</Filter>
-    </None>
-    <None Include="shaders\Deferred\gbuffer_vertex.glsl">
       <Filter>shaders\Deferred</Filter>
     </None>
     <None Include="shaders\Screen\bloom_fragment.glsl">
@@ -1734,6 +1794,24 @@
     <None Include="shaders\Screen\postprocess_vertex.glsl">
       <Filter>shaders\Screen</Filter>
     </None>
+    <None Include="shaders\ScreenSpace\screen_space_ambient_occlusion.glsl">
+      <Filter>shaders\ScreenSpace</Filter>
+    </None>
+    <None Include="shaders\ScreenSpace\screen_space_common.glsl">
+      <Filter>shaders\ScreenSpace</Filter>
+    </None>
+    <None Include="shaders\ScreenSpace\screen_space_gi.glsl">
+      <Filter>shaders\ScreenSpace</Filter>
+    </None>
+    <None Include="shaders\ScreenSpace\screen_space_reflection.glsl">
+      <Filter>shaders\ScreenSpace</Filter>
+    </None>
+    <None Include="shaders\Shadow\shadow_fragment.glsl">
+      <Filter>shaders\Shadow</Filter>
+    </None>
+    <None Include="shaders\Shadow\shadow_vertex.glsl">
+      <Filter>shaders\Shadow</Filter>
+    </None>
     <None Include="shaders\grid_Fragment.glsl">
       <Filter>shaders</Filter>
     </None>
@@ -1746,20 +1824,11 @@
     <None Include="shaders\main_vertex.glsl">
       <Filter>shaders</Filter>
     </None>
-    <None Include="shaders\Shadow\shadow_fragment.glsl">
-      <Filter>shaders</Filter>
-    </None>
-    <None Include="shaders\Shadow\shadow_vertex.glsl">
-      <Filter>shaders</Filter>
-    </None>
     <None Include="shaders\skybox_fragment.glsl">
       <Filter>shaders</Filter>
     </None>
     <None Include="shaders\skybox_vertex.glsl">
       <Filter>shaders</Filter>
     </None>
-    <None Include="shaders\ScreenSpace\screen_space_gi.glsl" />
-    <None Include="shaders\ScreenSpace\screen_space_ambient_occlusion.glsl" />
-    <None Include="shaders\ScreenSpace\screen_space_common.glsl" />
   </ItemGroup>
 </Project>

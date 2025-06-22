@@ -1,6 +1,6 @@
 #include "tagepch.h"
 #include "OpenGL_Texture.h"
-#include "GLAD/glad.h"
+#include <GLAD/glad.h>
 #include "stb/stb_image.h"
 #include "stb/stb_image_write.h"
 
@@ -126,6 +126,12 @@ namespace TARE {
 		stbi_image_free(data);
 		return true;
 	}
+
+	bool OpenGL_Texture2D::SaveToDisk(const std::string& location)
+	{
+		return false;
+	}
+
 	bool OpenGL_Texture2D::LoadFallbackTexture()
 	{
 		LOG_WARN("Using fallback texture");
@@ -174,8 +180,5 @@ namespace TARE {
 		return true;
 #endif
 	}
-	bool OpenGL_Texture2D::SaveToDisk(const std::string& location)
-	{
-		return false;
-	}
+
 }

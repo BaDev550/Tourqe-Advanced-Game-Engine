@@ -9,12 +9,10 @@ namespace TARE
 		SetupMesh();
 	}
 
-	void Mesh::Draw() const
+	void Mesh::Draw(TAGE::MEM::Ref<Shader>& shader) const
 	{
 		if (_material)
-			_material->Use();
-		RenderCommand::Enable(DEPTH_TEST);
-		
+			_material->Use(shader);
 		RenderCommand::DrawIndexed(_VAO);
 	}
 

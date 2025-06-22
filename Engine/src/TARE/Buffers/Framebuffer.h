@@ -19,6 +19,10 @@ namespace TARE {
 		virtual uint GetWidth() const = 0;
 		virtual uint GetHeight() const = 0;
 
+		virtual void Blit(const TAGE::MEM::Ref<Framebuffer>& target) const = 0;
+		virtual void BindRead() const = 0;
+		virtual void BindWrite() const = 0;
+
 		static TAGE::MEM::Ref<Framebuffer> Create(const FramebufferSpecification& spec);
 	};
 }

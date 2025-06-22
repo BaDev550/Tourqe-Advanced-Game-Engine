@@ -1,6 +1,6 @@
 #include "tagepch.h"
 #include "OpenGL_VertexArrayBuffer.h"
-#include "GLAD/glad.h"
+#include <GLAD/glad.h>
 
 namespace TARE {
 	static GLenum to_OpenGLType(ShaderDataType type) {

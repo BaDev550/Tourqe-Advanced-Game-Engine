@@ -1,7 +1,7 @@
 #pragma once
 
 #include "TAGE/Application/Application.h"
-#include "TAGE/World/Objects/Object.h"
+#include "TAGE/World/Objects/Entity.h"
 #include "TAGE/World/Scene/Scene.h"
 
 namespace TourqeEditor {
@@ -16,17 +16,17 @@ namespace TourqeEditor {
 
 		void OnImGuiRender();
 
-		TAGE::Object* GetSelectedEntity() const { return m_SelectionContext; }
-		void SetSelectedEntity(TAGE::Object* entity);
+		TAGE::Entity* GetSelectedEntity() const { return m_SelectionContext; }
+		void SetSelectedEntity(TAGE::Entity* entity);
 	private:
 		template<typename T>
 		void DisplayAddComponentEntry(const std::string& entryName);
 	
-		void DrawEntityNode(TAGE::Object* entity);
-		void DrawComponents(TAGE::Object* entity);
+		void DrawEntityNode(TAGE::Entity* entity);
+		void DrawComponents(TAGE::Entity* entity);
 	private:
 		TAGE::MEM::Ref<TAGE::Scene> m_Context;
-		TAGE::Object* m_SelectionContext = nullptr;
+		TAGE::Entity* m_SelectionContext = nullptr;
 	};
 
 }

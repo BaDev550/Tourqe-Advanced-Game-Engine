@@ -1,3 +1,6 @@
+#ifndef MATERIAL_GLSL
+#define MATERIAL_GLSL
+
 struct Material {
     sampler2D DiffuseTex;
     sampler2D SpecularTex;
@@ -15,4 +18,6 @@ vec2 ParallaxMapping(sampler2D heightMap, vec2 texCoords, vec3 viewDir)
     vec2 p = viewDir.xy / viewDir.z * (height * 1.0f);
     return texCoords - p;    
 } 
+#endif
+
 #endif

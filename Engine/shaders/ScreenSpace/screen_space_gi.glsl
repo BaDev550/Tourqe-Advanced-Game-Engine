@@ -1,56 +1,52 @@
+#ifndef SCREEN_SPACE_GI_GLSL
+#define SCREEN_SPACE_GI_GLSL
+
 #include "screen_space_common.glsl"
 
+uniform sampler2D u_PrevGI;
+uniform mat4 u_PrevViewProj;
+uniform mat4 u_CurrViewProj;
+
 vec3 calculateSSGI(
-    vec3 fragPos,
-    vec3 normal,
-    vec3 albedo,
-    vec2 TexCoords,
-    sampler2D u_gPos,
-    sampler2D u_gNorm,
-    sampler2D u_gAlb,
-    float screenWidth,
-    float screenHeight
+    vec3 fragPos, 
+    vec3 normal, 
+    vec3 albedo, 
+    vec2 uv,
+    sampler2D posTex, 
+    sampler2D normTex, 
+    sampler2D albTex,
+    sampler2D sceneTex, 
+    float screenW, 
+    float screenH
 ) {
-    vec3 indirect = vec3(0.0);
-    int validSamples = 0;
-
+    vec3 gi = vec3(0.0);
+    int cnt = 0;
     for (int i = 0; i < NUM_SAMPLES; ++i) {
-        vec2 rand = vec2(
-            fract(sin(dot(TexCoords + float(i), vec2(12.9898,78.233))) * 43758.5453),
-            fract(sin(dot(TexCoords + float(i) + 31.7, vec2(26.651,21.821))) * 12893.731)
+        vec2 r = vec2(
+            fract(sin(dot(uv+float(i), vec2(12.9898,78.233)))*43758.5453),
+            fract(sin(dot(uv+float(i)+31.7, vec2(26.651,21.821)))*12893.731)
         );
+        vec3 dir = hemisphereSample(r, normal);
+        vec3 sp = fragPos + dir * SAMPLE_RADIUS;
+        vec2 puv = uv + dir.xy * (SAMPLE_RADIUS/vec2(screenW, screenH));
+        if (any(lessThan(puv, vec2(0.0))) || any(greaterThan(puv, vec2(1.0)))) continue;
 
-        vec3 sampleDir = hemisphereSample(rand, normal);
-        vec3 samplePos = fragPos + sampleDir * SAMPLE_RADIUS;
-
-        vec2 offsetUV = TexCoords + (sampleDir.xy * SAMPLE_RADIUS) / vec2(screenWidth, screenHeight);
-        if (offsetUV.x < 0.0 || offsetUV.x > 1.0 || offsetUV.y < 0.0 || offsetUV.y > 1.0)
-            continue;
-
-        vec3 fetchedPos = texture(u_gPos, offsetUV).rgb;
-        if (fetchedPos == vec3(0.0)) continue;
-
-        vec3 dir = fetchedPos - fragPos;
-        float dist = length(dir);
-        if (dist < 0.01 || dist > SAMPLE_RADIUS) continue;
-
-        dir = normalize(dir);
-        float NdotD = max(dot(normal, dir), 0.0);
-        float attenuation = NdotD / (1.0 + dist * dist);
-
-        vec3 sampleAlb = texture(u_gAlb, offsetUV).rgb;
-
-        indirect += sampleAlb * attenuation;
-        validSamples++;
+        vec3 fsp = texture(posTex, puv).rgb;
+        if (fsp == vec3(0.0)) continue;
+        float d = length(fsp - fragPos);
+        if (d < 0.01 || d > SAMPLE_RADIUS) continue;
+        float w = max(dot(normal, normalize(fsp - fragPos)), 0.0) / (1.0 + d*d);
+        gi += texture(albTex, puv).rgb * w;
+        cnt++;
     }
+    if (cnt > 0) gi /= float(cnt);
 
-    if (validSamples > 0) {
-        indirect /= float(validSamples);
-        indirect *= 0.6;
-        indirect = clamp(indirect, vec3(0.0), vec3(1.0));
-    }else{
-        indirect = albedo * 0.6;
-    }
-
-    return indirect;
+    vec4 clip = u_CurrViewProj * vec4(fragPos,1.0);
+    vec2 currUV = clip.xy/clip.w*0.5+0.5;
+    vec4 prev = u_PrevViewProj * vec4(fragPos,1.0);
+    vec2 prevUV = prev.xy/prev.w*0.5+0.5;
+    vec3 prevGI = texture(u_PrevGI, prevUV).rgb;
+    return mix(gi, prevGI, 0.5);
 }
+
+#endif

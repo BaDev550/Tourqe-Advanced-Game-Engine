@@ -3,7 +3,7 @@
 
 namespace TARE
 {
-	void Camera::Update()
+	void Camera::CalculateCameraMatrixes()
 	{
 		_rotation.x = glm::clamp(_rotation.x, _minPitch, _maxPitch);
 
@@ -19,49 +19,55 @@ namespace TARE
 
 		_viewMatrix = glm::lookAt(_position, _position + _forward, _up);
 		_inverseViewMatrix = glm::inverse(_viewMatrix);
-		_projectionMatrix = glm::perspective(glm::radians(45.0f), _aspectRatio, NEAR_CLIP, FAR_CLIP);
+		_projectionMatrix = glm::perspective(glm::radians(_fov), _aspectRatio, _nearClip, _farClip);
 	}
 
 	void Camera::SetPosition(glm::vec3 position)
 	{
 		_position = position;
-		Update();
+		CalculateCameraMatrixes();
 	}
 
 	void Camera::SetEulerRotation(glm::vec3 rotation)
 	{
 		_rotation = rotation;
-		Update();
+		CalculateCameraMatrixes();
 	}
 
 	void Camera::Orbit(float pitchOffset, float yawOffset)
 	{
 		AddPitch(pitchOffset);
 		AddYaw(yawOffset);
-		Update();
+		CalculateCameraMatrixes();
 	}
 
 	void Camera::AddPitch(float value)
 	{
 		_rotation.x += value;
 		_rotation.x = glm::clamp(_rotation.x, _minPitch, _maxPitch);
-		Update();
+		CalculateCameraMatrixes();
 	}
 
 	void Camera::AddYaw(float value)
 	{
 		_rotation.y += value;
-		Update();
+		CalculateCameraMatrixes();
 	}
 
 	void Camera::AddHeight(float value)
 	{
 		_position.y += value;
-		Update();
+		CalculateCameraMatrixes();
 	}
 
 	void Camera::SetMinPitch(float value) { _minPitch = value; }
 	void Camera::SetMaxPitch(float value) { _maxPitch = value; }
+
+	void Camera::OnResize(float win_Width, float win_Height)
+	{
+		_aspectRatio = win_Width / win_Height;
+		CalculateCameraMatrixes();
+	}
 
 	const glm::mat4& Camera::GetViewMatrix() const { return _viewMatrix; }
 	const glm::mat4& Camera::GetProjectionMatrix() const { return _projectionMatrix; }

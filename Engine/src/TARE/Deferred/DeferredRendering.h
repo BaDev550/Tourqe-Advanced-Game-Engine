@@ -19,11 +19,13 @@ namespace TARE {
 		void BlitToScreen() const;
 
 		TAGE::MEM::Ref<Framebuffer> GetGBuffer() const { return _GBuffer; }
+		TAGE::MEM::Ref<Framebuffer> GetGIBuffer() const { return _GIBuffer; }
 		TAGE::MEM::Ref<Framebuffer> GetLightingBuffer() const { return _LightingBuffer; }
 		TAGE::MEM::Ref<Shader> GetGBufferShader() const { return _GBufferShader; }
 		TAGE::MEM::Ref<Shader> GetLightShader() const { return _LightShader; }
 	private:
 		TAGE::MEM::Ref<Framebuffer> _GBuffer;
+		TAGE::MEM::Ref<Framebuffer> _GIBuffer;
 		TAGE::MEM::Ref<Framebuffer> _LightingBuffer;
 		TAGE::MEM::Ref<Shader> _FinalShader;
 		TAGE::MEM::Ref<Shader> _GBufferShader;

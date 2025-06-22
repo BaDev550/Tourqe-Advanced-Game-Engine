@@ -223,12 +223,10 @@ namespace TAGE
 		if (enabled)
 		{
 			glfwSetInputMode(_Window, GLFW_CURSOR, GLFW_CURSOR_NORMAL);
-			LOG_INFO("Cursor enabled");
 		}
 		else
 		{
 			glfwSetInputMode(_Window, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
-			LOG_INFO("Cursor disabled");
 		}
 		_Properties.Focused = glfwGetWindowAttrib(_Window, GLFW_FOCUSED);
 	}

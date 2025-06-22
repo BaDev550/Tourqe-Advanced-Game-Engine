@@ -156,3 +156,22 @@ enum class FramebufferTextureFormat : uint8 {
 	DEPTH32F,
 	DEPTH24,
 };
+
+enum class CullMode : uint8
+{
+	NONE = 0,
+	FRONT,
+	BACK,
+};
+
+enum class BitmapFormat : uint8
+{
+	UBYTE,
+	FLOAT,
+};
+
+enum class BitmapType : uint8
+{
+	T2D,
+	CUBE
+};

@@ -3,6 +3,7 @@
 #include "TARE/Model/Model.h"
 #include "TARE/Camera/Camera.h"
 #include "TAGE/Common/TTypes.h"
+#include "TARE/Skybox/Skybox.h"
 
 namespace TAGE {
 	struct MeshComponent {
@@ -26,8 +27,18 @@ namespace TAGE {
 
 	struct CameraComponent {
 		MEM::Ref<TARE::Camera> Handle;
+		bool IsActive = true;
 
-		CameraComponent() = default;
+		CameraComponent() { Handle = MEM::MakeRef<TARE::Camera>(1280.0f, 720.0f); };
 		CameraComponent(const MEM::Ref<TARE::Camera>& camera) : Handle(camera) {}
+	};
+
+	struct SkyboxComponent {
+		MEM::Ref<TARE::Skybox> Handle;
+
+		SkyboxComponent() = default;
+		SkyboxComponent(const std::string& cubemapPath) {
+			Handle = MEM::MakeRef<TARE::Skybox>(cubemapPath.c_str());
+		}
 	};
 }
