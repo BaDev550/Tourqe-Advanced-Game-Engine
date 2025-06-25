@@ -18,6 +18,6 @@ void main()
 
     gPosition = vec4(FragPos, 1.0f);
     gNormal = vec4(normalize(Normal), 1.0f);
-    gEntityID = u_EntityID;
     gAlbedo = vec4(Albedo, 1.0f);
+    gEntityID = u_EntityID;
 }

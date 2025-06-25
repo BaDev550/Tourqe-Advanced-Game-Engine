@@ -40,7 +40,7 @@ namespace TAGE {
 			_Handle = entt::null;
 		}
 
-		operator entt::entity() const { return _Handle; }
+		entt::entity GetHandle() const { return _Handle; }
 		operator bool() const { return _Handle != entt::null; }
 	private:
 		entt::entity _Handle = entt::null;

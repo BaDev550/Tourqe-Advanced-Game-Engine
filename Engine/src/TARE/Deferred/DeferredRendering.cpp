@@ -78,10 +78,10 @@ namespace TARE {
 		FramebufferSpecification spec(
 			FramebufferAttachmentSpecification({
 					FramebufferTextureFormat(FramebufferTextureFormat::RGBA16F), // Position
-					FramebufferTextureFormat(FramebufferTextureFormat::RGBA8), // Normal
+					FramebufferTextureFormat(FramebufferTextureFormat::RGBA16F), // Normal
 					FramebufferTextureFormat(FramebufferTextureFormat::RGBA8), // Albedo
 					FramebufferTextureFormat(FramebufferTextureFormat::RED_INTEGER),
-					FramebufferTextureFormat(FramebufferTextureFormat::DEPTH24) // Depth
+					FramebufferTextureFormat(FramebufferTextureFormat::DEPTH32F) // Depth
 				}),
 			1, width, height
 		);

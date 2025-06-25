@@ -20,6 +20,7 @@ namespace TARE {
 			glm::vec3 CameraDirection;
 			glm::vec3 CameraUp;
 			glm::mat4 ViewMatrix;
+			glm::mat4 InversedViewMatrix;
 			glm::mat4 ProjectionMatrix;
 			glm::mat4 PrevViewProjMatrix;
 			glm::mat4 ViewProjectionMatrix;

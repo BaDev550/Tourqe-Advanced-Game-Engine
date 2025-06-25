@@ -25,12 +25,14 @@ namespace TARE {
 		_Data.ViewMatrix = cam->GetViewMatrix();
 		_Data.ProjectionMatrix = cam->GetProjectionMatrix();
 		_Data.ViewProjectionMatrix = cam->GetViewProjectionMatrix();
+		_Data.InversedViewMatrix = cam->GetInverseViewMatrix();
 
 		_DeferredRendering->GetLightShader()->Use();
 		_ShadowMap->BindTexture(SHADOW_MAP_TEXTURE_SLOT);
 		_DeferredRendering->GetLightShader()->SetUniform("u_ShadowMap", SHADOW_MAP_TEXTURE_SLOT);
 		_DeferredRendering->GetLightShader()->SetUniform("u_LightSpaceMatrix", _Data.LightViewProjectionMatrix);
 		_DeferredRendering->GetLightShader()->SetUniform("u_CameraPos", _Data.CameraPosition);
+		_DeferredRendering->GetLightShader()->SetUniform("u_InverseView", _Data.InversedViewMatrix);
 
 		_DeferredRendering->GetLightShader()->SetUniform("u_PrevViewProj", _Data.PrevViewProjMatrix);
 		_DeferredRendering->GetLightShader()->SetUniform("u_CurrViewProj", _Data.ViewProjectionMatrix);
@@ -90,7 +92,7 @@ namespace TARE {
 
 		if (light.type == LightType::DIRECTIONAL) {
 			float shadowRange = 20.0f;
-			glm::mat4 lightProjection = glm::ortho(-shadowRange, shadowRange, -shadowRange, shadowRange, 1.0f, 150.0f);
+			glm::mat4 lightProjection = glm::ortho(-shadowRange, shadowRange, -shadowRange, shadowRange, 0.1f, 150.0f);
 
 			glm::vec3 lightPos = -light.direction * 30.0f;
 			glm::mat4 lightView = glm::lookAt(

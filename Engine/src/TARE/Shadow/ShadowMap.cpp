@@ -9,6 +9,8 @@ namespace TARE {
 				FramebufferTextureFormat::DEPTH32F
 			}, 1, width, height);
 		_depthFBO = Framebuffer::Create(spec);
+		_depthCubemap = CubemapTexture::Create();
+		_depthCubemap->LoadShadowPointCubemap();
 
 		_depthShader = ShaderLibrary::Add("ShadowDepth", "../Engine/shaders/Shadow/shadow_vertex", "../Engine/shaders/Shadow/shadow_fragment");
 

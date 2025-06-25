@@ -18,44 +18,40 @@ uniform sampler2D u_ShadowMap;
 #include "../ScreenSpace/screen_space_reflection.glsl"
 
 uniform vec3 u_CameraPos;
-uniform mat4 u_View, u_Projection, u_InverseProjection;
+uniform mat4 u_View, u_Projection, u_InverseProjection, u_InverseView;
 uniform mat4 u_LightSpaceMatrix;
 
 void main() {
-    vec3 FPos    = texture(u_gPos, TexCoords).rgb;
-    vec3 N       = normalize(texture(u_gNorm, TexCoords).xyz * 2.0 - 1.0);
-    float M      = texture(u_gNorm, TexCoords).w;
-    vec3 A       = texture(u_gAlb, TexCoords).rgb;
-    float R      = texture(u_gAlb, TexCoords).a;
-    vec3 Vdir   = normalize(u_CameraPos - FPos);
+    vec3 FPos = texture(u_gPos, TexCoords).rgb;
+    vec3 Vdir = normalize(u_CameraPos - FPos);
+    vec3 N = normalize(texture(u_gNorm, TexCoords).xyz * 2.0 - 1.0);
+    float M = texture(u_gNorm, TexCoords).w;
+    float S = texture(u_gAlb, TexCoords).w;
+    vec3 A = texture(u_gAlb, TexCoords).rgb;
+    vec3 VP = (u_View * vec4(FPos, 1.0)).xyz;
+    vec3 VN = mat3(u_View) * N;
     vec4 FragPosLightSpace = u_LightSpaceMatrix * vec4(FPos, 1.0);
 
-    float sh = ShadowCalculation(u_ShadowMap, FragPosLightSpace, N, Vdir);
-    vec3 L   = vec3(0.0);
-    for(int i=0; i < u_LightCount; ++i) {
-        L += CalculatePBRLight(
-                u_Lights[i], 
-                N, 
-                Vdir,
-                FPos, 
-                A, 
-                M, 
-                R, 
-                A
-            );
+    vec3 F0 = vec3(0.4);
+    F0 = mix(F0, A, M);
+    vec3 Fresnel = fresnelSchlick(max(dot(normalize(VN), normalize(VP)), 0.0), F0);
+
+    float shadow = ShadowCalculation(u_ShadowMap, FragPosLightSpace, N, Vdir);
+    vec3 lightAccum = vec3(0.0);
+    for (int i = 0; i < u_LightCount; ++i) {
+        lightAccum += CalculatePBRLight(u_Lights[i], N, Vdir, FPos, A, M, S, A);
     }
-    L *= (1.0 - sh);
-    vec3 viewPos = (u_View * vec4(FPos, 1.0)).xyz;
-    vec3 viewNorm = mat3(u_View) * N;
+    lightAccum *= (1.0 - shadow);
 
-    float ao   = CalculateSSAO(FPos, N, TexCoords, u_gPos, u_gNorm, float(textureSize(u_gPos,0).x), float(textureSize(u_gPos,0).y));
-    vec3 ssr   = DoSSR(viewPos, viewNorm, Vdir, TexCoords, u_gDepth, u_SceneColor, u_Projection, u_InverseProjection, R);
-    vec3 ssgi  = calculateSSGI(FPos, N, A, TexCoords, u_gPos, u_gNorm, u_gAlb, u_SceneColor, float(textureSize(u_gPos,0).x), float(textureSize(u_gPos,0).y));
+    float ao = CalculateSSAO(FPos, N, TexCoords, u_gPos, u_gNorm, float(textureSize(u_gPos, 0).x), float(textureSize(u_gPos, 0).y));
+    vec3 ssr = DoSSR(u_gPos, u_gAlb, TexCoords, VP, VN, u_InverseView, u_Projection, Fresnel, S, M);
+    vec3 ssgi = calculateSSGI(FPos, N, A, TexCoords, u_gPos, u_gNorm, u_gAlb, u_SceneColor, float(textureSize(u_gPos, 0).x), float(textureSize(u_gPos, 0).y));
 
-    vec3 amb = mix(vec3(0.05)*A, vec3(0.35)*A, ao);
-    vec3 col = amb + ssr * (1.0 - R);
-    col = col / (col + vec3(1.0));
-    col = pow(col, vec3(1.0/1.2));
+    vec3 ambient = lightAccum + mix(vec3(0.05) * A, vec3(0.35) * A, ao);
+    vec3 color = ambient + ssr * (1.0 - S);
 
-    FragColor = vec4(col, 1.0);
+    color = color / (color + vec3(1.0));
+    color = pow(color, vec3(1.0 / 1.2));
+
+    FragColor = vec4(color, 1.0);
 }

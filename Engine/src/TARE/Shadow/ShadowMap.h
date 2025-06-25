@@ -2,6 +2,7 @@
 #include "TARE/Buffers/Framebuffer.h"
 #include "TARE/Shader/ShaderLibrary.h"
 #include "TARE/Camera/Camera.h"
+#include "TARE/Texture/Texture.h"
 
 namespace TARE {
 	class ShadowMap
@@ -25,6 +26,7 @@ namespace TARE {
     private:
         TAGE::MEM::Ref<Framebuffer> _depthFBO;
         TAGE::MEM::Ref<Shader> _depthShader;
+        TAGE::MEM::Ref<CubemapTexture> _depthCubemap;
 
         glm::mat4 _lightSpaceMatrix;
         glm::vec3 _lightDir;

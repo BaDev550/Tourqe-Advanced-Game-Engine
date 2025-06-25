@@ -40,7 +40,7 @@ float GeometrySmith(vec3 N, vec3 V, vec3 L, float roughness)
 
 vec3 fresnelSchlick(float cosTheta, vec3 F0)
 {
-    return F0 + (1.0 - F0) * pow(clamp(1.0 - cosTheta, 0.0, 1.0), 5.0);
+    return F0 + (1.0 - F0) * pow(1.0 - cosTheta, 5.0);
 }
 
 vec3 ComputeLightDirectionAndAttenuation(Light light, vec3 fragPos, out vec3 lightDir, out float attenuation)
@@ -105,29 +105,28 @@ vec3 CalculatePBRLight(
         float theta = dot(lightDir, normalize(-light.direction));
         float outer = cos(radians(light.outerCone));
         if (theta < outer)
-            return vec3(0.0); // fully outside spotlight
+            return vec3(0.0);
         intensity *= ComputeSpotFalloff(light, lightDir);
     }
 
     vec3 radiance = light.color * intensity * attenuation;
-
     vec3 H = normalize(viewDir + lightDir);
-    float NDF = DistributionGGX(normal, H, roughness);
+
+    float NDF = DistributionGGX(normal, H, roughness);   
     float G   = GeometrySmith(normal, viewDir, lightDir, roughness);
-    vec3 F    = fresnelSchlick(max(dot(H, viewDir), 0.0), F0);
+    vec3  F   = fresnelSchlick(clamp(dot(H, viewDir), 0.0, 1.0), F0);
 
     float NdotL = max(dot(normal, lightDir), 0.0);
     float NdotV = max(dot(normal, viewDir), 0.0);
-    float denom = 4.0 * NdotV * NdotL + 0.001;
-
+    float denom = 4.0 * NdotL * NdotV + 0.001;
     vec3 specular = (NDF * G * F) / denom;
 
     vec3 kS = F;
     vec3 kD = (vec3(1.0) - kS) * (1.0 - metallic);
-
     vec3 diffuse = (kD * albedo) / PI;
 
     return (diffuse + specular) * radiance * NdotL;
 }
+
 
 #endif

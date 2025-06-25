@@ -34,6 +34,7 @@ namespace TAGE {
 	{
 		if (_Entities[ID] != nullptr)
 			return _Entities[ID].get();
+		return nullptr;
 	}
 
 	void Scene::OnUpdateRuntime(float DeltaTime)

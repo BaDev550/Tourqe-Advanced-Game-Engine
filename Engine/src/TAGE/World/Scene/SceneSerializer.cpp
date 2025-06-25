@@ -91,7 +91,7 @@ namespace TAGE {
 
 	static void SerializeEntity(YAML::Emitter& out, Entity entity) {
 		out << YAML::BeginMap;
-		out << YAML::Key << "Entity" << YAML::Value << (uint64)(entt::entity)entity;
+		out << YAML::Key << "Entity" << YAML::Value << (uint64)entity.GetHandle();
 
 		if (entity.HasComponent<IdentityComponent>()) {
 			out << YAML::Key << "IdentityComponent";
