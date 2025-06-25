@@ -1,5 +1,6 @@
 #pragma once
 #include "TAGE/Common/TEnums.h"
+#include "TAGE/Utilities/Memory.h"
 #include "Bitmap.h"
 #include <string>
 

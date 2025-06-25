@@ -14,14 +14,14 @@
   #define _CRT_SECURE_NO_WARNINGS
 #endif
 
-namespace TourqeEditor {
+namespace TAGE::Editor {
 
-	SceneHierarchyPanel::SceneHierarchyPanel(const TAGE::MEM::Ref<TAGE::Scene>& context)
+	SceneHierarchyPanel::SceneHierarchyPanel(const MEM::Ref<Scene>& context)
 	{
 		SetContext(context);
 	}
 
-	void SceneHierarchyPanel::SetContext(const TAGE::MEM::Ref<TAGE::Scene>& context)
+	void SceneHierarchyPanel::SetContext(const MEM::Ref<Scene>& context)
 	{
 		m_Context = context;
 		m_SelectionContext = {};
@@ -33,10 +33,10 @@ namespace TourqeEditor {
 
 		if (m_Context)
 		{
-			m_Context->GetRegistry().view<TAGE::IdentityComponent, TAGE::TransformComponent>().each(
-				[&](entt::entity entityID, TAGE::IdentityComponent& id, TAGE::TransformComponent& transform)
+			m_Context->GetRegistry().view<IdentityComponent, TransformComponent>().each(
+				[&](entt::entity entityID, IdentityComponent& id, TransformComponent& transform)
 				{
-					TAGE::Entity* entity = &m_Context->GetEntityByID(entityID);
+					Entity* entity = m_Context->GetEntityByID(entityID);
 					DrawEntityNode(entity);
 				});
 
@@ -64,14 +64,14 @@ namespace TourqeEditor {
 		ImGui::End();
 	}
 
-	void SceneHierarchyPanel::SetSelectedEntity(TAGE::Entity* entity)
+	void SceneHierarchyPanel::SetSelectedEntity(Entity* entity)
 	{
 		m_SelectionContext = entity;
 	}
 
-	void SceneHierarchyPanel::DrawEntityNode(TAGE::Entity* entity)
+	void SceneHierarchyPanel::DrawEntityNode(Entity* entity)
 	{
-		auto& tag = entity->GetComponent<TAGE::IdentityComponent>().Name;
+		auto& tag = entity->GetComponent<IdentityComponent>().Name;
 		
 		ImGuiTreeNodeFlags flags = ((m_SelectionContext == entity) ? ImGuiTreeNodeFlags_Selected : 0) | ImGuiTreeNodeFlags_OpenOnArrow;
 		flags |= ImGuiTreeNodeFlags_SpanAvailWidth;
@@ -190,7 +190,7 @@ namespace TourqeEditor {
 	}
 	
 	template<typename T, typename UIFunction>
-	static void DrawComponent(const std::string& name, TAGE::Entity* entity, UIFunction uiFunction)
+	static void DrawComponent(const std::string& name, Entity* entity, UIFunction uiFunction)
 	{
 		const ImGuiTreeNodeFlags treeNodeFlags = ImGuiTreeNodeFlags_DefaultOpen | ImGuiTreeNodeFlags_Framed | ImGuiTreeNodeFlags_SpanAvailWidth | ImGuiTreeNodeFlags_AllowItemOverlap | ImGuiTreeNodeFlags_FramePadding;
 		if (entity->HasComponent<T>())
@@ -230,11 +230,11 @@ namespace TourqeEditor {
 		}
 	}
 
-	void SceneHierarchyPanel::DrawComponents(TAGE::Entity* entity)
+	void SceneHierarchyPanel::DrawComponents(Entity* entity)
 	{
-		if (entity->HasComponent<TAGE::IdentityComponent>())
+		if (entity->HasComponent<IdentityComponent>())
 		{
-			auto& tag = entity->GetComponent<TAGE::IdentityComponent>().Name;
+			auto& tag = entity->GetComponent<IdentityComponent>().Name;
 
 			char buffer[256];
 			memset(buffer, 0, sizeof(buffer));
@@ -253,10 +253,10 @@ namespace TourqeEditor {
 
 		if (ImGui::BeginPopup("AddComponent"))
 		{
-			DisplayAddComponentEntry<TAGE::LightComponent>("Light");
-			DisplayAddComponentEntry<TAGE::MeshComponent>("Mesh");
-			DisplayAddComponentEntry<TAGE::CameraComponent>("Camera");
-			DisplayAddComponentEntry<TAGE::SkyboxComponent>("Skybox");
+			DisplayAddComponentEntry<LightComponent>("Light");
+			DisplayAddComponentEntry<MeshComponent>("Mesh");
+			DisplayAddComponentEntry<CameraComponent>("Camera");
+			DisplayAddComponentEntry<SkyboxComponent>("Skybox");
 			//DisplayAddComponentEntry<CircleRendererComponent>("Circle Renderer");
 			//DisplayAddComponentEntry<Rigidbody2DComponent>("Rigidbody 2D");
 			//DisplayAddComponentEntry<BoxCollider2DComponent>("Box Collider 2D");
@@ -267,7 +267,7 @@ namespace TourqeEditor {
 		}
 
 		ImGui::PopItemWidth();
-		DrawComponent<TAGE::TransformComponent>("Transform", entity, [](auto& component)
+		DrawComponent<TransformComponent>("Transform", entity, [](auto& component)
 			{
 				DrawVec3Control("Translation", component.Position);
 				glm::vec3 eulerDegrees = glm::degrees(glm::eulerAngles(component.Rotation));
@@ -276,7 +276,7 @@ namespace TourqeEditor {
 				DrawVec3Control("Scale", component.Scale, 1.0f);
 			});
 
-		DrawComponent<TAGE::MeshComponent>("Mesh", entity, [](auto& component)
+		DrawComponent<MeshComponent>("Mesh", entity, [](auto& component)
 			{
 				if (component.Handle)
 				{
@@ -289,11 +289,11 @@ namespace TourqeEditor {
 
 				if (ImGui::Button("Select Mesh"))
 				{
-					std::string selectedMesh = TAGE::Platform::FileDialog::OpenFile("Mesh Files (*.obj;*.gltf)\0*.obj;*.gltf\0");
+					std::string selectedMesh = Platform::FileDialog::OpenFile("Mesh Files (*.obj;*.gltf)\0*.obj;*.gltf\0");
 					if (!selectedMesh.empty())
 					{
 						if (!component.Handle)
-							component.Handle = TAGE::MEM::MakeRef<TARE::Model>();
+							component.Handle = MEM::MakeRef<TARE::Model>();
 
 						component.Handle->LoadFromFile(selectedMesh);
 					}
@@ -303,7 +303,7 @@ namespace TourqeEditor {
 				ImGui::Checkbox("Cast Shadows", &component.CastShadows);
 			});
 
-		DrawComponent<TAGE::CameraComponent>("Camera", entity, [](auto& component)
+		DrawComponent<CameraComponent>("Camera", entity, [](auto& component)
 			{
 				ImGui::Checkbox("Active", &component.IsActive);
 
@@ -326,7 +326,7 @@ namespace TourqeEditor {
 				}
 			});
 
-		DrawComponent<TAGE::SkyboxComponent>("Skybox", entity, [](auto& component)
+		DrawComponent<SkyboxComponent>("Skybox", entity, [](auto& component)
 			{
 				if (component.Handle)
 				{
@@ -339,15 +339,15 @@ namespace TourqeEditor {
 
 				if (ImGui::Button("Select Skybox"))
 				{
-					std::string selectedSkybox = TAGE::Platform::FileDialog::OpenFile("Cubemap Files (*.hdr;*.png;*.exr)\0*.hdr;*.exr;*.png\0");
+					std::string selectedSkybox = Platform::FileDialog::OpenFile("Cubemap Files (*.hdr;*.png;*.exr)\0*.hdr;*.exr;*.png\0");
 					if (!selectedSkybox.empty())
 					{
-						component.Handle = TAGE::MEM::MakeRef<TARE::Skybox>(selectedSkybox.c_str());
+						component.Handle = MEM::MakeRef<TARE::Skybox>(selectedSkybox.c_str());
 					}
 				}
 			});
 
-		DrawComponent<TAGE::LightComponent>("Light", entity, [](auto& component)
+		DrawComponent<LightComponent>("Light", entity, [](auto& component)
 			{
 				DrawVec3Control("Color", component.Handle.color);
 				ImGui::DragFloat("Intensity", &component.Handle.intensity, 0.01f, 0.0f, 100.0f);

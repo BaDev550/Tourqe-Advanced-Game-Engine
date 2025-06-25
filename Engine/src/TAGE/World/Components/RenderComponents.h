@@ -10,6 +10,7 @@ namespace TAGE {
 		MEM::Ref<TARE::Model> Handle;
 		bool IsVisible = true;
 		bool CastShadows = true;
+		bool IsSelected = false;
 
 		MeshComponent() = default;
 		MeshComponent(const std::string& modelpath) {

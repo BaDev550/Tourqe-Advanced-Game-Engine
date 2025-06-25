@@ -13,7 +13,9 @@ namespace TAGE {
 		virtual void UpdateEditor(float deltaTime) override;
 		void SetEditorCamera(const MEM::Ref<TARE::EditorCamera>& camera) { _EditorCamera = camera; }
 	private:
-		void RenderObjects(const std::string& shaderName = "MainShader");
+		void Render(const MEM::Ref<TARE::Camera>& cam);
+		void RenderObjects();
+		void RenderShadowObject();
 		void GetLights(std::vector<Light>& lights, MEM::Ref<TARE::Skybox>& skybox);
 	private:
 		MEM::Ref<TARE::EditorCamera> _EditorCamera;

@@ -5,6 +5,7 @@ namespace TARE {
 	TARE::TARE(int width, int height)
 	{
 		ShaderLibrary::Add("MainShader", "../Engine/shaders/main_vertex", "../Engine/shaders/main_fragment");
+		_SingleColor = ShaderLibrary::Add("SingleColor", "../Engine/shaders/Debugger/single_color_vertex", "../Engine/shaders/Debugger/single_color_fragment");
 		_Width = width;
 		_Height = height;
 
@@ -88,15 +89,18 @@ namespace TARE {
 		_DeferredRendering->GetLightShader()->SetUniform((baseUniform + ".outerCone").c_str(), light.outerCone);
 
 		if (light.type == LightType::DIRECTIONAL) {
-			float shadowRange = 10.0f;
-			glm::mat4 lightProjection = glm::ortho(-shadowRange, shadowRange, -shadowRange, shadowRange, 1.0f, 75.0f);
+			float shadowRange = 20.0f;
+			glm::mat4 lightProjection = glm::ortho(-shadowRange, shadowRange, -shadowRange, shadowRange, 1.0f, 150.0f);
+
+			glm::vec3 lightPos = -light.direction * 30.0f;
 			glm::mat4 lightView = glm::lookAt(
-				light.direction,
+				lightPos,
 				glm::vec3(0.0f),
 				glm::vec3(0.0f, 1.0f, 0.0f)
 			);
 
 			_Data.LightViewProjectionMatrix = lightProjection * lightView;
 		}
+
 	}
 }

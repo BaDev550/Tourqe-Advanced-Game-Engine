@@ -83,4 +83,15 @@ namespace TARE {
 			break;
 		}
 	}
+	void OpenGL_RenderAPI::ToggleStencilFunction(bool mode)
+	{
+		if (mode) {
+			glStencilFunc(GL_NOTEQUAL, 1, 0xFF);
+			glStencilMask(0x00);
+		}
+		else {
+			glStencilMask(0xFF);
+			glStencilFunc(GL_ALWAYS, 0, 0xFF);
+		}
+	}
 }

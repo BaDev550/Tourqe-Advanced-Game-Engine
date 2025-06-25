@@ -2,8 +2,9 @@
 
 #include "TAGE/TAGE.h"
 #include "Panels/SceneHierarchyPanel.h"
+#include "Panels/ContentBrowserPanel.h"
 
-namespace TourqeEditor {
+namespace TAGE::Editor {
 	enum class ViewportDebugMode
 	{
 		Default = 0,
@@ -23,7 +24,7 @@ namespace TourqeEditor {
 		SIMULATE = 2
 	};
 
-	class EditorLayer : public TAGE::Layer
+	class EditorLayer : public Layer
 	{
 	public:
 		EditorLayer();
@@ -34,28 +35,30 @@ namespace TourqeEditor {
 
 		void OnUpdate(float dt) override;
 		virtual void OnImGuiRender() override;
-		virtual void OnEvent(TAGE::Event& event) override;
+		virtual void OnEvent(Event& event) override;
 	private:
-		bool OnKeyPressed(TAGE::KeyPressedEvent& e);
+		bool OnKeyPressed(KeyPressedEvent& e);
 
 		void NewScene();
 		void OpenScene();
 		void SaveSceneAs();
 	private:
-		TAGE::Entity* _SelectedObject;
-		TAGE::MEM::Ref<TARE::EditorCamera> _EditorCamera;
-		TAGE::MEM::Ref<TAGE::Scene> _ActiveScene;
+		Entity* _SelectedObject;
+		MEM::Ref<TARE::EditorCamera> _EditorCamera;
+		MEM::Ref<Scene> _ActiveScene;
 
 		bool _ViewportFocused = false, _ViewportHovered = false, _ViewportMouseFocused = true;
 		glm::vec2 _ViewportSize = { 0.0f, 0.0f };
 		glm::vec2 _ViewportBounds[2];
 		glm::vec2 _LastViewportSize;
 
+		int _HoveredEntityID = 0;
 		int _GizmoType = -1;
 		SceneState _SceneState = SceneState::EDIT;
 		ViewportDebugMode debugMode = ViewportDebugMode::Default;
 
-		TAGE::MEM::Scope<SceneHierarchyPanel> _SceneHierarchyPanel;
+		MEM::Scope<SceneHierarchyPanel> _SceneHierarchyPanel;
+		MEM::Scope<ContentBrowserPanel> _ContentBrowserPanel;
 	};
 
 }

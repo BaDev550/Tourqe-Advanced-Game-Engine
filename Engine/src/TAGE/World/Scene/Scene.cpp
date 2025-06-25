@@ -30,10 +30,10 @@ namespace TAGE {
 		return *entity;
 	}
 
-	Entity& Scene::GetEntityByID(const entt::entity& ID)
+	Entity* Scene::GetEntityByID(const entt::entity& ID)
 	{
 		if (_Entities[ID] != nullptr)
-			return *_Entities[ID];
+			return _Entities[ID].get();
 	}
 
 	void Scene::OnUpdateRuntime(float DeltaTime)

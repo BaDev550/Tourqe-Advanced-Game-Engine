@@ -40,6 +40,7 @@ namespace TARE
 	void Model::Draw(TAGE::MEM::Ref<Shader>& shader) const
 	{
 		shader->Use();
+		shader->SetUniform("u_Model", _transform);
 		for (const auto& mesh : _meshes)
 			mesh->Draw(shader);
 	}
@@ -51,6 +52,20 @@ namespace TARE
 		shaderRef->SetUniform("u_Model", _transform);
 		for (const auto& mesh : _meshes)
 			mesh->Draw(shaderRef);
+	}
+
+	BoundingBox Model::GetBoundingBox() const
+	{
+		glm::vec3 min = glm::vec3(FLT_MAX);
+		glm::vec3 max = glm::vec3(-FLT_MAX);
+
+		for (auto& mesh : _meshes) {
+			for (auto& vertex : mesh->GetVertices()) {
+				min = glm::min(min, vertex.pos);
+				max = glm::max(max, vertex.pos);
+			}
+		}
+		return { min, max };
 	}
 
 	void Model::SetTransform(const glm::mat4& transform)
@@ -109,17 +124,21 @@ namespace TARE
 				return;
 			}
 
-			std::string fullPath = _Directory + "/" + texPath;
+			std::filesystem::path modelDir = std::filesystem::path(_Directory).parent_path();
+			std::filesystem::path textureFilename = std::filesystem::path(texPath).filename();
+			std::filesystem::path fullPath = modelDir / textureFilename;
+
 			if (std::filesystem::exists(fullPath)) {
 				TAGE::MEM::Ref<Texture2D> texture = Texture2D::Create();
-				texture->LoadTexture(fullPath);
+				texture->LoadTexture(fullPath.string());
 				outMaterial->SetTexture(type, std::move(texture));
 			}
 			else {
-				LOG_WARN("Texture not found: {}", fullPath);
+				LOG_WARN("Texture not found: {}", fullPath.string());
 			}
 		}
 	}
+
 
 	inline int8 QuantizeSigned(float value) { return static_cast<int8>(std::roundf(glm::clamp(value, -1.0f, 1.0f) * 127.0f)); }
 	inline int16 QuantizePosition(float value) { return static_cast<int16>(value * 10000.0f); }

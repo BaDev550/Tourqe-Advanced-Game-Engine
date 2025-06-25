@@ -1,6 +1,5 @@
 #version 460 core
 layout(location = 0) out vec4 FragColor;
-layout(location = 1) out int ObjectID;
 
 in vec2 TexCoords;
 
@@ -54,10 +53,9 @@ void main() {
     vec3 ssgi  = calculateSSGI(FPos, N, A, TexCoords, u_gPos, u_gNorm, u_gAlb, u_SceneColor, float(textureSize(u_gPos,0).x), float(textureSize(u_gPos,0).y));
 
     vec3 amb = mix(vec3(0.05)*A, vec3(0.35)*A, ao);
-    vec3 col = L + amb + ssgi + ssr * (1.0 - R);
+    vec3 col = amb + ssr * (1.0 - R);
     col = col / (col + vec3(1.0));
     col = pow(col, vec3(1.0/1.2));
 
     FragColor = vec4(col, 1.0);
-    ObjectID = 50;
 }

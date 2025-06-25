@@ -69,6 +69,17 @@ namespace TARE
 		CalculateCameraMatrixes();
 	}
 
+	void Camera::LookAt(glm::vec3 target)
+	{
+		glm::vec3 direction = glm::normalize(target - _position);
+
+		_rotation.y = atan2(direction.x, -direction.z);
+		_rotation.x = asin(direction.y);
+
+		CalculateCameraMatrixes();
+	}
+
+
 	const glm::mat4& Camera::GetViewMatrix() const { return _viewMatrix; }
 	const glm::mat4& Camera::GetProjectionMatrix() const { return _projectionMatrix; }
 	const glm::mat4& Camera::GetViewProjectionMatrix() const { return _projectionMatrix * _viewMatrix; }

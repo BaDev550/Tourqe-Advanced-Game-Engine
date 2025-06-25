@@ -10,14 +10,15 @@ namespace TARE
 	class Camera
 	{
 	public:
-        Camera() : _aspectRatio(1.0f), _fov(45.0f), _nearClip(NEAR_CLIP), _farClip(FAR_CLIP) {}
-
         Camera(float win_Width = 1280, float win_Height = 720, float fov = 45.0f, float nearClip = NEAR_CLIP, float farClip = FAR_CLIP) {
-			_aspectRatio = win_Width / win_Height;
-			_fov = fov;
-			_nearClip = nearClip;
-			_farClip = farClip;
+            _aspectRatio = win_Width / win_Height;
+            _fov = fov;
+            _nearClip = nearClip;
+            _farClip = farClip;
+
+            _projectionMatrix = glm::perspective(glm::radians(_fov), _aspectRatio, _nearClip, _farClip);
         }
+
 
         virtual void OnUpdate(float dt) {};
 		virtual void OnEvent(TAGE::Event& event) {}
@@ -37,6 +38,7 @@ namespace TARE
 		void SetFOV(float fov) { _fov = fov; }
 		void SetNearClip(float nearClip) { _nearClip = nearClip; }
 		void SetFarClip(float farClip) { _farClip = farClip; }
+        void LookAt(glm::vec3 target);
         const glm::mat4& GetViewMatrix() const;
 		const glm::mat4& GetProjectionMatrix() const;
 		const glm::mat4& GetViewProjectionMatrix() const;

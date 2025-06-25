@@ -3,7 +3,7 @@
 
 #include "EditorLayer.h"
 
-namespace TourqeEditor {
+namespace TAGE::Editor {
 	class TourqeEditor : public TAGE::Application
 	{
 	public:
@@ -22,6 +22,6 @@ namespace TAGE {
 		spec.AppName = "Tourqe Editor";
 		spec.CommandLineArgs = args;
 
-		return new TourqeEditor::TourqeEditor(spec);
+		return new TAGE::Editor::TourqeEditor(spec);
 	}
 }

@@ -1,6 +1,7 @@
 #include "tagepch.h"
 #include "DeferredRendering.h"
 #include "TARE/Common/RenderCommands.h"
+#include "TAGE/Input/Input.h"
 
 namespace TARE {
 	DeferredRendering::DeferredRendering(int width, int height)
@@ -16,6 +17,7 @@ namespace TARE {
 	{
 		_GBuffer->Bind();
 		RenderCommand::Clear(COLOR_DEPTH);
+		_GBuffer->Clear(3, -1);
 
 		_GBufferShader->Use();
 		RenderCommand::BindTextureFromID(_GBuffer->GetColorAttachment(0), 0);
@@ -78,7 +80,8 @@ namespace TARE {
 					FramebufferTextureFormat(FramebufferTextureFormat::RGBA16F), // Position
 					FramebufferTextureFormat(FramebufferTextureFormat::RGBA8), // Normal
 					FramebufferTextureFormat(FramebufferTextureFormat::RGBA8), // Albedo
-					FramebufferTextureFormat(FramebufferTextureFormat::DEPTH24), // Depth
+					FramebufferTextureFormat(FramebufferTextureFormat::RED_INTEGER),
+					FramebufferTextureFormat(FramebufferTextureFormat::DEPTH24) // Depth
 				}),
 			1, width, height
 		);
@@ -100,8 +103,7 @@ namespace TARE {
 	{
 		FramebufferSpecification spec(
 			FramebufferAttachmentSpecification({
-					FramebufferTextureFormat::RGBA, // Lighting
-					FramebufferTextureFormat::RED_INTEGER
+					FramebufferTextureFormat::RGBA // Lighting
 			}),
 			1, _GBuffer->GetSpecification().Width, _GBuffer->GetSpecification().Height
 		);

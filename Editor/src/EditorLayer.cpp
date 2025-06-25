@@ -9,7 +9,7 @@
 #include "TAGE/World/Scene/SceneSerializer.h"
 #include "TAGE/Utilities/Platform.h"
 
-namespace TourqeEditor {
+namespace TAGE::Editor {
 	EditorLayer::EditorLayer()
 		: Layer("EditorLayer")
 	{
@@ -17,9 +17,10 @@ namespace TourqeEditor {
 
 	void EditorLayer::OnAttach()
 	{
-		_ActiveScene = TAGE::MEM::MakeRef<TAGE::Scene>("Test Scene - 1");
-		_EditorCamera = TAGE::MEM::MakeRef<TARE::EditorCamera>(_ActiveScene->GetWidth(), _ActiveScene->GetHeight());
-		_SceneHierarchyPanel = TAGE::MEM::MakeScope<SceneHierarchyPanel>(_ActiveScene);
+		_ActiveScene = MEM::MakeRef<Scene>("Test Scene - 1");
+		_EditorCamera = MEM::MakeRef<TARE::EditorCamera>(_ActiveScene->GetWidth(), _ActiveScene->GetHeight());
+		_SceneHierarchyPanel = MEM::MakeScope<SceneHierarchyPanel>(_ActiveScene);
+		_ContentBrowserPanel = MEM::MakeScope<ContentBrowserPanel>();
 	}
 
 	void EditorLayer::OnDetach()
@@ -36,10 +37,20 @@ namespace TourqeEditor {
 		int mouseX = (int)mx;
 		int mouseY = (int)my;
 
-		auto renderer = TAGE::Application::Get()->GetRenderer();
+		auto renderer = Application::Get()->GetRenderer();
 		if (mouseX >= 0 && mouseY >= 0 && mouseX < (int)viewportSize.x && mouseY < (int)viewportSize.y) {
-			int pixelData = renderer->GetDeferredRendering().GetLightingBuffer()->Read(1, mouseX, mouseY);
-			LOG_WARN(pixelData);
+			renderer->GetDeferredRendering().GetGBuffer()->Bind();
+			_HoveredEntityID = renderer->GetDeferredRendering().GetGBuffer()->Read(3, mouseX, mouseY);
+			renderer->GetDeferredRendering().GetGBuffer()->Unbind();
+
+			if (Input::IsMouseButtonJustPressed(E_MOUSE_BUTTON_LEFT) && !ImGuizmo::IsOver()) {
+				auto hoveredEntity = _ActiveScene->GetEntityByID((entt::entity)_HoveredEntityID);
+				if (hoveredEntity) {
+					if (hoveredEntity->HasComponent<MeshComponent>())
+						hoveredEntity->GetComponent<MeshComponent>().IsSelected = true;
+					_SceneHierarchyPanel->SetSelectedEntity(hoveredEntity);
+				}
+			}
 		}
 
 		auto spec = renderer->GetDeferredRendering().GetLightingBuffer()->GetSpecification();
@@ -50,7 +61,7 @@ namespace TourqeEditor {
 			_ActiveScene->OnResize((uint)_ViewportSize.x, (uint)_ViewportSize.y);
 			_EditorCamera->OnResize(_ViewportSize.x, _ViewportSize.y);
 			if (_ActiveScene->GetPrimaryCamera()) {
-				_ActiveScene->GetPrimaryCamera().GetComponent<TAGE::CameraComponent>().Handle->OnResize(_ViewportSize.x, _ViewportSize.y);
+				_ActiveScene->GetPrimaryCamera().GetComponent<CameraComponent>().Handle->OnResize(_ViewportSize.x, _ViewportSize.y);
 			}
 			_LastViewportSize = _ViewportSize;
 		}
@@ -126,7 +137,7 @@ namespace TourqeEditor {
 					OpenScene();
 				}
 
-				if (ImGui::MenuItem("Exit")) TAGE::Application::Get()->Close();
+				if (ImGui::MenuItem("Exit")) Application::Get()->Close();
 				
 				ImGui::EndMenu();
 			}
@@ -135,6 +146,7 @@ namespace TourqeEditor {
 		}
 
 		_SceneHierarchyPanel->OnImGuiRender();
+		_ContentBrowserPanel->OnImGuiRender();
 
 		ImGui::PushStyleVar(ImGuiStyleVar_WindowPadding, ImVec2{ 0, 0 });
 		ImGui::Begin("Viewport");
@@ -152,7 +164,7 @@ namespace TourqeEditor {
 		ImVec2 viewportPanelSize = ImGui::GetContentRegionAvail();
 		_ViewportSize = { viewportPanelSize.x, viewportPanelSize.y };
 		
-		auto renderer = TAGE::Application::Get()->GetRenderer();
+		auto renderer = Application::Get()->GetRenderer();
 		auto deferred = renderer->GetDeferredRendering();
 		deferred.GetLightShader()->Use();
 		uint64 textureID = 0;
@@ -187,20 +199,20 @@ namespace TourqeEditor {
 
 		ImGui::Image((ImTextureID)(void*)(uintptr_t)textureID, ImVec2{ _ViewportSize.x, _ViewportSize.y }, ImVec2{ 0, 1 }, ImVec2{ 1, 0 });
 
-		if (TAGE::Input::IsKeyJustPressed(E_KEY_E)) _GizmoType = ImGuizmo::OPERATION::TRANSLATE;
-		else if (TAGE::Input::IsKeyJustPressed(E_KEY_R)) _GizmoType = ImGuizmo::OPERATION::ROTATE;
-		else if (TAGE::Input::IsKeyJustPressed(E_KEY_Q)) _GizmoType = ImGuizmo::OPERATION::SCALE;
+		if (Input::IsKeyJustPressed(E_KEY_E)) _GizmoType = ImGuizmo::OPERATION::TRANSLATE;
+		else if (Input::IsKeyJustPressed(E_KEY_R)) _GizmoType = ImGuizmo::OPERATION::ROTATE;
+		else if (Input::IsKeyJustPressed(E_KEY_Q)) _GizmoType = ImGuizmo::OPERATION::SCALE;
 
-		if (_ViewportHovered && TAGE::Input::IsMouseButtonPressed(E_MOUSE_BUTTON_RIGHT)) {
-			TAGE::Application::Get()->GetWindow()->ToggleCursor(false);
+		if (_ViewportHovered && Input::IsMouseButtonPressed(E_MOUSE_BUTTON_RIGHT)) {
+			Application::Get()->GetWindow()->ToggleCursor(false);
 			_ViewportMouseFocused = true;
 		}
 		else {
-			TAGE::Application::Get()->GetWindow()->ToggleCursor(true);
+			Application::Get()->GetWindow()->ToggleCursor(true);
 			_ViewportMouseFocused = false;
 		}
 
-		TAGE::Entity* selectedEntity = _SceneHierarchyPanel->GetSelectedEntity();
+		Entity* selectedEntity = _SceneHierarchyPanel->GetSelectedEntity();
 		if (selectedEntity && _GizmoType != -1)
 		{
 			ImGuizmo::SetOrthographic(false);
@@ -211,7 +223,7 @@ namespace TourqeEditor {
 			ImGuizmo::SetRect(pos.x, pos.y, rect.x, rect.y);
 
 			//auto cameraEntity = _ActiveScene->GetPrimaryCamera();
-			//const auto& camera = cameraEntity.GetComponent<TAGE::CameraComponent>().Handle;
+			//const auto& camera = cameraEntity.GetComponent<CameraComponent>().Handle;
 
 			//const glm::mat4& cameraProj = camera->GetProjectionMatrix();
 			//glm::mat4 cameraView = camera->GetViewMatrix();
@@ -219,10 +231,10 @@ namespace TourqeEditor {
 			const glm::mat4& cameraProj = _EditorCamera->GetProjectionMatrix();
 			glm::mat4 cameraView = _EditorCamera->GetViewMatrix();
 
-			auto& tc = selectedEntity->GetComponent<TAGE::TransformComponent>();
+			auto& tc = selectedEntity->GetComponent<TransformComponent>();
 			glm::mat4 transform = tc.GetTransform();
 
-			bool snap = TAGE::Input::IsKeyPressed(E_KEY_LEFT_SHIFT);
+			bool snap = Input::IsKeyPressed(E_KEY_LEFT_SHIFT);
 			float snapValue = (_GizmoType == ImGuizmo::OPERATION::ROTATE) ? 45.0f : 0.5f;
 			float snapValues[3] = { snapValue, snapValue, snapValue };
 
@@ -250,16 +262,16 @@ namespace TourqeEditor {
 
 		ImGui::End();
 	}
-	void EditorLayer::OnEvent(TAGE::Event& event)
+	void EditorLayer::OnEvent(Event& event)
 	{
-		TAGE::EventDispatcher dispatcher(event);
-		dispatcher.Dispatch<TAGE::KeyPressedEvent>(BIND_EVENT_FN(EditorLayer::OnKeyPressed));
+		EventDispatcher dispatcher(event);
+		dispatcher.Dispatch<KeyPressedEvent>(BIND_EVENT_FN(EditorLayer::OnKeyPressed));
 	}
 
-	bool EditorLayer::OnKeyPressed(TAGE::KeyPressedEvent& e)
+	bool EditorLayer::OnKeyPressed(KeyPressedEvent& e)
 	{
-		bool control = TAGE::Input::IsKeyPressed(E_KEY_LEFT_CONTROL) || TAGE::Input::IsKeyPressed(E_KEY_RIGHT_CONTROL);
-		bool shift = TAGE::Input::IsKeyPressed(E_KEY_LEFT_SHIFT) || TAGE::Input::IsKeyPressed(E_KEY_RIGHT_SHIFT);
+		bool control = Input::IsKeyPressed(E_KEY_LEFT_CONTROL) || Input::IsKeyPressed(E_KEY_RIGHT_CONTROL);
+		bool shift = Input::IsKeyPressed(E_KEY_LEFT_SHIFT) || Input::IsKeyPressed(E_KEY_RIGHT_SHIFT);
 
 		switch (e.GetKey())
 		{
@@ -294,7 +306,7 @@ namespace TourqeEditor {
 
 		if (e.GetKey() == E_KEY_ESCAPE)
 		{
-			TAGE::Application::Get()->Close();
+			Application::Get()->Close();
 			return true;
 		}
 		return true;
@@ -302,29 +314,29 @@ namespace TourqeEditor {
 
 	void EditorLayer::NewScene()
 	{
-		_ActiveScene = TAGE::MEM::MakeRef<TAGE::Scene>("New Scene");
+		_ActiveScene = MEM::MakeRef<Scene>("New Scene");
 		_ActiveScene->OnResize((uint)_ViewportSize.x, (uint)_ViewportSize.y);
 		_SceneHierarchyPanel->SetContext(_ActiveScene);
 	}
 
 	void EditorLayer::OpenScene()
 	{
-		std::string filepath = TAGE::Platform::FileDialog::OpenFile("TAGE Scene (*.tage)\0*.tage\0");
+		std::string filepath = Platform::FileDialog::OpenFile("TAGE Scene (*.tage)\0*.tage\0");
 		if (!filepath.empty()) {
-			_ActiveScene = TAGE::MEM::MakeRef<TAGE::Scene>("New Scene");
+			_ActiveScene = MEM::MakeRef<Scene>("New Scene");
 			_ActiveScene->OnResize((uint)_ViewportSize.x, (uint)_ViewportSize.y);
 			_SceneHierarchyPanel->SetContext(_ActiveScene);
 
-			TAGE::SceneSerializer serializer(_ActiveScene);
+			SceneSerializer serializer(_ActiveScene);
 			serializer.Deserialize(filepath);
 		}
 	}
 
 	void EditorLayer::SaveSceneAs()
 	{
-		std::string filepath = TAGE::Platform::FileDialog::SaveFile("TAGE Scene (*.tage)\0*.tage\0");
+		std::string filepath = Platform::FileDialog::SaveFile("TAGE Scene (*.tage)\0*.tage\0");
 		if (!filepath.empty()) {
-			TAGE::SceneSerializer serializer(_ActiveScene);
+			SceneSerializer serializer(_ActiveScene);
 			serializer.Serialize(filepath);
 		}
 	}

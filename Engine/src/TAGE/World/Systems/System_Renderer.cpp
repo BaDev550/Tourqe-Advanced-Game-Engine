@@ -17,11 +17,7 @@ namespace TAGE {
 		auto& primaryCameraEntity = _Scene->GetPrimaryCamera();
 
 		if (!primaryCameraEntity) return;
-
-		std::vector<Light> lights;
 		MEM::Ref<TARE::Camera> camera = nullptr;
-		MEM::Ref<TARE::Skybox> skybox = nullptr;
-		GetLights(lights, skybox);
 
 		auto& cc = primaryCameraEntity.GetComponent<CameraComponent>();
 		auto& tc = primaryCameraEntity.GetComponent<TransformComponent>();
@@ -31,25 +27,21 @@ namespace TAGE {
 
 		if (!camera) return;
 
-		_Renderer->SetLights(lights);
-
-		TARE::RenderCommand::SetClearColor({ 1.0f, 1.0f, 1.0f, 1.0f });
-		TARE::RenderCommand::Clear(COLOR_DEPTH);
-
-		_Renderer->BeginShadowPass();
-		RenderObjects("ShadowDepth");
-		_Renderer->EndShadowPass();
-
-		_Renderer->BeginFrame(camera);
-		if (skybox)
-			skybox->Bind(camera->GetViewMatrix(), camera->GetProjectionMatrix());
-		RenderObjects("GBufferShader");
-		_Renderer->EndFrame();
+		Render(camera);
 	}
 
 	void System_Renderer::UpdateEditor(float deltaTime)
 	{
 		if (!_Scene) return;
+		if (!_EditorCamera) return;
+
+		Render(_EditorCamera);
+	}
+
+	void System_Renderer::Render(const MEM::Ref<TARE::Camera>& cam)
+	{
+		TARE::RenderCommand::SetClearColor({ 1.0f, 1.0f, 1.0f, 1.0f });
+		TARE::RenderCommand::Clear(COLOR_DEPTH_STENCIL);
 
 		std::vector<Light> lights;
 		MEM::Ref<TARE::Skybox> skybox = nullptr;
@@ -57,36 +49,62 @@ namespace TAGE {
 
 		_Renderer->SetLights(lights);
 
-		if (!_EditorCamera) return;
-
-		TARE::RenderCommand::SetClearColor({ 1.0f, 1.0f, 1.0f, 1.0f });
-		TARE::RenderCommand::Clear(COLOR_DEPTH);
-
 		_Renderer->BeginShadowPass();
-		RenderObjects("ShadowDepth");
+		RenderShadowObject();
 		_Renderer->EndShadowPass();
 
-		_Renderer->BeginFrame(_EditorCamera);
+		_Renderer->BeginFrame(cam);
 		if (skybox)
-			skybox->Bind(_EditorCamera->GetViewMatrix(), _EditorCamera->GetProjectionMatrix());
+			skybox->Bind(cam->GetViewMatrix(), cam->GetProjectionMatrix());
 		_Renderer->DrawGrid();
-		RenderObjects("GBufferShader");
+		RenderObjects();
 		_Renderer->EndFrame();
 	}
 
-	void System_Renderer::RenderObjects(const std::string& shaderName)
+	void System_Renderer::RenderObjects()
 	{
 		auto view = _Scene->GetRegistry().view<TransformComponent, MeshComponent>();
 		for (auto entity : view) {
-			Entity entityObj = _Scene->GetEntityByID(entity);
-			auto& mc = entityObj.GetComponent<MeshComponent>();
+			Entity* entityObj = _Scene->GetEntityByID(entity);
+			auto& mc = entityObj->GetComponent<MeshComponent>();
+			auto& tc = entityObj->GetComponent<TransformComponent>();
 			if (!mc.Handle) continue;
 
-			auto& transform = entityObj.GetComponent<TransformComponent>();
+			auto& transform = entityObj->GetComponent<TransformComponent>();
+
 			mc.Handle->SetTransform(transform.GetTransform());
 
-			if (mc.IsVisible)
-				mc.Handle->Draw(shaderName);
+			if (mc.IsVisible) {
+				_Renderer->GetDeferredRendering().GetGBufferShader()->Use();
+				_Renderer->GetDeferredRendering().GetGBufferShader()->SetUniform("u_EntityID", (int)entity);
+				mc.Handle->Draw("GBufferShader");
+			}
+
+			if (mc.IsSelected) {
+				TARE::RenderCommand::ToggleStencilFunc(true);
+				TARE::RenderCommand::Disable(DEPTH_TEST);
+				mc.Handle->SetTransform(transform.GetTransform() * 1.05f); 
+				mc.Handle->Draw("SingleColor");
+				TARE::RenderCommand::ToggleStencilFunc(false);
+				TARE::RenderCommand::Enable(DEPTH_TEST);
+			}
+		}
+
+	}
+
+	void System_Renderer::RenderShadowObject()
+	{
+		auto view = _Scene->GetRegistry().view<TransformComponent, MeshComponent>();
+		for (auto entity : view) {
+			Entity* entityObj = _Scene->GetEntityByID(entity);
+			auto& mc = entityObj->GetComponent<MeshComponent>();
+			if (!mc.Handle) continue;
+
+			auto& transform = entityObj->GetComponent<TransformComponent>();
+			mc.Handle->SetTransform(transform.GetTransform());
+
+			if (mc.CastShadows)
+				mc.Handle->Draw("ShadowDepth");
 		}
 	}
 

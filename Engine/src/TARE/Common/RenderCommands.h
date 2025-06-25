@@ -36,6 +36,9 @@ namespace TARE {
 		inline static void SetCullingMode(CullMode mode) {
 			_API->SetCullingMode(mode);
 		}
+		inline static void ToggleStencilFunc(bool mode) {
+			_API->ToggleStencilFunction(mode);
+		}
 
 	private:
 		static RenderAPI* _API;

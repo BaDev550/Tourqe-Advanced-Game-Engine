@@ -9,23 +9,6 @@
 #define TAGE_ENABLE_GLM_VERTEX_DATA
 #include <glm/gtx/quaternion.hpp>
 
-struct SkinedVertexData {
-	glm::vec3 Position;
-	glm::vec3 Normal;
-	glm::vec2 TexCoord;
-	glm::vec3 Tangent;
-	glm::vec3 Bitangent;
-	uint BoneIDs[MAX_BONE_INFLUENCES];
-	float BoneWeights[MAX_BONE_INFLUENCES];
-
-	SkinedVertexData() {
-	    for(int i = 0; i < MAX_BONE_INFLUENCES; ++i) {
-	        BoneIDs[i] = 0;
-			BoneWeights[i] = 0.0f;
-	    }
-	}
-};
-
 #ifdef TAGE_ENABLE_GLM_VERTEX_DATA
 #pragma pack(push, 1)
 struct VertexData {
@@ -47,6 +30,24 @@ struct VertexData {
 };
 #pragma pack(pop)
 #endif
+
+struct SkinedVertexData {
+	VertexData Vertex;
+	uint BoneIDs[MAX_BONE_INFLUENCES];
+	float BoneWeights[MAX_BONE_INFLUENCES];
+
+	SkinedVertexData() {
+		for (int i = 0; i < MAX_BONE_INFLUENCES; ++i) {
+			BoneIDs[i] = 0;
+			BoneWeights[i] = 0.0f;
+		}
+	}
+};
+
+struct BoundingBox {
+	glm::vec3 Min;
+	glm::vec3 Max;
+};
 
 struct Bone {
 	std::string Name;

@@ -649,6 +649,8 @@
     <None Include="shaders\Common\light.glsl" />
     <None Include="shaders\Debugger\debug_fragment.glsl" />
     <None Include="shaders\Debugger\debug_vertex.glsl" />
+    <None Include="shaders\Debugger\single_color_fragment.glsl" />
+    <None Include="shaders\Debugger\single_color_vertex.glsl" />
     <None Include="shaders\Deferred\gbuffer_fragment.glsl" />
     <None Include="shaders\Deferred\gbuffer_vertex.glsl" />
     <None Include="shaders\Deferred\light_fragment.glsl" />
@@ -669,6 +671,8 @@
     <None Include="shaders\main_vertex.glsl" />
     <None Include="shaders\skybox_fragment.glsl" />
     <None Include="shaders\skybox_vertex.glsl" />
+    <None Include="shaders\thumbnail_fragment.glsl" />
+    <None Include="shaders\thumbnail_vertex.glsl" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="vendor\GLAD\GLAD.vcxproj">

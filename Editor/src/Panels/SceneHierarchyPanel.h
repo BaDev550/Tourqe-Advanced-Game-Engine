@@ -4,29 +4,29 @@
 #include "TAGE/World/Objects/Entity.h"
 #include "TAGE/World/Scene/Scene.h"
 
-namespace TourqeEditor {
+namespace TAGE::Editor {
 
 	class SceneHierarchyPanel
 	{
 	public:
 		SceneHierarchyPanel() = default;
-		SceneHierarchyPanel(const TAGE::MEM::Ref<TAGE::Scene>& scene);
+		SceneHierarchyPanel(const MEM::Ref<Scene>& scene);
 
-		void SetContext(const TAGE::MEM::Ref<TAGE::Scene>& scene);
+		void SetContext(const MEM::Ref<Scene>& scene);
 
 		void OnImGuiRender();
 
-		TAGE::Entity* GetSelectedEntity() const { return m_SelectionContext; }
-		void SetSelectedEntity(TAGE::Entity* entity);
+		Entity* GetSelectedEntity() const { return m_SelectionContext; }
+		void SetSelectedEntity(Entity* entity);
 	private:
 		template<typename T>
 		void DisplayAddComponentEntry(const std::string& entryName);
 	
-		void DrawEntityNode(TAGE::Entity* entity);
-		void DrawComponents(TAGE::Entity* entity);
+		void DrawEntityNode(Entity* entity);
+		void DrawComponents(Entity* entity);
 	private:
-		TAGE::MEM::Ref<TAGE::Scene> m_Context;
-		TAGE::Entity* m_SelectionContext = nullptr;
+		MEM::Ref<Scene> m_Context;
+		Entity* m_SelectionContext = nullptr;
 	};
 
 }

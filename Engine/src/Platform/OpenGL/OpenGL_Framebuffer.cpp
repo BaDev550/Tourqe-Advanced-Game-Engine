@@ -5,10 +5,38 @@
 namespace TARE {
 	static const uint s_MaxFramebufferSize = 8192;
 	namespace Utils {
+		static GLenum TextureFormatTo_OpenGLFormat(FramebufferTextureFormat format)
+		{
+			switch (format)
+			{
+			case FramebufferTextureFormat::RGBA8:       return GL_RGBA8;
+			case FramebufferTextureFormat::RGBA16F: return GL_RGBA16F;
+			case FramebufferTextureFormat::RGBA: return GL_RGBA;
+			case FramebufferTextureFormat::RED_INTEGER: return GL_RED_INTEGER;
+			}
+
+			ASSERT_NOMSG(false);
+			return 0;
+		}
+
+		static GLenum TextureFormatTo_OpenGLType(FramebufferTextureFormat format)
+		{
+			switch (format)
+			{
+			case FramebufferTextureFormat::RGBA8:         return GL_UNSIGNED_BYTE;
+			case FramebufferTextureFormat::RGBA16F:       return GL_HALF_FLOAT;
+			case FramebufferTextureFormat::RGBA:          return GL_FLOAT;
+			case FramebufferTextureFormat::RED_INTEGER:   return GL_INT;
+			}
+
+			ASSERT_NOMSG(false);
+			return 0;
+		}
+
 		static GLenum TextureTarget(bool multisampled) { return multisampled ? GL_TEXTURE_2D_MULTISAMPLE : GL_TEXTURE_2D; }
 		static void CreateTextures(bool multisampled, uint* outID, uint count) { glCreateTextures(TextureTarget(multisampled), count, outID); }
 		static void BindTexture(bool multisampled, uint id) { glBindTexture(TextureTarget(multisampled), id); }
-		static void AttachColorTexture(uint id, int samples, GLenum internalFormat, GLenum format, uint width, uint height, int index)
+		static void AttachColorTexture(uint id, int samples, FramebufferTextureFormat formatEnum, GLenum internalFormat, GLenum format, uint width, uint height, int index)
 		{
 			bool multisampled = samples > 1;
 			if (multisampled)
@@ -17,7 +45,7 @@ namespace TARE {
 			}
 			else
 			{
-				GLenum type = (internalFormat == GL_RGBA16F || internalFormat == GL_RGBA32F) ? GL_FLOAT : GL_UNSIGNED_BYTE;
+				GLenum type = TextureFormatTo_OpenGLType(formatEnum);
 
 				glTexImage2D(GL_TEXTURE_2D, 0, internalFormat, width, height, 0, format, type, nullptr);
 
@@ -62,34 +90,6 @@ namespace TARE {
 			}
 
 			return false;
-		}
-
-		static GLenum TextureFormatTo_OpenGLFormat(FramebufferTextureFormat format)
-		{
-			switch (format)
-			{
-			case FramebufferTextureFormat::RGBA8:       return GL_RGBA8;
-			case FramebufferTextureFormat::RGBA16F: return GL_RGBA16F;
-			case FramebufferTextureFormat::RGBA: return GL_RGBA;
-			case FramebufferTextureFormat::RED_INTEGER: return GL_RED_INTEGER;
-			}
-
-			ASSERT_NOMSG(false);
-			return 0;
-		}
-
-		static GLenum TextureFormatTo_OpenGLType(FramebufferTextureFormat format)
-		{
-			switch (format)
-			{
-			case FramebufferTextureFormat::RGBA8:         return GL_UNSIGNED_BYTE;
-			case FramebufferTextureFormat::RGBA16F:       return GL_HALF_FLOAT;
-			case FramebufferTextureFormat::RGBA:          return GL_FLOAT;
-			case FramebufferTextureFormat::RED_INTEGER:   return GL_INT;
-			}
-
-			ASSERT_NOMSG(false);
-			return 0;
 		}
 	}
 
@@ -139,16 +139,16 @@ namespace TARE {
 				switch (_ColorAttachmentSpecifications[i].format)
 				{
 				case FramebufferTextureFormat::RGBA8:
-					Utils::AttachColorTexture(_ColorAttachments[i], _Specification.Samples, GL_RGBA8, GL_RGBA, _Specification.Width, _Specification.Height, i);
+					Utils::AttachColorTexture(_ColorAttachments[i], _Specification.Samples, FramebufferTextureFormat::RGBA8, GL_RGBA8, GL_RGBA, _Specification.Width, _Specification.Height, i);
 					break;
 				case FramebufferTextureFormat::RGBA:
-					Utils::AttachColorTexture(_ColorAttachments[i], _Specification.Samples, GL_RGBA, GL_RGBA, _Specification.Width, _Specification.Height, i);
+					Utils::AttachColorTexture(_ColorAttachments[i], _Specification.Samples, FramebufferTextureFormat::RGBA, GL_RGBA, GL_RGBA, _Specification.Width, _Specification.Height, i);
 					break;
 				case FramebufferTextureFormat::RGBA16F:
-					Utils::AttachColorTexture(_ColorAttachments[i], _Specification.Samples, GL_RGBA16F, GL_RGBA, _Specification.Width, _Specification.Height, i);
+					Utils::AttachColorTexture(_ColorAttachments[i], _Specification.Samples, FramebufferTextureFormat::RGBA16F, GL_RGBA16F, GL_RGBA, _Specification.Width, _Specification.Height, i);
 					break;
 				case FramebufferTextureFormat::RED_INTEGER:
-					Utils::AttachColorTexture(_ColorAttachments[i], _Specification.Samples, GL_R32I, GL_RED_INTEGER, _Specification.Width, _Specification.Height, i);
+					Utils::AttachColorTexture(_ColorAttachments[i], _Specification.Samples, FramebufferTextureFormat::RED_INTEGER, GL_R32I, GL_RED_INTEGER, _Specification.Width, _Specification.Height, i);
 					break;
 				}
 			}
@@ -215,11 +215,19 @@ namespace TARE {
 
 	int OpenGL_Framebuffer::Read(uint attachment, int x, int y) const
 	{
+		ASSERT_NOMSG(attachment < _ColorAttachmentSpecifications.size(), "Invalid attachment index for Read");
+
+		const auto& spec = _ColorAttachmentSpecifications[attachment];
+		GLenum format = Utils::TextureFormatTo_OpenGLFormat(spec.format);
+		GLenum type = Utils::TextureFormatTo_OpenGLType(spec.format);
+
 		glReadBuffer(GL_COLOR_ATTACHMENT0 + attachment);
-		int pixelData;
-		glReadPixels(x, y, 1, 1, GL_RED_INTEGER, GL_INT, &pixelData);
+
+		int pixelData = 0;
+		glReadPixels(x, y, 1, 1, format, type, &pixelData);
 		return pixelData;
 	}
+
 
 	void OpenGL_Framebuffer::Clear(uint attachment, int value)
 	{

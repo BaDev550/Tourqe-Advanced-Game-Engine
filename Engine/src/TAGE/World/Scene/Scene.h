@@ -14,7 +14,7 @@ namespace TAGE {
 
 		Entity& CreateEntity(const std::string& name);
 		Entity& CreateEntityWithUUID(const std::string& name, entt::entity& ID);
-		Entity& GetEntityByID(const entt::entity& ID);
+		Entity* GetEntityByID(const entt::entity& ID);
 		Entity GetPrimaryCamera();
 		void ClearEntities();
 

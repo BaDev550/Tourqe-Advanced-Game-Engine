@@ -23,6 +23,7 @@ namespace TARE
 		std::string GetFilePath() const { return _FilePath; }
 		uint GetMeshCount() { return (uint)_meshes.size(); }
 		Mesh& GetMesh(int slot) { return *_meshes[slot]; }
+		BoundingBox GetBoundingBox() const;
 		void AddMesh(TAGE::MEM::Scope<Mesh> mesh) { _meshes.push_back(std::move(mesh)); }
 	private:
 		std::vector<TAGE::MEM::Scope<Mesh>> _meshes;

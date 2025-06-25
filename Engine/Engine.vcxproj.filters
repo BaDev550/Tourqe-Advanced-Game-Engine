@@ -1830,5 +1830,9 @@
     <None Include="shaders\skybox_vertex.glsl">
       <Filter>shaders</Filter>
     </None>
+    <None Include="shaders\Debugger\single_color_fragment.glsl" />
+    <None Include="shaders\Debugger\single_color_vertex.glsl" />
+    <None Include="shaders\thumbnail_vertex.glsl" />
+    <None Include="shaders\thumbnail_fragment.glsl" />
   </ItemGroup>
 </Project>
