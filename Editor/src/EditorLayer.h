@@ -10,6 +10,7 @@ namespace TAGE::Editor {
 		Default = 0,
 		GBuffer_Position,
 		GBuffer_Normal,
+		GBuffer_Spec,
 		GBuffer_Albedo,
 		GBuffer_Depth,
 		Lighting,

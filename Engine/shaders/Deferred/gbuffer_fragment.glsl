@@ -15,9 +15,11 @@ uniform int u_EntityID;
 void main()
 {
     vec3 Albedo = texture(u_Material.DiffuseTex, TexCoords).rgb;
+    float Spec = texture(u_Material.SpecularTex, TexCoords).a;
 
     gPosition = vec4(FragPos, 1.0f);
-    gNormal = vec4(normalize(Normal), 1.0f);
+    gNormal = vec4(normalize(Normal), Spec);
     gAlbedo = vec4(Albedo, 1.0f);
+
     gEntityID = u_EntityID;
 }

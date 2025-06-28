@@ -134,11 +134,25 @@ namespace TARE {
 		return true;
 	}
 
+	void OpenGL_CubemapTexture::AttachCubemapFaceToFBO(int face, uint FBO)
+	{
+		glBindFramebuffer(GL_FRAMEBUFFER, FBO);
+		glFramebufferTexture2D(
+			GL_FRAMEBUFFER,
+			GL_DEPTH_ATTACHMENT,
+			GL_TEXTURE_CUBE_MAP_POSITIVE_X + face,
+			_ID,
+			0
+		);
+		glDrawBuffer(GL_NONE);
+		glReadBuffer(GL_NONE);
+		glBindFramebuffer(GL_FRAMEBUFFER, 0);
+	}
+
 	uint OpenGL_CubemapTexture::LoadShadowPointCubemap()
 	{
-		uint depthCubemap;
-		glGenTextures(1, &depthCubemap);
-		glBindTexture(GL_TEXTURE_CUBE_MAP, depthCubemap);
+		glGenTextures(1, &_ID);
+		glBindTexture(GL_TEXTURE_CUBE_MAP, _ID);
 		for (unsigned int i = 0; i < 6; ++i)
 		{
 			glTexImage2D(GL_TEXTURE_CUBE_MAP_POSITIVE_X + i, 0, GL_DEPTH_COMPONENT,
@@ -149,6 +163,8 @@ namespace TARE {
 		glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
 		glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
 		glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_WRAP_R, GL_CLAMP_TO_EDGE);
-		return depthCubemap;
+		glBindTexture(GL_TEXTURE_CUBE_MAP, 0);
+
+		return _ID;
 	}
 }

@@ -2,6 +2,7 @@
 #include "TARE/Buffers/Framebuffer.h"
 #include "TARE/Shader/ShaderLibrary.h"
 #include "TARE/Camera/Camera.h"
+#include "TARE/Common/Light.h"
 
 namespace TARE {
 	class DeferredRendering

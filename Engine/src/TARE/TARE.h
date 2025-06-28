@@ -11,6 +11,7 @@
 #include "Buffers/Framebuffer.h"
 #include "Deferred/DeferredRendering.h"
 #include "Shadow/ShadowMap.h"
+#include "Common/Light.h"
 
 namespace TARE {
 	class TARE
@@ -47,7 +48,7 @@ namespace TARE {
 			_DeferredRendering->GetLightingBuffer()->Resize(width, height);
 		}
 
-		void SetLights(const std::vector<Light>& lights);
+		void SetLights(std::vector<Light>& lights);
 		SceneData& GetSceneData() { return _Data; }
 		DeferredRendering& GetDeferredRendering() { return *_DeferredRendering; }
 		ShadowMap& GetShadowMap() { return *_ShadowMap; }
@@ -55,6 +56,8 @@ namespace TARE {
 		int _Width, _Height;
 
 		void CalculateLight(const Light& light, int index);
+		void ClearLight(int index);
+		void ClearShadowLight(int index);
 	private:
 		TAGE::MEM::Scope<EndlessGrid> _Grid;
 		TAGE::MEM::Ref<DeferredRendering> _DeferredRendering;

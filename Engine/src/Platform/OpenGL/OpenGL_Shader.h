@@ -5,7 +5,7 @@ namespace TARE {
 	class OpenGL_Shader : public Shader
 	{
 	public:
-		OpenGL_Shader(const char* vertexPath, const char* fragmentPath);
+		OpenGL_Shader(const char* vertexPath, const char* fragmentPath, const char* geometryPath);
 
 		virtual void Use() const override;
 		virtual void SetUniform(const char* name, bool value) const override;
@@ -21,7 +21,7 @@ namespace TARE {
 		virtual int GetUniformLocation(unsigned int program, const char* name) const override;
 		virtual void CheckCompileErrors(uint shader, const char* type) const override;
 		virtual void CompileShader(uint& shader, const char* code, const char* type) override;
-		virtual void CompileProgram(uint vertex, uint fragment) override;
+		virtual void CompileProgram(uint vertex, uint fragment, uint* geometry) override;
 		virtual void DeleteShader(uint shader) override;
 
 	private:

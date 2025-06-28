@@ -17,6 +17,7 @@ namespace TARE {
 		virtual uint GetColorAttachment(uint index = 0) const = 0;
 		virtual uint GetDepthAttachment() const = 0;
 		virtual uint GetWidth() const = 0;
+		virtual uint GetID() const = 0;
 		virtual uint GetHeight() const = 0;
 
 		virtual void Blit(const TAGE::MEM::Ref<Framebuffer>& target) const = 0;

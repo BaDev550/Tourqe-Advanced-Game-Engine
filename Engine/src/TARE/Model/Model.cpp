@@ -124,9 +124,15 @@ namespace TARE
 				return;
 			}
 
+			std::replace(texPath.begin(), texPath.end(), '\\', '/');
 			std::filesystem::path modelDir = std::filesystem::path(_Directory).parent_path();
 			std::filesystem::path textureFilename = std::filesystem::path(texPath).filename();
 			std::filesystem::path fullPath = modelDir / textureFilename;
+
+			std::filesystem::path fallback = std::filesystem::path(_Directory) / textureFilename;
+			if (std::filesystem::exists(fallback)) {
+				fullPath = fallback;
+			}
 
 			if (std::filesystem::exists(fullPath)) {
 				TAGE::MEM::Ref<Texture2D> texture = Texture2D::Create();

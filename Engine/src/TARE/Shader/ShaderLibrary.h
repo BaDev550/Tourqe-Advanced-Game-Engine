@@ -15,7 +15,7 @@ namespace TARE {
 			_shaders.clear();
 		};
 
-		static TAGE::MEM::Ref<Shader> Add(const std::string& name, const char* vertexPath, const char* fragmentPath);
+		static TAGE::MEM::Ref<Shader> Add(const std::string& name, const char* vertexPath, const char* fragmentPath, const char* geometryPath = "0");
 		static void Remove(const std::string& name) { _shaders[name]->DestroyProgram(); _shaders.erase(name); }
 		static TAGE::MEM::Ref<Shader> Get(const std::string& name) { return _shaders.at(name); }
 	private:

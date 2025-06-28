@@ -1,5 +1,6 @@
 #pragma once
 #include "TARE/Buffers/Framebuffer.h"
+#include "TAGE/Utilities/Memory.h"
 #include "TARE/Shader/ShaderLibrary.h"
 #include "TARE/Camera/Camera.h"
 #include "TARE/Texture/Texture.h"
@@ -13,27 +14,20 @@ namespace TARE {
 
         void BeginRender(const glm::mat4& lightViewProj);
         void EndRender();
+        void BeginPointLightShadowPass(const glm::vec3& lightPos);
+        void SetFaceViewProjection(int faceIndex, const glm::mat4& vpMatrix);
+        void EndPointLightShadowPass();
 
         void BindTexture(uint slot = 0) const;
 		void UseShader() const { _depthShader->Use(); }
 		uint GetTextureID() const { return _depthFBO->GetDepthAttachment(); }
-        const glm::mat4& GetLightSpaceMatrix() const { return _lightSpaceMatrix; }
-
-        void SetLightDirection(const glm::vec3& dir);
-        void SetOrthoBounds(float left, float right, float bottom, float top, float near, float far);
 
 		TAGE::MEM::Ref<Framebuffer>& GetFramebuffer() { return _depthFBO; }
     private:
         TAGE::MEM::Ref<Framebuffer> _depthFBO;
         TAGE::MEM::Ref<Shader> _depthShader;
-        TAGE::MEM::Ref<CubemapTexture> _depthCubemap;
-
-        glm::mat4 _lightSpaceMatrix;
-        glm::vec3 _lightDir;
-        glm::mat4 _lightView;
-        glm::mat4 _lightProj;
-
-        void UpdateMatrices();
+        TAGE::MEM::Ref<Shader> _pointLightDepthShader;
+        TAGE::MEM::Ref<CubemapTexture> _pointDepthCubemap;
 	};
 }
 

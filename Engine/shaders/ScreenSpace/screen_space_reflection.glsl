@@ -87,7 +87,9 @@ vec3 DoSSR(
     vec2 dCoords = smoothstep(0.2, 0.6, abs(vec2(0.5) - coords.xy));
     float screenEdgeFactor = clamp(1.0 - (dCoords.x + dCoords.y), 0.0, 1.0);
     float multiplier = pow(Metal, reflectionSpecularFalloffExponent) * screenEdgeFactor * -reflected.z;
-    vec3 SSR = textureLod(albedo, texCoords.xy, 0).rgb * clamp(multiplier, 0.0, 0.9) * Fresnel;
+    float dist = length(hitPos - viewPosition);
+    float fade = clamp((SSR_DISTANCE - dist) / SSR_DISTANCE, 0.0, 1.0);
+    vec3 SSR = textureLod(albedo, texCoords.xy, 0).rgb * clamp(multiplier, 0.0, 0.9) * Fresnel * fade;
 
     return SSR;
 }

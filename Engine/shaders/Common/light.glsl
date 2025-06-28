@@ -13,6 +13,7 @@ struct Light {
     float range;
     float innerCone;
     float outerCone;
+    mat4 lightSpaceMatrix;
 };
 
 #define LIGHT_TYPE_POINT       0
@@ -20,8 +21,8 @@ struct Light {
 #define LIGHT_TYPE_SPOT        2
 
 uniform Light u_Lights[MAX_LIGHTS];
+uniform sampler2D u_ShadowMaps[MAX_LIGHTS];
 uniform int u_LightCount;
-uniform int u_ShadowLightIndex;
 
 float ShadowCalculation(sampler2D shadowMap, vec4 fragPosLightSpace, vec3 normal, vec3 lightDir)
 {
@@ -36,7 +37,7 @@ float ShadowCalculation(sampler2D shadowMap, vec4 fragPosLightSpace, vec3 normal
 
     float avgBlockerDepth = 0.0;
     int blockerCount = 0;
-    int searchRadius = 3; // Initial search area
+    int searchRadius = 3;
     for (int x = -searchRadius; x <= searchRadius; ++x)
     {
         for (int y = -searchRadius; y <= searchRadius; ++y)
@@ -54,7 +55,7 @@ float ShadowCalculation(sampler2D shadowMap, vec4 fragPosLightSpace, vec3 normal
 
     if (blockerCount == 0)
     {
-        shadow = 0.0; // No blockers — fully lit
+        shadow = 0.0;
     }
     else
     {

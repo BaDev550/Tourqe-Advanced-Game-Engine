@@ -350,6 +350,7 @@ namespace TAGE::Editor {
 		DrawComponent<LightComponent>("Light", entity, [](auto& component)
 			{
 				DrawVec3Control("Color", component.Handle.color);
+				ImGui::Checkbox("Cast Shadow", &component.Handle.castShadow);
 				ImGui::DragFloat("Intensity", &component.Handle.intensity, 0.01f, 0.0f, 100.0f);
 				ImGui::DragFloat("Range", &component.Handle.range, 0.1f, 0.0f, 100.0f);
 				ImGui::DragFloat("Inner Cone", &component.Handle.innerCone, 0.1f, 0.0f, glm::radians(90.0f));

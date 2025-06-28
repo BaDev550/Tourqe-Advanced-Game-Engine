@@ -4,9 +4,9 @@
 #include <GLAD/glad.h>
 
 namespace TARE {
-	OpenGL_Shader::OpenGL_Shader(const char* vertexPath, const char* fragmentPath)
+	OpenGL_Shader::OpenGL_Shader(const char* vertexPath, const char* fragmentPath, const char* geometryPath)
 	{
-		LoadShader(vertexPath, fragmentPath);
+		LoadShader(vertexPath, fragmentPath, geometryPath);
 	}
 	void OpenGL_Shader::Use() const
 	{
@@ -33,12 +33,12 @@ namespace TARE {
 
 	void OpenGL_Shader::CompileShader(uint& shader, const char* code, const char* type)
 	{
-		if (std::strcmp(type, "VERTEX") == 0) {
+		if (std::strcmp(type, "VERTEX") == 0)
 			shader = glCreateShader(GL_VERTEX_SHADER);
-		}
-		else if (std::strcmp(type, "FRAGMENT") == 0) {
+		else if (std::strcmp(type, "FRAGMENT") == 0)
 			shader = glCreateShader(GL_FRAGMENT_SHADER);
-		}
+		else if (std::strcmp(type, "GEOMETRY") == 0)
+			shader = glCreateShader(GL_GEOMETRY_SHADER);
 		else {
 			LOG_ERROR("Unknown shader type: {}", type);
 			return;
@@ -50,17 +50,22 @@ namespace TARE {
 		CheckCompileErrors(shader, type);
 	}
 
-	void OpenGL_Shader::CompileProgram(uint vertex, uint fragment)
+	void OpenGL_Shader::CompileProgram(uint vertex, uint fragment, uint* geometry)
 	{
 		_ID = glCreateProgram();
 		glAttachShader(_ID, vertex);
 		glAttachShader(_ID, fragment);
+		if (geometry)
+			glAttachShader(_ID, *geometry);
+
 		glLinkProgram(_ID);
+		CheckCompileErrors(_ID, "PROGRAM");
 	}
 
 	void OpenGL_Shader::DeleteShader(uint shader)
 	{
-		glDeleteShader(shader);
+		if (shader != 0)
+			glDeleteShader(shader);
 	}
 
 	void OpenGL_Shader::CheckCompileErrors(uint shader, const char* type) const

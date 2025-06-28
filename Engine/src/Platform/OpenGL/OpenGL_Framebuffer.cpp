@@ -174,8 +174,8 @@ namespace TARE {
 
 		if (_ColorAttachments.size() > 1)
 		{
-			ASSERT_NOMSG(_ColorAttachments.size() <= 4);
-			GLenum buffers[4] = { GL_COLOR_ATTACHMENT0, GL_COLOR_ATTACHMENT1, GL_COLOR_ATTACHMENT2, GL_COLOR_ATTACHMENT3 };
+			ASSERT_NOMSG(_ColorAttachments.size() <= 5);
+			GLenum buffers[5] = { GL_COLOR_ATTACHMENT0, GL_COLOR_ATTACHMENT1, GL_COLOR_ATTACHMENT2, GL_COLOR_ATTACHMENT3, GL_COLOR_ATTACHMENT4 };
 			glDrawBuffers(_ColorAttachments.size(), buffers);
 		}
 		else if (_ColorAttachments.empty())

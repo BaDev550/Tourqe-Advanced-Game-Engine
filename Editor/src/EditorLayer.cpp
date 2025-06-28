@@ -50,6 +50,9 @@ namespace TAGE::Editor {
 						hoveredEntity->GetComponent<MeshComponent>().IsSelected = true;
 					_SceneHierarchyPanel->SetSelectedEntity(hoveredEntity);
 				}
+				else {
+					_SceneHierarchyPanel->SetSelectedEntity(nullptr);
+				}
 			}
 		}
 
@@ -180,8 +183,11 @@ namespace TAGE::Editor {
 		case ViewportDebugMode::GBuffer_Normal:
 			textureID = deferred.GetGBuffer()->GetColorAttachment(1);
 			break;
-		case ViewportDebugMode::GBuffer_Albedo:
+		case ViewportDebugMode::GBuffer_Spec:
 			textureID = deferred.GetGBuffer()->GetColorAttachment(2);
+			break;
+		case ViewportDebugMode::GBuffer_Albedo:
+			textureID = deferred.GetGBuffer()->GetColorAttachment(3);
 			break;
 		case ViewportDebugMode::GBuffer_Depth:
 			textureID = deferred.GetGBuffer()->GetDepthAttachment();
@@ -190,7 +196,7 @@ namespace TAGE::Editor {
 			textureID = deferred.GetLightingBuffer()->GetColorAttachment(0);
 			break;
 		case ViewportDebugMode::ShadowMap:
-			textureID = renderer->GetShadowMap().GetTextureID();
+			textureID = renderer->GetSceneData().Lights[0].shadowMap->GetTextureID();
 			break;
 		case ViewportDebugMode::GI:
 			textureID = deferred.GetGIBuffer()->GetColorAttachment(0);
@@ -283,6 +289,7 @@ namespace TAGE::Editor {
 		case E_KEY_F6: debugMode = ViewportDebugMode::Lighting; break;
 		case E_KEY_F7: debugMode = ViewportDebugMode::ShadowMap; break;
 		case E_KEY_F8: debugMode = ViewportDebugMode::GI; break;
+		case E_KEY_F9: debugMode = ViewportDebugMode::GBuffer_Spec; break;
 
 		case E_KEY_S: {
 			if (control && shift)

@@ -147,9 +147,6 @@
     <ClInclude Include="src\Platform\DirectX11\DirectX11_RenderContext.h">
       <Filter>src\Platform\DirectX11</Filter>
     </ClInclude>
-    <ClInclude Include="src\Platform\DirectX11\DirectX11_Shader.h">
-      <Filter>src\Platform\DirectX11</Filter>
-    </ClInclude>
     <ClInclude Include="src\Platform\OpenGL\OpenGL_Buffers.h">
       <Filter>src\Platform\OpenGL</Filter>
     </ClInclude>
@@ -1600,12 +1597,10 @@
       <Filter>vendor\stb</Filter>
     </ClInclude>
     <ClInclude Include="src\TARE\Camera\EditorCamera.h" />
+    <ClInclude Include="src\TARE\Common\Light.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\Platform\DirectX11\DirectX11_RenderContext.cpp">
-      <Filter>src\Platform\DirectX11</Filter>
-    </ClCompile>
-    <ClCompile Include="src\Platform\DirectX11\DirectX11_Shader.cpp">
       <Filter>src\Platform\DirectX11</Filter>
     </ClCompile>
     <ClCompile Include="src\Platform\OpenGL\OpenGL_Buffers.cpp">
@@ -1834,5 +1829,8 @@
     <None Include="shaders\Debugger\single_color_vertex.glsl" />
     <None Include="shaders\thumbnail_vertex.glsl" />
     <None Include="shaders\thumbnail_fragment.glsl" />
+    <None Include="shaders\Shadow\point_light_shadow_fragment.glsl" />
+    <None Include="shaders\Shadow\point_light_shadow_vertex.glsl" />
+    <None Include="shaders\Shadow\point_light_shadow_geometry.glsl" />
   </ItemGroup>
 </Project>

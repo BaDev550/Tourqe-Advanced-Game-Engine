@@ -1,5 +1,6 @@
 #include "ContentBrowserPanel.h"
 #include "imgui.h"
+#include "TAGE/World/Scene/SceneSerializer.h"
 
 namespace TAGE::Editor {
 	static const std::filesystem::path s_AssetsPath = "assets";
@@ -68,6 +69,7 @@ namespace TAGE::Editor {
 				if (directoryEntry.is_directory())
 					_CurrentDirectory /= path.filename();
 				else {
+
 					// file
 				}
 			}

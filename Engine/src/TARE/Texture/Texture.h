@@ -52,6 +52,7 @@ namespace TARE {
 	public:
 		virtual bool LoadCubemap(const std::string& path) = 0;
 		virtual uint LoadShadowPointCubemap() = 0;
+		virtual void AttachCubemapFaceToFBO(int face, uint FBO) = 0;
 		virtual bool ConvertEquirectangularToCubemap(Bitmap in, std::vector<Bitmap>& map) = 0;
 		virtual bool LoadCubemapData(std::vector<Bitmap>& bitmaps) = 0;
 	};

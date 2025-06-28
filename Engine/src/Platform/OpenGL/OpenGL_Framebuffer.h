@@ -20,6 +20,7 @@ namespace TARE {
 		virtual uint GetDepthAttachment() const override { ASSERT(_DepthAttachment != 0, "No depth attachment found!"); return _DepthAttachment; }
 		virtual uint GetWidth() const override { return _Specification.Width; }
 		virtual uint GetHeight() const override { return _Specification.Height; }
+		virtual uint GetID() const override { return _BufferID; }
 
 		virtual void Blit(const TAGE::MEM::Ref<Framebuffer>& target) const override;
 		virtual void BindRead() const override;

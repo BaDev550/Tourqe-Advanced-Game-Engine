@@ -46,7 +46,7 @@ vec3 calculateSSGI(
     vec4 prev = u_PrevViewProj * vec4(fragPos,1.0);
     vec2 prevUV = prev.xy/prev.w*0.5+0.5;
     vec3 prevGI = texture(u_PrevGI, prevUV).rgb;
-    return mix(gi, prevGI, 0.5);
+    return mix(gi, prevGI, 0.5) * 0.1;
 }
 
 #endif

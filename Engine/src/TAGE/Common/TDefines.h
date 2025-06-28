@@ -20,7 +20,7 @@ typedef unsigned long long	uint64;
 #define FAR_CLIP 250.0f
 
 #define USE_FALLBACK_TEXTURE 1
-#define SHADOW_MAP_TEXTURE_SLOT 15
+#define SHADOW_MAP_TEXTURE_SLOT 10
 
 #define PI 3.14159265358979323846f
 #define MAX_LIGHTS 16
@@ -29,7 +29,7 @@ typedef unsigned long long	uint64;
 #define MAX_INSTANCES 1024
 #define MAX_BONE_INFLUENCES 4
 #define SCALE_FACTOR 0.01f
-#define SHADOW_MAP_RESOLUTION 2048
+#define SHADOW_MAP_RESOLUTION 4056
 
 #define CUBEMAP_FACE_NUM 6
 #define CUBEMAP_FACE_POSITIVE_X 0

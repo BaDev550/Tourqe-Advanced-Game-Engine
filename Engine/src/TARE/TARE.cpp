@@ -28,9 +28,6 @@ namespace TARE {
 		_Data.InversedViewMatrix = cam->GetInverseViewMatrix();
 
 		_DeferredRendering->GetLightShader()->Use();
-		_ShadowMap->BindTexture(SHADOW_MAP_TEXTURE_SLOT);
-		_DeferredRendering->GetLightShader()->SetUniform("u_ShadowMap", SHADOW_MAP_TEXTURE_SLOT);
-		_DeferredRendering->GetLightShader()->SetUniform("u_LightSpaceMatrix", _Data.LightViewProjectionMatrix);
 		_DeferredRendering->GetLightShader()->SetUniform("u_CameraPos", _Data.CameraPosition);
 		_DeferredRendering->GetLightShader()->SetUniform("u_InverseView", _Data.InversedViewMatrix);
 
@@ -66,43 +63,75 @@ namespace TARE {
 			_Grid->Render(_Data.ViewMatrix, _Data.ProjectionMatrix, _Data.CameraPosition);
 	}
 
-	void TARE::SetLights(const std::vector<Light>& lights)
+	void TARE::SetLights(std::vector<Light>& lights)
 	{
 		if (lights.empty()) return;
+
+		int count = (int)lights.size();
 		_DeferredRendering->GetLightShader()->Use();
-		_DeferredRendering->GetLightShader()->SetUniform("u_LightCount", (int)lights.size());
-		for (size_t i = 0; i < lights.size(); ++i) {
-			CalculateLight(lights[i], static_cast<int>(i));
+		_DeferredRendering->GetLightShader()->SetUniform("u_LightCount", count);
+
+		for (int i = 0; i < MAX_LIGHTS; ++i) {
+			if (i < count)
+				CalculateLight(lights[i], i);
+			else
+				ClearLight(i);
 		}
 		_Data.Lights = lights;
 	}
 
 	void TARE::CalculateLight(const Light& light, int index)
 	{
-		_DeferredRendering->GetLightShader()->Use();
-		std::string baseUniform = "u_Lights[" + std::to_string(index) + "]";
-		_DeferredRendering->GetLightShader()->SetUniform((baseUniform + ".type").c_str(), static_cast<int>(light.type));
-		_DeferredRendering->GetLightShader()->SetUniform((baseUniform + ".position").c_str(), light.position);
-		_DeferredRendering->GetLightShader()->SetUniform((baseUniform + ".direction").c_str(), light.direction);
-		_DeferredRendering->GetLightShader()->SetUniform((baseUniform + ".color").c_str(), light.color);
-		_DeferredRendering->GetLightShader()->SetUniform((baseUniform + ".intensity").c_str(), light.intensity);
-		_DeferredRendering->GetLightShader()->SetUniform((baseUniform + ".range").c_str(), light.range);
-		_DeferredRendering->GetLightShader()->SetUniform((baseUniform + ".innerCone").c_str(), light.innerCone);
-		_DeferredRendering->GetLightShader()->SetUniform((baseUniform + ".outerCone").c_str(), light.outerCone);
+        auto shader = _DeferredRendering->GetLightShader();
+        shader->Use();
 
-		if (light.type == LightType::DIRECTIONAL) {
-			float shadowRange = 20.0f;
-			glm::mat4 lightProjection = glm::ortho(-shadowRange, shadowRange, -shadowRange, shadowRange, 0.1f, 150.0f);
+        std::string baseUniform = "u_Lights[" + std::to_string(index) + "]";
 
-			glm::vec3 lightPos = -light.direction * 30.0f;
-			glm::mat4 lightView = glm::lookAt(
-				lightPos,
-				glm::vec3(0.0f),
-				glm::vec3(0.0f, 1.0f, 0.0f)
-			);
+        shader->SetUniform((baseUniform + ".type").c_str(), static_cast<int>(light.type));
+        shader->SetUniform((baseUniform + ".position").c_str(), light.position);
+        shader->SetUniform((baseUniform + ".direction").c_str(), light.direction);
+        shader->SetUniform((baseUniform + ".color").c_str(), light.color);
+        shader->SetUniform((baseUniform + ".intensity").c_str(), light.intensity);
+        shader->SetUniform((baseUniform + ".range").c_str(), light.range);
+        shader->SetUniform((baseUniform + ".innerCone").c_str(), light.innerCone);
+        shader->SetUniform((baseUniform + ".outerCone").c_str(), light.outerCone);
 
-			_Data.LightViewProjectionMatrix = lightProjection * lightView;
+		if (light.castShadow && light.shadowMap) {
+			int textureSlot = SHADOW_MAP_TEXTURE_SLOT + index;
+			shader->SetUniform((baseUniform + ".lightSpaceMatrix").c_str(), light.lightSpaceMatrix);
+
+			light.shadowMap->BindTexture(textureSlot);
+			shader->SetUniform(("u_ShadowMaps[" + std::to_string(index) + "]").c_str(), textureSlot);
 		}
+		else {
+			ClearShadowLight(index);
+		}
+	}
 
+	void TARE::ClearLight(int index)
+	{
+		auto shader = _DeferredRendering->GetLightShader();
+		std::string baseUniform = "u_Lights[" + std::to_string(index) + "]";
+
+		shader->SetUniform((baseUniform + ".type").c_str(), -1);
+		shader->SetUniform((baseUniform + ".position").c_str(), glm::vec3(0.0f));
+		shader->SetUniform((baseUniform + ".direction").c_str(), glm::vec3(0.0f));
+		shader->SetUniform((baseUniform + ".color").c_str(), glm::vec3(0.0f));
+		shader->SetUniform((baseUniform + ".intensity").c_str(), 0.0f);
+		shader->SetUniform((baseUniform + ".range").c_str(), 0.0f);
+		shader->SetUniform((baseUniform + ".innerCone").c_str(), 0.0f);
+		shader->SetUniform((baseUniform + ".outerCone").c_str(), 0.0f);
+		shader->SetUniform((baseUniform + ".lightSpaceMatrix").c_str(), glm::mat4(1.0f));
+
+		shader->SetUniform(("u_ShadowMaps[" + std::to_string(index) + "]").c_str(), 0);
+	}
+
+	void TARE::ClearShadowLight(int index)
+	{
+		auto shader = _DeferredRendering->GetLightShader();
+		std::string baseUniform = "u_Lights[" + std::to_string(index) + "]";
+
+		shader->SetUniform((baseUniform + ".lightSpaceMatrix").c_str(), glm::mat4(1.0f));
+		shader->SetUniform(("u_ShadowMaps[" + std::to_string(index) + "]").c_str(), 0);
 	}
 }

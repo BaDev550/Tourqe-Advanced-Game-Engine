@@ -37,6 +37,7 @@ namespace TARE {
 		virtual bool ConvertEquirectangularToCubemap(Bitmap in, std::vector<Bitmap>& map) override;
 		virtual bool LoadCubemapData(std::vector<Bitmap>& bitmaps) override;
 		virtual uint LoadShadowPointCubemap() override;
+		virtual void AttachCubemapFaceToFBO(int face, uint FBO) override;
 
 		virtual uint GetID() const override { return _ID; }
 		virtual int GetWidth() const override { return _Width; }

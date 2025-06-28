@@ -4,7 +4,7 @@
 const int NUM_SAMPLES = 16;
 const float SAMPLE_RADIUS = 0.5;
 
-#define SSR_MAX_STEPS 30
+#define SSR_MAX_STEPS 64
 #define SSR_STEP_SIZE 0.1
 #define SSR_TOLERANCE 0.05
 #define SSR_DISTANCE 5.0

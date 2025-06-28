@@ -20,14 +20,14 @@ namespace TARE
 		virtual void SetUniform(const char* name, glm::mat4 value) const = 0;
 		virtual void DestroyProgram() const {};
 
-		static TAGE::MEM::Ref<Shader> Create(const char* vertexPath, const char* fragmentPath);
+		static TAGE::MEM::Ref<Shader> Create(const char* vertexPath, const char* fragmentPath, const char* geometryPath = "0");
 	protected:
 		virtual int GetUniformLocation(unsigned int program, const char* name) const { return 0; }
 		virtual void CheckCompileErrors(uint shader, const char* type) const = 0;
 		virtual void CompileShader(uint& shader, const char* code, const char* type) = 0;
-		virtual void CompileProgram(uint vertex, uint fragment) = 0;
+		virtual void CompileProgram(uint vertex, uint fragment, uint* geometry) = 0;
 		virtual void DeleteShader(uint shader) = 0;
 
-		void LoadShader(const char* vertexPath, const char* fragmentPath);
+		void LoadShader(const char* vertexPath, const char* fragmentPath, const char* geometryPath);
 	};
 }
