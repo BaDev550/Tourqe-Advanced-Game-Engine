@@ -78,6 +78,12 @@ enum class DebugRenderMode : uint8 {
 	GRID,
 };
 
+enum class DebugPrimitiveType {
+	LINE,
+	SPHERE,
+	CAPSULE
+};
+
 enum class LightType : uint8 {
 	POINT,
 	DIRECTIONAL,
@@ -174,4 +180,33 @@ enum class BitmapType : uint8
 {
 	T2D,
 	CUBE
+};
+
+enum class ColliderShapeType : uint8 {
+	BOX, 
+	SPHERE, 
+	CAPSULE, 
+	MESH
+};
+
+enum class CollisionResponseType : uint8 {
+	NONE = 0, 
+	OVERLAP, 
+	BLOCK 
+};
+
+enum class PhysicsBodyType : uint8 {
+	STATIC = 0,
+	DYNAMIC,
+	KINEMATIC 
+};
+
+enum class ContactType : uint8 {
+	COLLISION,
+	TRIGGER
+};
+
+enum class RayDrawType {
+	FOR_FRAME = 0,
+	FOR_DURATION 
 };

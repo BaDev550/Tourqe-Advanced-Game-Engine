@@ -2,6 +2,8 @@
 #include "SceneSerializer.h"
 #include "TAGE/World/Components/BaseComponents.h"
 #include "TAGE/World/Components/RenderComponents.h"
+#include "TAGE/World/Components/ScriptingComponents.h"
+#include "TAGE/World/Components/PhysicsComponents.h"
 #include <yaml-cpp/yaml.h>
 
 namespace YAML {
@@ -91,7 +93,7 @@ namespace TAGE {
 
 	static void SerializeEntity(YAML::Emitter& out, Entity entity) {
 		out << YAML::BeginMap;
-		out << YAML::Key << "Entity" << YAML::Value << (uint64)entity.GetHandle();
+		out << YAML::Key << "Entity" << YAML::Value << (uint)entity;
 
 		if (entity.HasComponent<IdentityComponent>()) {
 			out << YAML::Key << "IdentityComponent";
@@ -172,6 +174,25 @@ namespace TAGE {
 			out << YAML::EndMap;
 		}
 
+		if (entity.HasComponent<RigidBodyComponent>()) {
+			out << YAML::Key << "RigidBodyComponent";
+			out << YAML::BeginMap;
+			auto& rb = entity.GetComponent<RigidBodyComponent>();
+			out << YAML::Key << "BodyType" << YAML::Value << (int)rb.BodyType;
+			out << YAML::EndMap;
+		}
+
+		if (entity.HasComponent<ColliderComponent>()) {
+			out << YAML::Key << "ColliderComponent";
+			out << YAML::BeginMap;
+			auto& cc = entity.GetComponent<ColliderComponent>();
+			
+			out << YAML::Key << "Shape" << YAML::Value << (int)cc.Shape;
+			out << YAML::Key << "Size" << YAML::Value << cc.Size;
+			out << YAML::Key << "ResponseType" << YAML::Value << (int)cc.ResponseType;
+			out << YAML::EndMap;
+		}
+
 		out << YAML::EndMap;
 	}
 
@@ -238,13 +259,13 @@ namespace TAGE {
 				auto meshComponent = entity["MeshComponent"];
 				if (meshComponent) {
 					auto& meshPath = meshComponent["MeshPath"].as<std::string>();
-					auto& mesh = deserializedEntity.AddComponent<MeshComponent>(meshPath);
+					auto& mesh = deserializedEntity.AddOrReplaceComponent<MeshComponent>(meshPath);
 				}
 
 				auto cameraComponent = entity["CameraComponent"];
 				if (cameraComponent) {
 					auto& cameraData = cameraComponent["Camera"];
-					auto& camera = deserializedEntity.AddComponent<CameraComponent>();
+					auto& camera = deserializedEntity.AddOrReplaceComponent<CameraComponent>();
 					camera.Handle->SetAspectRatio(cameraData["AspectRatio"].as<float>());
 					camera.Handle->SetFOV(cameraData["FOV"].as<float>());
 					camera.Handle->SetNearClip(cameraData["NearClip"].as<float>());
@@ -263,13 +284,37 @@ namespace TAGE {
 						innerCone = lightComponent["InnerCone"].as<float>();
 						outerCone = lightComponent["OuterCone"].as<float>();
 					}
-					auto& light = deserializedEntity.AddComponent<LightComponent>(Light(type, {}, {}, color, range, intensity, innerCone, outerCone));
+					auto& light = deserializedEntity.AddOrReplaceComponent<LightComponent>(Light(type, {}, {}, color, range, intensity, innerCone, outerCone));
 				}
 
 				auto skyboxComponent = entity["SkyboxComponent"];
 				if (skyboxComponent) {
 					auto& texturePath = skyboxComponent["TexturePath"].as<std::string>();
-					auto& skybox = deserializedEntity.AddComponent<SkyboxComponent>(texturePath);
+					auto& skybox = deserializedEntity.AddOrReplaceComponent<SkyboxComponent>(texturePath);
+				}
+
+				auto colliderComponent = entity["ColliderComponent"];
+				if (colliderComponent) {
+					auto shape = (ColliderShapeType)colliderComponent["Shape"].as<int>();
+					auto size = colliderComponent["Size"].as<glm::vec3>();
+					auto response = (CollisionResponseType)colliderComponent["ResponseType"].as<int>();
+					auto& collider = deserializedEntity.AddOrReplaceComponent<ColliderComponent>();
+					collider.Shape = shape;
+					collider.ResponseType = response;
+					collider.Size = size;
+
+					_Scene->GetPhysicsSystem().DestroyPhysics(deserializedEntity);
+					_Scene->GetPhysicsSystem().RegisterCollider(deserializedEntity);
+				}
+
+				auto rigidBodyComponent = entity["RigidBodyComponent"];
+				if (rigidBodyComponent) {
+					auto bodyType = (PhysicsBodyType)rigidBodyComponent["BodyType"].as<int>();
+					auto& rigidBody = deserializedEntity.AddOrReplaceComponent<RigidBodyComponent>();
+					rigidBody.BodyType = bodyType;
+
+					_Scene->GetPhysicsSystem().DestroyPhysics(deserializedEntity);
+					_Scene->GetPhysicsSystem().RegisterRigidBody(deserializedEntity);
 				}
 			}
 		}

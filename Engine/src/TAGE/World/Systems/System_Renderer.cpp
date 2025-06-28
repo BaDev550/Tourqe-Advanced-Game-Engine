@@ -27,7 +27,7 @@ namespace TAGE {
 
 		if (!camera) return;
 
-		Render(camera);
+		Render(camera, deltaTime);
 	}
 
 	void System_Renderer::UpdateEditor(float deltaTime)
@@ -35,10 +35,10 @@ namespace TAGE {
 		if (!_Scene) return;
 		if (!_EditorCamera) return;
 
-		Render(_EditorCamera);
+		Render(_EditorCamera, deltaTime);
 	}
 
-	void System_Renderer::Render(const MEM::Ref<TARE::Camera>& cam)
+	void System_Renderer::Render(const MEM::Ref<TARE::Camera>& cam, float dt)
 	{
 		TARE::RenderCommand::SetClearColor({ 1.0f, 1.0f, 1.0f, 1.0f });
 		TARE::RenderCommand::Clear(COLOR_DEPTH_STENCIL);
@@ -55,19 +55,20 @@ namespace TAGE {
 			skybox->Bind(cam->GetViewMatrix(), cam->GetProjectionMatrix());
 		_Renderer->DrawGrid();
 		RenderObjects();
+		//_Scene->GetPhysicsWorld().DrawDebug(dt, cam->GetViewProjectionMatrix());
 		_Renderer->EndFrame();
 	}
 
 	void System_Renderer::RenderObjects()
 	{
-		auto view = _Scene->GetRegistry().view<TransformComponent, MeshComponent>();
+		auto view = _Scene->GetEntitiesWith<MeshComponent>();
 		for (auto entity : view) {
-			Entity* entityObj = _Scene->GetEntityByID(entity);
-			auto& mc = entityObj->GetComponent<MeshComponent>();
-			auto& tc = entityObj->GetComponent<TransformComponent>();
+			Entity& entityObj = _Scene->GetEntityByID(entity);
+			auto& mc = entityObj.GetComponent<MeshComponent>();
+			auto& tc = entityObj.GetComponent<TransformComponent>();
 			if (!mc.Handle) continue;
 
-			auto& transform = entityObj->GetComponent<TransformComponent>();
+			auto& transform = entityObj.GetComponent<TransformComponent>();
 
 			mc.Handle->SetTransform(transform.GetTransform());
 
@@ -76,28 +77,19 @@ namespace TAGE {
 				_Renderer->GetDeferredRendering().GetGBufferShader()->SetUniform("u_EntityID", (int)entity);
 				mc.Handle->Draw("GBufferShader");
 			}
-
-			if (mc.IsSelected) {
-				TARE::RenderCommand::ToggleStencilFunc(true);
-				TARE::RenderCommand::Disable(DEPTH_TEST);
-				mc.Handle->SetTransform(transform.GetTransform() * 1.05f); 
-				mc.Handle->Draw("SingleColor");
-				TARE::RenderCommand::ToggleStencilFunc(false);
-				TARE::RenderCommand::Enable(DEPTH_TEST);
-			}
 		}
 
 	}
 
 	void System_Renderer::RenderShadowObject(bool point)
 	{
-		auto view = _Scene->GetRegistry().view<TransformComponent, MeshComponent>();
+		auto view = _Scene->GetEntitiesWith<TransformComponent, MeshComponent>();
 		for (auto entity : view) {
-			Entity* entityObj = _Scene->GetEntityByID(entity);
-			auto& mc = entityObj->GetComponent<MeshComponent>();
+			Entity& entityObj = _Scene->GetEntityByID(entity);
+			auto& mc = entityObj.GetComponent<MeshComponent>();
 			if (!mc.Handle) continue;
 
-			auto& transform = entityObj->GetComponent<TransformComponent>();
+			auto& transform = entityObj.GetComponent<TransformComponent>();
 			mc.Handle->SetTransform(transform.GetTransform());
 
 			if (mc.CastShadows)
@@ -199,11 +191,12 @@ namespace TAGE {
 	void System_Renderer::GetLights(std::vector<Light>& lights, MEM::Ref<TARE::Skybox>& skybox)
 	{
 		{
-			auto lightEntities = _Scene->GetEntitiesWith<TransformComponent, LightComponent>();
+			auto lightEntities = _Scene->GetEntitiesWith<LightComponent>();
 			for (const auto& entity : lightEntities)
 			{
-				auto& lc = entity->GetComponent<LightComponent>();
-				auto& transform = entity->GetComponent<TransformComponent>();
+				Entity& lightEntity = _Scene->GetEntityByID(entity);
+				auto& lc = lightEntity.GetComponent<LightComponent>();
+				auto& transform = lightEntity.GetComponent<TransformComponent>();
 				lc.Handle.position = transform.Position;
 				lc.Handle.direction = glm::normalize(glm::rotate(transform.Rotation, glm::vec3(0.0f, 0.0f, -1.0f)));
 				lights.push_back(lc.Handle);
@@ -213,7 +206,8 @@ namespace TAGE {
 			auto skyboxEntities = _Scene->GetEntitiesWith<SkyboxComponent>();
 			for (const auto& entity : skyboxEntities)
 			{
-				skybox = entity->GetComponent<SkyboxComponent>().Handle;
+				Entity& skyBoxEntity = _Scene->GetEntityByID(entity);
+				skybox = skyBoxEntity.GetComponent<SkyboxComponent>().Handle;
 				break;
 			}
 		}

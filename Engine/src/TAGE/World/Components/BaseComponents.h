@@ -3,17 +3,19 @@
 #include <string>
 #include <vector>
 #include <glm/glm.hpp>
+#include "TAGE/Utilities/UUID.h"
 #define GLM_ENABLE_EXPERIMENTAL
 #include <glm/gtx/quaternion.hpp>
 #include <glm/gtc/matrix_transform.hpp>
-#include "TAGE/World/Objects/ScriptableEntity.h"
 
 namespace TAGE {
 	struct IdentityComponent {
 		std::string Name;
+		UUID UniqeId;
 		std::vector<const char*> Tags;
 
 		IdentityComponent(const std::string& name = "UNDEFINED") : Name(name) {}
+		IdentityComponent(const std::string& name, UUID id) : Name(name), UniqeId(id) {}
 	};
 
 	struct TransformComponent {
@@ -26,19 +28,6 @@ namespace TAGE {
 			glm::mat4 rotation = glm::mat4_cast(Rotation);
 			glm::mat4 scale = glm::scale(glm::mat4(1.0f), Scale);
 			return translation * rotation * scale;
-		}
-	};
-
-	struct NativeScriptComponent {
-		ScriptableEntity* Instance = nullptr;
-
-		ScriptableEntity*(*InstantiateScript)();
-		void (*DestroyScript)(NativeScriptComponent*);
-
-		template<typename T>
-		void Bind() {
-			InstantiateScript = []() { return static_cast<ScriptableEntity*>(new T()); };
-			DestroyScript = [](NativeScriptComponent* nsc) { delete nsc->Instance; nsc->Instance = nullptr; };
 		}
 	};
 }

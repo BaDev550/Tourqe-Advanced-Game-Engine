@@ -62,7 +62,6 @@ namespace TARE {
 		TAGE::MEM::Scope<EndlessGrid> _Grid;
 		TAGE::MEM::Ref<DeferredRendering> _DeferredRendering;
 		TAGE::MEM::Ref<ShadowMap> _ShadowMap;
-		TAGE::MEM::Ref<Shader> _SingleColor; // Move this into debugger
 		SceneData _Data;
 	};
 }

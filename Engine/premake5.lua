@@ -30,7 +30,8 @@ project "Engine"
         "%{IncludeDir.ImGizmo}",
         "%{IncludeDir.glm}",
         "%{IncludeDir.entt}",
-        "%{IncludeDir.yaml}"
+        "%{IncludeDir.yaml}",
+        "%{IncludeDir.BulletPhysics}"
    }
 
    defines 
@@ -45,6 +46,9 @@ project "Engine"
         "assimp",
         "ImGui",
         "ImGuiGizmo",
+        "BulletDynamics",
+        "BulletCollision",
+        "LinearMath",
         "yaml-cpp",
         "d3d11.lib",
         "dxgi.lib",

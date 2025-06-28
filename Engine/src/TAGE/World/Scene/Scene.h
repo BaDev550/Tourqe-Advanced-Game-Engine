@@ -1,7 +1,10 @@
 #pragma once
 #include "TAGE/World/Systems/System_Base.h"
 #include "TAGE/World/Systems/System_Renderer.h"
+#include "TAGE/World/Systems/System_Physics.h"
+#include "TAGE/Physics/PhysicsWorld.h"
 #include "TARE/Camera/EditorCamera.h"
+#include "TAGE/Utilities/UUID.h"
 #include "entt/entt.hpp"
 #include <vector>
 
@@ -12,52 +15,50 @@ namespace TAGE {
 	public:
 		Scene(const std::string& name);
 
-		Entity& CreateEntity(const std::string& name);
-		Entity& CreateEntityWithUUID(const std::string& name, entt::entity& ID);
-		Entity* GetEntityByID(const entt::entity& ID);
-		Entity GetPrimaryCamera();
-		void ClearEntities();
+		Entity CreateEntity(const std::string& name);
+		Entity CreateEntityWithUUID(const std::string& name, UUID ID);
 
-		void OnResize(uint width, uint height) { _Width = width; _Height = height; }
+		Entity GetEntityByUUID(UUID ID);
+		Entity GetEntityByID(entt::entity entityID);
+		Entity FindEntityByName(std::string_view name);
+		Entity GetPrimaryCamera();
+
+		void DestroyEntity(Entity entity);
+
+		void OnRuntimeStart() {}
+		void OnRuntimeStop() {}
 		void OnUpdateRuntime(float DeltaTime);
 		void OnUpdateEditor(float DeltaTime, const MEM::Ref<TARE::EditorCamera>& camera);
-
-		template<typename T, typename... Ts>
-		std::vector<MEM::Ref<Entity>> GetEntitiesWith();
-		std::unordered_map<entt::entity, MEM::Ref<Entity>> GetEntities() const { return _Entities; }
+		void OnResize(uint width, uint height) { _Width = width; _Height = height; }
 
 		std::string& GetName() { return _Name; }
 		entt::registry& GetRegistry() { return _Registry; }
+		Physics::PhysicsWorld& GetPhysicsWorld() { return _PhysicsWorld; }
+		System_Physics& GetPhysicsSystem() { return *_PhysicsSystem; }
 
 		uint GetWidth() const { return _Width; }
 		uint GetHeight() const { return _Height; }
+
+		template<typename... Components>
+		auto GetEntitiesWith() {
+			return _Registry.view<Components...>();
+		}
 	private:
-		std::unordered_map<entt::entity, MEM::Ref<Entity>> _Entities;
+		bool _Running = false;
 		entt::registry _Registry;
 		std::string _Name;
 		uint _Width = 1280, _Height = 720;
+		
+		std::unordered_map<UUID, entt::entity> _Entities;
 
 		MEM::Ref<System_Renderer> _RendererSystem;
+		MEM::Ref<System_Physics> _PhysicsSystem;
+		Physics::PhysicsWorld _PhysicsWorld;
+
+		template<typename T>
+		void OnComponentAdded(Entity entity, T& component);
 	protected:
 		friend class SceneSerializer;
 		friend class Entity;
 	};
-
-	template<typename T, typename... Ts>
-	std::vector<MEM::Ref<Entity>> Scene::GetEntitiesWith()
-	{
-		std::vector<MEM::Ref<Entity>> result;
-
-		auto view = _Registry.view<T, Ts...>();
-		for (auto entity : view)
-		{
-			auto it = _Entities.find(entity);
-			if (it != _Entities.end())
-			{
-				result.push_back(it->second);
-			}
-		}
-
-		return result;
-	}
 }

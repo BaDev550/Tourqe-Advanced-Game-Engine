@@ -22,7 +22,8 @@ project "Editor"
         "../Engine/%{IncludeDir.Assimp}",
         "../Engine/%{IncludeDir.glm}",
         "../Engine/%{IncludeDir.entt}",
-        "../Engine/%{IncludeDir.yaml}"
+        "../Engine/%{IncludeDir.yaml}",
+        "../Engine/%{IncludeDir.BulletPhysics}"
     }
 
     links {

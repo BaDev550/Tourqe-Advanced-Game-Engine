@@ -2,13 +2,14 @@
 
 #include "TAGE/World/Scene/Scene.h"
 #include "TAGE/Utilities/Logger.h"
+#include "TAGE/World/Components/BaseComponents.h"
 #include "entt/entt.hpp"
 
 namespace TAGE {
 	class Entity {
 	public:
 		Entity() = default;
-		Entity(entt::entity& handle, Scene* scene) : _Handle(handle), _Scene(scene) {}
+		Entity(entt::entity handle, Scene* scene) : _Handle(handle), _Scene(scene) {}
 		Entity(const Entity& other) = default;
 
 		template<typename T>
@@ -16,10 +17,18 @@ namespace TAGE {
 
 		template<typename T, typename... Args>
 		T& AddComponent(Args&&... args) {
-			if (!HasComponent<T>()) {
-				return _Scene->GetRegistry().emplace<T>(_Handle, std::forward<Args>(args)...);
-			}
-			return _Scene->GetRegistry().get<T>(_Handle);
+			ASSERT(!HasComponent<T>(), "Entity already has this component");
+			T& component = _Scene->GetRegistry().emplace<T>(_Handle, std::forward<Args>(args)...);
+			_Scene->OnComponentAdded(*this, component);
+
+			return component;
+		}
+
+		template<typename T, typename... Args>
+		T& AddOrReplaceComponent(Args&&... args) {
+			T& component = _Scene->GetRegistry().emplace_or_replace<T>(_Handle, std::forward<Args>(args)...);
+			_Scene->OnComponentAdded(*this, component);
+			return component;
 		}
 
 		template<typename T>
@@ -34,14 +43,21 @@ namespace TAGE {
 			_Scene->GetRegistry().remove<T>(_Handle);
 		}
 		
-		void Destroy() {
-			if (_Handle != entt::null)
-				_Scene->GetRegistry().destroy(_Handle);
-			_Handle = entt::null;
+		UUID GetUUID() {
+			return GetComponent<IdentityComponent>().UniqeId;
 		}
 
-		entt::entity GetHandle() const { return _Handle; }
+		operator entt::entity() const { return _Handle; }
 		operator bool() const { return _Handle != entt::null; }
+		operator uint() const { return (uint)_Handle; }
+
+		bool operator==(const Entity& other) const {
+			return _Handle == other._Handle && _Scene == other._Scene;
+		}
+
+		bool operator!=(const Entity& other) const {
+			return !(*this == other);
+		}
 	private:
 		entt::entity _Handle = entt::null;
 		Scene* _Scene = nullptr;

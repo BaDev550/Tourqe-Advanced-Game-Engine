@@ -99,6 +99,7 @@ namespace TARE {
 		virtual void Unbind() const = 0;
 		virtual void SetLayout(const BufferLayout& layout) = 0;
 		virtual const BufferLayout& GetLayout() const = 0;
+		virtual void SetData(void* data, size_t size) = 0;
 
 		static TAGE::MEM::Ref<VertexBufferObject> Create(void* data, size_t size);
 	};

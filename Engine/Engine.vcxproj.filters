@@ -61,6 +61,9 @@
     <Filter Include="src\TAGE\Layers">
       <UniqueIdentifier>{DC9CF8A2-4828-6667-5139-E95BBD43C267}</UniqueIdentifier>
     </Filter>
+    <Filter Include="src\TAGE\Physics">
+      <UniqueIdentifier>{2FCD5046-1BC6-6F98-44F8-541D30504FA4}</UniqueIdentifier>
+    </Filter>
     <Filter Include="src\TAGE\Thread">
       <UniqueIdentifier>{84B41CB6-F03F-8A7A-F950-0D6F655BE67A}</UniqueIdentifier>
     </Filter>
@@ -219,6 +222,18 @@
     <ClInclude Include="src\TAGE\Layers\LayerStack.h">
       <Filter>src\TAGE\Layers</Filter>
     </ClInclude>
+    <ClInclude Include="src\TAGE\Physics\ContactListener.h">
+      <Filter>src\TAGE\Physics</Filter>
+    </ClInclude>
+    <ClInclude Include="src\TAGE\Physics\PhysicsDebugRenderer.h">
+      <Filter>src\TAGE\Physics</Filter>
+    </ClInclude>
+    <ClInclude Include="src\TAGE\Physics\PhysicsWorld.h">
+      <Filter>src\TAGE\Physics</Filter>
+    </ClInclude>
+    <ClInclude Include="src\TAGE\Physics\Raycaster.h">
+      <Filter>src\TAGE\Physics</Filter>
+    </ClInclude>
     <ClInclude Include="src\TAGE\TAGE.h">
       <Filter>src\TAGE</Filter>
     </ClInclude>
@@ -249,7 +264,13 @@
     <ClInclude Include="src\TAGE\World\Components\BaseComponents.h">
       <Filter>src\TAGE\World\Components</Filter>
     </ClInclude>
+    <ClInclude Include="src\TAGE\World\Components\PhysicsComponents.h">
+      <Filter>src\TAGE\World\Components</Filter>
+    </ClInclude>
     <ClInclude Include="src\TAGE\World\Components\RenderComponents.h">
+      <Filter>src\TAGE\World\Components</Filter>
+    </ClInclude>
+    <ClInclude Include="src\TAGE\World\Components\ScriptingComponents.h">
       <Filter>src\TAGE\World\Components</Filter>
     </ClInclude>
     <ClInclude Include="src\TAGE\World\Objects\Entity.h">
@@ -267,6 +288,9 @@
     <ClInclude Include="src\TAGE\World\Systems\System_Base.h">
       <Filter>src\TAGE\World\Systems</Filter>
     </ClInclude>
+    <ClInclude Include="src\TAGE\World\Systems\System_Physics.h">
+      <Filter>src\TAGE\World\Systems</Filter>
+    </ClInclude>
     <ClInclude Include="src\TAGE\World\Systems\System_Renderer.h">
       <Filter>src\TAGE\World\Systems</Filter>
     </ClInclude>
@@ -282,8 +306,14 @@
     <ClInclude Include="src\TARE\Camera\Camera.h">
       <Filter>src\TARE\Camera</Filter>
     </ClInclude>
+    <ClInclude Include="src\TARE\Camera\EditorCamera.h">
+      <Filter>src\TARE\Camera</Filter>
+    </ClInclude>
     <ClInclude Include="src\TARE\Camera\FrustumCulling.h">
       <Filter>src\TARE\Camera</Filter>
+    </ClInclude>
+    <ClInclude Include="src\TARE\Common\Light.h">
+      <Filter>src\TARE\Common</Filter>
     </ClInclude>
     <ClInclude Include="src\TARE\Common\RenderAPI.h">
       <Filter>src\TARE\Common</Filter>
@@ -307,9 +337,6 @@
       <Filter>src\TARE\Model</Filter>
     </ClInclude>
     <ClInclude Include="src\TARE\Model\Model.h">
-      <Filter>src\TARE\Model</Filter>
-    </ClInclude>
-    <ClInclude Include="src\TARE\Model\Primitives.h">
       <Filter>src\TARE\Model</Filter>
     </ClInclude>
     <ClInclude Include="src\TARE\Shader\Shader.h">
@@ -1596,8 +1623,7 @@
     <ClInclude Include="vendor\stb\stb_image_write.h">
       <Filter>vendor\stb</Filter>
     </ClInclude>
-    <ClInclude Include="src\TARE\Camera\EditorCamera.h" />
-    <ClInclude Include="src\TARE\Common\Light.h" />
+    <ClInclude Include="src\TARE\Debug\DebugRenderer.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\Platform\DirectX11\DirectX11_RenderContext.cpp">
@@ -1660,6 +1686,18 @@
     <ClCompile Include="src\TAGE\Layers\LayerStack.cpp">
       <Filter>src\TAGE\Layers</Filter>
     </ClCompile>
+    <ClCompile Include="src\TAGE\Physics\ContactListener.cpp">
+      <Filter>src\TAGE\Physics</Filter>
+    </ClCompile>
+    <ClCompile Include="src\TAGE\Physics\PhysicsDebugRenderer.cpp">
+      <Filter>src\TAGE\Physics</Filter>
+    </ClCompile>
+    <ClCompile Include="src\TAGE\Physics\PhysicsWorld.cpp">
+      <Filter>src\TAGE\Physics</Filter>
+    </ClCompile>
+    <ClCompile Include="src\TAGE\Physics\Raycaster.cpp">
+      <Filter>src\TAGE\Physics</Filter>
+    </ClCompile>
     <ClCompile Include="src\TAGE\Utilities\UUID.cpp">
       <Filter>src\TAGE\Utilities</Filter>
     </ClCompile>
@@ -1675,6 +1713,9 @@
     <ClCompile Include="src\TAGE\World\Scene\SceneSerializer.cpp">
       <Filter>src\TAGE\World\Scene</Filter>
     </ClCompile>
+    <ClCompile Include="src\TAGE\World\Systems\System_Physics.cpp">
+      <Filter>src\TAGE\World\Systems</Filter>
+    </ClCompile>
     <ClCompile Include="src\TAGE\World\Systems\System_Renderer.cpp">
       <Filter>src\TAGE\World\Systems</Filter>
     </ClCompile>
@@ -1688,6 +1729,9 @@
       <Filter>src\TARE\Buffers</Filter>
     </ClCompile>
     <ClCompile Include="src\TARE\Camera\Camera.cpp">
+      <Filter>src\TARE\Camera</Filter>
+    </ClCompile>
+    <ClCompile Include="src\TARE\Camera\EditorCamera.cpp">
       <Filter>src\TARE\Camera</Filter>
     </ClCompile>
     <ClCompile Include="src\TARE\Common\RenderAPI.cpp">
@@ -1712,9 +1756,6 @@
       <Filter>src\TARE\Model</Filter>
     </ClCompile>
     <ClCompile Include="src\TARE\Model\Model.cpp">
-      <Filter>src\TARE\Model</Filter>
-    </ClCompile>
-    <ClCompile Include="src\TARE\Model\Primitives.cpp">
       <Filter>src\TARE\Model</Filter>
     </ClCompile>
     <ClCompile Include="src\TARE\Shader\Shader.cpp">
@@ -1747,7 +1788,7 @@
     <ClCompile Include="vendor\stb\stb_image.cpp">
       <Filter>vendor\stb</Filter>
     </ClCompile>
-    <ClCompile Include="src\TARE\Camera\EditorCamera.cpp" />
+    <ClCompile Include="src\TARE\Debug\DebugRenderer.cpp" />
   </ItemGroup>
   <ItemGroup>
     <None Include="shaders\Common\Material.glsl">
@@ -1763,6 +1804,12 @@
       <Filter>shaders\Debugger</Filter>
     </None>
     <None Include="shaders\Debugger\debug_vertex.glsl">
+      <Filter>shaders\Debugger</Filter>
+    </None>
+    <None Include="shaders\Debugger\single_color_fragment.glsl">
+      <Filter>shaders\Debugger</Filter>
+    </None>
+    <None Include="shaders\Debugger\single_color_vertex.glsl">
       <Filter>shaders\Debugger</Filter>
     </None>
     <None Include="shaders\Deferred\gbuffer_fragment.glsl">
@@ -1801,6 +1848,15 @@
     <None Include="shaders\ScreenSpace\screen_space_reflection.glsl">
       <Filter>shaders\ScreenSpace</Filter>
     </None>
+    <None Include="shaders\Shadow\point_light_shadow_fragment.glsl">
+      <Filter>shaders\Shadow</Filter>
+    </None>
+    <None Include="shaders\Shadow\point_light_shadow_geometry.glsl">
+      <Filter>shaders\Shadow</Filter>
+    </None>
+    <None Include="shaders\Shadow\point_light_shadow_vertex.glsl">
+      <Filter>shaders\Shadow</Filter>
+    </None>
     <None Include="shaders\Shadow\shadow_fragment.glsl">
       <Filter>shaders\Shadow</Filter>
     </None>
@@ -1825,12 +1881,11 @@
     <None Include="shaders\skybox_vertex.glsl">
       <Filter>shaders</Filter>
     </None>
-    <None Include="shaders\Debugger\single_color_fragment.glsl" />
-    <None Include="shaders\Debugger\single_color_vertex.glsl" />
-    <None Include="shaders\thumbnail_vertex.glsl" />
-    <None Include="shaders\thumbnail_fragment.glsl" />
-    <None Include="shaders\Shadow\point_light_shadow_fragment.glsl" />
-    <None Include="shaders\Shadow\point_light_shadow_vertex.glsl" />
-    <None Include="shaders\Shadow\point_light_shadow_geometry.glsl" />
+    <None Include="shaders\thumbnail_fragment.glsl">
+      <Filter>shaders</Filter>
+    </None>
+    <None Include="shaders\thumbnail_vertex.glsl">
+      <Filter>shaders</Filter>
+    </None>
   </ItemGroup>
 </Project>

@@ -5,7 +5,6 @@ namespace TARE {
 	TARE::TARE(int width, int height)
 	{
 		ShaderLibrary::Add("MainShader", "../Engine/shaders/main_vertex", "../Engine/shaders/main_fragment");
-		_SingleColor = ShaderLibrary::Add("SingleColor", "../Engine/shaders/Debugger/single_color_vertex", "../Engine/shaders/Debugger/single_color_fragment");
 		_Width = width;
 		_Height = height;
 

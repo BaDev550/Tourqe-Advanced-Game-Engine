@@ -32,6 +32,11 @@ struct VertexData {
 #pragma pack(pop)
 #endif
 
+struct DebugVertexData {
+	glm::vec3 Position;
+	glm::vec3 Color;
+};
+
 struct SkinedVertexData {
 	VertexData Vertex;
 	uint BoneIDs[MAX_BONE_INFLUENCES];
@@ -111,6 +116,14 @@ struct BoneAnimation {
 
 		return translation * rotation * scaling;
 	}
+};
+
+struct RaycastLine {
+	glm::vec3 from;
+	glm::vec3 to;
+	glm::vec3 color;
+	RayDrawType drawType;
+	float time;
 };
 
 struct FramebufferTextureSpecification {

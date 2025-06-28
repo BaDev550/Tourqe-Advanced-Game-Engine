@@ -46,12 +46,12 @@ namespace TAGE::Editor {
 			if (Input::IsMouseButtonJustPressed(E_MOUSE_BUTTON_LEFT) && !ImGuizmo::IsOver()) {
 				auto hoveredEntity = _ActiveScene->GetEntityByID((entt::entity)_HoveredEntityID);
 				if (hoveredEntity) {
-					if (hoveredEntity->HasComponent<MeshComponent>())
-						hoveredEntity->GetComponent<MeshComponent>().IsSelected = true;
+					if (hoveredEntity.HasComponent<MeshComponent>())
+						hoveredEntity.GetComponent<MeshComponent>().IsSelected = true;
 					_SceneHierarchyPanel->SetSelectedEntity(hoveredEntity);
 				}
 				else {
-					_SceneHierarchyPanel->SetSelectedEntity(nullptr);
+					_SceneHierarchyPanel->SetSelectedEntity({});
 				}
 			}
 		}
@@ -218,7 +218,7 @@ namespace TAGE::Editor {
 			_ViewportMouseFocused = false;
 		}
 
-		Entity* selectedEntity = _SceneHierarchyPanel->GetSelectedEntity();
+		Entity selectedEntity = _SceneHierarchyPanel->GetSelectedEntity();
 		if (selectedEntity && _GizmoType != -1)
 		{
 			ImGuizmo::SetOrthographic(false);
@@ -237,7 +237,7 @@ namespace TAGE::Editor {
 			const glm::mat4& cameraProj = _EditorCamera->GetProjectionMatrix();
 			glm::mat4 cameraView = _EditorCamera->GetViewMatrix();
 
-			auto& tc = selectedEntity->GetComponent<TransformComponent>();
+			auto& tc = selectedEntity.GetComponent<TransformComponent>();
 			glm::mat4 transform = tc.GetTransform();
 
 			bool snap = Input::IsKeyPressed(E_KEY_LEFT_SHIFT);

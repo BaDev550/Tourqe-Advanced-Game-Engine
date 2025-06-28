@@ -1,6 +1,7 @@
 #include "SceneHierarchyPanel.h"
 #include "TAGE/World/Components/BaseComponents.h"
 #include "TAGE/World/Components/RenderComponents.h"
+#include "TAGE/World/Components/PhysicsComponents.h"
 #include "TAGE/Utilities/Platform.h"
 
 #include <imgui.h>
@@ -36,7 +37,7 @@ namespace TAGE::Editor {
 			m_Context->GetRegistry().view<IdentityComponent, TransformComponent>().each(
 				[&](entt::entity entityID, IdentityComponent& id, TransformComponent& transform)
 				{
-					Entity* entity = m_Context->GetEntityByID(entityID);
+					Entity entity = m_Context->GetEntityByUUID(id.UniqeId);
 					DrawEntityNode(entity);
 				});
 
@@ -64,14 +65,14 @@ namespace TAGE::Editor {
 		ImGui::End();
 	}
 
-	void SceneHierarchyPanel::SetSelectedEntity(Entity* entity)
+	void SceneHierarchyPanel::SetSelectedEntity(Entity entity)
 	{
 		m_SelectionContext = entity;
 	}
 
-	void SceneHierarchyPanel::DrawEntityNode(Entity* entity)
+	void SceneHierarchyPanel::DrawEntityNode(Entity entity)
 	{
-		auto& tag = entity->GetComponent<IdentityComponent>().Name;
+		auto& tag = entity.GetComponent<IdentityComponent>().Name;
 		
 		ImGuiTreeNodeFlags flags = ((m_SelectionContext == entity) ? ImGuiTreeNodeFlags_Selected : 0) | ImGuiTreeNodeFlags_OpenOnArrow;
 		flags |= ImGuiTreeNodeFlags_SpanAvailWidth;
@@ -101,7 +102,7 @@ namespace TAGE::Editor {
 
 		if (entityDeleted)
 		{
-			m_SelectionContext->Destroy();
+			m_Context->DestroyEntity(entity);
 			if (m_SelectionContext == entity)
 				m_SelectionContext = {};
 		}
@@ -190,12 +191,12 @@ namespace TAGE::Editor {
 	}
 	
 	template<typename T, typename UIFunction>
-	static void DrawComponent(const std::string& name, Entity* entity, UIFunction uiFunction)
+	static void DrawComponent(const std::string& name, Entity entity, UIFunction uiFunction)
 	{
 		const ImGuiTreeNodeFlags treeNodeFlags = ImGuiTreeNodeFlags_DefaultOpen | ImGuiTreeNodeFlags_Framed | ImGuiTreeNodeFlags_SpanAvailWidth | ImGuiTreeNodeFlags_AllowItemOverlap | ImGuiTreeNodeFlags_FramePadding;
-		if (entity->HasComponent<T>())
+		if (entity.HasComponent<T>())
 		{
-			auto& component = entity->GetComponent<T>();
+			auto& component = entity.GetComponent<T>();
 			ImVec2 contentRegionAvailable = ImGui::GetContentRegionAvail();
 
 			ImGui::PushStyleVar(ImGuiStyleVar_FramePadding, ImVec2{ 4, 4 });
@@ -226,15 +227,15 @@ namespace TAGE::Editor {
 			}
 
 			if (removeComponent)
-				entity->RemoveComponent<T>();
+				entity.RemoveComponent<T>();
 		}
 	}
 
-	void SceneHierarchyPanel::DrawComponents(Entity* entity)
+	void SceneHierarchyPanel::DrawComponents(Entity entity)
 	{
-		if (entity->HasComponent<IdentityComponent>())
+		if (entity.HasComponent<IdentityComponent>())
 		{
-			auto& tag = entity->GetComponent<IdentityComponent>().Name;
+			auto& tag = entity.GetComponent<IdentityComponent>().Name;
 
 			char buffer[256];
 			memset(buffer, 0, sizeof(buffer));
@@ -257,14 +258,13 @@ namespace TAGE::Editor {
 			DisplayAddComponentEntry<MeshComponent>("Mesh");
 			DisplayAddComponentEntry<CameraComponent>("Camera");
 			DisplayAddComponentEntry<SkyboxComponent>("Skybox");
-			//DisplayAddComponentEntry<CircleRendererComponent>("Circle Renderer");
-			//DisplayAddComponentEntry<Rigidbody2DComponent>("Rigidbody 2D");
-			//DisplayAddComponentEntry<BoxCollider2DComponent>("Box Collider 2D");
-			//DisplayAddComponentEntry<CircleCollider2DComponent>("Circle Collider 2D");
-			//DisplayAddComponentEntry<TextComponent>("Text Component");
+			DisplayAddComponentEntry<RigidBodyComponent>("Rigidbody");
+			DisplayAddComponentEntry<ColliderComponent>("Collider");
 
 			ImGui::EndPopup();
 		}
+
+		ImGui::Text("Uniqe ID: %s", std::to_string(entity.GetComponent<IdentityComponent>().UniqeId).c_str());
 
 		ImGui::PopItemWidth();
 		DrawComponent<TransformComponent>("Transform", entity, [](auto& component)
@@ -357,15 +357,53 @@ namespace TAGE::Editor {
 				ImGui::DragFloat("Outer Cone", &component.Handle.outerCone, 0.1f, 0.0f, glm::radians(90.0f));
 				ImGui::Combo("Type", (int*)&component.Handle.type, "Point\0Directional\0Spot\0");
 			});
+
+		DrawComponent<RigidBodyComponent>("Rigid Body", entity, [&](auto& component)
+			{
+				if (entity.HasComponent<ColliderComponent>()) {
+					ImGui::Text("Body Pointer: 0x%p", component.Body);
+
+					const char* bodyTypeStrings[] = { "Static", "Kinematic", "Dynamic" };
+					int currentType = static_cast<int>(component.BodyType);
+					if (ImGui::Combo("Body Type", &currentType, bodyTypeStrings, IM_ARRAYSIZE(bodyTypeStrings))) {
+						component.BodyType = static_cast<PhysicsBodyType>(currentType);
+					}
+
+					if (ImGui::Button("Set Velocity")) {
+						component.SetVelocity({ 0.0f, 5.0f, 0.0f });
+					}
+				}
+				else {
+					ImGui::Text("You need to add collider component");
+				}
+			});
+
+		DrawComponent<ColliderComponent>("Collider", entity, [](auto& component)
+			{
+				const char* shapeStrings[] = { "Box", "Capsule", "Sphere", "Mesh" };
+				int currentShape = static_cast<int>(component.Shape);
+				if (ImGui::Combo("Shape", &currentShape, shapeStrings, IM_ARRAYSIZE(shapeStrings))) {
+					component.Shape = static_cast<ColliderShapeType>(currentShape);
+					component.Dirty = true;
+				}
+
+				ImGui::Checkbox("Is Trigger", reinterpret_cast<bool*>(&component.ResponseType));
+				if (component.IsTrigger())
+					component.ResponseType = CollisionResponseType::OVERLAP;
+				else
+					component.ResponseType = CollisionResponseType::BLOCK;
+
+				DrawVec3Control("Size", component.Size);
+			});
 	}
 
 	template<typename T>
 	void SceneHierarchyPanel::DisplayAddComponentEntry(const std::string& entryName) {
-		if (!m_SelectionContext->HasComponent<T>())
+		if (!m_SelectionContext.HasComponent<T>())
 		{
 			if (ImGui::MenuItem(entryName.c_str()))
 			{
-				m_SelectionContext->AddComponent<T>();
+				m_SelectionContext.AddComponent<T>();
 				ImGui::CloseCurrentPopup();
 			}
 		}

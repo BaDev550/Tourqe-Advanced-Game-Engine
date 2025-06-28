@@ -12,8 +12,10 @@ namespace TARE {
 		virtual void Unbind() const override;
 		virtual void SetLayout(const BufferLayout& layout) override { _Layout = layout; }
 		virtual const BufferLayout& GetLayout() const override { return _Layout; }
+		virtual void SetData(void* data, size_t size) override;
 	private:
 		uint _ID;
+		size_t _Size;
 		BufferLayout _Layout;
 	};
 

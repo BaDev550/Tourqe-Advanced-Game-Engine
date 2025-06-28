@@ -13,7 +13,7 @@ namespace TAGE {
 		virtual void UpdateEditor(float deltaTime) override;
 		void SetEditorCamera(const MEM::Ref<TARE::EditorCamera>& camera) { _EditorCamera = camera; }
 	private:
-		void Render(const MEM::Ref<TARE::Camera>& cam);
+		void Render(const MEM::Ref<TARE::Camera>& cam, float dt);
 		void RenderObjects();
 		void RenderShadowObject(bool point = false);
 		void RenderShadowPass(std::vector<Light>& lights);
