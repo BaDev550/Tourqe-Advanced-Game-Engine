@@ -41,14 +41,14 @@
   </ImportGroup>
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
-    <OutDir>bin\Debug-windows-x86_64\ImGuiGizmo\</OutDir>
-    <IntDir>bin-int\Debug-windows-x86_64\ImGuiGizmo\</IntDir>
+    <OutDir>..\..\..\bin\Debug-windows-x86_64\ImGuiGizmo\</OutDir>
+    <IntDir>..\..\..\bin-int\Debug-windows-x86_64\ImGuiGizmo\</IntDir>
     <TargetName>ImGuiGizmo</TargetName>
     <TargetExt>.lib</TargetExt>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
-    <OutDir>bin\Release-windows-x86_64\ImGuiGizmo\</OutDir>
-    <IntDir>bin-int\Release-windows-x86_64\ImGuiGizmo\</IntDir>
+    <OutDir>..\..\..\bin\Release-windows-x86_64\ImGuiGizmo\</OutDir>
+    <IntDir>..\..\..\bin-int\Release-windows-x86_64\ImGuiGizmo\</IntDir>
     <TargetName>ImGuiGizmo</TargetName>
     <TargetExt>.lib</TargetExt>
   </PropertyGroup>

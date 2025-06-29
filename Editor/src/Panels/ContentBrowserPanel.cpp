@@ -7,9 +7,9 @@ namespace TAGE::Editor {
 
 	ContentBrowserPanel::ContentBrowserPanel() : _CurrentDirectory(s_AssetsPath) {
 		_DirectoryIcon = TARE::Texture2D::Create();
-		_DirectoryIcon->LoadTexture("assets/textures/Icons/Folder.png");
+		_DirectoryIcon->LoadTexture("Assets/textures/Icons/Folder.png");
 		_FileIcon = TARE::Texture2D::Create();
-		_FileIcon->LoadTexture("assets/textures/Icons/File.png");
+		_FileIcon->LoadTexture("Assets/textures/Icons/File.png");
 	}
 
 	void ContentBrowserPanel::OnImGuiRender()

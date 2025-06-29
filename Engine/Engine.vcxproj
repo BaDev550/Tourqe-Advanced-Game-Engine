@@ -41,14 +41,14 @@
   </ImportGroup>
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
-    <OutDir>bin\Debug-windows-x86_64\Engine\</OutDir>
-    <IntDir>bin-int\Debug-windows-x86_64\Engine\</IntDir>
+    <OutDir>..\bin\Debug-windows-x86_64\Engine\</OutDir>
+    <IntDir>..\bin-int\Debug-windows-x86_64\Engine\</IntDir>
     <TargetName>Engine</TargetName>
     <TargetExt>.lib</TargetExt>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
-    <OutDir>bin\Release-windows-x86_64\Engine\</OutDir>
-    <IntDir>bin-int\Release-windows-x86_64\Engine\</IntDir>
+    <OutDir>..\bin\Release-windows-x86_64\Engine\</OutDir>
+    <IntDir>..\bin-int\Release-windows-x86_64\Engine\</IntDir>
     <TargetName>Engine</TargetName>
     <TargetExt>.lib</TargetExt>
   </PropertyGroup>
@@ -58,7 +58,7 @@
       <PrecompiledHeaderFile>tagepch.h</PrecompiledHeaderFile>
       <WarningLevel>Level3</WarningLevel>
       <PreprocessorDefinitions>_CRT_SECURE_NO_WARNINGS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <AdditionalIncludeDirectories>src;vendor;vendor\spdlog;vendor\GLFW\include;vendor\GLAD\include;vendor\assimp\include;vendor\imgui;vendor\ImGuizmo;vendor\glm;vendor\entt\include;vendor\yaml-cpp\include;vendor\bullet-physics\src;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>src;vendor;vendor\spdlog;vendor\GLFW\include;vendor\GLAD\include;vendor\assimp\include;vendor\imgui;vendor\ImGuizmo;vendor\glm;vendor\entt\include;vendor\yaml-cpp\include;vendor\bullet-physics\src;vendor\mono\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <DebugInformationFormat>EditAndContinue</DebugInformationFormat>
       <Optimization>Disabled</Optimization>
       <RuntimeLibrary>MultiThreadedDebugDLL</RuntimeLibrary>
@@ -71,7 +71,7 @@
       <GenerateDebugInformation>true</GenerateDebugInformation>
     </Link>
     <Lib>
-      <AdditionalDependencies>opengl32.lib;d3d11.lib;dxgi.lib;d3dcompiler.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>opengl32.lib;d3d11.lib;dxgi.lib;d3dcompiler.lib;vendor\mono\lib\Debug\libmono-static-sgen.lib;Ws2_32.lib;winmm.lib;version.lib;Bcrypt.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Lib>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
@@ -80,7 +80,7 @@
       <PrecompiledHeaderFile>tagepch.h</PrecompiledHeaderFile>
       <WarningLevel>Level3</WarningLevel>
       <PreprocessorDefinitions>_CRT_SECURE_NO_WARNINGS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <AdditionalIncludeDirectories>src;vendor;vendor\spdlog;vendor\GLFW\include;vendor\GLAD\include;vendor\assimp\include;vendor\imgui;vendor\ImGuizmo;vendor\glm;vendor\entt\include;vendor\yaml-cpp\include;vendor\bullet-physics\src;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>src;vendor;vendor\spdlog;vendor\GLFW\include;vendor\GLAD\include;vendor\assimp\include;vendor\imgui;vendor\ImGuizmo;vendor\glm;vendor\entt\include;vendor\yaml-cpp\include;vendor\bullet-physics\src;vendor\mono\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <Optimization>Full</Optimization>
       <FunctionLevelLinking>true</FunctionLevelLinking>
       <IntrinsicFunctions>true</IntrinsicFunctions>
@@ -97,11 +97,11 @@
       <OptimizeReferences>true</OptimizeReferences>
     </Link>
     <Lib>
-      <AdditionalDependencies>opengl32.lib;d3d11.lib;dxgi.lib;d3dcompiler.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>opengl32.lib;d3d11.lib;dxgi.lib;d3dcompiler.lib;vendor\mono\lib\Release\libmono-static-sgen.lib;Ws2_32.lib;winmm.lib;version.lib;Bcrypt.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Lib>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClInclude Include="src\TARE\Debug\DebugRenderer.h" />
+    <ClInclude Include="src\TAGE\Scripting\ScriptGlue.h" />
     <ClInclude Include="src\Platform\DirectX11\DirectX11_RenderContext.h" />
     <ClInclude Include="src\Platform\OpenGL\OpenGL_Buffers.h" />
     <ClInclude Include="src\Platform\OpenGL\OpenGL_Framebuffer.h" />
@@ -131,6 +131,7 @@
     <ClInclude Include="src\TAGE\Physics\PhysicsDebugRenderer.h" />
     <ClInclude Include="src\TAGE\Physics\PhysicsWorld.h" />
     <ClInclude Include="src\TAGE\Physics\Raycaster.h" />
+    <ClInclude Include="src\TAGE\Scripting\ScriptEngine.h" />
     <ClInclude Include="src\TAGE\TAGE.h" />
     <ClInclude Include="src\TAGE\Thread\ThreadWarpper.h" />
     <ClInclude Include="src\TAGE\Utilities\Logger.h" />
@@ -161,6 +162,7 @@
     <ClInclude Include="src\TARE\Common\RenderAPI.h" />
     <ClInclude Include="src\TARE\Common\RenderCommands.h" />
     <ClInclude Include="src\TARE\Common\RenderContext.h" />
+    <ClInclude Include="src\TARE\Debug\DebugRenderer.h" />
     <ClInclude Include="src\TARE\Deferred\DeferredRendering.h" />
     <ClInclude Include="src\TARE\Material\Material.h" />
     <ClInclude Include="src\TARE\Model\EndlessGrid.h" />
@@ -596,7 +598,7 @@
     <ClInclude Include="vendor\stb\stb_image_write.h" />
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="src\TARE\Debug\DebugRenderer.cpp" />
+    <ClCompile Include="src\TAGE\Scripting\ScriptGlue.cpp" />
     <ClCompile Include="src\Platform\DirectX11\DirectX11_RenderContext.cpp" />
     <ClCompile Include="src\Platform\OpenGL\OpenGL_Buffers.cpp" />
     <ClCompile Include="src\Platform\OpenGL\OpenGL_CubemapTexture.cpp" />
@@ -621,6 +623,7 @@
     <ClCompile Include="src\TAGE\Physics\PhysicsDebugRenderer.cpp" />
     <ClCompile Include="src\TAGE\Physics\PhysicsWorld.cpp" />
     <ClCompile Include="src\TAGE\Physics\Raycaster.cpp" />
+    <ClCompile Include="src\TAGE\Scripting\ScriptEngine.cpp" />
     <ClCompile Include="src\TAGE\Utilities\UUID.cpp" />
     <ClCompile Include="src\TAGE\Utilities\Utilities.cpp" />
     <ClCompile Include="src\TAGE\Window\Window.cpp" />
@@ -636,6 +639,7 @@
     <ClCompile Include="src\TARE\Common\RenderAPI.cpp" />
     <ClCompile Include="src\TARE\Common\RenderCommands.cpp" />
     <ClCompile Include="src\TARE\Common\RenderContext.cpp" />
+    <ClCompile Include="src\TARE\Debug\DebugRenderer.cpp" />
     <ClCompile Include="src\TARE\Deferred\DeferredRendering.cpp" />
     <ClCompile Include="src\TARE\Material\Material.cpp" />
     <ClCompile Include="src\TARE\Model\EndlessGrid.cpp" />

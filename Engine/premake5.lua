@@ -3,8 +3,8 @@ project "Engine"
    language "C++"
    cppdialect "C++17"
 
-   targetdir ("bin/" .. outputdir .. "/%{prj.name}")
-   objdir ("bin-int/" .. outputdir .. "/%{prj.name}")
+   targetdir ("%{wks.location}/bin/" .. outputdir .. "/%{prj.name}")
+   objdir ("%{wks.location}/bin-int/" .. outputdir .. "/%{prj.name}")
 
     pchheader "tagepch.h"
     pchsource "src/tagepch.cpp"
@@ -31,7 +31,8 @@ project "Engine"
         "%{IncludeDir.glm}",
         "%{IncludeDir.entt}",
         "%{IncludeDir.yaml}",
-        "%{IncludeDir.BulletPhysics}"
+        "%{IncludeDir.BulletPhysics}",
+        "%{IncludeDir.mono}"
    }
 
    defines 
@@ -52,12 +53,22 @@ project "Engine"
         "yaml-cpp",
         "d3d11.lib",
         "dxgi.lib",
-        "d3dcompiler.lib"
+        "d3dcompiler.lib",
+
+        "%{Library.mono}",
        }
 
    buildoptions "/utf-8"
    filter "system:windows"
        systemversion "latest"
+
+       links 
+       {
+            "%{Library.WinSock}",
+            "%{Library.Winmm}",
+            "%{Library.WinVersion}",
+            "%{Library.WinBcrypt}",
+       }
 
    filter "configurations:Debug"
        runtime "Debug"

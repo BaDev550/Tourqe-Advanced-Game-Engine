@@ -2,6 +2,7 @@
 #include "Application.h"
 #include "TAGE/Utilities/Timer.h"
 #include "TAGE/Input/Input.h"
+#include "TAGE/Scripting/ScriptEngine.h"
 
 #include "TAGE/World/Systems/System_Renderer.h"
 #include "TAGE/World/Components/RenderComponents.h"
@@ -26,6 +27,7 @@ namespace TAGE {
 		_Window->ToggleCursor(true);
 
 		Input::Init(_Window->GetGLFWWindow());
+		ScriptEngine::Init();
 
 		_ImGuiLayer = MEM::MakeScope<ImGuiLayer>();
 		PushOverlay(_ImGuiLayer.get());
@@ -37,6 +39,7 @@ namespace TAGE {
 			layer->OnDetach();
 		_LayerStack.Clear();
 		Logger::Destroy();
+		ScriptEngine::Shutdown();
 
 		LOG_WARN("Application terminated!");
 		LOG_WARN("Exiting...");

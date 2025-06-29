@@ -4,6 +4,8 @@
 #include "spdlog/spdlog.h"
 #include "TAGE/Common/TEnums.h"
 #include "spdlog/sinks/stdout_color_sinks.h"
+#define GLM_ENABLE_EXPERIMENTAL
+#include "glm/gtx/string_cast.hpp"
 #include "Memory.h"
 #include <format>
 

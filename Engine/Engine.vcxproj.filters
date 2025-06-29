@@ -64,6 +64,9 @@
     <Filter Include="src\TAGE\Physics">
       <UniqueIdentifier>{2FCD5046-1BC6-6F98-44F8-541D30504FA4}</UniqueIdentifier>
     </Filter>
+    <Filter Include="src\TAGE\Scripting">
+      <UniqueIdentifier>{FFA141AC-EB85-0202-54E6-FC5440E9EC83}</UniqueIdentifier>
+    </Filter>
     <Filter Include="src\TAGE\Thread">
       <UniqueIdentifier>{84B41CB6-F03F-8A7A-F950-0D6F655BE67A}</UniqueIdentifier>
     </Filter>
@@ -99,6 +102,9 @@
     </Filter>
     <Filter Include="src\TARE\Common">
       <UniqueIdentifier>{60EE4990-CC79-B754-D58A-3A4941951355}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="src\TARE\Debug">
+      <UniqueIdentifier>{9E66F732-8A34-EB38-73C8-5B5F5F35C79D}</UniqueIdentifier>
     </Filter>
     <Filter Include="src\TARE\Deferred">
       <UniqueIdentifier>{D85E17A4-4475-153A-8DEC-A05BF941E6C1}</UniqueIdentifier>
@@ -234,6 +240,9 @@
     <ClInclude Include="src\TAGE\Physics\Raycaster.h">
       <Filter>src\TAGE\Physics</Filter>
     </ClInclude>
+    <ClInclude Include="src\TAGE\Scripting\ScriptEngine.h">
+      <Filter>src\TAGE\Scripting</Filter>
+    </ClInclude>
     <ClInclude Include="src\TAGE\TAGE.h">
       <Filter>src\TAGE</Filter>
     </ClInclude>
@@ -323,6 +332,9 @@
     </ClInclude>
     <ClInclude Include="src\TARE\Common\RenderContext.h">
       <Filter>src\TARE\Common</Filter>
+    </ClInclude>
+    <ClInclude Include="src\TARE\Debug\DebugRenderer.h">
+      <Filter>src\TARE\Debug</Filter>
     </ClInclude>
     <ClInclude Include="src\TARE\Deferred\DeferredRendering.h">
       <Filter>src\TARE\Deferred</Filter>
@@ -1623,7 +1635,7 @@
     <ClInclude Include="vendor\stb\stb_image_write.h">
       <Filter>vendor\stb</Filter>
     </ClInclude>
-    <ClInclude Include="src\TARE\Debug\DebugRenderer.h" />
+    <ClInclude Include="src\TAGE\Scripting\ScriptGlue.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\Platform\DirectX11\DirectX11_RenderContext.cpp">
@@ -1698,6 +1710,9 @@
     <ClCompile Include="src\TAGE\Physics\Raycaster.cpp">
       <Filter>src\TAGE\Physics</Filter>
     </ClCompile>
+    <ClCompile Include="src\TAGE\Scripting\ScriptEngine.cpp">
+      <Filter>src\TAGE\Scripting</Filter>
+    </ClCompile>
     <ClCompile Include="src\TAGE\Utilities\UUID.cpp">
       <Filter>src\TAGE\Utilities</Filter>
     </ClCompile>
@@ -1742,6 +1757,9 @@
     </ClCompile>
     <ClCompile Include="src\TARE\Common\RenderContext.cpp">
       <Filter>src\TARE\Common</Filter>
+    </ClCompile>
+    <ClCompile Include="src\TARE\Debug\DebugRenderer.cpp">
+      <Filter>src\TARE\Debug</Filter>
     </ClCompile>
     <ClCompile Include="src\TARE\Deferred\DeferredRendering.cpp">
       <Filter>src\TARE\Deferred</Filter>
@@ -1788,7 +1806,7 @@
     <ClCompile Include="vendor\stb\stb_image.cpp">
       <Filter>vendor\stb</Filter>
     </ClCompile>
-    <ClCompile Include="src\TARE\Debug\DebugRenderer.cpp" />
+    <ClCompile Include="src\TAGE\Scripting\ScriptGlue.cpp" />
   </ItemGroup>
   <ItemGroup>
     <None Include="shaders\Common\Material.glsl">

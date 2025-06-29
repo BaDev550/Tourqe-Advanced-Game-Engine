@@ -24,9 +24,9 @@ namespace TAGE::Editor {
 		_ContentBrowserPanel = MEM::MakeScope<ContentBrowserPanel>();
 
 		_PlayIcon = TARE::Texture2D::Create();
-		_PlayIcon->LoadTexture("assets/textures/Icons/Play.png");
+		_PlayIcon->LoadTexture("Assets/textures/Icons/Play.png");
 		_StopIcon = TARE::Texture2D::Create();
-		_StopIcon->LoadTexture("assets/textures/Icons/Stop.png");
+		_StopIcon->LoadTexture("Assets/textures/Icons/Stop.png");
 	}
 
 	void EditorLayer::OnDetach()
