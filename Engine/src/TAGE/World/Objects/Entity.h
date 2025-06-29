@@ -47,6 +47,10 @@ namespace TAGE {
 			return GetComponent<IdentityComponent>().UniqeId;
 		}
 
+		const std::string& GetName() {
+			return GetComponent<IdentityComponent>().Name;
+		}
+
 		operator entt::entity() const { return _Handle; }
 		operator bool() const { return _Handle != entt::null; }
 		operator uint() const { return (uint)_Handle; }

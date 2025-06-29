@@ -17,10 +17,16 @@ namespace TAGE::Editor {
 
 	void EditorLayer::OnAttach()
 	{
-		_ActiveScene = MEM::MakeRef<Scene>("Test Scene - 1");
+		_EditorScene = MEM::MakeRef<Scene>("Editor Scene - 1");
+		_ActiveScene = _EditorScene;
 		_EditorCamera = MEM::MakeRef<TARE::EditorCamera>(_ActiveScene->GetWidth(), _ActiveScene->GetHeight());
 		_SceneHierarchyPanel = MEM::MakeScope<SceneHierarchyPanel>(_ActiveScene);
 		_ContentBrowserPanel = MEM::MakeScope<ContentBrowserPanel>();
+
+		_PlayIcon = TARE::Texture2D::Create();
+		_PlayIcon->LoadTexture("assets/textures/Icons/Play.png");
+		_StopIcon = TARE::Texture2D::Create();
+		_StopIcon->LoadTexture("assets/textures/Icons/Stop.png");
 	}
 
 	void EditorLayer::OnDetach()
@@ -69,14 +75,26 @@ namespace TAGE::Editor {
 			_LastViewportSize = _ViewportSize;
 		}
 
-		if (_ViewportMouseFocused && !ImGuizmo::IsUsing()) {
-			_EditorCamera->OnUpdate(dt);
-		}
-		else {
-			_EditorCamera->SetFirstMouse(true);
-		}
+		switch (_SceneState)
+		{
+		case SceneState::EDIT:
+			if (_ViewportMouseFocused && !ImGuizmo::IsUsing()) {
+				_EditorCamera->OnUpdate(dt);
+			}
+			else {
+				_EditorCamera->SetFirstMouse(true);
+			}
 
-		_ActiveScene->OnUpdateEditor(dt, _EditorCamera);
+			_ActiveScene->OnUpdateEditor(dt, _EditorCamera);
+			break;
+		case SceneState::PLAY:
+			_ActiveScene->OnUpdateRuntime(dt);
+			break;
+		case SceneState::SIMULATE:
+			break;
+		default:
+			break;
+		}
 	}
 
 	void EditorLayer::OnImGuiRender()
@@ -152,7 +170,7 @@ namespace TAGE::Editor {
 		_ContentBrowserPanel->OnImGuiRender();
 
 		ImGui::PushStyleVar(ImGuiStyleVar_WindowPadding, ImVec2{ 0, 0 });
-		ImGui::Begin("Viewport");
+		ImGui::Begin("Viewport", nullptr, ImGuiWindowFlags_NoDecoration | ImGuiWindowFlags_NoScrollbar | ImGuiWindowFlags_NoScrollWithMouse);
 		auto viewportMinRegion = ImGui::GetWindowContentRegionMin();
 		auto viewportMaxRegion = ImGui::GetWindowContentRegionMax();
 		ImVec2 size = ImGui::GetContentRegionAvail();
@@ -205,6 +223,16 @@ namespace TAGE::Editor {
 
 		ImGui::Image((ImTextureID)(void*)(uintptr_t)textureID, ImVec2{ _ViewportSize.x, _ViewportSize.y }, ImVec2{ 0, 1 }, ImVec2{ 1, 0 });
 
+		if (ImGui::BeginDragDropTarget())
+		{
+			if (const ImGuiPayload* payload = ImGui::AcceptDragDropPayload("CONTENT_BROWSER_ITEM"))
+			{
+				const wchar_t* path = (const wchar_t*)payload->Data;
+				OpenScene(path);
+			}
+			ImGui::EndDragDropTarget();
+		}
+
 		if (Input::IsKeyJustPressed(E_KEY_E)) _GizmoType = ImGuizmo::OPERATION::TRANSLATE;
 		else if (Input::IsKeyJustPressed(E_KEY_R)) _GizmoType = ImGuizmo::OPERATION::ROTATE;
 		else if (Input::IsKeyJustPressed(E_KEY_Q)) _GizmoType = ImGuizmo::OPERATION::SCALE;
@@ -219,7 +247,7 @@ namespace TAGE::Editor {
 		}
 
 		Entity selectedEntity = _SceneHierarchyPanel->GetSelectedEntity();
-		if (selectedEntity && _GizmoType != -1)
+		if (_SceneState == SceneState::EDIT && selectedEntity && _GizmoType != -1)
 		{
 			ImGuizmo::SetOrthographic(false);
 
@@ -266,12 +294,52 @@ namespace TAGE::Editor {
 		ImGui::End();
 		ImGui::PopStyleVar();
 
+		Toolbar();
+
 		ImGui::End();
 	}
+
+	void EditorLayer::Toolbar()
+	{
+		ImGui::PushStyleVar(ImGuiStyleVar_WindowPadding, ImVec2(0, 2));
+		ImGui::PushStyleVar(ImGuiStyleVar_ItemInnerSpacing, ImVec2(0, 0));
+		ImGui::PushStyleColor(ImGuiCol_Button, ImVec4(0, 0, 0, 0));
+		ImGui::PushStyleColor(ImGuiCol_ButtonHovered, ImVec4(0, 0, 0, 0));
+		ImGui::PushStyleColor(ImGuiCol_ButtonActive, ImVec4(0, 0, 0, 0));
+
+		ImGui::Begin("##toolbar", nullptr, ImGuiWindowFlags_NoDecoration | ImGuiWindowFlags_NoScrollbar | ImGuiWindowFlags_NoScrollWithMouse);
+
+		float size = ImGui::GetWindowHeight() - 30.0f;
+		ImGui::SetCursorPosX((ImGui::GetWindowContentRegionMax().x * 0.5f) - (size * 0.5f));
+
+		MEM::Ref<TARE::Texture2D> icon = _SceneState == SceneState::EDIT ? _PlayIcon : _StopIcon;
+		if (ImGui::ImageButton("PlayStop", (ImTextureID)icon->GetID(), ImVec2(size, size), ImVec2(0, 0), ImVec2(1, 1))) {
+			if (_SceneState == SceneState::EDIT)
+				OnScenePlay();
+			else if (_SceneState == SceneState::PLAY)
+				OnSceneStop();
+		}
+
+		ImGui::PopStyleVar(2);
+		ImGui::PopStyleColor(3);
+		ImGui::End();
+	}
+
 	void EditorLayer::OnEvent(Event& event)
 	{
 		EventDispatcher dispatcher(event);
 		dispatcher.Dispatch<KeyPressedEvent>(BIND_EVENT_FN(EditorLayer::OnKeyPressed));
+	}
+
+	void EditorLayer::OnDuplicateEntity()
+	{
+		if (_SceneState != SceneState::EDIT)
+			return;
+
+		Entity selectedE = _SceneHierarchyPanel->GetSelectedEntity();
+		if (selectedE) {
+			_EditorScene->DuplicateEntity(selectedE);
+		}
 	}
 
 	bool EditorLayer::OnKeyPressed(KeyPressedEvent& e)
@@ -306,6 +374,11 @@ namespace TAGE::Editor {
 				OpenScene();
 			break;
 		}
+		case E_KEY_D: {
+			if (control)
+				OnDuplicateEntity();
+			break;
+		}
 
 		default:
 			break;
@@ -330,12 +403,30 @@ namespace TAGE::Editor {
 	{
 		std::string filepath = Platform::FileDialog::OpenFile("TAGE Scene (*.tage)\0*.tage\0");
 		if (!filepath.empty()) {
-			_ActiveScene = MEM::MakeRef<Scene>("New Scene");
-			_ActiveScene->OnResize((uint)_ViewportSize.x, (uint)_ViewportSize.y);
-			_SceneHierarchyPanel->SetContext(_ActiveScene);
+			OpenScene(filepath);
+		}
+	}
 
-			SceneSerializer serializer(_ActiveScene);
-			serializer.Deserialize(filepath);
+	void EditorLayer::OpenScene(const std::filesystem::path& path)
+	{
+		if (_SceneState != SceneState::EDIT)
+			OnSceneStop();
+
+		if (path.extension().string() != ".tage")
+		{
+			LOG_WARN("Could not load {0} - not a scene file", path.filename().string());
+			return;
+		}
+
+		MEM::Ref<Scene> newScene = MEM::MakeRef<Scene>(path.stem().string());
+		SceneSerializer serializer(newScene);
+		if (serializer.Deserialize(path.string()))
+		{
+			_EditorScene = newScene;
+			_EditorScene->OnResize((uint)_ViewportSize.x, (uint)_ViewportSize.y);
+			_SceneHierarchyPanel->SetContext(_EditorScene);
+
+			_ActiveScene = newScene;
 		}
 	}
 
@@ -346,5 +437,23 @@ namespace TAGE::Editor {
 			SceneSerializer serializer(_ActiveScene);
 			serializer.Serialize(filepath);
 		}
+	}
+
+	void EditorLayer::OnScenePlay()
+	{
+		_SceneState = SceneState::PLAY;
+
+		_ActiveScene = Scene::Copy(_EditorScene);
+		_ActiveScene->OnRuntimeStart();
+		_SceneHierarchyPanel->SetContext(_ActiveScene);
+	}
+
+	void EditorLayer::OnSceneStop()
+	{
+		_SceneState = SceneState::EDIT;
+
+		_ActiveScene->OnRuntimeStop();
+		_ActiveScene = _EditorScene;
+		_SceneHierarchyPanel->SetContext(_ActiveScene);
 	}
 }

@@ -9,6 +9,10 @@ namespace TAGE {
 		System_Physics(Physics::PhysicsWorld* World);
 		void Update(float deltaTime) override;
 		void UpdateEditor(float deltaTime) override;
+
+		void SetWorld(Physics::PhysicsWorld* World) {
+			_World = World;
+		}
 	private:
 		Physics::PhysicsWorld* _World;
 

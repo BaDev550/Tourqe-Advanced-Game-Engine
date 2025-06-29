@@ -15,6 +15,8 @@ namespace TAGE {
 	public:
 		Scene(const std::string& name);
 
+		static MEM::Ref<Scene> Copy(MEM::Ref<Scene> other);
+
 		Entity CreateEntity(const std::string& name);
 		Entity CreateEntityWithUUID(const std::string& name, UUID ID);
 
@@ -24,9 +26,10 @@ namespace TAGE {
 		Entity GetPrimaryCamera();
 
 		void DestroyEntity(Entity entity);
+		void DuplicateEntity(Entity entity);
 
-		void OnRuntimeStart() {}
-		void OnRuntimeStop() {}
+		void OnRuntimeStart();
+		void OnRuntimeStop();
 		void OnUpdateRuntime(float DeltaTime);
 		void OnUpdateEditor(float DeltaTime, const MEM::Ref<TARE::EditorCamera>& camera);
 		void OnResize(uint width, uint height) { _Width = width; _Height = height; }

@@ -13,5 +13,7 @@ namespace TAGE {
 			InstantiateScript = []() { return static_cast<ScriptableEntity*>(new T()); };
 			DestroyScript = [](NativeScriptComponent* nsc) { delete nsc->Instance; nsc->Instance = nullptr; };
 		}
+
+		NativeScriptComponent(const NativeScriptComponent&) = default;
 	};
 }

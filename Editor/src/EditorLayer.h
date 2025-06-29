@@ -37,16 +37,24 @@ namespace TAGE::Editor {
 		void OnUpdate(float dt) override;
 		virtual void OnImGuiRender() override;
 		virtual void OnEvent(Event& event) override;
+		void OnDuplicateEntity();
 	private:
 		bool OnKeyPressed(KeyPressedEvent& e);
 
 		void NewScene();
 		void OpenScene();
+		void OpenScene(const std::filesystem::path&);
 		void SaveSceneAs();
+
+		void OnScenePlay();
+		void OnSceneStop();
+
+		void Toolbar();
 	private:
 		Entity* _SelectedObject;
 		MEM::Ref<TARE::EditorCamera> _EditorCamera;
 		MEM::Ref<Scene> _ActiveScene;
+		MEM::Ref<Scene> _EditorScene;
 
 		bool _ViewportFocused = false, _ViewportHovered = false, _ViewportMouseFocused = true;
 		glm::vec2 _ViewportSize = { 0.0f, 0.0f };
@@ -60,6 +68,9 @@ namespace TAGE::Editor {
 
 		MEM::Scope<SceneHierarchyPanel> _SceneHierarchyPanel;
 		MEM::Scope<ContentBrowserPanel> _ContentBrowserPanel;
+
+		MEM::Ref<TARE::Texture2D> _PlayIcon;
+		MEM::Ref<TARE::Texture2D> _StopIcon;
 	};
 
 }

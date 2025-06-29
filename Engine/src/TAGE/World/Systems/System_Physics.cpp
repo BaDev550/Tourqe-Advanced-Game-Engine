@@ -22,25 +22,6 @@ namespace TAGE {
 			auto& rb = physicsEntity.GetComponent<RigidBodyComponent>();
 			auto& transform = physicsEntity.GetComponent<TransformComponent>();
 
-			btTransform trans;
-			rb.Body->getMotionState()->getWorldTransform(trans);
-			transform.Position = Physics::Utils::BtToGlm(trans.getOrigin());
-			transform.Rotation = Physics::Utils::BtToGlm(trans.getRotation());
-		}
-	}
-
-	void System_Physics::UpdateEditor(float deltaTime)
-	{
-		_World->StepSimulation(deltaTime);
-
-		UpdateDirty();
-
-		auto view = _Scene->GetEntitiesWith<RigidBodyComponent>();
-		for (auto entity : view) {
-			auto physicsEntity = _Scene->GetEntityByID(entity);
-			auto& rb = physicsEntity.GetComponent<RigidBodyComponent>();
-			auto& transform = physicsEntity.GetComponent<TransformComponent>();
-
 			if (rb.BodyType == PhysicsBodyType::STATIC || rb.BodyType == PhysicsBodyType::KINEMATIC) {
 				glm::vec3 pos = transform.Position;
 				glm::quat rot = transform.Rotation;
@@ -52,7 +33,7 @@ namespace TAGE {
 				rb.Body->getMotionState()->setWorldTransform(BTtransform);
 				rb.Body->setWorldTransform(BTtransform);
 			}
-			
+
 			if (rb.BodyType == PhysicsBodyType::DYNAMIC) {
 				btTransform trans;
 				rb.Body->getMotionState()->getWorldTransform(trans);
@@ -60,7 +41,29 @@ namespace TAGE {
 				transform.Rotation = Physics::Utils::BtToGlm(trans.getRotation());
 			}
 
-		} // TESTING
+		}
+	}
+
+	void System_Physics::UpdateEditor(float deltaTime)
+	{
+		UpdateDirty();
+
+		auto view = _Scene->GetEntitiesWith<RigidBodyComponent>();
+		for (auto entity : view) {
+			auto physicsEntity = _Scene->GetEntityByID(entity);
+			auto& rb = physicsEntity.GetComponent<RigidBodyComponent>();
+			auto& transform = physicsEntity.GetComponent<TransformComponent>();
+			glm::vec3 pos = transform.Position;
+			glm::quat rot = transform.Rotation;
+
+			btTransform BTtransform;
+			BTtransform.setOrigin(Physics::Utils::GlmToBt(pos));
+			BTtransform.setRotation(Physics::Utils::GlmToBt(rot));
+
+			rb.SetVelocity({ 0,0,0 });
+			rb.Body->getMotionState()->setWorldTransform(BTtransform);
+			rb.Body->setWorldTransform(BTtransform);
+		}
 	}
 
 	void System_Physics::RegisterRigidBody(Entity entityToRegister)

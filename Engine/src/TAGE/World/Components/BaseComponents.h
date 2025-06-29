@@ -15,6 +15,7 @@ namespace TAGE {
 		std::vector<const char*> Tags;
 
 		IdentityComponent(const std::string& name = "UNDEFINED") : Name(name) {}
+		IdentityComponent(const IdentityComponent&) = default;
 		IdentityComponent(const std::string& name, UUID id) : Name(name), UniqeId(id) {}
 	};
 
@@ -29,5 +30,7 @@ namespace TAGE {
 			glm::mat4 scale = glm::scale(glm::mat4(1.0f), Scale);
 			return translation * rotation * scale;
 		}
+
+		TransformComponent(const TransformComponent&) = default;
 	};
 }

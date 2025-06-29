@@ -93,7 +93,7 @@ namespace TAGE {
 
 	static void SerializeEntity(YAML::Emitter& out, Entity entity) {
 		out << YAML::BeginMap;
-		out << YAML::Key << "Entity" << YAML::Value << (uint)entity;
+		out << YAML::Key << "Entity" << YAML::Value << entity.GetUUID();
 
 		if (entity.HasComponent<IdentityComponent>()) {
 			out << YAML::Key << "IdentityComponent";
@@ -237,16 +237,17 @@ namespace TAGE {
 		auto entities = data["Entities"];
 		if (entities) {
 			for (auto entity : entities) {
-				uint64 entityID = entity["Entity"].as<uint64>();
-
 				std::string name;
+				uint64 uuid = entity["Entity"].as<uint64>();
+
 				auto IdentityComponent = entity["IdentityComponent"];
-				if (IdentityComponent)
+				if (IdentityComponent) {
 					name = IdentityComponent["Name"].as<std::string>();
+				}
 
-				LOG_TRACE("Deserializing entity with ID: {}, Name: {}", entityID, name);
+				LOG_TRACE("Deserializing entity with ID: {}, Name: {}", uuid, name);
 
-				Entity& deserializedEntity = _Scene->CreateEntity(name);
+				Entity& deserializedEntity = _Scene->CreateEntityWithUUID(name, uuid);
 				
 				auto transformComponent = entity["TransformComponent"];
 				if (transformComponent) {

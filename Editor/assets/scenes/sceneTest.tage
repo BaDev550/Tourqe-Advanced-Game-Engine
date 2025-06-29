@@ -1,0 +1,31 @@
+Scene: Editor Scene - 1
+Entities:
+  - Entity: 507271514089303050
+    IdentityComponent:
+      Name: Empty Entity
+    TransformComponent:
+      Position: [-4.55395031, 0, 0]
+      Rotation: [-4.94085652e-05, 0.692898631, 4.74805347e-05, 0.721035004]
+      Scale: [0.999987483, 0.999998868, 0.999991775]
+    CameraComponent:
+      Camera:
+        AspectRatio: 1.77777779
+        FOV: 45
+        NearClip: 0.0500000007
+        FarClip: 250
+      IsActive: true
+  - Entity: 2713956064812098954
+    IdentityComponent:
+      Name: Empty Entity
+    TransformComponent:
+      Position: [0, 2.20475936, 0]
+      Rotation: [0, 0, 0, 1]
+      Scale: [1, 1, 1]
+    MeshComponent:
+      MeshPath: E:\TAGE\Editor\assets\models\mario_2\mario_2.obj
+    RigidBodyComponent:
+      BodyType: 1
+    ColliderComponent:
+      Shape: 0
+      Size: [1, 1, 1]
+      ResponseType: 2

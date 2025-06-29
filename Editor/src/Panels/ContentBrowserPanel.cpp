@@ -65,6 +65,14 @@ namespace TAGE::Editor {
 				ImGui::ImageButton("Asset", (ImTextureID)iconID, ImVec2(thumbnailSize, thumbnailSize));
 			}
 
+			if (ImGui::BeginDragDropSource())
+			{
+				std::filesystem::path relativePath(path);
+				const wchar_t* itemPath = relativePath.c_str();
+				ImGui::SetDragDropPayload("CONTENT_BROWSER_ITEM", itemPath, (wcslen(itemPath) + 1) * sizeof(wchar_t));
+				ImGui::EndDragDropSource();
+			}
+
 			if (ImGui::IsItemHovered() && ImGui::IsMouseDoubleClicked(ImGuiMouseButton_Left)) {
 				if (directoryEntry.is_directory())
 					_CurrentDirectory /= path.filename();

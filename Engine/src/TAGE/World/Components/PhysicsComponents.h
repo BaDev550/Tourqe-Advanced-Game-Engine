@@ -14,12 +14,14 @@ namespace TAGE {
 		bool Dirty = false;
 
 		ColliderComponent() = default;
+		ColliderComponent(const ColliderComponent&) = default;
 
 		bool IsTrigger() const { return ResponseType == CollisionResponseType::OVERLAP; }
 	};
 
 	struct RigidBodyComponent {
 		RigidBodyComponent() = default;
+		RigidBodyComponent(const RigidBodyComponent&) = default;
 
 		void AddForce(const glm::vec3& force) {
 			Body->activate();
