@@ -1,0 +1,58 @@
+Scene: sceneTest
+Entities:
+  - Entity: 10340457103610555485
+    IdentityComponent:
+      Name: Empty Entity
+    TransformComponent:
+      Position: [0, 0, 0]
+      Rotation: [-0.671423137, -0.172754094, 0.129736334, 0.708883286]
+      Scale: [0.999997437, 0.999999285, 0.999996841]
+    LightComponent:
+      Type: 1
+      Color: [1, 1, 1]
+      Range: 10
+      Intensity: 10
+  - Entity: 15974927434579312431
+    IdentityComponent:
+      Name: Sponza
+    TransformComponent:
+      Position: [0, 0, 0]
+      Rotation: [0, 0, 0, 1]
+      Scale: [0.00999999978, 0.00999999978, 0.00999999978]
+    MeshComponent:
+      MeshPath: E:\TAGE\Editor\Assets\models\Sponza\Sponza.gltf
+    RigidBodyComponent:
+      BodyType: 0
+    ColliderComponent:
+      Shape: 0
+      Size: [15, 1, 15]
+      ResponseType: 2
+  - Entity: 2713956064812098954
+    IdentityComponent:
+      Name: Empty Entity
+    TransformComponent:
+      Position: [0, 2.20475936, 0]
+      Rotation: [0, 0, 0, 1]
+      Scale: [1, 1, 1]
+    MeshComponent:
+      MeshPath: E:\TAGE\Editor\assets\models\mario_2\mario_2.obj
+    RigidBodyComponent:
+      BodyType: 1
+    ColliderComponent:
+      Shape: 0
+      Size: [1, 1, 1]
+      ResponseType: 2
+  - Entity: 507271514089303050
+    IdentityComponent:
+      Name: Empty Entity
+    TransformComponent:
+      Position: [-5.63512468, 1.94642627, -0.0430465229]
+      Rotation: [-4.94083361e-05, 0.692898631, 4.74803128e-05, 0.721035004]
+      Scale: [0.999982119, 0.999998868, 0.999991775]
+    CameraComponent:
+      Camera:
+        AspectRatio: 1.77777779
+        FOV: 90
+        NearClip: 0.0500000007
+        FarClip: 250
+      IsActive: true

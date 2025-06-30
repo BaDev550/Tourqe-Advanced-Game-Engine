@@ -18,6 +18,11 @@ namespace TAGE {
 			Handle = MEM::MakeRef<TARE::Model>();
 			Handle->LoadFromFile(modelpath);
 		}
+
+		void LoadMesh(const std::string& meshPath) {
+			Handle.reset(new TARE::Model());
+			Handle->LoadFromFile(meshPath);
+		}
 	};
 
 	struct LightComponent {

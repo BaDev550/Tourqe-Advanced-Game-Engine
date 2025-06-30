@@ -10,21 +10,43 @@ extern "C" {
 	typedef struct _MonoMethod MonoMethod;
 	typedef struct _MonoAssembly MonoAssembly;
 	typedef struct _MonoImage MonoImage;
+	typedef struct _MonoClassField MonoClassField;
 }
 
 namespace TAGE {
+	enum class ScriptFieldType : uint8 {
+		None = 0,
+		Float, Double,
+		Byte, Short, Int, Long, Bool, Char,
+		UShort, UInt, ULong,
+
+		Vector2, Vector3, Vector4,
+		Entity
+	};
+
+	struct ScriptField {
+		std::string Name;
+		ScriptFieldType Type;
+		MonoClassField* ClassField;
+	};
+
 	class ScriptClass {
 	public:
 		ScriptClass() = default;
-		ScriptClass(const std::string& classNamespace, const std::string& className);
+		ScriptClass(const std::string& classNamespace, const std::string& className, bool isCore = false);
 
 		MonoObject* Instantiate();
 		MonoObject* InvokeMethod(MonoObject* instance, MonoMethod* method, void** param = nullptr);
 		MonoMethod* GetMethod(const std::string& methodName, int parameterCount);
+
+		const std::map<std::string, ScriptField>& GetFields() { return _Fields; }
 	private:
 		std::string _ClassNamespace;
 		std::string _ClassName;
+		std::map<std::string, ScriptField> _Fields;
 		MonoClass* _MonoClass = nullptr;
+
+		friend class ScriptEngine;
 	};
 
 	class Scene;
@@ -37,6 +59,25 @@ namespace TAGE {
 		void InvokeOnCreate();
 		void InvokeOnUpdate(float dt);
 		void InvokeOnFixedUpdate(float dt);
+
+		MEM::Ref<ScriptClass> GetScriptClass() { return _ScriptClass; }
+
+		template<typename T>
+		T GetFieldValue(const std::string& name) {
+			bool success = GetFieldValueInternal(name, _FieldValueBuffer);
+			if (!success)
+				return T();
+
+			return *(T*)_FieldValueBuffer;
+		}
+
+		template<typename T>
+		void SetFieldValue(const std::string& name, const T& value) {
+			SetFieldValueInternal(name, &value);
+		}
+	private:
+		bool GetFieldValueInternal(const std::string& name, void* buffer);
+		bool SetFieldValueInternal(const std::string& name, const void* value);
 	private:
 		MEM::Ref<ScriptClass> _ScriptClass;
 		MonoObject* _Instance = nullptr;
@@ -45,6 +86,8 @@ namespace TAGE {
 		MonoMethod* _OnCreateMethod = nullptr;
 		MonoMethod* _OnUpdateMethod = nullptr;
 		MonoMethod* _OnFixedUpdateMethod = nullptr;
+
+		inline static char _FieldValueBuffer[8];
 	};
 
 	class ScriptEngine
@@ -54,6 +97,8 @@ namespace TAGE {
 		static void Shutdown();
 
 		static void LoadAssembly(const std::filesystem::path& filePath);
+		static void LoadAppAssembly(const std::filesystem::path& filePath);
+
 		static void OnRuntimeStart(Scene* scene);
 		static void OnRuntimeStop();
 		static void OnCreateEntity(Entity entity);
@@ -64,12 +109,13 @@ namespace TAGE {
 		static MonoImage* GetCoreAssemblyImage();
 		static bool EntityClassExists(const std::string& fullClassName);
 		static std::unordered_map<std::string, MEM::Ref<ScriptClass>> GetEntityClasses();
+		static MEM::Ref<ScriptInstance> GetEntityScriptInstance(UUID uuid);
 	private:
 		static void InitMono();
 		static void DestroyMono();
 
 		static MonoObject* InstantiateClass(MonoClass* monoClass);
-		static void LoadAssemblyClasses(MonoAssembly* assembly);
+		static void LoadAssemblyClasses();
 
 		friend class ScriptClass;
 		friend class ScriptGlue;

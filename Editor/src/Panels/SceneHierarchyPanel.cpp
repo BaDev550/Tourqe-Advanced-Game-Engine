@@ -276,10 +276,10 @@ namespace TAGE::Editor {
 				DrawVec3Control("Scale", component.Scale, 1.0f);
 			});
 
-		DrawComponent<ScriptComponent>("Script", entity, [](auto& component)
+		DrawComponent<ScriptComponent>("Script", entity, [entity](auto& component) mutable
 			{
 				bool scriptClassExist = ScriptEngine::EntityClassExists(component.Name);
-
+				
 				static char buffer[64];
 				strcpy(buffer, component.Name.c_str());
 
@@ -288,6 +288,28 @@ namespace TAGE::Editor {
 
 				if (ImGui::InputText("Class", buffer, sizeof(buffer))) {
 					component.Name = buffer;
+				}
+
+				MEM::Ref<ScriptInstance> scriptInstance = ScriptEngine::GetEntityScriptInstance(entity.GetUUID());
+				if (scriptInstance) {
+					const auto& fields = scriptInstance->GetScriptClass()->GetFields();
+					for (const auto& [name, field] : fields) {
+						if (field.Type == ScriptFieldType::Float) 
+						{
+							float data = scriptInstance->GetFieldValue<float>(name);
+							if (ImGui::DragFloat(name.c_str(), &data)) {
+								scriptInstance->SetFieldValue<float>(name, data);
+							}
+						}
+
+						if (field.Type == ScriptFieldType::Bool)
+						{
+							bool data = scriptInstance->GetFieldValue<bool>(name);
+							if (ImGui::Checkbox(name.c_str(), &data)) {
+								scriptInstance->SetFieldValue<bool>(name, data);
+							}
+						}
+					}
 				}
 
 				if (!scriptClassExist)
@@ -313,8 +335,26 @@ namespace TAGE::Editor {
 						if (!component.Handle)
 							component.Handle = MEM::MakeRef<TARE::Model>();
 
-						component.Handle->LoadFromFile(selectedMesh);
+						component.LoadMesh(selectedMesh);
 					}
+				}
+
+				if (ImGui::BeginDragDropTarget())
+				{
+					if (const ImGuiPayload* payload = ImGui::AcceptDragDropPayload("CONTENT_BROWSER_ITEM"))
+					{
+						const wchar_t* path = static_cast<const wchar_t*>(payload->Data);
+						std::filesystem::path fPath(path);
+
+						if (fPath.extension() == L".obj" || fPath.extension() == L".fbx") {
+							if (!component.Handle)
+								component.Handle = MEM::MakeRef<TARE::Model>();
+
+							component.LoadMesh(fPath.string());
+							LOG_INFO("Path: {}", fPath.string());
+						}
+					}
+					ImGui::EndDragDropTarget();
 				}
 
 				ImGui::Checkbox("Visible", &component.IsVisible);
