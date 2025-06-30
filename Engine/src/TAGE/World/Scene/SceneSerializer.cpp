@@ -193,6 +193,14 @@ namespace TAGE {
 			out << YAML::EndMap;
 		}
 
+		if (entity.HasComponent<ScriptComponent>()) {
+			out << YAML::Key << "ScriptComponent";
+			out << YAML::BeginMap;
+			auto& sc = entity.GetComponent<ScriptComponent>();
+			out << YAML::Key << "Class" << YAML::Value << sc.Name;
+			out << YAML::EndMap;
+		}
+
 		out << YAML::EndMap;
 	}
 
@@ -316,6 +324,12 @@ namespace TAGE {
 
 					_Scene->GetPhysicsSystem().DestroyPhysics(deserializedEntity);
 					_Scene->GetPhysicsSystem().RegisterRigidBody(deserializedEntity);
+				}
+
+				auto scriptComponent = entity["ScriptComponent"];
+				if (scriptComponent) {
+					auto className = scriptComponent["Class"].as<std::string>();
+					auto& script = deserializedEntity.AddOrReplaceComponent<ScriptComponent>(className);
 				}
 			}
 		}

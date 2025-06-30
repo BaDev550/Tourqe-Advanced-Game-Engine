@@ -16,4 +16,12 @@ namespace TAGE {
 
 		NativeScriptComponent(const NativeScriptComponent&) = default;
 	};
+
+	struct ScriptComponent {
+		std::string Name;
+
+		ScriptComponent() = default;
+		ScriptComponent(const std::string& name) : Name(name) {}
+		ScriptComponent(const ScriptComponent&) = default;
+	};
 }

@@ -47,13 +47,13 @@ namespace TAGE
 		_ScrollDelta = 0.0f;
 	}
 
-	bool Input::IsKeyPressed(int key) { return _KeyStates[key]; }
-	bool Input::IsKeyJustPressed(int key) { return _KeyStates[key] && !_PrevKeyStates[key]; }
-	bool Input::IsKeyJustReleased(int key) { return !_KeyStates[key] && _PrevKeyStates[key]; }
+	bool Input::IsKeyPressed(KeyCode key) { return _KeyStates[key]; }
+	bool Input::IsKeyJustPressed(KeyCode key) { return _KeyStates[key] && !_PrevKeyStates[key]; }
+	bool Input::IsKeyJustReleased(KeyCode key) { return !_KeyStates[key] && _PrevKeyStates[key]; }
 
-	bool Input::IsMouseButtonPressed(int button) { return _MouseButtonStates[button]; }
-	bool Input::IsMouseButtonJustPressed(int button) { return _MouseButtonStates[button] && !_PrevMouseButtonStates[button]; }
-	bool Input::IsMouseButtonJustReleased(int button) { return !_MouseButtonStates[button] && _PrevMouseButtonStates[button]; }
+	bool Input::IsMouseButtonPressed(MouseCode button) { return _MouseButtonStates[button]; }
+	bool Input::IsMouseButtonJustPressed(MouseCode button) { return _MouseButtonStates[button] && !_PrevMouseButtonStates[button]; }
+	bool Input::IsMouseButtonJustReleased(MouseCode button) { return !_MouseButtonStates[button] && _PrevMouseButtonStates[button]; }
 
 	glm::vec2 Input::GetMousePosition() { return _MousePos; }
 	glm::vec2 Input::GetMouseDelta() { return _MouseDelta; }
@@ -67,7 +67,7 @@ namespace TAGE
 		_ScrollDelta = (float)yoffset;
 	}
 
-	void Input::BindAction(const std::string& name, int key)
+	void Input::BindAction(const std::string& name, KeyCode key)
 	{
 		_ActionMap[name] = key;
 	}

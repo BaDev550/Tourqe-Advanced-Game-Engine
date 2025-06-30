@@ -14,13 +14,13 @@ namespace TAGE {
 		static void Init(GLFWwindow* window);
 		static void Update();
 
-		static bool IsKeyPressed(int key);
-		static bool IsKeyJustPressed(int key);
-		static bool IsKeyJustReleased(int key);
+		static bool IsKeyPressed(KeyCode key);
+		static bool IsKeyJustPressed(KeyCode key);
+		static bool IsKeyJustReleased(KeyCode key);
 
-		static bool IsMouseButtonPressed(int button);
-		static bool IsMouseButtonJustPressed(int button);
-		static bool IsMouseButtonJustReleased(int button);
+		static bool IsMouseButtonPressed(MouseCode button);
+		static bool IsMouseButtonJustPressed(MouseCode button);
+		static bool IsMouseButtonJustReleased(MouseCode button);
 
 		static glm::vec2 GetMousePosition();
 		static glm::vec2 GetMouseDelta();
@@ -29,7 +29,7 @@ namespace TAGE {
 
 		static float GetScrollDelta();
 
-		static void BindAction(const std::string& name, int key);
+		static void BindAction(const std::string& name, KeyCode key);
 		static bool IsActionPressed(const std::string& name);
 
 	private:

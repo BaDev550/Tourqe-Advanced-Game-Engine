@@ -1636,6 +1636,7 @@
       <Filter>vendor\stb</Filter>
     </ClInclude>
     <ClInclude Include="src\TAGE\Scripting\ScriptGlue.h" />
+    <ClInclude Include="src\TAGE\World\Components\Components.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\Platform\DirectX11\DirectX11_RenderContext.cpp">

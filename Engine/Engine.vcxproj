@@ -142,6 +142,7 @@
     <ClInclude Include="src\TAGE\Utilities\UUID.h" />
     <ClInclude Include="src\TAGE\Window\Window.h" />
     <ClInclude Include="src\TAGE\World\Components\BaseComponents.h" />
+    <ClInclude Include="src\TAGE\World\Components\Components.h" />
     <ClInclude Include="src\TAGE\World\Components\PhysicsComponents.h" />
     <ClInclude Include="src\TAGE\World\Components\RenderComponents.h" />
     <ClInclude Include="src\TAGE\World\Components\ScriptingComponents.h" />

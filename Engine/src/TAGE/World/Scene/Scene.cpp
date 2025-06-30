@@ -1,39 +1,56 @@
 #include "tagepch.h"
 #include "Scene.h"
 #include "TAGE/World/Objects/Entity.h"
-#include "TAGE/World/Components/BaseComponents.h"
-#include "TAGE/World/Components/RenderComponents.h"
-#include "TAGE/World/Components/PhysicsComponents.h"
-#include "TAGE/World/Components/ScriptingComponents.h"
+#include "TAGE/World/Components/Components.h"
+#include "TAGE/Scripting/ScriptEngine.h"
 #include "TAGE/Application/Application.h"
 
 namespace TAGE {
 	Scene::Scene(const std::string& name) : _Name(name) {
+		_PhysicsWorld = new Physics::PhysicsWorld();
 		_RendererSystem = MEM::MakeRef<System_Renderer>(Application::Get()->GetRenderer());
-		_PhysicsSystem = MEM::MakeRef<System_Physics>(&_PhysicsWorld);
+		_PhysicsSystem = MEM::MakeRef<System_Physics>(_PhysicsWorld);
 		_RendererSystem->SetActiveScene(this);
 		_PhysicsSystem->SetActiveScene(this);
 	}
 
-	template<typename Component>
-	static void CopyComponent(entt::registry& dst, entt::registry& src, const std::unordered_map<UUID, entt::entity>& entites)
-	{
-		auto view = src.view<Component>();
-		for (auto e : view) {
-			UUID uuid = src.get<IdentityComponent>(e).UniqeId;
-			ASSERT_NOMSG(entites.find(uuid) != entites.end());
-			entt::entity dstEntityID = entites.at(uuid);
-
-			auto& component = src.get<Component>(e);
-			dst.emplace_or_replace<Component>(dstEntityID, component);
-		}
+	Scene::~Scene() {
+		delete _PhysicsWorld;
 	}
 
-	template<typename Component>
+	template<typename... Component>
+	static void CopyComponent(entt::registry& dst, entt::registry& src, const std::unordered_map<UUID, entt::entity>& entites)
+	{
+		([&]() {
+			auto view = src.view<Component>();
+			for (auto e : view) {
+				entt::entity dstEntityID = entites.at(src.get<IdentityComponent>(e).UniqeId);
+
+				auto& component = src.get<Component>(e);
+				dst.emplace_or_replace<Component>(dstEntityID, component);
+			}
+			}(), ...);
+	}
+
+	template<typename... Component>
+	static void CopyComponent(ComponentGroup<Component...>, entt::registry& dst, entt::registry& src, const std::unordered_map<UUID, entt::entity>& entites)
+	{
+		CopyComponent<Component...>(dst, src, entites);
+	}
+
+	template<typename... Component>
 	static void CopyComponentIfExists(Entity dst, Entity src)
 	{
-		if (src.HasComponent<Component>())
-			dst.AddOrReplaceComponent<Component>(src.GetComponent<Component>());
+		([&]() {
+			if (src.HasComponent<Component>())
+				dst.AddOrReplaceComponent<Component>(src.GetComponent<Component>());
+			}(), ...);
+	}
+
+	template<typename... Component>
+	static void CopyComponentIfExists(ComponentGroup<Component...>, Entity dst, Entity src)
+	{
+		CopyComponentIfExists<Component...>(dst, src);
 	}
 
 	Entity Scene::CreateEntity(const std::string& name)
@@ -60,7 +77,28 @@ namespace TAGE {
 
 	void Scene::OnUpdateRuntime(float DeltaTime)
 	{
+		_FixedTimeAccumulator += DeltaTime;
+
+		while (_FixedTimeAccumulator >= _FixedTimeStep)
 		{
+			auto view = _Registry.view<ScriptComponent>();
+			for (auto e : view) {
+				Entity entity = { e, this };
+				ScriptEngine::OnFixedUpdateEntity(entity, _FixedTimeStep);
+			}
+
+			_PhysicsSystem->Update(_FixedTimeStep);
+
+			_FixedTimeAccumulator -= _FixedTimeStep;
+		}
+
+		{
+			auto view = _Registry.view<ScriptComponent>();
+			for (auto e : view) {
+				Entity entity = { e, this };
+				ScriptEngine::OnUpdateEntity(entity, DeltaTime);
+			}
+
 			_Registry.view<NativeScriptComponent>().each([=](auto entity, auto& nsc) {
 				if (!nsc.Instance)
 				{
@@ -73,7 +111,6 @@ namespace TAGE {
 			});
 		}
 
-		_PhysicsSystem->Update(DeltaTime);
 		_RendererSystem->Update(DeltaTime);
 	}
 
@@ -93,11 +130,22 @@ namespace TAGE {
 	void Scene::OnRuntimeStart()
 	{
 		_Running = true;
+
+		{
+			ScriptEngine::OnRuntimeStart(this);
+
+			auto view = _Registry.view<ScriptComponent>();
+			for (auto e : view) {
+				Entity entity = { e, this };
+				ScriptEngine::OnCreateEntity(entity);
+			}
+		}
 	}
 
 	void Scene::OnRuntimeStop()
 	{
 		_Running = false;
+		ScriptEngine::OnRuntimeStop();
 	}
 
 	Entity Scene::GetPrimaryCamera() {
@@ -136,7 +184,7 @@ namespace TAGE {
 		newScene->_Height = other->_Height;
 
 		newScene->_RendererSystem = MEM::MakeRef<System_Renderer>(Application::Get()->GetRenderer());
-		newScene->_PhysicsSystem = MEM::MakeRef<System_Physics>(&other->_PhysicsWorld);
+		newScene->_PhysicsSystem = MEM::MakeRef<System_Physics>(other->_PhysicsWorld);
 
 		newScene->_RendererSystem->SetActiveScene(newScene.get());
 		newScene->_PhysicsSystem->SetActiveScene(newScene.get());
@@ -155,14 +203,7 @@ namespace TAGE {
 			enttMap[id] = newEntity;
 		}
 
-		CopyComponent<TransformComponent>(dstSceneRegistry, srcSceneRegistry, enttMap);
-		CopyComponent<LightComponent>(dstSceneRegistry, srcSceneRegistry, enttMap);
-		CopyComponent<MeshComponent>(dstSceneRegistry, srcSceneRegistry, enttMap);
-		CopyComponent<SkyboxComponent>(dstSceneRegistry, srcSceneRegistry, enttMap);
-		CopyComponent<CameraComponent>(dstSceneRegistry, srcSceneRegistry, enttMap);
-		CopyComponent<ColliderComponent>(dstSceneRegistry, srcSceneRegistry, enttMap);
-		CopyComponent<RigidBodyComponent>(dstSceneRegistry, srcSceneRegistry, enttMap);
-
+		CopyComponent(AllComponents{}, dstSceneRegistry, srcSceneRegistry, enttMap);
 		return newScene;
 	}
 
@@ -170,13 +211,7 @@ namespace TAGE {
 	{
 		std::string name = entity.GetName();
 		Entity newEntity = CreateEntity(name);
-		CopyComponentIfExists<TransformComponent>(newEntity, entity);
-		CopyComponentIfExists<LightComponent>(newEntity, entity);
-		CopyComponentIfExists<MeshComponent>(newEntity, entity);
-		CopyComponentIfExists<SkyboxComponent>(newEntity, entity);
-		CopyComponentIfExists<CameraComponent>(newEntity, entity);
-		CopyComponentIfExists<ColliderComponent>(newEntity, entity);
-		CopyComponentIfExists<RigidBodyComponent>(newEntity, entity);
+		CopyComponentIfExists(AllComponents{}, newEntity, entity);
 	}
 
 template<typename T>
@@ -217,6 +252,11 @@ template<typename T>
 
 	template<>
 	void Scene::OnComponentAdded<NativeScriptComponent>(Entity entity, NativeScriptComponent& component)
+	{
+	}
+
+	template<>
+	void Scene::OnComponentAdded<ScriptComponent>(Entity entity, ScriptComponent& component)
 	{
 	}
 

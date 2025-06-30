@@ -1,7 +1,6 @@
 #include "SceneHierarchyPanel.h"
-#include "TAGE/World/Components/BaseComponents.h"
-#include "TAGE/World/Components/RenderComponents.h"
-#include "TAGE/World/Components/PhysicsComponents.h"
+#include "TAGE/World/Components/Components.h"
+#include "TAGE/Scripting/ScriptEngine.h"
 #include "TAGE/Utilities/Platform.h"
 
 #include <imgui.h>
@@ -254,6 +253,7 @@ namespace TAGE::Editor {
 
 		if (ImGui::BeginPopup("AddComponent"))
 		{
+			DisplayAddComponentEntry<ScriptComponent>("Script");
 			DisplayAddComponentEntry<LightComponent>("Light");
 			DisplayAddComponentEntry<MeshComponent>("Mesh");
 			DisplayAddComponentEntry<CameraComponent>("Camera");
@@ -274,6 +274,24 @@ namespace TAGE::Editor {
 				if (DrawVec3Control("Rotation", eulerDegrees))
 					component.Rotation = glm::quat(glm::radians(eulerDegrees));
 				DrawVec3Control("Scale", component.Scale, 1.0f);
+			});
+
+		DrawComponent<ScriptComponent>("Script", entity, [](auto& component)
+			{
+				bool scriptClassExist = ScriptEngine::EntityClassExists(component.Name);
+
+				static char buffer[64];
+				strcpy(buffer, component.Name.c_str());
+
+				if (!scriptClassExist)
+					ImGui::PushStyleColor(ImGuiCol_Text, ImVec4(0.9, 0.1, 0.3, 1.0f));
+
+				if (ImGui::InputText("Class", buffer, sizeof(buffer))) {
+					component.Name = buffer;
+				}
+
+				if (!scriptClassExist)
+					ImGui::PopStyleColor();
 			});
 
 		DrawComponent<MeshComponent>("Mesh", entity, [](auto& component)

@@ -14,6 +14,7 @@ namespace TAGE {
 	{
 	public:
 		Scene(const std::string& name);
+		~Scene();
 
 		static MEM::Ref<Scene> Copy(MEM::Ref<Scene> other);
 
@@ -36,7 +37,7 @@ namespace TAGE {
 
 		std::string& GetName() { return _Name; }
 		entt::registry& GetRegistry() { return _Registry; }
-		Physics::PhysicsWorld& GetPhysicsWorld() { return _PhysicsWorld; }
+		Physics::PhysicsWorld* GetPhysicsWorld() { return _PhysicsWorld; }
 		System_Physics& GetPhysicsSystem() { return *_PhysicsSystem; }
 
 		uint GetWidth() const { return _Width; }
@@ -48,6 +49,9 @@ namespace TAGE {
 		}
 	private:
 		bool _Running = false;
+		float _FixedTimeStep = 0.02f; 
+		float _FixedTimeAccumulator = 0.0f;
+
 		entt::registry _Registry;
 		std::string _Name;
 		uint _Width = 1280, _Height = 720;
@@ -56,7 +60,7 @@ namespace TAGE {
 
 		MEM::Ref<System_Renderer> _RendererSystem;
 		MEM::Ref<System_Physics> _PhysicsSystem;
-		Physics::PhysicsWorld _PhysicsWorld;
+		Physics::PhysicsWorld* _PhysicsWorld;
 
 		template<typename T>
 		void OnComponentAdded(Entity entity, T& component);

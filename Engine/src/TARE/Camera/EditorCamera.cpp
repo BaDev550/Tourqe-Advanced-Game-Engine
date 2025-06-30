@@ -10,20 +10,20 @@ namespace TARE {
 		glm::vec3 position = GetPosition();
 
 		float speed = 5.0f;
-		if (TAGE::Input::IsKeyPressed(E_KEY_LEFT_SHIFT))
+		if (TAGE::Input::IsKeyPressed(TAGE::Key::LeftShift))
 			speed *= 2.5f;
 
-		if (TAGE::Input::IsKeyPressed(E_KEY_W))
+		if (TAGE::Input::IsKeyPressed(TAGE::Key::W))
 			position += forward * speed * dt;
-		if (TAGE::Input::IsKeyPressed(E_KEY_S))
+		if (TAGE::Input::IsKeyPressed(TAGE::Key::S))
 			position -= forward * speed * dt;
-		if (TAGE::Input::IsKeyPressed(E_KEY_A))
+		if (TAGE::Input::IsKeyPressed(TAGE::Key::A))
 			position -= right * speed * dt;
-		if (TAGE::Input::IsKeyPressed(E_KEY_D))
+		if (TAGE::Input::IsKeyPressed(TAGE::Key::D))
 			position += right * speed * dt;
-		if (TAGE::Input::IsKeyPressed(E_KEY_E))
+		if (TAGE::Input::IsKeyPressed(TAGE::Key::E))
 			position.y += speed * dt;
-		if (TAGE::Input::IsKeyPressed(E_KEY_Q))
+		if (TAGE::Input::IsKeyPressed(TAGE::Key::Q))
 			position.y -= speed * dt;
 
 		SetPosition(position);

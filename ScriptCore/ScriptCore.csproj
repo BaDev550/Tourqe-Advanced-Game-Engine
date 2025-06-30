@@ -7,7 +7,7 @@
     <ProjectGuid>{43DDC966-2F95-0BB4-989C-E40F8473A6A4}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>ScriptCore</RootNamespace>
+    <RootNamespace>TAGE</RootNamespace>
     <AssemblyName>ScriptCore</AssemblyName>
     <TargetFrameworkVersion>v4.7.2</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
@@ -21,7 +21,8 @@
     <OutputPath>..\Editor\Resources\Scripts\</OutputPath>
     <BaseIntermediateOutputPath>..\Editor\Resources\Scripts\Intermadiates\Debug\</BaseIntermediateOutputPath>
     <IntermediateOutputPath>$(BaseIntermediateOutputPath)</IntermediateOutputPath>
-    <DefineConstants></DefineConstants>
+    <DefineConstants>
+    </DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
@@ -33,7 +34,8 @@
     <OutputPath>..\Editor\Resources\Scripts\</OutputPath>
     <BaseIntermediateOutputPath>..\Editor\Resources\Scripts\Intermadiates\Release\</BaseIntermediateOutputPath>
     <IntermediateOutputPath>$(BaseIntermediateOutputPath)</IntermediateOutputPath>
-    <DefineConstants></DefineConstants>
+    <DefineConstants>
+    </DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
@@ -42,7 +44,15 @@
   <ItemGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|x64' ">
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="src\Main.cs" />
+    <Compile Include="src\CameraController.cs" />
+    <Compile Include="src\Scene\Components.cs" />
+    <Compile Include="src\Scene\Entity.cs" />
+    <Compile Include="src\Math\Vector.cs" />
+    <Compile Include="src\TAGE\Input.cs" />
+    <Compile Include="src\TAGE\KeyCode.cs" />
+    <Compile Include="src\TAGE\InternalCalls.cs" />
+    <Compile Include="src\Player.cs" />
+    <Compile Include="src\TAGE\Logger.cs" />
   </ItemGroup>
   <ItemGroup>
   </ItemGroup>

@@ -49,7 +49,7 @@ namespace TAGE::Editor {
 			_HoveredEntityID = renderer->GetDeferredRendering().GetGBuffer()->Read(3, mouseX, mouseY);
 			renderer->GetDeferredRendering().GetGBuffer()->Unbind();
 
-			if (Input::IsMouseButtonJustPressed(E_MOUSE_BUTTON_LEFT) && !ImGuizmo::IsOver()) {
+			if (Input::IsMouseButtonJustPressed(Mouse::ButtonLeft) && !ImGuizmo::IsOver()) {
 				auto hoveredEntity = _ActiveScene->GetEntityByID((entt::entity)_HoveredEntityID);
 				if (hoveredEntity) {
 					if (hoveredEntity.HasComponent<MeshComponent>())
@@ -233,11 +233,11 @@ namespace TAGE::Editor {
 			ImGui::EndDragDropTarget();
 		}
 
-		if (Input::IsKeyJustPressed(E_KEY_E)) _GizmoType = ImGuizmo::OPERATION::TRANSLATE;
-		else if (Input::IsKeyJustPressed(E_KEY_R)) _GizmoType = ImGuizmo::OPERATION::ROTATE;
-		else if (Input::IsKeyJustPressed(E_KEY_Q)) _GizmoType = ImGuizmo::OPERATION::SCALE;
+		if (Input::IsKeyJustPressed(Key::E)) _GizmoType = ImGuizmo::OPERATION::TRANSLATE;
+		else if (Input::IsKeyJustPressed(Key::R)) _GizmoType = ImGuizmo::OPERATION::ROTATE;
+		else if (Input::IsKeyJustPressed(Key::Q)) _GizmoType = ImGuizmo::OPERATION::SCALE;
 
-		if (_ViewportHovered && Input::IsMouseButtonPressed(E_MOUSE_BUTTON_RIGHT)) {
+		if (_ViewportHovered && Input::IsMouseButtonPressed(Mouse::ButtonRight)) {
 			Application::Get()->GetWindow()->ToggleCursor(false);
 			_ViewportMouseFocused = true;
 		}
@@ -268,7 +268,7 @@ namespace TAGE::Editor {
 			auto& tc = selectedEntity.GetComponent<TransformComponent>();
 			glm::mat4 transform = tc.GetTransform();
 
-			bool snap = Input::IsKeyPressed(E_KEY_LEFT_SHIFT);
+			bool snap = Input::IsKeyPressed(Key::LeftShift);
 			float snapValue = (_GizmoType == ImGuizmo::OPERATION::ROTATE) ? 45.0f : 0.5f;
 			float snapValues[3] = { snapValue, snapValue, snapValue };
 
@@ -344,37 +344,37 @@ namespace TAGE::Editor {
 
 	bool EditorLayer::OnKeyPressed(KeyPressedEvent& e)
 	{
-		bool control = Input::IsKeyPressed(E_KEY_LEFT_CONTROL) || Input::IsKeyPressed(E_KEY_RIGHT_CONTROL);
-		bool shift = Input::IsKeyPressed(E_KEY_LEFT_SHIFT) || Input::IsKeyPressed(E_KEY_RIGHT_SHIFT);
+		bool control = Input::IsKeyPressed(Key::LeftControl) || Input::IsKeyPressed(Key::RightControl);
+		bool shift = Input::IsKeyPressed(Key::LeftShift) || Input::IsKeyPressed(Key::RightShift);
 
 		switch (e.GetKey())
 		{
-		case E_KEY_F1: debugMode = ViewportDebugMode::Default; break;
-		case E_KEY_F2: debugMode = ViewportDebugMode::GBuffer_Position; break;
-		case E_KEY_F3: debugMode = ViewportDebugMode::GBuffer_Normal; break;
-		case E_KEY_F4: debugMode = ViewportDebugMode::GBuffer_Albedo; break;
-		case E_KEY_F5: debugMode = ViewportDebugMode::GBuffer_Depth; break;
-		case E_KEY_F6: debugMode = ViewportDebugMode::Lighting; break;
-		case E_KEY_F7: debugMode = ViewportDebugMode::ShadowMap; break;
-		case E_KEY_F8: debugMode = ViewportDebugMode::GI; break;
-		case E_KEY_F9: debugMode = ViewportDebugMode::GBuffer_Spec; break;
+		case Key::F1: debugMode = ViewportDebugMode::Default; break;
+		case Key::F2: debugMode = ViewportDebugMode::GBuffer_Position; break;
+		case Key::F3: debugMode = ViewportDebugMode::GBuffer_Normal; break;
+		case Key::F4: debugMode = ViewportDebugMode::GBuffer_Albedo; break;
+		case Key::F5: debugMode = ViewportDebugMode::GBuffer_Depth; break;
+		case Key::F6: debugMode = ViewportDebugMode::Lighting; break;
+		case Key::F7: debugMode = ViewportDebugMode::ShadowMap; break;
+		case Key::F8: debugMode = ViewportDebugMode::GI; break;
+		case Key::F9: debugMode = ViewportDebugMode::GBuffer_Spec; break;
 
-		case E_KEY_S: {
+		case Key::S: {
 			if (control && shift)
 				SaveSceneAs();
 			break;
 		}
-		case E_KEY_N: {
+		case Key::N: {
 			if (control)
 				NewScene();
 			break;
 		}
-		case E_KEY_O: {
+		case Key::O: {
 			if (control)
 				OpenScene();
 			break;
 		}
-		case E_KEY_D: {
+		case Key::D: {
 			if (control)
 				OnDuplicateEntity();
 			break;
@@ -384,7 +384,7 @@ namespace TAGE::Editor {
 			break;
 		}
 
-		if (e.GetKey() == E_KEY_ESCAPE)
+		if (e.GetKey() == Key::Escape)
 		{
 			Application::Get()->Close();
 			return true;
