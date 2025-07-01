@@ -148,6 +148,15 @@ namespace TAGE {
 		_Registry.destroy(entity);
 	}
 
+	void Scene::Clear()
+	{
+		auto view = _Registry.view<IdentityComponent, TransformComponent>();
+		for (auto e : view) {
+			Entity entityToDestroy = { e, this };
+			DestroyEntity(entityToDestroy);
+		}
+	}
+
 	void Scene::OnRuntimeStart()
 	{
 		_Running = true;

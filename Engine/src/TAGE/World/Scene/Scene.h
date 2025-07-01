@@ -28,6 +28,7 @@ namespace TAGE {
 
 		void DestroyEntity(Entity entity);
 		void DuplicateEntity(Entity entity);
+		void Clear();
 
 		void OnRuntimeStart();
 		void OnSimulateStart();

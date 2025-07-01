@@ -17,8 +17,8 @@ namespace TAGE {
 		LOG_INFO("TAGE Version - {}.{}", ENGINE_VERSION_MAJOR, ENGINE_VERSION_MINOR);
 
 		ASSERT(s_Instance, "Application already exists");
-		int width = 1280;
-		int height = 720;
+		int width = 1920;
+		int height = 1080;
 
 		const SWindow WINDOW = SWindow(_AppSpecifics.AppName.c_str(), width, height);
 		_Window = MEM::MakeScope<Window>(WINDOW, WindowMode::WINDOWED);

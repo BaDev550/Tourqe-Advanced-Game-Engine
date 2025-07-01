@@ -12,9 +12,7 @@ namespace TAGE {
 		void StartRuntime() override;
 		void StopRuntime() override;
 
-		void SetWorld(Physics::PhysicsWorld* World) {
-			_World = World;
-		}
+		void SetWorld(Physics::PhysicsWorld* World) { _World = World; }
 	private:
 		Physics::PhysicsWorld* _World;
 

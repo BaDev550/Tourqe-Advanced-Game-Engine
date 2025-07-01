@@ -93,6 +93,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClInclude Include="src\Gamelayer\GameLayer.h" />
     <ClInclude Include="src\EditorLayer.h" />
     <ClInclude Include="src\Panels\ContentBrowserPanel.h" />
     <ClInclude Include="src\Panels\OutputPanel.h" />
@@ -100,6 +101,7 @@
     <ClInclude Include="src\Panels\ThumbnailRenderer.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="src\Gamelayer\GameLayer.cpp" />
     <ClCompile Include="src\EditorLayer.cpp" />
     <ClCompile Include="src\Panels\ContentBrowserPanel.cpp" />
     <ClCompile Include="src\Panels\SceneHierarchyPanel.cpp" />

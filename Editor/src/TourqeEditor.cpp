@@ -2,6 +2,7 @@
 #include <TAGE/Application/EntryPoint.h>
 
 #include "EditorLayer.h"
+#include "Gamelayer/GameLayer.h"
 
 namespace TAGE::Editor {
 	class TourqeEditor : public TAGE::Application
@@ -11,6 +12,7 @@ namespace TAGE::Editor {
 			: Application(spec)
 		{
 			PushLayer(new EditorLayer());
+			//PushLayer(new GameLayer());
 		}
 	};
 }

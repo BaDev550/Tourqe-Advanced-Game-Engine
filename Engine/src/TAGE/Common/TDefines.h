@@ -14,7 +14,7 @@ typedef unsigned long long	uint64;
 
 #define ASSET_CONTENT_PATH "imported/"
 #define ENGINE_VERSION_MAJOR 1
-#define ENGINE_VERSION_MINOR 1
+#define ENGINE_VERSION_MINOR 2
 
 #define NEAR_CLIP 0.05f
 #define FAR_CLIP 250.0f
@@ -23,7 +23,7 @@ typedef unsigned long long	uint64;
 #define SHADOW_MAP_TEXTURE_SLOT 10
 
 #define PI 3.14159265358979323846f
-#define MAX_LIGHTS 16
+#define MAX_LIGHTS 32
 #define MAX_BONES 124
 #define MAX_MATERIALS 32
 #define MAX_INSTANCES 1024
