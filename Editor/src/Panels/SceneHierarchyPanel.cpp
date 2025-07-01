@@ -420,6 +420,7 @@ namespace TAGE::Editor {
 			{
 				if (entity.HasComponent<ColliderComponent>()) {
 					ImGui::Text("Body Pointer: 0x%p", component.Body);
+					ImGui::Text("Motion State Pointer: 0x%p", component.MotionState);
 
 					const char* bodyTypeStrings[] = { "Static", "Kinematic", "Dynamic" };
 					int currentType = static_cast<int>(component.BodyType);

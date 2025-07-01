@@ -16,13 +16,7 @@ namespace TAGE::Physics {
         virtual void setDebugMode(int debugMode) override { m_DebugMode = debugMode; }
         virtual void draw3dText(const btVector3& location, const char* textString) override {}
         int getDebugMode() const override { return m_DebugMode; }
-
-        void BeginFrame(float dt);
-        void Render(float dt, const glm::mat4& viewproj);
-
-        void Flush(float dt, const glm::mat4& viewproj);
     private:
-        std::vector<RaycastLine> m_Lines;
         int m_DebugMode = DBG_DrawWireframe | DBG_DrawContactPoints | DBG_DrawAabb;
     };
 }

@@ -21,7 +21,7 @@ namespace TAGE::Physics::Raycast {
 
         btCollisionObject* ignore = nullptr;
         if (CurrentCaller && CurrentCaller->HasComponent<RigidBodyComponent>()) {
-            ignore = CurrentCaller->GetComponent<RigidBodyComponent>().Body;
+            ignore = CurrentCaller->GetComponent<RigidBodyComponent>().Body.get();
         }
 
         ClosestNotMeRayResultCallback callback(start, end, ignoreSelf ? ignore : nullptr);

@@ -18,8 +18,8 @@ namespace TARE {
 		inline static void DrawIndexed(const TAGE::MEM::Ref<VertexArrayObject>& VAO) {
 			_API->DrawIndexed(VAO);
 		}
-		inline static void DrawLine(const TAGE::MEM::Ref<VertexArrayObject>& VAO) {
-			_API->DrawLine(VAO);
+		inline static void DrawLine(const TAGE::MEM::Ref<VertexArrayObject>& VAO, uint vertexCount) {
+			_API->DrawLine(VAO, vertexCount);
 		}
 		inline static void DrawVertex(const TAGE::MEM::Ref<VertexArrayObject>& VAO) {
 			_API->DrawVertex(VAO);

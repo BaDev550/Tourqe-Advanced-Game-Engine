@@ -11,19 +11,6 @@ namespace Sandbox
     {
         private RigidBodyComponent rb;
 
-        //public bool V0;
-        //public char V1;
-        //public short V2;
-        //public int V3;
-        //public long V4;
-        //public byte V5;
-        //public UInt16 V6;
-        //public UInt32 V7;
-        //public UInt64 V8;
-        //public double V9;
-        //public Vector2 V10;
-        //public Vector3 V11;
-        //public Entity V12;
         public float speed = 500.0f; 
         public bool lockMovement = false;
 
@@ -38,11 +25,6 @@ namespace Sandbox
         }
 
         void OnUpdate(float deltaTime)
-        {
-
-        }
-
-        void OnFixedUpdate(float deltaTime)
         {
             Vector3 velocity = Vector3.Zero;
 
@@ -59,7 +41,7 @@ namespace Sandbox
             velocity *= (speed * deltaTime);
 
             if (!lockMovement)
-                rb.SetVelocity(velocity);
+                rb.ApplyForce(velocity);
         }
     }
 }

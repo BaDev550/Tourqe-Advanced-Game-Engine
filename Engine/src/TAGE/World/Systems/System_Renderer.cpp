@@ -1,5 +1,6 @@
 #include "tagepch.h"
 #include "System_Renderer.h"
+#include "TARE/Common/RenderAPI.h"
 #include "TAGE/World/Scene/Scene.h"
 #include "TAGE/World/Objects/Entity.h"
 #include "TAGE/World/Components/BaseComponents.h"
@@ -27,7 +28,7 @@ namespace TAGE {
 
 		if (!camera) return;
 
-		Render(camera, deltaTime);
+		Render(camera, deltaTime, true);
 	}
 
 	void System_Renderer::UpdateEditor(float deltaTime)
@@ -38,7 +39,7 @@ namespace TAGE {
 		Render(_EditorCamera, deltaTime);
 	}
 
-	void System_Renderer::Render(const MEM::Ref<TARE::Camera>& cam, float dt)
+	void System_Renderer::Render(const MEM::Ref<TARE::Camera>& cam, float dt, bool runtime)
 	{
 		TARE::RenderCommand::SetClearColor({ 1.0f, 1.0f, 1.0f, 1.0f });
 		TARE::RenderCommand::Clear(COLOR_DEPTH_STENCIL);
@@ -53,9 +54,15 @@ namespace TAGE {
 		_Renderer->BeginFrame(cam);
 		if (skybox)
 			skybox->Bind(cam->GetViewMatrix(), cam->GetProjectionMatrix());
-		_Renderer->DrawGrid();
+
+		if (!runtime)
+			_Renderer->DrawGrid();
+
 		RenderObjects();
-		//_Scene->GetPhysicsWorld().DrawDebug(dt, cam->GetViewProjectionMatrix());
+
+		if (!runtime && TARE::RenderAPI::GetDebugRenderMode() == DebugRenderMode::BOUNDING_BOX)
+			_Scene->GetPhysicsWorld()->DrawDebug(dt, cam->GetViewProjectionMatrix());
+
 		_Renderer->EndFrame();
 	}
 

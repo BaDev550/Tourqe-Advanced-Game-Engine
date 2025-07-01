@@ -1637,6 +1637,7 @@
     </ClInclude>
     <ClInclude Include="src\TAGE\Scripting\ScriptGlue.h" />
     <ClInclude Include="src\TAGE\World\Components\Components.h" />
+    <ClInclude Include="src\TAGE\Utilities\LogSink.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\Platform\DirectX11\DirectX11_RenderContext.cpp">

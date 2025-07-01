@@ -3,6 +3,7 @@
 #include "TAGE/TAGE.h"
 #include "Panels/SceneHierarchyPanel.h"
 #include "Panels/ContentBrowserPanel.h"
+#include "Panels/OutputPanel.h"
 
 namespace TAGE::Editor {
 	enum class ViewportDebugMode
@@ -10,7 +11,6 @@ namespace TAGE::Editor {
 		Default = 0,
 		GBuffer_Position,
 		GBuffer_Normal,
-		GBuffer_Spec,
 		GBuffer_Albedo,
 		GBuffer_Depth,
 		Lighting,
@@ -48,6 +48,8 @@ namespace TAGE::Editor {
 
 		void OnScenePlay();
 		void OnSceneStop();
+		void OnSimulateStart();
+		void OnSimulateStop();
 
 		void Toolbar();
 	private:
@@ -68,6 +70,7 @@ namespace TAGE::Editor {
 
 		MEM::Scope<SceneHierarchyPanel> _SceneHierarchyPanel;
 		MEM::Scope<ContentBrowserPanel> _ContentBrowserPanel;
+		MEM::Scope<OutputPanel> _OutputPanel;
 
 		MEM::Ref<TARE::Texture2D> _PlayIcon;
 		MEM::Ref<TARE::Texture2D> _StopIcon;

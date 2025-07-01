@@ -38,7 +38,6 @@ namespace TAGE {
 		for (Layer* layer : _LayerStack)
 			layer->OnDetach();
 		_LayerStack.Clear();
-		Logger::Destroy();
 		ScriptEngine::Shutdown();
 
 		LOG_WARN("Application terminated!");

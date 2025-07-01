@@ -34,6 +34,8 @@ namespace TARE {
 	{
 		_LightingBuffer->Bind();
 
+		RenderCommand::SetClearColor({ 1.0f, 1.0f, 1.0f, 1.0f });
+		RenderCommand::Clear(COLOR);
 		_LightingBuffer->Clear(0, 0);
 
 		_LightShader->Use();

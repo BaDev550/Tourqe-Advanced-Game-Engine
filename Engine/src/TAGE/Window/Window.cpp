@@ -43,13 +43,14 @@ namespace TAGE
 		else {
 			_Properties.Width = properties.Width;
 			_Properties.Height = properties.Height;
-			glfwWindowHint(GLFW_DECORATED, GLFW_TRUE);
+			glfwWindowHint(GLFW_DECORATED, GLFW_FALSE);
 			glfwWindowHint(GLFW_MAXIMIZED, GLFW_FALSE);
 			_Window = glfwCreateWindow(_Properties.Width, _Properties.Height, _Properties.Title, nullptr, nullptr);
 		}
 		ASSERT(_Window, "Failed to create GLFW window");
 		glfwMakeContextCurrent(_Window);
 		glfwSetWindowUserPointer(_Window, &_Properties);
+		glfwMaximizeWindow(_Window);
 		SetVSync(properties.VSync);
 
 		glfwSetWindowSizeCallback(_Window, [](GLFWwindow* window, int width, int height) {
@@ -158,6 +159,16 @@ namespace TAGE
 		LOG_INFO("Window resized to {}x{}", width, height);
 	}
 
+	void Window::RestoreWindow(bool maximaze)
+	{
+		if (maximaze) {
+			glfwRestoreWindow(_Window);
+		}
+		else {
+			glfwMaximizeWindow(_Window);
+		}
+	}
+
 	void Window::SetTitle(const char* title)
 	{
 		if (!title || title[0] == '\0')
@@ -231,6 +242,11 @@ namespace TAGE
 		_Properties.Focused = glfwGetWindowAttrib(_Window, GLFW_FOCUSED);
 	}
 
+	void Window::SetWindowPos(int x, int y)
+	{
+		glfwSetWindowPos(_Window, x, y);
+	}
+
 	bool Window::ShouldClose() const
 	{
 		return (glfwWindowShouldClose(_Window) || _ForceClose);
@@ -244,5 +260,11 @@ namespace TAGE
 		_Properties.Focused = glfwGetWindowAttrib(_Window, GLFW_FOCUSED);
 		_Properties.Visible = glfwGetWindowAttrib(_Window, GLFW_VISIBLE);
 	}
+
+	void Window::GetWindowPos(int* x, int* y)
+	{
+		glfwGetWindowPos(_Window, x, y);
+	}
+
 
 }

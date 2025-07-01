@@ -18,30 +18,30 @@ namespace TAGE::Physics {
 		void RemoveRigidBody(btRigidBody* body);
 		void DrawDebug(float dt, const glm::mat4& viewProj);
 
-        btDiscreteDynamicsWorld* GetWorld() const { return _DynamicsWorld; }
+        btDiscreteDynamicsWorld* GetWorld() const { return _DynamicsWorld.get(); }
 
     private:
-        btBroadphaseInterface* _Broadphase;
-        btDefaultCollisionConfiguration* _CollisionConfig;
-        btCollisionDispatcher* _Dispatcher;
-        btSequentialImpulseConstraintSolver* _Solver;
-        btDiscreteDynamicsWorld* _DynamicsWorld;
-		PhysicsDebugRenderer* _DebugRenderer;
+        MEM::Scope<btBroadphaseInterface> _Broadphase;
+        MEM::Scope<btDefaultCollisionConfiguration> _CollisionConfig;
+        MEM::Scope<btCollisionDispatcher> _Dispatcher;
+        MEM::Scope<btSequentialImpulseConstraintSolver> _Solver;
+        MEM::Scope<btDiscreteDynamicsWorld> _DynamicsWorld;
+		MEM::Scope<PhysicsDebugRenderer> _DebugRenderer;
 	};
 
 	namespace Utils {
 
-		inline btCollisionShape* CollisionShapeToBullet(ColliderShapeType shape, const glm::vec3& size)
+		inline MEM::Ref<btCollisionShape> CollisionShapeToBullet(ColliderShapeType shape, const glm::vec3& size)
 		{
 			switch (shape)
 			{
-			case ColliderShapeType::BOX:      return new btBoxShape(btVector3(size.x / 2.0f, size.y / 2.0f, size.z / 2.0f));
-			case ColliderShapeType::SPHERE:  return new btSphereShape(size.x / 2.0f);
-			case ColliderShapeType::CAPSULE:   return new btCapsuleShape(size.x / 2.0f, size.y);
+			case ColliderShapeType::BOX:      return  std::move(MEM::MakeRef<btBoxShape>(btVector3(size.x / 2.0f, size.y / 2.0f, size.z / 2.0f)));
+			case ColliderShapeType::SPHERE:  return   std::move(MEM::MakeRef<btSphereShape>(size.x / 2.0f));
+			case ColliderShapeType::CAPSULE:   return std::move(MEM::MakeRef<btCapsuleShape>(size.x / 2.0f, size.y));
 			case ColliderShapeType::MESH:     ASSERT(false, "Mesh colliders not supported yet."); return nullptr;
 			}
 
-			return new btBoxShape(btVector3(size.x / 2.0f, size.y / 2.0f, size.z / 2.0f));
+			return std::move(MEM::MakeRef<btBoxShape>(btVector3(size.x / 2.0f, size.y / 2.0f, size.z / 2.0f)));
 		}
 
 		inline btVector3 GlmToBt(const glm::vec3& v) {

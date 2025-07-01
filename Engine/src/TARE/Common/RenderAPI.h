@@ -10,7 +10,7 @@ namespace TARE {
 		virtual void SetViewport(int x, int y, int width, int height) = 0;
 		virtual void DrawIndexed(const TAGE::MEM::Ref<VertexArrayObject>& VAO) = 0;
 		virtual void DrawVertex(const TAGE::MEM::Ref<VertexArrayObject>& VAO) = 0;
-		virtual void DrawLine(const TAGE::MEM::Ref<VertexArrayObject>& VAO) = 0;
+		virtual void DrawLine(const TAGE::MEM::Ref<VertexArrayObject>& VAO, uint vertexCount) = 0;
 		virtual void Enable(uint properties) = 0;
 		virtual void Disable(uint properties) = 0;
 		virtual void BindTextureFromID(uint64 textureID, uint slot) = 0;

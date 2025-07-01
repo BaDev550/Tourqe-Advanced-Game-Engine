@@ -135,6 +135,7 @@
     <ClInclude Include="src\TAGE\TAGE.h" />
     <ClInclude Include="src\TAGE\Thread\ThreadWarpper.h" />
     <ClInclude Include="src\TAGE\Utilities\Logger.h" />
+    <ClInclude Include="src\TAGE\Utilities\LogSink.h" />
     <ClInclude Include="src\TAGE\Utilities\Memory.h" />
     <ClInclude Include="src\TAGE\Utilities\Platform.h" />
     <ClInclude Include="src\TAGE\Utilities\TimeStep.h" />

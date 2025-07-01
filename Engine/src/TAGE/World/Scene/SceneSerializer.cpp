@@ -311,9 +311,6 @@ namespace TAGE {
 					collider.Shape = shape;
 					collider.ResponseType = response;
 					collider.Size = size;
-
-					_Scene->GetPhysicsSystem().DestroyPhysics(deserializedEntity);
-					_Scene->GetPhysicsSystem().RegisterCollider(deserializedEntity);
 				}
 
 				auto rigidBodyComponent = entity["RigidBodyComponent"];
@@ -321,9 +318,6 @@ namespace TAGE {
 					auto bodyType = (PhysicsBodyType)rigidBodyComponent["BodyType"].as<int>();
 					auto& rigidBody = deserializedEntity.AddOrReplaceComponent<RigidBodyComponent>();
 					rigidBody.BodyType = bodyType;
-
-					_Scene->GetPhysicsSystem().DestroyPhysics(deserializedEntity);
-					_Scene->GetPhysicsSystem().RegisterRigidBody(deserializedEntity);
 				}
 
 				auto scriptComponent = entity["ScriptComponent"];

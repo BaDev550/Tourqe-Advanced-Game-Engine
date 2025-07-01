@@ -9,6 +9,8 @@ namespace TAGE {
 		virtual ~System() = default;
 		virtual void Update(float deltaTime) = 0;
 		virtual void UpdateEditor(float deltaTime) = 0;
+		virtual void StartRuntime() {}
+		virtual void StopRuntime() {}
 
 		void SetActiveScene(Scene* scene) { _Scene = scene; }
 	protected:

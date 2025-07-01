@@ -1,0 +1,193 @@
+Scene: Walls
+Entities:
+  - Entity: 6119023660582609510
+    IdentityComponent:
+      Name: Sky
+    TransformComponent:
+      Position: [0, 0, 0]
+      Rotation: [0, 0, 0, 1]
+      Scale: [1, 1, 1]
+    SkyboxComponent:
+      TexturePath: E:\TAGE\Editor\Assets\textures\skyboxes\skybox_1.png
+  - Entity: 11078050628770694360
+    IdentityComponent:
+      Name: Wall
+    TransformComponent:
+      Position: [-5.56282806, 2.2339859, -3.09907961]
+      Rotation: [-0.0172090717, -0.860210001, -0.029100012, 0.508817971]
+      Scale: [7.1739769, 2.59214878, 0.198289409]
+    MeshComponent:
+      MeshPath: assets\models\Cube\cube.obj
+    RigidBodyComponent:
+      BodyType: 0
+    ColliderComponent:
+      Shape: 0
+      Size: [15, 3, 1]
+      ResponseType: 2
+  - Entity: 5822397048963539095
+    IdentityComponent:
+      Name: Wall
+    TransformComponent:
+      Position: [5.29006672, 2.33916926, 0.118443832]
+      Rotation: [-7.81119695e-07, 0.707106829, -7.81119695e-07, -0.707106709]
+      Scale: [9.798913, 2.59214807, 0.198291332]
+    MeshComponent:
+      MeshPath: assets\models\Cube\cube.obj
+    RigidBodyComponent:
+      BodyType: 0
+    ColliderComponent:
+      Shape: 0
+      Size: [15, 3, 1]
+      ResponseType: 2
+  - Entity: 9030629255092140211
+    IdentityComponent:
+      Name: Wall
+    TransformComponent:
+      Position: [-1.87124801, 2.33915353, -1.91422486]
+      Rotation: [-7.81119695e-07, 0.707106829, -7.81119695e-07, -0.707106709]
+      Scale: [9.79890919, 2.59214807, 0.198291272]
+    MeshComponent:
+      MeshPath: assets\models\Cube\cube.obj
+    RigidBodyComponent:
+      BodyType: 0
+    ColliderComponent:
+      Shape: 0
+      Size: [15, 3, 1]
+      ResponseType: 2
+  - Entity: 6268993350939068064
+    IdentityComponent:
+      Name: Wall
+    TransformComponent:
+      Position: [17.4032574, 2.33920622, 0.118445382]
+      Rotation: [-7.81119695e-07, 0.707106829, -7.81119695e-07, -0.707106709]
+      Scale: [17.541275, 2.59214807, 0.198298827]
+    MeshComponent:
+      MeshPath: assets\models\Cube\cube.obj
+    RigidBodyComponent:
+      BodyType: 0
+    ColliderComponent:
+      Shape: 0
+      Size: [35, 3, 1]
+      ResponseType: 2
+  - Entity: 15561595194401332452
+    IdentityComponent:
+      Name: Wall
+    TransformComponent:
+      Position: [-17.3754654, 2.33912659, 0.441511154]
+      Rotation: [-7.81119695e-07, 0.707106829, -7.81119695e-07, -0.707106709]
+      Scale: [17.541851, 2.59214807, 0.198303327]
+    MeshComponent:
+      MeshPath: assets\models\Cube\cube.obj
+    RigidBodyComponent:
+      BodyType: 0
+    ColliderComponent:
+      Shape: 0
+      Size: [35, 3, 1]
+      ResponseType: 2
+  - Entity: 8550361607551779238
+    IdentityComponent:
+      Name: Wall
+    TransformComponent:
+      Position: [0, 2.33916306, -17.232481]
+      Rotation: [0, 0, 0, 1]
+      Scale: [17.5426445, 2.59214807, 0.19830963]
+    MeshComponent:
+      MeshPath: assets\models\Cube\cube.obj
+    RigidBodyComponent:
+      BodyType: 0
+    ColliderComponent:
+      Shape: 0
+      Size: [35, 3, 1]
+      ResponseType: 2
+  - Entity: 9849777408609930384
+    IdentityComponent:
+      Name: Wall
+    TransformComponent:
+      Position: [0, 2.95864201, 17.3615265]
+      Rotation: [0, 0, 0, 1]
+      Scale: [17.5426445, 2.59214807, 0.19830963]
+    MeshComponent:
+      MeshPath: assets\models\Cube\cube.obj
+    RigidBodyComponent:
+      BodyType: 0
+    ColliderComponent:
+      Shape: 0
+      Size: [35, 3, 1]
+      ResponseType: 2
+  - Entity: 7353558854358201750
+    IdentityComponent:
+      Name: Camera
+    TransformComponent:
+      Position: [0.698647261, 26.1945286, 0.704850316]
+      Rotation: [-0.707105935, -0, 0, 0.707107663]
+      Scale: [0.70000118, 0.700000107, 0.70000118]
+    MeshComponent:
+      MeshPath: assets\models\Cube\cube.obj
+    CameraComponent:
+      Camera:
+        AspectRatio: 2.08602142
+        FOV: 90
+        NearClip: 0.0500000007
+        FarClip: 250
+      IsActive: true
+    ScriptComponent:
+      Class: Sandbox.CameraController
+  - Entity: 14369423985148311177
+    IdentityComponent:
+      Name: Floor
+    TransformComponent:
+      Position: [0, 0, 0]
+      Rotation: [0, 0, 0, 1]
+      Scale: [17.7597904, 0.222534433, 17.6379108]
+    MeshComponent:
+      MeshPath: assets\models\Cube\cube.obj
+    RigidBodyComponent:
+      BodyType: 0
+    ColliderComponent:
+      Shape: 0
+      Size: [35, 1, 35]
+      ResponseType: 2
+  - Entity: 2571567423043615397
+    IdentityComponent:
+      Name: Sun
+    TransformComponent:
+      Position: [0, 0, 0]
+      Rotation: [-0.0697987601, 0.691528499, 0.691432357, 0.197073102]
+      Scale: [1.00000417, 1.00000298, 1.00000155]
+    LightComponent:
+      Type: 1
+      Color: [1, 1, 1]
+      Range: 10
+      Intensity: 20
+  - Entity: 14447036893869012265
+    IdentityComponent:
+      Name: Player
+    TransformComponent:
+      Position: [1.64074481, 2.73975348, -0.21610105]
+      Rotation: [0, 0, 0, 1]
+      Scale: [1, 1, 1]
+    MeshComponent:
+      MeshPath: assets\models\Sphere\Sphere.obj
+    RigidBodyComponent:
+      BodyType: 1
+    ColliderComponent:
+      Shape: 1
+      Size: [2, 1, 2]
+      ResponseType: 2
+    ScriptComponent:
+      Class: Sandbox.Player
+  - Entity: 17136891053031272525
+    IdentityComponent:
+      Name: Wall
+    TransformComponent:
+      Position: [-10.6301222, 2.07201195, 11.0831566]
+      Rotation: [0.0319038406, 0.985859811, 0.0112047587, 0.164124846]
+      Scale: [7.17338991, 2.59214926, 0.198284835]
+    MeshComponent:
+      MeshPath: assets\models\Cube\cube.obj
+    RigidBodyComponent:
+      BodyType: 0
+    ColliderComponent:
+      Shape: 0
+      Size: [15, 3, 1]
+      ResponseType: 2

@@ -30,10 +30,16 @@ namespace TAGE {
 		void DuplicateEntity(Entity entity);
 
 		void OnRuntimeStart();
+		void OnSimulateStart();
 		void OnRuntimeStop();
+		void OnSimulateStop();
 		void OnUpdateRuntime(float DeltaTime);
 		void OnUpdateEditor(float DeltaTime, const MEM::Ref<TARE::EditorCamera>& camera);
+		void OnUpdateSimulate(float DeltaTime, const MEM::Ref<TARE::EditorCamera>& camera);
 		void OnResize(uint width, uint height) { _Width = width; _Height = height; }
+
+		void OnPhysicsStart();
+		void OnPhysicsStop();
 
 		std::string& GetName() { return _Name; }
 		entt::registry& GetRegistry() { return _Registry; }

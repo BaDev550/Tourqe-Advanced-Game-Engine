@@ -30,32 +30,28 @@ vec3 BinarySearch(in sampler2D pos, inout vec3 dir, inout vec3 hitCoord, inout f
 }
 
 vec4 RayCast(in sampler2D pos, in vec3 dir, inout vec3 hitCoord, out float dDepth, in mat4 projection) {
-    dir *= SSR_STEP_SIZE;
-
-    float depth;
-    int steps;
-    vec4 projectedCoord;
+    hitCoord += dir * SSR_STEP_SIZE * 2.0;
 
     for (int i = 0; i < SSR_MAX_STEPS; i++) {
-        hitCoord += dir;
-
-        projectedCoord = projection * vec4(hitCoord, 1.0);
+        vec4 projectedCoord = projection * vec4(hitCoord, 1.0);
         projectedCoord.xy /= projectedCoord.w;
         projectedCoord.xy = projectedCoord.xy * 0.5 + 0.5;
 
-        depth = textureLod(pos, projectedCoord.xy, 2).z;
-        if (depth > 1000.0) 
-            continue;
+        if (any(lessThan(projectedCoord.xy, vec2(0.0))) || any(greaterThan(projectedCoord.xy, vec2(1.0)))) {
+            break;
+        }
 
+        float depth = textureLod(pos, projectedCoord.xy, 0).z;
         dDepth = hitCoord.z - depth;
 
-        if ((dir.z - dDepth) < 1.2 && dDepth <= 0.0) {
-            return vec4(BinarySearch(pos, dir, hitCoord, dDepth, projection), 1.0);
+        if (dDepth < 0.0 && dDepth > -SSR_THICKNESS) {
+            return vec4(projectedCoord.xy, depth, 1.0);
         }
-        steps++;
+
+        hitCoord += dir * SSR_STEP_SIZE;
     }
 
-    return vec4(projectedCoord.xy, depth, 0.0);
+    return vec4(0.0, 0.0, 0.0, 0.0);
 }
 
 vec3 hash(vec3 a) {
@@ -66,32 +62,40 @@ vec3 hash(vec3 a) {
 
 vec3 DoSSR(
     sampler2D position,
-    sampler2D albedo,
+    sampler2D sceneColor,
     vec2 texCoords,
     vec3 viewPosition,
-    vec3 viewNormal, 
-    mat4 inversedView,
+    vec3 viewNormal,
     mat4 projection,
-    vec3 Fresnel,
-    float Spec,
-    float Metal
+    float roughness,
+    float metallic
 ) {
     vec3 reflected = normalize(reflect(normalize(viewPosition), normalize(viewNormal)));
+
+    vec3 randomVec = hash(viewPosition);
+    float jitterAmount = roughness * roughness;
+    vec3 jitteredReflected = normalize(mix(reflected, randomVec, jitterAmount));
+
     vec3 hitPos = viewPosition;
     float dDepth;
+    vec4 coords = RayCast(position, jitteredReflected, hitPos, dDepth, projection);
 
-    vec3 wp = vec3(vec4(viewPosition, 1.0) * inversedView);
-    vec3 jitt = mix(vec3(0.0), hash(wp), Spec);
-    vec4 coords = RayCast(position, jitt + reflected * max(minRayStep, -viewPosition.z), hitPos, dDepth, projection);
+    if (coords.w < 0.5) {
+        return vec3(0.0);
+    }
 
-    vec2 dCoords = smoothstep(0.2, 0.6, abs(vec2(0.5) - coords.xy));
+    vec2 dCoords = abs(vec2(0.5) - coords.xy);
     float screenEdgeFactor = clamp(1.0 - (dCoords.x + dCoords.y), 0.0, 1.0);
-    float multiplier = pow(Metal, reflectionSpecularFalloffExponent) * screenEdgeFactor * -reflected.z;
-    float dist = length(hitPos - viewPosition);
-    float fade = clamp((SSR_DISTANCE - dist) / SSR_DISTANCE, 0.0, 1.0);
-    vec3 SSR = textureLod(albedo, texCoords.xy, 0).rgb * clamp(multiplier, 0.0, 0.9) * Fresnel * fade;
+    screenEdgeFactor = smoothstep(0.0, 0.5, screenEdgeFactor);
 
-    return SSR;
+    float dist = length(hitPos - viewPosition);
+    float distanceFade = clamp(1.0 - (dist / SSR_DISTANCE), 0.0, 1.0);
+
+    float roughnessFade = pow(1.0 - roughness, 2.0);
+    float mipLevel = roughness * MAX_REFLECTION_LOD;
+    vec3 reflectedColor = textureLod(sceneColor, coords.xy, mipLevel).rgb;
+
+    return reflectedColor * screenEdgeFactor * distanceFade * roughnessFade;
 }
 
 #endif

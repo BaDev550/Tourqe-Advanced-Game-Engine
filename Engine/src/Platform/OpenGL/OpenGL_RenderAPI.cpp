@@ -16,10 +16,13 @@ namespace TARE {
 		glDrawArrays(GL_TRIANGLES, 0, VAO->GetCount());
 	}
 
-	void OpenGL_RenderAPI::DrawLine(const TAGE::MEM::Ref<VertexArrayObject>& VAO)
+	void OpenGL_RenderAPI::DrawLine(const TAGE::MEM::Ref<VertexArrayObject>& VAO, uint vertexCount)
 	{
+		if (vertexCount == 0)
+			return;
+
 		VAO->Bind();
-		glDrawArrays(GL_LINES, 0, VAO->GetCount());
+		glDrawArrays(GL_LINES, 0, vertexCount);
 	}
 
 	void OpenGL_RenderAPI::Enable(uint properties)

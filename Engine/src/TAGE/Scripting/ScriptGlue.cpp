@@ -24,16 +24,16 @@ namespace TAGE {
 		switch (logLevel)
 		{
 		case 0:
-			LOG_INFO(str);
+			APP_LOG_INFO(str);
 			break;
 		case 1:
-			LOG_WARN(str);
+			APP_LOG_WARN(str);
 			break;
 		case 2:
-			LOG_ERROR(str);
+			APP_LOG_ERROR(str);
 			break;
 		default:
-			LOG_INFO(str);
+			APP_LOG_INFO(str);
 			break;
 		}
 	}
@@ -42,16 +42,16 @@ namespace TAGE {
 		switch (logLevel)
 		{
 		case 0:
-			LOG_INFO(glm::to_string(*vector));
+			APP_LOG_INFO(glm::to_string(*vector));
 			break;
 		case 1:
-			LOG_WARN(glm::to_string(*vector));
+			APP_LOG_WARN(glm::to_string(*vector));
 			break;
 		case 2:
-			LOG_ERROR(glm::to_string(*vector));
+			APP_LOG_ERROR(glm::to_string(*vector));
 			break;
 		default:
-			LOG_INFO(glm::to_string(*vector));
+			APP_LOG_INFO(glm::to_string(*vector));
 			break;
 		}
 	}

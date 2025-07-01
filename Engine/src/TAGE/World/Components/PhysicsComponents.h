@@ -7,8 +7,8 @@
 
 namespace TAGE {
 	struct ColliderComponent {
+		MEM::Ref<btCollisionShape> CollisionShape = nullptr;
 		ColliderShapeType Shape = ColliderShapeType::BOX;
-		btCollisionShape* CollisionShape = nullptr;
 		CollisionResponseType ResponseType = CollisionResponseType::BLOCK;
 		glm::vec3 Size = glm::vec3(1.0f);
 		bool Dirty = false;
@@ -37,8 +37,8 @@ namespace TAGE {
 			return glm::vec3(Body->getLinearVelocity().getX(), Body->getLinearVelocity().getY(), Body->getLinearVelocity().getZ());
 		}
 
-		btRigidBody* Body = nullptr;
+		MEM::Ref<btRigidBody> Body = nullptr;
+		MEM::Ref<btMotionState> MotionState = nullptr;
 		PhysicsBodyType BodyType;
-		btDefaultMotionState* MotionState = nullptr;
 	};
 }

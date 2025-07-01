@@ -14,8 +14,6 @@ namespace TAGE {
 	{
 		_World->StepSimulation(deltaTime);
 
-		UpdateDirty();
-
 		auto view = _Scene->GetEntitiesWith<RigidBodyComponent>();
 		for (auto entity : view) {
 			auto physicsEntity = _Scene->GetEntityByID(entity);
@@ -30,13 +28,13 @@ namespace TAGE {
 				BTtransform.setOrigin(Physics::Utils::GlmToBt(pos));
 				BTtransform.setRotation(Physics::Utils::GlmToBt(rot));
 
-				rb.Body->getMotionState()->setWorldTransform(BTtransform);
+				rb.MotionState->setWorldTransform(BTtransform);
 				rb.Body->setWorldTransform(BTtransform);
 			}
 
 			if (rb.BodyType == PhysicsBodyType::DYNAMIC) {
 				btTransform trans;
-				rb.Body->getMotionState()->getWorldTransform(trans);
+				rb.MotionState->getWorldTransform(trans);
 				transform.Position = Physics::Utils::BtToGlm(trans.getOrigin());
 				transform.Rotation = Physics::Utils::BtToGlm(trans.getRotation());
 			}
@@ -46,8 +44,6 @@ namespace TAGE {
 
 	void System_Physics::UpdateEditor(float deltaTime)
 	{
-		UpdateDirty();
-
 		auto view = _Scene->GetEntitiesWith<RigidBodyComponent>();
 		for (auto entity : view) {
 			auto physicsEntity = _Scene->GetEntityByID(entity);
@@ -60,10 +56,36 @@ namespace TAGE {
 			BTtransform.setOrigin(Physics::Utils::GlmToBt(pos));
 			BTtransform.setRotation(Physics::Utils::GlmToBt(rot));
 
-			rb.SetVelocity({ 0,0,0 });
-			rb.Body->getMotionState()->setWorldTransform(BTtransform);
-			rb.Body->setWorldTransform(BTtransform);
+			if (rb.Body && rb.MotionState) {
+				rb.SetVelocity({ 0,0,0 });
+				rb.MotionState->setWorldTransform(BTtransform);
+				rb.Body->setWorldTransform(BTtransform);
+			}
 		}
+	}
+
+	void System_Physics::StartRuntime()
+	{
+		auto view = _Scene->GetRegistry().view<RigidBodyComponent, ColliderComponent>();
+		for (auto e : view) {
+			Entity entity = { e, _Scene };
+
+			auto& rb = view.get<RigidBodyComponent>(e);
+			auto& cl = view.get<ColliderComponent>(e);
+
+			if (entity.HasComponent<ColliderComponent>()) {
+				RegisterCollider(entity);
+			}
+
+			if (entity.HasComponent<RigidBodyComponent>()) {
+				RegisterRigidBody(entity);
+			}
+		}
+	}
+
+	void System_Physics::StopRuntime()
+	{
+
 	}
 
 	void System_Physics::RegisterRigidBody(Entity entityToRegister)
@@ -81,9 +103,8 @@ namespace TAGE {
 		if (rb.Body != nullptr)
 			return;
 
-		btCollisionShape* shape = nullptr;
+		MEM::Ref<btCollisionShape> shape = nullptr;
 		if (hasCollider) {
-			shape = collider->CollisionShape;
 			if (!shape) {
 				shape = Physics::Utils::CollisionShapeToBullet(collider->Shape, collider->Size);
 				collider->CollisionShape = shape;
@@ -95,15 +116,15 @@ namespace TAGE {
 		startTransform.setOrigin(Physics::Utils::GlmToBt(transform.Position));
 		startTransform.setRotation(Physics::Utils::GlmToBt(transform.Rotation));
 
-		btDefaultMotionState* motionState = new btDefaultMotionState(startTransform);
+		MEM::Ref<btDefaultMotionState> motionState = MEM::MakeRef<btDefaultMotionState>(startTransform);
 
 		btScalar mass = (rb.BodyType == PhysicsBodyType::DYNAMIC) ? 1.0f : 0.0f;
 		btVector3 inertia(0, 0, 0);
 		if (hasCollider && mass != 0.0f)
 			shape->calculateLocalInertia(mass, inertia);
 
-		btRigidBody::btRigidBodyConstructionInfo rbInfo(mass, motionState, shape, inertia);
-		btRigidBody* body = new btRigidBody(rbInfo);
+		btRigidBody::btRigidBodyConstructionInfo rbInfo(mass, motionState.get(), shape.get(), inertia);
+		MEM::Ref<btRigidBody> body = MEM::MakeRef<btRigidBody>(rbInfo);
 
 		switch (rb.BodyType) {
 		case PhysicsBodyType::STATIC:
@@ -123,9 +144,10 @@ namespace TAGE {
 		}
 
 		body->setUserPointer(&entityToRegister);
-		rb.Body = body;
+		rb.Body = std::move(body);
+		rb.MotionState = std::move(motionState);
 
-		_World->AddRigidBody(body);
+		_World->AddRigidBody(rb.Body.get());
 	}
 
 	void System_Physics::RegisterCollider(Entity entityToRegister)
@@ -136,10 +158,10 @@ namespace TAGE {
 			return;
 
 		auto& transform = entityToRegister.GetComponent<TransformComponent>();
-		btCollisionShape* shape = Physics::Utils::CollisionShapeToBullet(collider.Shape, collider.Size);
+		MEM::Ref<btCollisionShape> shape = Physics::Utils::CollisionShapeToBullet(collider.Shape, collider.Size);
 		ASSERT(shape != nullptr, "Failed to create collision shape");
 
-		collider.CollisionShape = shape;
+		collider.CollisionShape = std::move(shape);
 	}
 
 	void System_Physics::DestroyPhysics(Entity entity)
@@ -147,9 +169,7 @@ namespace TAGE {
 		if (entity.HasComponent<RigidBodyComponent>()) {
 			auto& rb = entity.GetComponent<RigidBodyComponent>();
 			if (rb.Body) {
-				_World->RemoveRigidBody(rb.Body);
-				delete rb.Body->getMotionState();
-				delete rb.Body;
+				_World->RemoveRigidBody(rb.Body.get());
 				rb.Body = nullptr;
 			}
 		}
@@ -157,7 +177,6 @@ namespace TAGE {
 		if (entity.HasComponent<ColliderComponent>()) {
 			auto& collider = entity.GetComponent<ColliderComponent>();
 			if (collider.CollisionShape) {
-				delete collider.CollisionShape;
 				collider.CollisionShape = nullptr;
 			}
 		}

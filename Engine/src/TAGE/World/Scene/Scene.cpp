@@ -7,15 +7,16 @@
 
 namespace TAGE {
 	Scene::Scene(const std::string& name) : _Name(name) {
-		_PhysicsWorld = new Physics::PhysicsWorld();
-		_RendererSystem = MEM::MakeRef<System_Renderer>(Application::Get()->GetRenderer());
+		TARE::Debug::DebugRenderer::Get().Init();
+
 		_PhysicsSystem = MEM::MakeRef<System_Physics>(_PhysicsWorld);
-		_RendererSystem->SetActiveScene(this);
 		_PhysicsSystem->SetActiveScene(this);
+
+		_RendererSystem = MEM::MakeRef<System_Renderer>(Application::Get()->GetRenderer());
+		_RendererSystem->SetActiveScene(this);
 	}
 
 	Scene::~Scene() {
-		delete _PhysicsWorld;
 	}
 
 	template<typename... Component>
@@ -121,6 +122,26 @@ namespace TAGE {
 		_RendererSystem->UpdateEditor(DeltaTime);
 	}
 
+	void Scene::OnUpdateSimulate(float DeltaTime, const MEM::Ref<TARE::EditorCamera>& camera)
+	{
+		_PhysicsSystem->Update(DeltaTime);
+		_RendererSystem->SetEditorCamera(camera);
+		_RendererSystem->UpdateEditor(DeltaTime);
+	}
+
+	void Scene::OnPhysicsStart()
+	{
+		_PhysicsWorld = new Physics::PhysicsWorld();
+		_PhysicsSystem->SetWorld(_PhysicsWorld);
+		_PhysicsSystem->StartRuntime();
+	}
+
+	void Scene::OnPhysicsStop()
+	{
+		delete _PhysicsWorld;
+		_PhysicsWorld = nullptr;
+	}
+
 	void Scene::DestroyEntity(Entity entity)
 	{
 		_Entities.erase(entity.GetUUID());
@@ -140,12 +161,28 @@ namespace TAGE {
 				ScriptEngine::OnCreateEntity(entity);
 			}
 		}
+
+		OnPhysicsStart();
+	}
+
+	void Scene::OnSimulateStart()
+	{
+		_Running = true;
+		OnPhysicsStart();
 	}
 
 	void Scene::OnRuntimeStop()
 	{
 		_Running = false;
 		ScriptEngine::OnRuntimeStop();
+
+		OnPhysicsStop();
+	}
+
+	void Scene::OnSimulateStop()
+	{
+		_Running = false;
+		OnPhysicsStop();
 	}
 
 	Entity Scene::GetPrimaryCamera() {
@@ -263,12 +300,10 @@ template<typename T>
 	template<>
 	void Scene::OnComponentAdded<RigidBodyComponent>(Entity entity, RigidBodyComponent& component)
 	{
-		_PhysicsSystem->RegisterRigidBody(entity);
 	}
 
 	template<>
 	void Scene::OnComponentAdded<ColliderComponent>(Entity entity, ColliderComponent& component)
 	{
-		_PhysicsSystem->RegisterCollider(entity);
 	}
 }

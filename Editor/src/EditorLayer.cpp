@@ -22,6 +22,7 @@ namespace TAGE::Editor {
 		_EditorCamera = MEM::MakeRef<TARE::EditorCamera>(_ActiveScene->GetWidth(), _ActiveScene->GetHeight());
 		_SceneHierarchyPanel = MEM::MakeScope<SceneHierarchyPanel>(_ActiveScene);
 		_ContentBrowserPanel = MEM::MakeScope<ContentBrowserPanel>();
+		_OutputPanel = MEM::MakeScope<OutputPanel>();
 
 		_PlayIcon = TARE::Texture2D::Create();
 		_PlayIcon->LoadTexture("Assets/textures/Icons/Play.png");
@@ -91,6 +92,14 @@ namespace TAGE::Editor {
 			_ActiveScene->OnUpdateRuntime(dt);
 			break;
 		case SceneState::SIMULATE:
+			if (_ViewportMouseFocused && !ImGuizmo::IsUsing()) {
+				_EditorCamera->OnUpdate(dt);
+			}
+			else {
+				_EditorCamera->SetFirstMouse(true);
+			}
+
+			_ActiveScene->OnUpdateSimulate(dt, _EditorCamera);
 			break;
 		default:
 			break;
@@ -99,6 +108,8 @@ namespace TAGE::Editor {
 
 	void EditorLayer::OnImGuiRender()
 	{
+		Toolbar();
+
 		static bool dockspaceOpen = true;
 		static bool opt_fullscreen_persistant = true;
 		bool opt_fullscreen = opt_fullscreen_persistant;
@@ -139,35 +150,9 @@ namespace TAGE::Editor {
 
 		style.WindowMinSize.x = minWinSizeX;
 
-		if (ImGui::BeginMenuBar())
-		{
-			if (ImGui::BeginMenu("File"))
-			{
-				if (ImGui::MenuItem("New", "Ctrl+N"))
-				{
-					NewScene();
-				}
-
-				if (ImGui::MenuItem("Save Scene As...", "Ctrl+Shift+S"))
-				{
-					SaveSceneAs();
-				}
-
-				if (ImGui::MenuItem("Open Scene...", "Ctrl+O"))
-				{
-					OpenScene();
-				}
-
-				if (ImGui::MenuItem("Exit")) Application::Get()->Close();
-				
-				ImGui::EndMenu();
-			}
-
-			ImGui::EndMenuBar();
-		}
-
 		_SceneHierarchyPanel->OnImGuiRender();
 		_ContentBrowserPanel->OnImGuiRender();
+		_OutputPanel->OnImGuiRender();
 
 		ImGui::PushStyleVar(ImGuiStyleVar_WindowPadding, ImVec2{ 0, 0 });
 		ImGui::Begin("Viewport", nullptr, ImGuiWindowFlags_NoDecoration | ImGuiWindowFlags_NoScrollbar | ImGuiWindowFlags_NoScrollWithMouse);
@@ -201,11 +186,8 @@ namespace TAGE::Editor {
 		case ViewportDebugMode::GBuffer_Normal:
 			textureID = deferred.GetGBuffer()->GetColorAttachment(1);
 			break;
-		case ViewportDebugMode::GBuffer_Spec:
-			textureID = deferred.GetGBuffer()->GetColorAttachment(2);
-			break;
 		case ViewportDebugMode::GBuffer_Albedo:
-			textureID = deferred.GetGBuffer()->GetColorAttachment(3);
+			textureID = deferred.GetGBuffer()->GetColorAttachment(2);
 			break;
 		case ViewportDebugMode::GBuffer_Depth:
 			textureID = deferred.GetGBuffer()->GetDepthAttachment();
@@ -294,35 +276,174 @@ namespace TAGE::Editor {
 		ImGui::End();
 		ImGui::PopStyleVar();
 
-		Toolbar();
+		ImGui::Begin("Settings");
+		static bool drawColliders = false;
+		ImGui::Checkbox("Draw Colliders", &drawColliders);
+		const char* drawTypeString[] = { 
+			"Default", 
+			"GBuffer_Position", 
+			"GBuffer_Normal",
+			"GBuffer_Albedo",
+			"GBuffer_Depth",
+			"Lighting",
+			"ShadowMap",
+			"GI"
+		};
+		int currentdrawType = static_cast<int>(debugMode);
+		if (ImGui::Combo("Debug Viewport Image", &currentdrawType, drawTypeString, IM_ARRAYSIZE(drawTypeString))) {
+			debugMode = static_cast<ViewportDebugMode>(currentdrawType);
+		}
+
+		if (drawColliders) {
+			TARE::RenderAPI::SetRenderMode(DebugRenderMode::BOUNDING_BOX);
+		}
+		else {
+			TARE::RenderAPI::SetRenderMode(DebugRenderMode::NONE);
+		}
+
+		ImGui::End();
 
 		ImGui::End();
 	}
 
 	void EditorLayer::Toolbar()
 	{
+		static bool isDraggingWindow = false;
+		static ImVec2 dragStartPos;
+		if (ImGui::BeginMainMenuBar())
+		{
+			if (ImGui::BeginMenu("File"))
+			{
+				ImGui::MenuItem("New");
+				if (ImGui::MenuItem("Open Scene...")) {
+					OpenScene();
+				}
+				if (ImGui::MenuItem("Save Scene As...")) {
+					SaveSceneAs();
+				}
+
+				ImGui::Separator();
+				if (ImGui::MenuItem("Exit"))
+				{
+					if (ImGui::MenuItem("Exit")) Application::Get()->Close();
+				}
+				ImGui::EndMenu();
+			}
+
+			if (ImGui::BeginMenu("Edit"))
+			{
+				ImGui::MenuItem("Undo");
+				ImGui::MenuItem("Redo");
+				ImGui::Separator();
+				ImGui::MenuItem("Cut");
+				ImGui::MenuItem("Copy");
+				if (ImGui::MenuItem("Duplicate Entity")) {
+
+				}
+				ImGui::EndMenu();
+			}
+
+			const char* text = "Tourqe Advanced Game Engine";
+			float windowWidth = ImGui::GetWindowWidth();
+			ImVec2 textSize = ImGui::CalcTextSize(text);
+			float textPosX = (windowWidth - textSize.x) * 0.5f;
+
+			ImGui::SetCursorPosX(textPosX);
+			ImGui::Text("%s", text);
+
+			ImGui::SameLine(ImGui::GetWindowWidth() - 100.0f);
+
+			if (ImGui::Button("-")) {
+				//Application::Get()->GetWindow()->IconifyWindow();
+			}
+			ImGui::SameLine();
+
+			static bool maximized = true;
+			if (ImGui::Button("[]")) {
+				Application::Get()->GetWindow()->RestoreWindow(maximized);
+				maximized = !maximized;
+			}
+			ImGui::SameLine();
+
+			if (ImGui::Button("X")) {
+				Application::Get()->Close();
+			}
+
+			if (ImGui::IsMouseClicked(ImGuiMouseButton_Left) && ImGui::IsWindowHovered(ImGuiHoveredFlags_RootAndChildWindows))
+			{
+				isDraggingWindow = true;
+				dragStartPos = ImGui::GetMousePos();
+			}
+
+			if (ImGui::IsMouseDoubleClicked(ImGuiMouseButton_Left) && ImGui::IsWindowHovered(ImGuiHoveredFlags_RootAndChildWindows))
+			{
+				Application::Get()->GetWindow()->RestoreWindow(maximized);
+				maximized = !maximized;
+			}
+
+			if (isDraggingWindow)
+			{
+				if (ImGui::IsMouseDragging(ImGuiMouseButton_Left))
+				{
+					ImVec2 currentPos = ImGui::GetMousePos();
+					ImVec2 delta = ImVec2(currentPos.x - dragStartPos.x, currentPos.y - dragStartPos.y);
+					dragStartPos = currentPos;
+
+					int x, y;
+					Application::Get()->GetWindow()->GetWindowPos(&x, &y);
+					Application::Get()->GetWindow()->SetWindowPos(x + (int)delta.x, y + (int)delta.y);
+				}
+
+				if (ImGui::IsMouseReleased(ImGuiMouseButton_Left))
+				{
+					isDraggingWindow = false;
+				}
+			}
+
+			ImGui::EndMainMenuBar();
+		}
+
+		ImGuiViewportP* viewport = (ImGuiViewportP*)(void*)ImGui::GetMainViewport();
+		ImGuiWindowFlags window_flags = ImGuiWindowFlags_NoScrollbar | ImGuiWindowFlags_NoSavedSettings | ImGuiWindowFlags_MenuBar;
+		float height = ImGui::GetFrameHeight();
+
 		ImGui::PushStyleVar(ImGuiStyleVar_WindowPadding, ImVec2(0, 2));
 		ImGui::PushStyleVar(ImGuiStyleVar_ItemInnerSpacing, ImVec2(0, 0));
 		ImGui::PushStyleColor(ImGuiCol_Button, ImVec4(0, 0, 0, 0));
 		ImGui::PushStyleColor(ImGuiCol_ButtonHovered, ImVec4(0, 0, 0, 0));
 		ImGui::PushStyleColor(ImGuiCol_ButtonActive, ImVec4(0, 0, 0, 0));
+		if (ImGui::BeginViewportSideBar("##toolbar", viewport, ImGuiDir_Up, height, window_flags)) {
+			if (ImGui::BeginMenuBar()) {
+				float iconSize = 20.0f;
+				float spacing = ImGui::GetStyle().ItemSpacing.x;
+				float totalWidth = iconSize * 3 + spacing * 2;
+				float centerPosX = (ImGui::GetWindowWidth() - totalWidth) * 0.5f;
 
-		ImGui::Begin("##toolbar", nullptr, ImGuiWindowFlags_NoDecoration | ImGuiWindowFlags_NoScrollbar | ImGuiWindowFlags_NoScrollWithMouse);
+				ImGui::SetCursorPosX(centerPosX);
+				ImGui::SetCursorPosX((ImGui::GetWindowContentRegionMax().x * 0.5f) - (iconSize * 0.5f));
 
-		float size = ImGui::GetWindowHeight() - 30.0f;
-		ImGui::SetCursorPosX((ImGui::GetWindowContentRegionMax().x * 0.5f) - (size * 0.5f));
+				MEM::Ref<TARE::Texture2D> icon = _SceneState == SceneState::PLAY ? _StopIcon : _PlayIcon;
+				MEM::Ref<TARE::Texture2D> simulateIcon = _SceneState == SceneState::SIMULATE ? _StopIcon : _PlayIcon;
+				if (ImGui::ImageButton("PlayStop", (ImTextureID)icon->GetID(), ImVec2(iconSize, iconSize), ImVec2(0, 0), ImVec2(1, 1))) {
+					if (_SceneState == SceneState::EDIT)
+						OnScenePlay();
+					else if (_SceneState == SceneState::PLAY)
+						OnSceneStop();
+				}
+				ImGui::SameLine();
+				if (ImGui::ImageButton("Simulate", (ImTextureID)simulateIcon->GetID(), ImVec2(iconSize, iconSize), ImVec2(0, 0), ImVec2(1, 1))) {
+					if (_SceneState == SceneState::EDIT)
+						OnSimulateStart();
+					else if (_SceneState == SceneState::SIMULATE)
+						OnSimulateStop();
+				}
 
-		MEM::Ref<TARE::Texture2D> icon = _SceneState == SceneState::EDIT ? _PlayIcon : _StopIcon;
-		if (ImGui::ImageButton("PlayStop", (ImTextureID)icon->GetID(), ImVec2(size, size), ImVec2(0, 0), ImVec2(1, 1))) {
-			if (_SceneState == SceneState::EDIT)
-				OnScenePlay();
-			else if (_SceneState == SceneState::PLAY)
-				OnSceneStop();
+				ImGui::EndMenuBar();
+			}
 		}
-
+		ImGui::End();
 		ImGui::PopStyleVar(2);
 		ImGui::PopStyleColor(3);
-		ImGui::End();
 	}
 
 	void EditorLayer::OnEvent(Event& event)
@@ -357,7 +478,6 @@ namespace TAGE::Editor {
 		case Key::F6: debugMode = ViewportDebugMode::Lighting; break;
 		case Key::F7: debugMode = ViewportDebugMode::ShadowMap; break;
 		case Key::F8: debugMode = ViewportDebugMode::GI; break;
-		case Key::F9: debugMode = ViewportDebugMode::GBuffer_Spec; break;
 
 		case Key::S: {
 			if (control && shift)
@@ -453,6 +573,24 @@ namespace TAGE::Editor {
 		_SceneState = SceneState::EDIT;
 
 		_ActiveScene->OnRuntimeStop();
+		_ActiveScene = _EditorScene;
+		_SceneHierarchyPanel->SetContext(_ActiveScene);
+	}
+
+	void EditorLayer::OnSimulateStart()
+	{
+		_SceneState = SceneState::SIMULATE;
+
+		_ActiveScene = Scene::Copy(_EditorScene);
+		_ActiveScene->OnSimulateStart();
+		_SceneHierarchyPanel->SetContext(_ActiveScene);
+	}
+
+	void EditorLayer::OnSimulateStop()
+	{
+		_SceneState = SceneState::EDIT;
+
+		_ActiveScene->OnSimulateStop();
 		_ActiveScene = _EditorScene;
 		_SceneHierarchyPanel->SetContext(_ActiveScene);
 	}

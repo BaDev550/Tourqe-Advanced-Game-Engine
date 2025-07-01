@@ -1,6 +1,7 @@
 #ifndef PBR_GLSL
 #define PBR_GLSL
 
+
 const float PI = 3.14159265359;
 
 float DistributionGGX(vec3 N, vec3 H, float roughness)
@@ -40,7 +41,7 @@ float GeometrySmith(vec3 N, vec3 V, vec3 L, float roughness)
 
 vec3 fresnelSchlick(float cosTheta, vec3 F0)
 {
-    return F0 + (1.0 - F0) * pow(1.0 - cosTheta, 5.0);
+    return F0 + (1.0 - F0) * pow(clamp(1.0 - cosTheta, 0.0, 1.0), 5.0);
 }
 
 vec3 ComputeLightDirectionAndAttenuation(Light light, vec3 fragPos, out vec3 lightDir, out float attenuation)
@@ -84,6 +85,8 @@ vec3 ComputeCookTorranceSpecular(vec3 normal, vec3 viewDir, vec3 lightDir, vec3 
     return (NDF * G * F) / denom;
 }
 
+#define USE_COMPLEX_CALCULATION
+#ifdef USE_COMPLEX_CALCULATION
 vec3 CalculatePBRLight(
     Light light, 
     vec3 normal, 
@@ -127,6 +130,40 @@ vec3 CalculatePBRLight(
 
     return (diffuse + specular) * radiance * NdotL;
 }
+#else
+vec3 CalculatePBRLight(
+    Light light, 
+    vec3 normal, 
+    vec3 viewDir, 
+    vec3 fragPos, 
+    vec3 albedo, 
+    float metallic, 
+    float roughness, 
+    vec3 F0)
+{
+    vec3 L = normalize(light.position - fragPos);
+    vec3 H = normalize(viewDir + L);
+    float distance = length(light.position - fragPos);
+    float attenuation = 1.0 / (distance * distance);
+    vec3 radiance = light.color * attenuation;
 
+    float NDF = DistributionGGX(normal, H, roughness);
+    float G = GeometrySmith(normal, viewDir, L, roughness);
+    vec3 F = fresnelSchlick(max(dot(H, viewDir), 0.0), F0);
+
+    vec3 kS = F;
+    vec3 kD = vec3(1.0) - kS;
+    kD *= 1.0 - metallic;
+
+    vec3 numerator = NDF * G * F;
+    float denaminator = 4.0 * max(dot(normal, viewDir), 0.0) * max(dot(normal, L), 0.0) + 0.0001;
+    vec3 specular = numerator / denaminator;
+
+    float NdotL = max(dot(normal, L), 0.0);
+    vec3 Light = (kD * albedo / PI + specular) * radiance * NdotL;
+
+    return Light;
+}
+#endif
 
 #endif

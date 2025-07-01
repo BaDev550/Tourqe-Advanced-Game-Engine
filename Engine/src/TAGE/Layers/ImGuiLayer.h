@@ -18,6 +18,7 @@ namespace TAGE {
 
 		void BlockEvents(bool block) { _BlockEvents = block; }
 
+		void SetupImGuiStyle();
 	private:
 		bool _BlockEvents = true;
 	};

@@ -45,6 +45,8 @@ namespace TAGE {
 		void ToggleFullscreen();
 		void ForceClose();
 		void ToggleCursor(bool enabled);
+		void SetWindowPos(int x, int y);
+		void RestoreWindow(bool maximaze);
 
 		bool ShouldClose() const;
 		void SwapBuffers();
@@ -53,6 +55,7 @@ namespace TAGE {
 		bool IsFocused() const { return _Properties.Focused; }
 		bool IsVisible() const { return _Properties.Visible; }
 		bool IsMinimized() const { return glfwGetWindowAttrib(_Window, GLFW_ICONIFIED); }
+		void GetWindowPos(int* x, int* y);
 		GLFWwindow* GetGLFWWindow() const { return _Window; }
 
 		int GetWidth() const { return _Properties.Width; }
