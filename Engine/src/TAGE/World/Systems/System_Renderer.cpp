@@ -21,9 +21,9 @@ namespace TAGE {
 		MEM::Ref<TARE::Camera> camera = nullptr;
 
 		auto& cc = primaryCameraEntity.GetComponent<CameraComponent>();
-		auto& tc = primaryCameraEntity.GetComponent<TransformComponent>();
+		auto& tc = _Scene->GetWorldSpaceTransform(primaryCameraEntity);
 		cc.Handle->SetPosition(tc.Position);
-		cc.Handle->SetEulerRotation(glm::eulerAngles(tc.Rotation));
+		cc.Handle->SetEulerRotation(tc.GetRotationEuler());
 		camera = cc.Handle;
 
 		if (!camera) return;
@@ -72,12 +72,10 @@ namespace TAGE {
 		for (auto entity : view) {
 			Entity& entityObj = _Scene->GetEntityByID(entity);
 			auto& mc = entityObj.GetComponent<MeshComponent>();
-			auto& tc = entityObj.GetComponent<TransformComponent>();
 			if (!mc.Handle) continue;
 
-			auto& transform = entityObj.GetComponent<TransformComponent>();
-
-			mc.Handle->SetTransform(transform.GetTransform());
+			glm::mat4 transform = _Scene->GetWorldSpaceTransformMatrix(entityObj);
+			mc.Handle->SetTransform(transform);
 
 			if (mc.IsVisible) {
 				_Renderer->GetDeferredRendering().GetGBufferShader()->Use();
@@ -96,8 +94,8 @@ namespace TAGE {
 			auto& mc = entityObj.GetComponent<MeshComponent>();
 			if (!mc.Handle) continue;
 
-			auto& transform = entityObj.GetComponent<TransformComponent>();
-			mc.Handle->SetTransform(transform.GetTransform());
+			glm::mat4 transform = _Scene->GetWorldSpaceTransformMatrix(entityObj);
+			mc.Handle->SetTransform(transform);
 
 			if (mc.CastShadows)
 				mc.Handle->Draw(point ? "PointLightShadowDepth" : "ShadowDepth");
@@ -205,7 +203,7 @@ namespace TAGE {
 				auto& lc = lightEntity.GetComponent<LightComponent>();
 				auto& transform = lightEntity.GetComponent<TransformComponent>();
 				lc.Handle.position = transform.Position;
-				lc.Handle.direction = glm::normalize(glm::rotate(transform.Rotation, glm::vec3(0.0f, 0.0f, -1.0f)));
+				lc.Handle.direction = transform.GetRotationEuler();
 				lights.push_back(lc.Handle);
 			}
 		}

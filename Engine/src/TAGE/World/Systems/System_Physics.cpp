@@ -22,7 +22,7 @@ namespace TAGE {
 
 			if (rb.BodyType == PhysicsBodyType::STATIC || rb.BodyType == PhysicsBodyType::KINEMATIC) {
 				glm::vec3 pos = transform.Position;
-				glm::quat rot = transform.Rotation;
+				glm::quat rot = transform.GetRotation();
 
 				btTransform BTtransform;
 				BTtransform.setOrigin(Physics::Utils::GlmToBt(pos));
@@ -36,7 +36,7 @@ namespace TAGE {
 				btTransform trans;
 				rb.MotionState->getWorldTransform(trans);
 				transform.Position = Physics::Utils::BtToGlm(trans.getOrigin());
-				transform.Rotation = Physics::Utils::BtToGlm(trans.getRotation());
+				transform.SetRotation(Physics::Utils::BtToGlm(trans.getRotation()));
 			}
 
 		}
@@ -50,7 +50,7 @@ namespace TAGE {
 			auto& rb = physicsEntity.GetComponent<RigidBodyComponent>();
 			auto& transform = physicsEntity.GetComponent<TransformComponent>();
 			glm::vec3 pos = transform.Position;
-			glm::quat rot = transform.Rotation;
+			glm::quat rot = transform.GetRotation();
 
 			btTransform BTtransform;
 			BTtransform.setOrigin(Physics::Utils::GlmToBt(pos));
@@ -106,7 +106,7 @@ namespace TAGE {
 		MEM::Ref<btCollisionShape> shape = nullptr;
 		if (hasCollider) {
 			if (!shape) {
-				shape = Physics::Utils::CollisionShapeToBullet(collider->Shape, collider->Size);
+				shape = Physics::Utils::CollisionShapeToBullet(entityToRegister, collider->Shape, collider->Size);
 				collider->CollisionShape = shape;
 			}
 		}
@@ -114,7 +114,7 @@ namespace TAGE {
 		btTransform startTransform;
 		startTransform.setIdentity();
 		startTransform.setOrigin(Physics::Utils::GlmToBt(transform.Position));
-		startTransform.setRotation(Physics::Utils::GlmToBt(transform.Rotation));
+		startTransform.setRotation(Physics::Utils::GlmToBt(transform.GetRotation()));
 
 		MEM::Ref<btDefaultMotionState> motionState = MEM::MakeRef<btDefaultMotionState>(startTransform);
 
@@ -143,6 +143,8 @@ namespace TAGE {
 			body->setCollisionFlags(body->getCollisionFlags() | btCollisionObject::CF_NO_CONTACT_RESPONSE);
 		}
 
+		body->setLinearFactor(Physics::Utils::GlmToBt(rb.LinearFactor));
+		body->setAngularFactor(Physics::Utils::GlmToBt(rb.AngularFactor));
 		body->setUserPointer(&entityToRegister);
 		rb.Body = std::move(body);
 		rb.MotionState = std::move(motionState);
@@ -158,7 +160,7 @@ namespace TAGE {
 			return;
 
 		auto& transform = entityToRegister.GetComponent<TransformComponent>();
-		MEM::Ref<btCollisionShape> shape = Physics::Utils::CollisionShapeToBullet(collider.Shape, collider.Size);
+		MEM::Ref<btCollisionShape> shape = Physics::Utils::CollisionShapeToBullet(entityToRegister, collider.Shape, collider.Size);
 		ASSERT(shape != nullptr, "Failed to create collision shape");
 
 		collider.CollisionShape = std::move(shape);

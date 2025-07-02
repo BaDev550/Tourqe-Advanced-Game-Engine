@@ -22,7 +22,9 @@ namespace TARE {
 			TAGE::MEM::Ref<Material> material
 		);
 		Mesh() {}
-		void Draw(TAGE::MEM::Ref<Shader>& shaderName) const;
+		~Mesh();
+		virtual void Draw(TAGE::MEM::Ref<Shader>& shader) const;
+
 		std::vector<VertexData> GetVertices() { return _vertices; }
 		std::vector<uint> GetIndices() { return _indices; }
 		TAGE::MEM::Ref<Material> GetMaterial() { return _material; }
@@ -34,6 +36,6 @@ namespace TARE {
 		std::vector<uint> _indices;
 		TAGE::MEM::Ref<VertexArrayObject> _VAO;
 		TAGE::MEM::Ref<Material> _material;
-		void SetupMesh();
+		virtual void SetupMesh();
 	};
 }

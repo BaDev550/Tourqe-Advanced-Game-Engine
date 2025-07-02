@@ -6,6 +6,7 @@ namespace TARE {
 	{
 	public:
 		OpenGL_Texture2D() {}
+		~OpenGL_Texture2D();
 		virtual void Bind(uint8 slot = 0) const override;
 		virtual void Unbind() const override;
 

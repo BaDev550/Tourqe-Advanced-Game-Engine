@@ -1,0 +1,108 @@
+Scene: Editor Scene - 1
+Entities:
+  - Entity: 9483258112159329022
+    IdentityComponent:
+      Name: Floor
+    Parent: 0
+    Children:
+      []
+    TransformComponent:
+      Position: [0, 0, 0]
+      Rotation: [0, 0, 0]
+      Scale: [7.47768736, 0.229441151, 7.73548841]
+    MeshComponent:
+      MeshPath: assets\models\Cube\cube.obj
+    RigidBodyComponent:
+      BodyType: 0
+      LinearFactor: [1, 1, 1]
+      AngularFactor: [1, 1, 1]
+    ColliderComponent:
+      Shape: 0
+      Size: [15, 1, 15]
+      ResponseType: 2
+  - Entity: 14211468471924411689
+    IdentityComponent:
+      Name: Camera
+    Parent: 10426979151703552009
+    Children:
+      []
+    TransformComponent:
+      Position: [2.22641802, 0.419475317, -0.0498660207]
+      Rotation: [0, -1.50000012, 0]
+      Scale: [1, 1, 1]
+    CameraComponent:
+      Camera:
+        AspectRatio: 2.24175835
+        FOV: 90
+        NearClip: 0.0500000007
+        FarClip: 250
+      IsActive: true
+  - Entity: 10426979151703552009
+    IdentityComponent:
+      Name: Mario
+    Parent: 0
+    Children:
+      - Handle: 14211468471924411689
+    TransformComponent:
+      Position: [-0.0434414148, 1.71190596, 0.0498660207]
+      Rotation: [0, 0, 0]
+      Scale: [1, 1, 1]
+    MeshComponent:
+      MeshPath: assets\models\mario_2\mario_2.obj
+    RigidBodyComponent:
+      BodyType: 1
+      LinearFactor: [1, 1, 1]
+      AngularFactor: [0, 0, 0]
+    ColliderComponent:
+      Shape: 0
+      Size: [1, 2, 1]
+      ResponseType: 2
+    ScriptComponent:
+      Class: Sandbox.Player
+  - Entity: 10394537247524885064
+    IdentityComponent:
+      Name: Sun
+    Parent: 0
+    Children:
+      []
+    TransformComponent:
+      Position: [0, 0, 0]
+      Rotation: [-0.836160302, -0.321747988, 0.368781298]
+      Scale: [1, 1, 1]
+    LightComponent:
+      Type: 1
+      Color: [1, 1, 1]
+      Range: 100
+      Intensity: 10
+  - Entity: 3434960238536295985
+    IdentityComponent:
+      Name: Sky
+    Parent: 0
+    Children:
+      []
+    TransformComponent:
+      Position: [0, 0, 0]
+      Rotation: [0, 0, 0]
+      Scale: [1, 1, 1]
+    SkyboxComponent:
+      TexturePath: E:\TAGE\Editor\Assets\textures\skyboxes\skybox_1.png
+  - Entity: 8209614875644579394
+    IdentityComponent:
+      Name: Floor
+    Parent: 0
+    Children:
+      []
+    TransformComponent:
+      Position: [-7.27852726, 7.63028049, 0]
+      Rotation: [0, 0, -1.57079649]
+      Scale: [7.47768736, 0.229441151, 7.73548841]
+    MeshComponent:
+      MeshPath: assets\models\Cube\cube.obj
+    RigidBodyComponent:
+      BodyType: 0
+      LinearFactor: [1, 1, 1]
+      AngularFactor: [1, 1, 1]
+    ColliderComponent:
+      Shape: 0
+      Size: [15, 1, 15]
+      ResponseType: 2

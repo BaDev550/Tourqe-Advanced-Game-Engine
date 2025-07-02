@@ -61,6 +61,7 @@ namespace TARE
         glm::vec3 _position = glm::vec3(0.0f);
         glm::vec3 _rotation = glm::vec3(0.0f);
         glm::mat4 _viewMatrix = glm::mat4(1.0f);
+        glm::mat4 _viewProjectionMatrix = glm::mat4(1.0f);
         glm::mat4 _projectionMatrix = glm::mat4(1.0f);
         glm::mat4 _inverseViewMatrix = glm::mat4(1.0f);
         glm::vec3 _forward = glm::vec3(0.0f, 0.0f, 1.0f);

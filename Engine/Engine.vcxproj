@@ -58,7 +58,7 @@
       <PrecompiledHeaderFile>tagepch.h</PrecompiledHeaderFile>
       <WarningLevel>Level3</WarningLevel>
       <PreprocessorDefinitions>_CRT_SECURE_NO_WARNINGS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <AdditionalIncludeDirectories>src;vendor;vendor\spdlog;vendor\GLFW\include;vendor\GLAD\include;vendor\assimp\include;vendor\imgui;vendor\ImGuizmo;vendor\glm;vendor\entt\include;vendor\yaml-cpp\include;vendor\bullet-physics\src;vendor\mono\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>src;vendor;vendor\spdlog;vendor\GLFW\include;vendor\GLAD\include;vendor\assimp\include;vendor\imgui;vendor\ImGuizmo;vendor\glm;vendor\entt\include;vendor\yaml-cpp\include;vendor\bullet-physics\src;vendor\mono\include;vendor\meshoptimizer;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <DebugInformationFormat>EditAndContinue</DebugInformationFormat>
       <Optimization>Disabled</Optimization>
       <RuntimeLibrary>MultiThreadedDebugDLL</RuntimeLibrary>
@@ -80,7 +80,7 @@
       <PrecompiledHeaderFile>tagepch.h</PrecompiledHeaderFile>
       <WarningLevel>Level3</WarningLevel>
       <PreprocessorDefinitions>_CRT_SECURE_NO_WARNINGS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <AdditionalIncludeDirectories>src;vendor;vendor\spdlog;vendor\GLFW\include;vendor\GLAD\include;vendor\assimp\include;vendor\imgui;vendor\ImGuizmo;vendor\glm;vendor\entt\include;vendor\yaml-cpp\include;vendor\bullet-physics\src;vendor\mono\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>src;vendor;vendor\spdlog;vendor\GLFW\include;vendor\GLAD\include;vendor\assimp\include;vendor\imgui;vendor\ImGuizmo;vendor\glm;vendor\entt\include;vendor\yaml-cpp\include;vendor\bullet-physics\src;vendor\mono\include;vendor\meshoptimizer;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <Optimization>Full</Optimization>
       <FunctionLevelLinking>true</FunctionLevelLinking>
       <IntrinsicFunctions>true</IntrinsicFunctions>
@@ -101,7 +101,6 @@
     </Lib>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClInclude Include="src\TAGE\Scripting\ScriptGlue.h" />
     <ClInclude Include="src\Platform\DirectX11\DirectX11_RenderContext.h" />
     <ClInclude Include="src\Platform\OpenGL\OpenGL_Buffers.h" />
     <ClInclude Include="src\Platform\OpenGL\OpenGL_Framebuffer.h" />
@@ -116,6 +115,7 @@
     <ClInclude Include="src\TAGE\AssetManager\AssetSerializers\AssetSerializer.h" />
     <ClInclude Include="src\TAGE\Common\TDefines.h" />
     <ClInclude Include="src\TAGE\Common\TEnums.h" />
+    <ClInclude Include="src\TAGE\Common\TMath.h" />
     <ClInclude Include="src\TAGE\Common\TTypes.h" />
     <ClInclude Include="src\TAGE\Events\ApplicationEvents.h" />
     <ClInclude Include="src\TAGE\Events\Event.h" />
@@ -132,10 +132,11 @@
     <ClInclude Include="src\TAGE\Physics\PhysicsWorld.h" />
     <ClInclude Include="src\TAGE\Physics\Raycaster.h" />
     <ClInclude Include="src\TAGE\Scripting\ScriptEngine.h" />
+    <ClInclude Include="src\TAGE\Scripting\ScriptGlue.h" />
     <ClInclude Include="src\TAGE\TAGE.h" />
     <ClInclude Include="src\TAGE\Thread\ThreadWarpper.h" />
-    <ClInclude Include="src\TAGE\Utilities\Logger.h" />
     <ClInclude Include="src\TAGE\Utilities\LogSink.h" />
+    <ClInclude Include="src\TAGE\Utilities\Logger.h" />
     <ClInclude Include="src\TAGE\Utilities\Memory.h" />
     <ClInclude Include="src\TAGE\Utilities\Platform.h" />
     <ClInclude Include="src\TAGE\Utilities\TimeStep.h" />
@@ -170,6 +171,7 @@
     <ClInclude Include="src\TARE\Model\EndlessGrid.h" />
     <ClInclude Include="src\TARE\Model\Mesh.h" />
     <ClInclude Include="src\TARE\Model\Model.h" />
+    <ClInclude Include="src\TARE\Model\SkinedMesh.h" />
     <ClInclude Include="src\TARE\Shader\Shader.h" />
     <ClInclude Include="src\TARE\Shader\ShaderLibrary.h" />
     <ClInclude Include="src\TARE\Shader\ShaderPreprocessor.h" />
@@ -596,11 +598,11 @@
     <ClInclude Include="vendor\glm\glm\vec3.hpp" />
     <ClInclude Include="vendor\glm\glm\vec4.hpp" />
     <ClInclude Include="vendor\glm\glm\vector_relational.hpp" />
+    <ClInclude Include="vendor\stb\stb_dxt.h" />
     <ClInclude Include="vendor\stb\stb_image.h" />
     <ClInclude Include="vendor\stb\stb_image_write.h" />
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="src\TAGE\Scripting\ScriptGlue.cpp" />
     <ClCompile Include="src\Platform\DirectX11\DirectX11_RenderContext.cpp" />
     <ClCompile Include="src\Platform\OpenGL\OpenGL_Buffers.cpp" />
     <ClCompile Include="src\Platform\OpenGL\OpenGL_CubemapTexture.cpp" />
@@ -617,6 +619,7 @@
     <ClCompile Include="src\TAGE\AssetManager\AssetSerializers\Serializer_Model.cpp" />
     <ClCompile Include="src\TAGE\AssetManager\Importer_Model.cpp" />
     <ClCompile Include="src\TAGE\AssetManager\Importer_Texture.cpp" />
+    <ClCompile Include="src\TAGE\Common\TMath.cpp" />
     <ClCompile Include="src\TAGE\Input\Input.cpp" />
     <ClCompile Include="src\TAGE\Layers\ImGuiBuild.cpp" />
     <ClCompile Include="src\TAGE\Layers\ImGuiLayer.cpp" />
@@ -626,6 +629,7 @@
     <ClCompile Include="src\TAGE\Physics\PhysicsWorld.cpp" />
     <ClCompile Include="src\TAGE\Physics\Raycaster.cpp" />
     <ClCompile Include="src\TAGE\Scripting\ScriptEngine.cpp" />
+    <ClCompile Include="src\TAGE\Scripting\ScriptGlue.cpp" />
     <ClCompile Include="src\TAGE\Utilities\UUID.cpp" />
     <ClCompile Include="src\TAGE\Utilities\Utilities.cpp" />
     <ClCompile Include="src\TAGE\Window\Window.cpp" />
@@ -647,6 +651,7 @@
     <ClCompile Include="src\TARE\Model\EndlessGrid.cpp" />
     <ClCompile Include="src\TARE\Model\Mesh.cpp" />
     <ClCompile Include="src\TARE\Model\Model.cpp" />
+    <ClCompile Include="src\TARE\Model\SkinedMesh.cpp" />
     <ClCompile Include="src\TARE\Shader\Shader.cpp" />
     <ClCompile Include="src\TARE\Shader\ShaderLibrary.cpp" />
     <ClCompile Include="src\TARE\Shader\ShaderPreprocessor.cpp" />
@@ -721,6 +726,9 @@
     </ProjectReference>
     <ProjectReference Include="vendor\yaml-cpp\yaml-cpp.vcxproj">
       <Project>{88F1A057-74BE-FB62-9DD7-E90A890331F1}</Project>
+    </ProjectReference>
+    <ProjectReference Include="vendor\meshoptimizer\meshoptimizer.vcxproj">
+      <Project>{75046AD2-E1C4-E508-AAFF-2E86167F2AE5}</Project>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

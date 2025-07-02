@@ -32,7 +32,8 @@ project "Engine"
         "%{IncludeDir.entt}",
         "%{IncludeDir.yaml}",
         "%{IncludeDir.BulletPhysics}",
-        "%{IncludeDir.mono}"
+        "%{IncludeDir.mono}",
+        "%{IncludeDir.meshoptimizer}"
    }
 
    defines 
@@ -54,6 +55,7 @@ project "Engine"
         "d3d11.lib",
         "dxgi.lib",
         "d3dcompiler.lib",
+        "meshoptimizer",
 
         "%{Library.mono}",
        }

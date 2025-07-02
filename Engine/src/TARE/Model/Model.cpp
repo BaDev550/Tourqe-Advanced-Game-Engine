@@ -2,6 +2,7 @@
 #include "Model.h"
 #include "TARE/Shader/ShaderLibrary.h"
 #include "TAGE/AssetManager/AssetManager.h"
+#include "meshoptimizer.h"
 
 namespace TARE
 {
@@ -222,6 +223,19 @@ namespace TARE
 			LoadTextureToMaterial(TextureType::AMBIENT_OCCLUSION, mat, material);
 		}
 
-		return TAGE::MEM::MakeScope<Mesh>(std::move(vertices), std::move(indices), std::move(material));
+        std::vector<uint> remap(vertices.size());  
+        size_t unique_vertex_count = meshopt_generateVertexRemap(remap.data(), indices.data(), indices.size(), vertices.data(), vertices.size(), sizeof(VertexData));
+		std::vector<uint> optimized_indices(indices.size());
+		std::vector<VertexData> optimized_vertices(unique_vertex_count);
+
+		meshopt_remapIndexBuffer(optimized_indices.data(), indices.data(), indices.size(), &remap[0]);
+		meshopt_remapVertexBuffer(optimized_vertices.data(), vertices.data(), vertices.size(), sizeof(VertexData), &remap[0]);
+		meshopt_optimizeVertexCache(optimized_indices.data(), optimized_indices.data(), optimized_indices.size(), unique_vertex_count);
+		meshopt_optimizeOverdraw(optimized_indices.data(), optimized_indices.data(), optimized_indices.size(), &optimized_vertices[0].pos.x, unique_vertex_count, sizeof(VertexData), 1.05f);
+		meshopt_optimizeVertexFetch(optimized_vertices.data(), optimized_indices.data(), optimized_indices.size(), optimized_vertices.data(), unique_vertex_count, sizeof(VertexData));
+
+		vertices.clear();
+		indices.clear();
+		return TAGE::MEM::MakeScope<Mesh>(std::move(optimized_vertices), std::move(optimized_indices), std::move(material));
 	}
 }

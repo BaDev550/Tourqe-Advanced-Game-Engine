@@ -12,14 +12,31 @@ namespace TARE
 		_forward.z = -cosf(_rotation.x) * cosf(_rotation.y);
 		_forward = glm::normalize(_forward);
 
-		_right = glm::normalize(glm::cross(_forward, glm::vec3(0.0f, 1.0f, 0.0f)));
+		glm::vec3 worldUp = glm::vec3(0.0f, 1.0f, 0.0f);
+		if (glm::abs(glm::dot(_forward, worldUp)) > 0.999f) {
+			_right = glm::normalize(glm::cross(glm::vec3(0.0f, 0.0f, -1.0f), _forward));
+		}
+		else {
+			_right = glm::normalize(glm::cross(_forward, worldUp));
+		}
+
 		_up = glm::normalize(glm::cross(_right, _forward));
 
-		_forwardXZ = glm::normalize(glm::vec3(_forward.x, 0.0f, _forward.z));
+		if (glm::abs(_forward.x) > 0.001f || glm::abs(_forward.z) > 0.001f)
+		{
+			_forwardXZ = glm::normalize(glm::vec3(_forward.x, 0.0f, _forward.z));
+		}
+		else
+		{
+			_forwardXZ = glm::vec3(0.0f, 0.0f, 0.0f);
+		}
+
 
 		_viewMatrix = glm::lookAt(_position, _position + _forward, _up);
-		_inverseViewMatrix = glm::inverse(_viewMatrix);
 		_projectionMatrix = glm::perspective(glm::radians(_fov), _aspectRatio, _nearClip, _farClip);
+
+		_inverseViewMatrix = glm::inverse(_viewMatrix);
+		_viewProjectionMatrix = _projectionMatrix * _viewMatrix;
 	}
 
 	void Camera::SetPosition(glm::vec3 position)
@@ -45,13 +62,11 @@ namespace TARE
 	{
 		_rotation.x += value;
 		_rotation.x = glm::clamp(_rotation.x, _minPitch, _maxPitch);
-		CalculateCameraMatrixes();
 	}
 
 	void Camera::AddYaw(float value)
 	{
 		_rotation.y += value;
-		CalculateCameraMatrixes();
 	}
 
 	void Camera::AddHeight(float value)
@@ -82,7 +97,7 @@ namespace TARE
 
 	const glm::mat4& Camera::GetViewMatrix() const { return _viewMatrix; }
 	const glm::mat4& Camera::GetProjectionMatrix() const { return _projectionMatrix; }
-	const glm::mat4& Camera::GetViewProjectionMatrix() const { return _projectionMatrix * _viewMatrix; }
+	const glm::mat4& Camera::GetViewProjectionMatrix() const { return _viewProjectionMatrix; }
 	const glm::mat4& Camera::GetInverseViewMatrix() const { return _inverseViewMatrix; }
 	const glm::vec3& Camera::GetPosition() const { return _position; }
 	const glm::vec3& Camera::GetEulerRotation() const { return _rotation; }

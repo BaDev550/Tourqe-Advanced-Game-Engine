@@ -81,21 +81,49 @@ namespace TAGE::Editor {
 			m_SelectionContext = entity;
 		}
 
+		if (ImGui::BeginDragDropTarget())
+		{
+			if (const ImGuiPayload* payload = ImGui::AcceptDragDropPayload("HIERARCHY_ENTITY"))
+			{
+				Entity childEntity = *(Entity*)payload->Data;
+				m_Context->ParentEntity(childEntity, entity);
+			}
+			ImGui::EndDragDropTarget();
+		}
+
+		if (ImGui::BeginDragDropSource())
+		{
+			ImGui::SetDragDropPayload("HIERARCHY_ENTITY", &entity, sizeof(Entity));
+			ImGui::Text("%s", tag.c_str());
+			ImGui::EndDragDropSource();
+		}
+
 		bool entityDeleted = false;
 		if (ImGui::BeginPopupContextItem())
 		{
 			if (ImGui::MenuItem("Delete Entity"))
 				entityDeleted = true;
+			if (ImGui::MenuItem("Unparent"))
+			{
+				m_Context->UnparentEntity(entity);
+			}
 
 			ImGui::EndPopup();
 		}
+		auto& rc = entity.GetComponent<RelationshipComponent>();
 
 		if (opened)
 		{
 			ImGuiTreeNodeFlags flags = ImGuiTreeNodeFlags_OpenOnArrow | ImGuiTreeNodeFlags_SpanAvailWidth;
 			bool opened = ImGui::TreeNodeEx((void*)9817239, flags, tag.c_str());
-			if (opened)
-				ImGui::TreePop();
+			for (UUID childUUID : rc.Children)
+			{
+				Entity childEntity = m_Context->GetEntityByUUID(childUUID);
+				if (childEntity)
+				{
+					DrawEntityNode(childEntity);
+				}
+			}
 			ImGui::TreePop();
 		}
 
@@ -270,9 +298,9 @@ namespace TAGE::Editor {
 		DrawComponent<TransformComponent>("Transform", entity, [](auto& component)
 			{
 				DrawVec3Control("Translation", component.Position);
-				glm::vec3 eulerDegrees = glm::degrees(glm::eulerAngles(component.Rotation));
+				glm::vec3 eulerDegrees = component.GetRotationEuler();
 				if (DrawVec3Control("Rotation", eulerDegrees))
-					component.Rotation = glm::quat(glm::radians(eulerDegrees));
+					component.SetRotationEuler(eulerDegrees);
 				DrawVec3Control("Scale", component.Scale, 1.0f);
 			});
 
@@ -343,7 +371,7 @@ namespace TAGE::Editor {
 				{
 					if (const ImGuiPayload* payload = ImGui::AcceptDragDropPayload("CONTENT_BROWSER_ITEM"))
 					{
-						const wchar_t* path = static_cast<const wchar_t*>(payload->Data);
+						const char* path = static_cast<const char*>(payload->Data);
 						std::filesystem::path fPath(path);
 
 						if (fPath.extension() == L".obj" || fPath.extension() == L".fbx") {
@@ -428,8 +456,44 @@ namespace TAGE::Editor {
 						component.BodyType = static_cast<PhysicsBodyType>(currentType);
 					}
 
-					if (ImGui::Button("Set Velocity")) {
-						component.SetVelocity({ 0.0f, 5.0f, 0.0f });
+					if (ImGui::CollapsingHeader("Constant Movement")) {
+						static bool lockX, lockY, lockZ = false;
+						static bool valueChanged = false;
+						ImGui::Text("Lock Movement");
+						ImGui::SameLine();
+						if (ImGui::Checkbox("X##movementX", &lockX))
+							valueChanged = true;
+						ImGui::SameLine();
+						if (ImGui::Checkbox("Y##movementY", &lockY))
+							valueChanged = true;
+						ImGui::SameLine();
+						if (ImGui::Checkbox("Z##movementZ", &lockZ))
+							valueChanged = true;
+
+						if (valueChanged) {
+							component.LockMovement(lockX, lockY, lockZ);
+							valueChanged = false;
+						}
+					}
+
+					if (ImGui::CollapsingHeader("Constant Rotation")) {
+						static bool lockX, lockY, lockZ = false;
+						static bool valueChanged = false;
+						ImGui::Text("Lock Rotation");
+						ImGui::SameLine();
+						if (ImGui::Checkbox("X##rotationX", &lockX))
+							valueChanged = true;
+						ImGui::SameLine();
+						if (ImGui::Checkbox("Y##rotationY", &lockY))
+							valueChanged = true;
+						ImGui::SameLine();
+						if (ImGui::Checkbox("Z##rotationZ", &lockZ))
+							valueChanged = true;
+
+						if (valueChanged) {
+							component.LockRotation(lockX, lockY, lockZ);
+							valueChanged = false;
+						}
 					}
 				}
 				else {
@@ -439,7 +503,10 @@ namespace TAGE::Editor {
 
 		DrawComponent<ColliderComponent>("Collider", entity, [](auto& component)
 			{
-				const char* shapeStrings[] = { "Box", "Capsule", "Sphere", "Mesh" };
+				DrawVec3Control("Offset", component.Offset);
+				DrawVec3Control("Size", component.Size);
+
+				const char* shapeStrings[] = { "Box", "Sphere", "Capsule", "Mesh" };
 				int currentShape = static_cast<int>(component.Shape);
 				if (ImGui::Combo("Shape", &currentShape, shapeStrings, IM_ARRAYSIZE(shapeStrings))) {
 					component.Shape = static_cast<ColliderShapeType>(currentShape);
@@ -452,7 +519,6 @@ namespace TAGE::Editor {
 				else
 					component.ResponseType = CollisionResponseType::BLOCK;
 
-				DrawVec3Control("Size", component.Size);
 			});
 	}
 

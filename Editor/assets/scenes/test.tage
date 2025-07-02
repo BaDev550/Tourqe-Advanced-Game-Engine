@@ -1,33 +1,92 @@
-Scene: Editor Scene - 1
+Scene: Test
 Entities:
-  - Entity: 7771583285447395024
+  - Entity: 3977871372191096448
     IdentityComponent:
-      Name: Empty Entity
+      Name: Floor
+    Parent: 0
+    Children:
+      []
     TransformComponent:
-      Position: [0, 4.78094292, 0]
-      Rotation: [0, 0, 0, 1]
+      Position: [-13.3342552, 2.68241501, 0]
+      Rotation: [0, 0, 1.57079649]
+      Scale: [2.78191519, 0.177173242, 14.9492617]
+    MeshComponent:
+      MeshPath: assets\models\Cube\cube.obj
+    RigidBodyComponent:
+      BodyType: 0
+    ColliderComponent:
+      Shape: 0
+      Size: [35, 1, 35]
+      ResponseType: 2
+  - Entity: 13235830997300490908
+    IdentityComponent:
+      Name: Sun
+    Parent: 0
+    Children:
+      []
+    TransformComponent:
+      Position: [0, 0, 0]
+      Rotation: [-0.959927738, -1.30665922, 0.0545679033]
+      Scale: [1, 1, 1]
+    LightComponent:
+      Type: 1
+      Color: [1, 1, 1]
+      Range: 10
+      Intensity: 10
+  - Entity: 9388116751533317827
+    IdentityComponent:
+      Name: Mario
+    Parent: 0
+    Children:
+      - Handle: 17142303126450688634
+    TransformComponent:
+      Position: [-0.454632819, 2.48634386, -1.38241339]
+      Rotation: [0, 0, 0]
       Scale: [1, 1, 1]
     MeshComponent:
-      MeshPath: E:\TAGE\Editor\assets\models\Cube\cube.obj
+      MeshPath: assets\models\mario_2\mario_2.obj
     RigidBodyComponent:
       BodyType: 1
     ColliderComponent:
       Shape: 0
-      Size: [1, 1, 1]
+      Size: [1, 2, 1]
       ResponseType: 2
-  - Entity: 15985782878447027798
+    ScriptComponent:
+      Class: Sandbox.Player
+  - Entity: 17142303126450688634
     IdentityComponent:
-      Name: Empty Entity
+      Name: Camera
+    Parent: 9388116751533317827
+    Children:
+      []
     TransformComponent:
-      Position: [0, 0, 17.5327454]
-      Rotation: [0, 0, 0, 1]
-      Scale: [1, 1, 1]
+      Position: [3.39542842, 0.920939922, -0.105161309]
+      Rotation: [0, -1.51681757, 0]
+      Scale: [0.400000006, 0.400000036, 0.400000006]
     MeshComponent:
-      MeshPath: E:\TAGE\Editor\assets\models\Cube\cube.obj
+      MeshPath: assets\models\Cube\cube.obj
     CameraComponent:
       Camera:
-        AspectRatio: 1.77777779
-        FOV: 45
+        AspectRatio: 2.23547888
+        FOV: 90
         NearClip: 0.0500000007
         FarClip: 250
       IsActive: true
+  - Entity: 13663063098940352525
+    IdentityComponent:
+      Name: Floor
+    Parent: 0
+    Children:
+      []
+    TransformComponent:
+      Position: [0, 0, 0]
+      Rotation: [0, 0, 0]
+      Scale: [13.4457235, 0.177173257, 14.9492617]
+    MeshComponent:
+      MeshPath: assets\models\Cube\cube.obj
+    RigidBodyComponent:
+      BodyType: 0
+    ColliderComponent:
+      Shape: 0
+      Size: [35, 1, 35]
+      ResponseType: 2

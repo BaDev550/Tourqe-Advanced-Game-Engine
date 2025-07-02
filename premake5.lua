@@ -22,6 +22,7 @@ workspace "TAGE"
     IncludeDir["BulletPhysics"] = "%{wks.location}/Engine/vendor/bullet-physics/src"
     IncludeDir["yaml"] =          "%{wks.location}/Engine/vendor/yaml-cpp/include"
     IncludeDir["mono"] =          "%{wks.location}/Engine/vendor/mono/include"
+    IncludeDir["meshoptimizer"] = "%{wks.location}/Engine/vendor/meshoptimizer/"
 
     LibaryDir = {}
     LibaryDir["mono"] = "%{wks.location}/Engine/vendor/mono/lib/%{cfg.buildcfg}"
@@ -41,6 +42,7 @@ workspace "TAGE"
         include "Engine/vendor/assimp"
         include "Engine/vendor/yaml-cpp"
         include "Engine/vendor/bullet-physics/"
+        include "Engine/vendor/meshoptimizer/"
     group ""
 
     group "Engine"

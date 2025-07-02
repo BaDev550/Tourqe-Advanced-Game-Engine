@@ -16,6 +16,11 @@ namespace TARE
 		RenderCommand::DrawIndexed(_VAO);
 	}
 
+	Mesh::~Mesh() {
+		_vertices.clear();
+		_indices.clear();
+	}
+
 	void Mesh::SetupMesh()
 	{
 		TAGE::MEM::Ref<VertexBufferObject> _VBO;
@@ -23,10 +28,10 @@ namespace TARE
 #ifdef TAGE_ENABLE_GLM_VERTEX_DATA
 		BufferLayout layout = {
 			{ ShaderDataType::VEC3,  "aPos" },
-			{ ShaderDataType::VEC3,  "aNormal",    true },
-			{ ShaderDataType::VEC2,  "aTexCoord",  true },
-			{ ShaderDataType::VEC3,  "aTangent",   true },
-			{ ShaderDataType::VEC3,  "aBitangent", true }
+			{ ShaderDataType::VEC3,  "aNormal",      true },
+			{ ShaderDataType::VEC2,  "aTexCoord",    true },
+			{ ShaderDataType::VEC3,  "aTangent",     true },
+			{ ShaderDataType::VEC3,  "aBitangent",   true }
 		};
 #else
 		BufferLayout layout = {

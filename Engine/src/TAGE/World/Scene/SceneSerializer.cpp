@@ -113,13 +113,30 @@ namespace TAGE {
 			out << YAML::EndMap;
 		}
 
+		if (entity.HasComponent<RelationshipComponent>())
+		{
+			auto& relationshipComponent = entity.GetComponent<RelationshipComponent>();
+			out << YAML::Key << "Parent" << YAML::Value << relationshipComponent.ParentHandle;
+
+			out << YAML::Key << "Children";
+			out << YAML::Value << YAML::BeginSeq;
+
+			for (auto child : relationshipComponent.Children)
+			{
+				out << YAML::BeginMap;
+				out << YAML::Key << "Handle" << YAML::Value << child;
+				out << YAML::EndMap;
+			}
+			out << YAML::EndSeq;
+		}
+
 		if (entity.HasComponent<TransformComponent>()) {
 			out << YAML::Key << "TransformComponent";
 			out << YAML::BeginMap;
 
 			auto& transform = entity.GetComponent<TransformComponent>();
 			out << YAML::Key << "Position" << YAML::Value << transform.Position;
-			out << YAML::Key << "Rotation" << YAML::Value << transform.Rotation;
+			out << YAML::Key << "Rotation" << YAML::Value << transform.GetRotationEuler();
 			out << YAML::Key << "Scale" << YAML::Value << transform.Scale;
 
 			out << YAML::EndMap;
@@ -179,6 +196,8 @@ namespace TAGE {
 			out << YAML::BeginMap;
 			auto& rb = entity.GetComponent<RigidBodyComponent>();
 			out << YAML::Key << "BodyType" << YAML::Value << (int)rb.BodyType;
+			out << YAML::Key << "LinearFactor" << YAML::Value << rb.LinearFactor;
+			out << YAML::Key << "AngularFactor" << YAML::Value << rb.AngularFactor;
 			out << YAML::EndMap;
 		}
 
@@ -245,9 +264,9 @@ namespace TAGE {
 		auto entities = data["Entities"];
 		if (entities) {
 			for (auto entity : entities) {
-				std::string name;
 				uint64 uuid = entity["Entity"].as<uint64>();
 
+				std::string name;
 				auto IdentityComponent = entity["IdentityComponent"];
 				if (IdentityComponent) {
 					name = IdentityComponent["Name"].as<std::string>();
@@ -257,11 +276,25 @@ namespace TAGE {
 
 				Entity& deserializedEntity = _Scene->CreateEntityWithUUID(name, uuid);
 				
+				auto& relationshipComponent = deserializedEntity.GetComponent<RelationshipComponent>();
+				uint64 parentHandle = entity["Parent"] ? entity["Parent"].as<uint64>() : 0;
+				relationshipComponent.ParentHandle = parentHandle;
+
+				auto children = entity["Children"];
+				if (children)
+				{
+					for (auto child : children)
+					{
+						uint64 childHandle = child["Handle"].as<uint64>();
+						relationshipComponent.Children.push_back(childHandle);
+					}
+				}
+
 				auto transformComponent = entity["TransformComponent"];
 				if (transformComponent) {
 					auto& transform = deserializedEntity.GetComponent<TransformComponent>();
 					transform.Position = transformComponent["Position"].as<glm::vec3>();
-					transform.Rotation = transformComponent["Rotation"].as<glm::quat>();
+					transform.SetRotationEuler(transformComponent["Rotation"].as<glm::vec3>());
 					transform.Scale = transformComponent["Scale"].as<glm::vec3>();
 				}
 
@@ -316,6 +349,9 @@ namespace TAGE {
 				auto rigidBodyComponent = entity["RigidBodyComponent"];
 				if (rigidBodyComponent) {
 					auto bodyType = (PhysicsBodyType)rigidBodyComponent["BodyType"].as<int>();
+					//auto linearFactor = rigidBodyComponent["LinearFactor"].as<glm::vec3>();
+					//auto angularFactor = rigidBodyComponent["AngularFactor"].as<glm::vec3>();
+
 					auto& rigidBody = deserializedEntity.AddOrReplaceComponent<RigidBodyComponent>();
 					rigidBody.BodyType = bodyType;
 				}

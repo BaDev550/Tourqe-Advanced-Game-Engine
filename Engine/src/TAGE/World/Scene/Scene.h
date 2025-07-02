@@ -2,6 +2,7 @@
 #include "TAGE/World/Systems/System_Base.h"
 #include "TAGE/World/Systems/System_Renderer.h"
 #include "TAGE/World/Systems/System_Physics.h"
+#include "TAGE/World/Components/BaseComponents.h"
 #include "TAGE/Physics/PhysicsWorld.h"
 #include "TARE/Camera/EditorCamera.h"
 #include "TAGE/Utilities/UUID.h"
@@ -23,6 +24,7 @@ namespace TAGE {
 
 		Entity GetEntityByUUID(UUID ID);
 		Entity GetEntityByID(entt::entity entityID);
+		Entity TryGetEntityWithUUID(UUID id) const;
 		Entity FindEntityByName(std::string_view name);
 		Entity GetPrimaryCamera();
 
@@ -46,6 +48,10 @@ namespace TAGE {
 		entt::registry& GetRegistry() { return _Registry; }
 		Physics::PhysicsWorld* GetPhysicsWorld() { return _PhysicsWorld; }
 		System_Physics& GetPhysicsSystem() { return *_PhysicsSystem; }
+		void ConvertToLocalSpace(Entity entity);
+		void ConvertToWorldSpace(Entity entity);
+		glm::mat4 GetWorldSpaceTransformMatrix(Entity entity);
+		TransformComponent GetWorldSpaceTransform(Entity entity);
 
 		uint GetWidth() const { return _Width; }
 		uint GetHeight() const { return _Height; }
@@ -54,6 +60,9 @@ namespace TAGE {
 		auto GetEntitiesWith() {
 			return _Registry.view<Components...>();
 		}
+
+		void ParentEntity(Entity entity, Entity parent);
+		void UnparentEntity(Entity entity, bool convertToWorldSpace = true);
 	private:
 		bool _Running = false;
 		float _FixedTimeStep = 0.02f; 
@@ -63,7 +72,7 @@ namespace TAGE {
 		std::string _Name;
 		uint _Width = 1280, _Height = 720;
 		
-		std::unordered_map<UUID, entt::entity> _Entities;
+		std::unordered_map<UUID, Entity> _Entities;
 
 		MEM::Ref<System_Renderer> _RendererSystem;
 		MEM::Ref<System_Physics> _PhysicsSystem;

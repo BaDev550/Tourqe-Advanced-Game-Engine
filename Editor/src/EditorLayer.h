@@ -46,12 +46,20 @@ namespace TAGE::Editor {
 		void OpenScene(const std::filesystem::path&);
 		void SaveSceneAs();
 
+		void SaveLayout();
+		void LoadLayout();
+
 		void OnScenePlay();
 		void OnSceneStop();
 		void OnSimulateStart();
 		void OnSimulateStop();
 
-		void Toolbar();
+		void UI_BeginDockspace();
+		void UI_EndDockspace();
+		void UI_DrawMainMenuBar();
+		void UI_DrawToolbar();
+		void UI_DrawViewport();
+		void UI_DrawSettingsPanel();
 	private:
 		Entity* _SelectedObject;
 		MEM::Ref<TARE::EditorCamera> _EditorCamera;

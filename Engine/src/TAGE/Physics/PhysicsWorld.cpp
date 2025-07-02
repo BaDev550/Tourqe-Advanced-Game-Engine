@@ -1,6 +1,8 @@
 #include "tagepch.h"
 #include "PhysicsWorld.h"
 #include "TARE/Debug/DebugRenderer.h"
+#include "TAGE/World/Objects/Entity.h"
+#include "TAGE/World/Components/RenderComponents.h"
 
 namespace TAGE::Physics {
 
@@ -45,4 +47,76 @@ namespace TAGE::Physics {
         renderer.Render(viewProj);
     }
 
+    namespace Utils {
+        enum class MeshCollisionType
+        {
+            STATIC_TRIANGLE_MESH,
+            CONVEX_HULL
+        };
+
+        MEM::Ref<btCollisionShape> AppendMeshCollision(Entity entity)
+        {
+            if (!entity.HasComponent<MeshComponent>())
+                return nullptr;
+
+            std::vector<glm::vec3> allVertices;
+            std::vector<uint> allIndices;
+
+            uint indexOffset = 0;
+            auto& mc = entity.GetComponent<MeshComponent>();
+            uint meshCount = mc.Handle->GetMeshCount();
+
+            for (uint i = 0; i < meshCount; i++)
+            {
+                auto mesh = mc.Handle->GetMesh(i);
+                const auto& vertices = mesh.GetVertices();
+                const auto& indices = mesh.GetIndices();
+
+                for (const auto& vertex : vertices) {
+                    allVertices.push_back(vertex.pos);
+                }
+
+                for (uint index : indices) {
+                    allIndices.push_back(index + indexOffset);
+                }
+
+                indexOffset += vertices.size();
+            }
+
+            if (allVertices.empty())
+            {
+                ASSERT(false, "Mesh has no vertices, cannot create collision shape.");
+                return nullptr;
+            }
+
+            auto shape = MEM::MakeRef<btConvexHullShape>(
+                (btScalar*)allVertices.data(),
+                allVertices.size(),
+                sizeof(glm::vec3)
+            );
+
+            return std::move(shape);
+        }
+
+        MEM::Ref<btCollisionShape> CollisionShapeToBullet(Entity entity, ColliderShapeType shape, const glm::vec3& size)
+        {
+            MEM::Ref<btCollisionShape> BoxShape = MEM::MakeRef<btBoxShape>(btVector3(size.x / 2.0f, size.y / 2.0f, size.z / 2.0f));
+            switch (shape)
+            {
+            case ColliderShapeType::BOX:      return  std::move(BoxShape);
+            case ColliderShapeType::SPHERE:  return   std::move(MEM::MakeRef<btSphereShape>(size.x / 2.0f));
+            case ColliderShapeType::CAPSULE:   return std::move(MEM::MakeRef<btCapsuleShape>(size.x / 2.0f, size.y));
+            case ColliderShapeType::MESH: {
+                    MEM::Ref<btCollisionShape> meshShape = AppendMeshCollision(entity);
+                    if (!meshShape)
+                        return std::move(BoxShape);
+
+                    return meshShape;
+                }
+            }
+
+            return std::move(BoxShape);
+        }
+    }
 }
+

@@ -6,6 +6,10 @@
 #include <glm/gtx/quaternion.hpp>
 #include "TAGE/Physics/PhysicsDebugRenderer.h"
 
+namespace TAGE{
+	class Entity;
+}
+
 namespace TAGE::Physics {
 	class PhysicsWorld
 	{
@@ -30,19 +34,8 @@ namespace TAGE::Physics {
 	};
 
 	namespace Utils {
-
-		inline MEM::Ref<btCollisionShape> CollisionShapeToBullet(ColliderShapeType shape, const glm::vec3& size)
-		{
-			switch (shape)
-			{
-			case ColliderShapeType::BOX:      return  std::move(MEM::MakeRef<btBoxShape>(btVector3(size.x / 2.0f, size.y / 2.0f, size.z / 2.0f)));
-			case ColliderShapeType::SPHERE:  return   std::move(MEM::MakeRef<btSphereShape>(size.x / 2.0f));
-			case ColliderShapeType::CAPSULE:   return std::move(MEM::MakeRef<btCapsuleShape>(size.x / 2.0f, size.y));
-			case ColliderShapeType::MESH:     ASSERT(false, "Mesh colliders not supported yet."); return nullptr;
-			}
-
-			return std::move(MEM::MakeRef<btBoxShape>(btVector3(size.x / 2.0f, size.y / 2.0f, size.z / 2.0f)));
-		}
+		inline MEM::Ref<btCollisionShape> AppendMeshCollision(Entity entity);
+		MEM::Ref<btCollisionShape> CollisionShapeToBullet(Entity entity, ColliderShapeType shape, const glm::vec3& size);
 
 		inline btVector3 GlmToBt(const glm::vec3& v) {
 			return btVector3(v.x, v.y, v.z);

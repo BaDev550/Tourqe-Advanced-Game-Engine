@@ -11,7 +11,7 @@ namespace TAGE {
 	};
 
 	using AllComponents = ComponentGroup<
-		TransformComponent, MeshComponent,
+		RelationshipComponent, TransformComponent, MeshComponent,
 		RigidBodyComponent, ColliderComponent,
 		CameraComponent, SkyboxComponent,
 		ScriptComponent, LightComponent>;

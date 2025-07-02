@@ -1,58 +1,123 @@
-Scene: sceneTest
+Scene: TPSMario
 Entities:
-  - Entity: 10340457103610555485
+  - Entity: 12118652880487886041
     IdentityComponent:
       Name: Empty Entity
+    Parent: 0
+    Children:
+      []
+    TransformComponent:
+      Position: [0.659444809, 0, -0.763378322]
+      Rotation: [0, 0, 0]
+      Scale: [0.00999999978, 0.00999999978, 0.00999999978]
+    MeshComponent:
+      MeshPath: E:\TAGE\Editor\Assets\models\Sponza\Sponza.gltf
+  - Entity: 3977871372191096448
+    IdentityComponent:
+      Name: Floor
+    Parent: 0
+    Children:
+      []
+    TransformComponent:
+      Position: [-13.3342552, 2.68241501, 0]
+      Rotation: [0, 0, 1.57079649]
+      Scale: [2.78191519, 0.177173242, 14.9492617]
+    MeshComponent:
+      MeshPath: assets\models\Cube\cube.obj
+    RigidBodyComponent:
+      BodyType: 0
+      LinearFactor: [1, 1, 1]
+      AngularFactor: [1, 1, 1]
+    ColliderComponent:
+      Shape: 0
+      Size: [35, 1, 35]
+      ResponseType: 2
+  - Entity: 13235830997300490908
+    IdentityComponent:
+      Name: Sun
+    Parent: 0
+    Children:
+      []
     TransformComponent:
       Position: [0, 0, 0]
-      Rotation: [-0.671423137, -0.172754094, 0.129736334, 0.708883286]
-      Scale: [0.999997437, 0.999999285, 0.999996841]
+      Rotation: [-0.959927738, -1.30665922, 0.0545679033]
+      Scale: [1, 1, 1]
     LightComponent:
       Type: 1
       Color: [1, 1, 1]
       Range: 10
       Intensity: 10
-  - Entity: 15974927434579312431
+  - Entity: 9388116751533317827
     IdentityComponent:
-      Name: Sponza
+      Name: Mario
+    Parent: 0
+    Children:
+      - Handle: 17142303126450688634
+      - Handle: 12226881553193720343
     TransformComponent:
-      Position: [0, 0, 0]
-      Rotation: [0, 0, 0, 1]
-      Scale: [0.00999999978, 0.00999999978, 0.00999999978]
-    MeshComponent:
-      MeshPath: E:\TAGE\Editor\Assets\models\Sponza\Sponza.gltf
-    RigidBodyComponent:
-      BodyType: 0
-    ColliderComponent:
-      Shape: 0
-      Size: [15, 1, 15]
-      ResponseType: 2
-  - Entity: 2713956064812098954
-    IdentityComponent:
-      Name: Empty Entity
-    TransformComponent:
-      Position: [0, 2.20475936, 0]
-      Rotation: [0, 0, 0, 1]
+      Position: [-1.53494763, 2.41179705, -1.2300837]
+      Rotation: [0, 0, 0]
       Scale: [1, 1, 1]
     MeshComponent:
-      MeshPath: E:\TAGE\Editor\assets\models\mario_2\mario_2.obj
+      MeshPath: assets\models\mario_2\mario_2.obj
     RigidBodyComponent:
       BodyType: 1
+      LinearFactor: [1, 1, 1]
+      AngularFactor: [0, 0, 0]
     ColliderComponent:
       Shape: 0
-      Size: [1, 1, 1]
+      Size: [1, 2, 1]
       ResponseType: 2
-  - Entity: 507271514089303050
+    ScriptComponent:
+      Class: Sandbox.Player
+  - Entity: 17142303126450688634
     IdentityComponent:
-      Name: Empty Entity
+      Name: Camera
+    Parent: 9388116751533317827
+    Children:
+      []
     TransformComponent:
-      Position: [-5.63512468, 1.94642627, -0.0430465229]
-      Rotation: [-4.94083361e-05, 0.692898631, 4.74803128e-05, 0.721035004]
-      Scale: [0.999982119, 0.999998868, 0.999991775]
+      Position: [3.42886519, 0.920956135, 0.513852775]
+      Rotation: [3.0999999, -1.51681757, 0]
+      Scale: [0.400000006, 0.400000036, 0.400000006]
+    MeshComponent:
+      MeshPath: assets\models\Cube\cube.obj
     CameraComponent:
       Camera:
-        AspectRatio: 1.77777779
-        FOV: 90
+        AspectRatio: 2.23547888
+        FOV: 45
         NearClip: 0.0500000007
         FarClip: 250
       IsActive: true
+  - Entity: 13663063098940352525
+    IdentityComponent:
+      Name: Floor
+    Parent: 0
+    Children:
+      []
+    TransformComponent:
+      Position: [0, 0, 0]
+      Rotation: [0, 0, 0]
+      Scale: [13.4457235, 0.177173257, 14.9492617]
+    MeshComponent:
+      MeshPath: assets\models\Cube\cube.obj
+    RigidBodyComponent:
+      BodyType: 0
+      LinearFactor: [1, 1, 1]
+      AngularFactor: [1, 1, 1]
+    ColliderComponent:
+      Shape: 0
+      Size: [35, 1, 35]
+      ResponseType: 2
+  - Entity: 12226881553193720343
+    IdentityComponent:
+      Name: Weapon
+    Parent: 9388116751533317827
+    Children:
+      []
+    TransformComponent:
+      Position: [-0.0921280384, 0.0430400372, 0.387922823]
+      Rotation: [-1.57079601, -1.57079637, 0]
+      Scale: [0.270000011, 0.269999951, 0.270000011]
+    MeshComponent:
+      MeshPath: E:\TAGE\Editor\Assets\models\weapons\AR\scene.gltf

@@ -1,8 +1,12 @@
 #include "tagepch.h"
 #include "OpenGL_Texture.h"
-#include <GLAD/glad.h>
-#include "stb/stb_image.h"
-#include "stb/stb_image_write.h"
+#include <glad/glad.h>
+
+#define STB_DXT_IMPLEMENTATION
+#include <stb/stb_dxt.h>
+
+#include <stb/stb_image.h>
+#include <stb/stb_image_write.h>
 
 namespace TARE {
 	static GLenum GetDataFormat(int channels) {
@@ -27,6 +31,11 @@ namespace TARE {
 		}
 	}
 
+	OpenGL_Texture2D::~OpenGL_Texture2D()
+	{
+		glDeleteTextures(1, &_ID);
+	}
+
 	void OpenGL_Texture2D::Bind(uint8 slot) const
 	{
 		glActiveTexture(GL_TEXTURE0 + slot);
@@ -45,24 +54,74 @@ namespace TARE {
 		}
 		_Path = path.c_str();
 
-		uint8* data = stbi_load(_Path, &_Width, &_Height, &_Channels, 0);
-		if (data) {
-			glCreateTextures(GL_TEXTURE_2D, 1, &_ID);
-			glTextureStorage2D(_ID, 1, GetInternalFormat(_Channels), _Width, _Height);
-			glTextureParameteri(_ID, GL_TEXTURE_WRAP_S, GL_REPEAT);
-			glTextureParameteri(_ID, GL_TEXTURE_WRAP_T, GL_REPEAT);
-			glTextureParameteri(_ID, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
-			glTextureParameteri(_ID, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
-			glPixelStorei(GL_UNPACK_ALIGNMENT, 1);
-			glTextureSubImage2D(_ID, 0, 0, 0, _Width, _Height, GetDataFormat(_Channels), GL_UNSIGNED_BYTE, data);
-			stbi_image_free(data);
-		}
-		else {
+		int width, height, channels;
+		uint8* raw_data = stbi_load(_Path, &width, &height, &channels, 4);
+		if (!raw_data) {
 			LOG_ERROR("Failed To Load Texture: {}", _Path);
 			LoadFallbackTexture();
+			return false;
 		}
+
+		_Width = width;
+		_Height = height;
+		_Channels = 4;
+
+		bool hasAlpha = (channels == 4);
+		GLenum internalFormat = hasAlpha ? GL_COMPRESSED_RGBA_S3TC_DXT5_EXT : GL_COMPRESSED_RGB_S3TC_DXT1_EXT;
+
+		int blockSize = (internalFormat == GL_COMPRESSED_RGBA_S3TC_DXT5_EXT) ? 16 : 8;
+		int compressedSize = ((width + 3) / 4) * ((height + 3) / 4) * blockSize;
+
+		auto* compressed_data = new uint8[compressedSize];
+		uint8* dest_ptr = compressed_data;
+
+		for (int y = 0; y < height; y += 4)
+		{
+			for (int x = 0; x < width; x += 4)
+			{
+				uint8 source_block[16 * 4];
+				for (int block_y = 0; block_y < 4; ++block_y)
+				{
+					for (int block_x = 0; block_x < 4; ++block_x)
+					{
+						int src_x = x + block_x;
+						int src_y = y + block_y;
+
+						uint8* src_pixel_ptr;
+						if (src_x < width && src_y < height) {
+							src_pixel_ptr = raw_data + (src_y * width + src_x) * 4;
+						}
+						else {
+							int clamped_x = std::min(width - 1, src_x);
+							int clamped_y = std::min(height - 1, src_y);
+							src_pixel_ptr = raw_data + (clamped_y * width + clamped_x) * 4;
+						}
+						uint8* dest_pixel_ptr = source_block + (block_y * 4 + block_x) * 4;
+						memcpy(dest_pixel_ptr, src_pixel_ptr, 4);
+					}
+				}
+				stb_compress_dxt_block(dest_ptr, source_block, hasAlpha, STB_DXT_HIGHQUAL);
+				dest_ptr += blockSize;
+			}
+		}
+
+		glCreateTextures(GL_TEXTURE_2D, 1, &_ID);
+		int mipLevels = 1 + floor(log2(std::max(width, height)));
+		glTextureStorage2D(_ID, mipLevels, internalFormat, width, height);
+		glCompressedTextureSubImage2D(_ID, 0, 0, 0, width, height, internalFormat, compressedSize, compressed_data);
+		glGenerateTextureMipmap(_ID);
+
+		glTextureParameteri(_ID, GL_TEXTURE_WRAP_S, GL_REPEAT);
+		glTextureParameteri(_ID, GL_TEXTURE_WRAP_T, GL_REPEAT);
+		glTextureParameteri(_ID, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_LINEAR);
+		glTextureParameteri(_ID, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+
+		stbi_image_free(raw_data);
+		delete[] compressed_data;
+
 		return true;
 	}
+
 	bool OpenGL_Texture2D::LoadTextureFromMemory(const uint8* data, size_t size)
 	{
 		uint8* pixels = stbi_load_from_memory(data, static_cast<int>(size), &_Width, &_Height, &_Channels, 4);

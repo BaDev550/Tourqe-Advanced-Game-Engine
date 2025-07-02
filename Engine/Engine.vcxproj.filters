@@ -195,6 +195,9 @@
     <ClInclude Include="src\TAGE\Common\TEnums.h">
       <Filter>src\TAGE\Common</Filter>
     </ClInclude>
+    <ClInclude Include="src\TAGE\Common\TMath.h">
+      <Filter>src\TAGE\Common</Filter>
+    </ClInclude>
     <ClInclude Include="src\TAGE\Common\TTypes.h">
       <Filter>src\TAGE\Common</Filter>
     </ClInclude>
@@ -243,11 +246,17 @@
     <ClInclude Include="src\TAGE\Scripting\ScriptEngine.h">
       <Filter>src\TAGE\Scripting</Filter>
     </ClInclude>
+    <ClInclude Include="src\TAGE\Scripting\ScriptGlue.h">
+      <Filter>src\TAGE\Scripting</Filter>
+    </ClInclude>
     <ClInclude Include="src\TAGE\TAGE.h">
       <Filter>src\TAGE</Filter>
     </ClInclude>
     <ClInclude Include="src\TAGE\Thread\ThreadWarpper.h">
       <Filter>src\TAGE\Thread</Filter>
+    </ClInclude>
+    <ClInclude Include="src\TAGE\Utilities\LogSink.h">
+      <Filter>src\TAGE\Utilities</Filter>
     </ClInclude>
     <ClInclude Include="src\TAGE\Utilities\Logger.h">
       <Filter>src\TAGE\Utilities</Filter>
@@ -271,6 +280,9 @@
       <Filter>src\TAGE\Window</Filter>
     </ClInclude>
     <ClInclude Include="src\TAGE\World\Components\BaseComponents.h">
+      <Filter>src\TAGE\World\Components</Filter>
+    </ClInclude>
+    <ClInclude Include="src\TAGE\World\Components\Components.h">
       <Filter>src\TAGE\World\Components</Filter>
     </ClInclude>
     <ClInclude Include="src\TAGE\World\Components\PhysicsComponents.h">
@@ -349,6 +361,9 @@
       <Filter>src\TARE\Model</Filter>
     </ClInclude>
     <ClInclude Include="src\TARE\Model\Model.h">
+      <Filter>src\TARE\Model</Filter>
+    </ClInclude>
+    <ClInclude Include="src\TARE\Model\SkinedMesh.h">
       <Filter>src\TARE\Model</Filter>
     </ClInclude>
     <ClInclude Include="src\TARE\Shader\Shader.h">
@@ -1629,15 +1644,15 @@
     <ClInclude Include="vendor\glm\glm\vector_relational.hpp">
       <Filter>vendor\glm\glm</Filter>
     </ClInclude>
+    <ClInclude Include="vendor\stb\stb_dxt.h">
+      <Filter>vendor\stb</Filter>
+    </ClInclude>
     <ClInclude Include="vendor\stb\stb_image.h">
       <Filter>vendor\stb</Filter>
     </ClInclude>
     <ClInclude Include="vendor\stb\stb_image_write.h">
       <Filter>vendor\stb</Filter>
     </ClInclude>
-    <ClInclude Include="src\TAGE\Scripting\ScriptGlue.h" />
-    <ClInclude Include="src\TAGE\World\Components\Components.h" />
-    <ClInclude Include="src\TAGE\Utilities\LogSink.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\Platform\DirectX11\DirectX11_RenderContext.cpp">
@@ -1688,6 +1703,9 @@
     <ClCompile Include="src\TAGE\AssetManager\Importer_Texture.cpp">
       <Filter>src\TAGE\AssetManager</Filter>
     </ClCompile>
+    <ClCompile Include="src\TAGE\Common\TMath.cpp">
+      <Filter>src\TAGE\Common</Filter>
+    </ClCompile>
     <ClCompile Include="src\TAGE\Input\Input.cpp">
       <Filter>src\TAGE\Input</Filter>
     </ClCompile>
@@ -1713,6 +1731,9 @@
       <Filter>src\TAGE\Physics</Filter>
     </ClCompile>
     <ClCompile Include="src\TAGE\Scripting\ScriptEngine.cpp">
+      <Filter>src\TAGE\Scripting</Filter>
+    </ClCompile>
+    <ClCompile Include="src\TAGE\Scripting\ScriptGlue.cpp">
       <Filter>src\TAGE\Scripting</Filter>
     </ClCompile>
     <ClCompile Include="src\TAGE\Utilities\UUID.cpp">
@@ -1778,6 +1799,9 @@
     <ClCompile Include="src\TARE\Model\Model.cpp">
       <Filter>src\TARE\Model</Filter>
     </ClCompile>
+    <ClCompile Include="src\TARE\Model\SkinedMesh.cpp">
+      <Filter>src\TARE\Model</Filter>
+    </ClCompile>
     <ClCompile Include="src\TARE\Shader\Shader.cpp">
       <Filter>src\TARE\Shader</Filter>
     </ClCompile>
@@ -1808,7 +1832,6 @@
     <ClCompile Include="vendor\stb\stb_image.cpp">
       <Filter>vendor\stb</Filter>
     </ClCompile>
-    <ClCompile Include="src\TAGE\Scripting\ScriptGlue.cpp" />
   </ItemGroup>
   <ItemGroup>
     <None Include="shaders\Common\Material.glsl">

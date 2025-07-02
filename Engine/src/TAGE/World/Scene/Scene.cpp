@@ -64,6 +64,7 @@ namespace TAGE {
 		Entity entity = { _Registry.create(), this };
 		entity.AddComponent<IdentityComponent>(name, ID);
 		entity.AddComponent<TransformComponent>();
+		entity.AddComponent<RelationshipComponent>();
 		_Entities[ID] = entity;
 		return entity;
 	}
@@ -142,6 +143,81 @@ namespace TAGE {
 		_PhysicsWorld = nullptr;
 	}
 
+	void Scene::ConvertToLocalSpace(Entity entity)
+	{
+		Entity parent = TryGetEntityWithUUID(entity.GetParentUUID());
+
+		if (!parent)
+			return;
+
+		auto& transform = entity.Transform();
+		glm::mat4 parentTransform = GetWorldSpaceTransformMatrix(parent);
+		glm::mat4 localTransform = glm::inverse(parentTransform) * transform.GetTransform();
+		transform.SetTransform(localTransform);
+	}
+
+	void Scene::ConvertToWorldSpace(Entity entity)
+	{
+		Entity parent = TryGetEntityWithUUID(entity.GetParentUUID());
+
+		if (!parent)
+			return;
+
+		glm::mat4 transform = GetWorldSpaceTransformMatrix(entity);
+		auto& entityTransform = entity.Transform();
+		entityTransform.SetTransform(transform);
+	}
+
+	glm::mat4 Scene::GetWorldSpaceTransformMatrix(Entity entity)
+	{
+		glm::mat4 transform(1.0f);
+
+		Entity parent = TryGetEntityWithUUID(entity.GetParentUUID());
+		if (parent)
+			transform = GetWorldSpaceTransformMatrix(parent);
+
+		return transform * entity.Transform().GetTransform();
+	}
+
+	TransformComponent Scene::GetWorldSpaceTransform(Entity entity)
+	{
+		glm::mat4 transform = GetWorldSpaceTransformMatrix(entity);
+		TransformComponent transformComponent;
+		transformComponent.SetTransform(transform);
+		return transformComponent;
+	}
+
+	void Scene::ParentEntity(Entity entity, Entity parent)
+	{
+		if (parent.IsDescendantOf(entity))
+		{
+			UnparentEntity(parent);
+
+			Entity newParent = TryGetEntityWithUUID(entity.GetParentUUID());
+			if (newParent)
+			{
+				UnparentEntity(entity);
+				ParentEntity(parent, newParent);
+			}
+		}
+		else
+		{
+			Entity previousParent = TryGetEntityWithUUID(entity.GetParentUUID());
+
+			if (previousParent)
+				UnparentEntity(entity);
+		}
+
+		entity.SetParentUUID(parent.GetUUID());
+		parent.Children().push_back(entity.GetUUID());
+
+		ConvertToLocalSpace(entity);
+	}
+
+	void Scene::UnparentEntity(Entity entity, bool convertToWorldSpace)
+	{
+	}
+
 	void Scene::DestroyEntity(Entity entity)
 	{
 		_Entities.erase(entity.GetUUID());
@@ -211,6 +287,13 @@ namespace TAGE {
 			return GetEntityByUUID(id);
 		}
 		return {};
+	}
+
+	Entity Scene::TryGetEntityWithUUID(UUID id) const
+	{
+		if (const auto iter = _Entities.find(id); iter != _Entities.end())
+			return iter->second;
+		return Entity{};
 	}
 
 	Entity Scene::FindEntityByName(std::string_view name)
@@ -313,6 +396,11 @@ template<typename T>
 
 	template<>
 	void Scene::OnComponentAdded<ColliderComponent>(Entity entity, ColliderComponent& component)
+	{
+	}
+
+	template<>
+	void Scene::OnComponentAdded<RelationshipComponent>(Entity entity, RelationshipComponent& component)
 	{
 	}
 }
