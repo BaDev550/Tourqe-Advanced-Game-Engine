@@ -28,7 +28,7 @@ namespace TAGE {
 		static float GetMouseY();
 
 		static float GetScrollDelta();
-
+		
 		static void BindAction(const std::string& name, KeyCode key);
 		static bool IsActionPressed(const std::string& name);
 

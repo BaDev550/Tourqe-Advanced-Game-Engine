@@ -101,6 +101,8 @@
     </Lib>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClInclude Include="src\TAGE\World\Objects\EntityFunctions.h" />
+    <ClInclude Include="src\TAGE\World\Objects\Prefab.h" />
     <ClInclude Include="src\Platform\DirectX11\DirectX11_RenderContext.h" />
     <ClInclude Include="src\Platform\OpenGL\OpenGL_Buffers.h" />
     <ClInclude Include="src\Platform\OpenGL\OpenGL_Framebuffer.h" />
@@ -603,6 +605,8 @@
     <ClInclude Include="vendor\stb\stb_image_write.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="src\TAGE\World\Objects\Entity.cpp" />
+    <ClCompile Include="src\TAGE\World\Objects\Prefab.cpp" />
     <ClCompile Include="src\Platform\DirectX11\DirectX11_RenderContext.cpp" />
     <ClCompile Include="src\Platform\OpenGL\OpenGL_Buffers.cpp" />
     <ClCompile Include="src\Platform\OpenGL\OpenGL_CubemapTexture.cpp" />

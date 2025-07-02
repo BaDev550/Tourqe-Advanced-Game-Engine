@@ -4,6 +4,7 @@
 #include "TARE/Camera/Camera.h"
 #include "TAGE/Common/TTypes.h"
 #include "TARE/Skybox/Skybox.h"
+#include "TARE/Common/Light.h"
 
 namespace TAGE {
 	struct MeshComponent {

@@ -16,20 +16,6 @@ namespace TAGE
 
         public readonly ulong ID;
 
-        public Vector3 Translation
-        {
-            get
-            {
-                InternalCalls.TransformComponent_GetTranslation(ID, out Vector3 result);
-                return result;
-            }
-
-            set
-            {
-                InternalCalls.TransformComponent_SetTranslation(ID, ref value);
-            }
-        }
-
         public bool HasComponent<T>() where T : Component, new()
         {
             Type componentType = typeof(T);

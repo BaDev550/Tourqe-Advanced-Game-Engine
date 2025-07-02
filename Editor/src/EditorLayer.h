@@ -45,6 +45,7 @@ namespace TAGE::Editor {
 		void OpenScene();
 		void OpenScene(const std::filesystem::path&);
 		void SaveSceneAs();
+		void SaveScene();
 
 		void SaveLayout();
 		void LoadLayout();
@@ -65,6 +66,7 @@ namespace TAGE::Editor {
 		MEM::Ref<TARE::EditorCamera> _EditorCamera;
 		MEM::Ref<Scene> _ActiveScene;
 		MEM::Ref<Scene> _EditorScene;
+		std::filesystem::path _EditorSavePath;
 
 		bool _ViewportFocused = false, _ViewportHovered = false, _ViewportMouseFocused = true;
 		glm::vec2 _ViewportSize = { 0.0f, 0.0f };
@@ -73,6 +75,7 @@ namespace TAGE::Editor {
 
 		int _HoveredEntityID = 0;
 		int _GizmoType = -1;
+		bool _HoveringGizmo = false;
 		SceneState _SceneState = SceneState::EDIT;
 		ViewportDebugMode debugMode = ViewportDebugMode::Default;
 
@@ -82,6 +85,11 @@ namespace TAGE::Editor {
 
 		MEM::Ref<TARE::Texture2D> _PlayIcon;
 		MEM::Ref<TARE::Texture2D> _StopIcon;
+		MEM::Ref<TARE::Texture2D> _SimulateIcon;
+
+		MEM::Ref<TARE::Texture2D> _IconTranslate;
+		MEM::Ref<TARE::Texture2D> _IconRotate;
+		MEM::Ref<TARE::Texture2D> _IconScale;
 	};
 
 }

@@ -32,6 +32,11 @@ namespace TAGE {
 		}
 	};
 
+	struct PrefabComponent {
+		UUID PrefabID = 0;
+		UUID EntityID = 0;
+	};
+
 	struct TransformComponent {
 		glm::vec3 Position{ 0.0f };
 		glm::vec3 Scale{ 1.0f };

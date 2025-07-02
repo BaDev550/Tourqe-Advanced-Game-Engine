@@ -153,6 +153,7 @@ namespace TAGE {
 		ScriptClass EntityClass;
 		std::unordered_map<std::string, MEM::Ref<ScriptClass>> EntityClasses;
 		std::unordered_map<UUID, MEM::Ref<ScriptInstance>> EntityInstances;
+		std::unordered_map<UUID, ScriptFieldMap> EntityScriptFields;
 
 		Scene* SceneContext = nullptr;
 	};
@@ -210,8 +211,17 @@ namespace TAGE {
 	{
 		const auto& sc = entity.GetComponent<ScriptComponent>();
 		if (EntityClassExists(sc.Name)) {
+			UUID entityID = entity.GetUUID();
+
 			MEM::Ref<ScriptInstance> instance = MEM::MakeRef<ScriptInstance>(s_Data->EntityClasses[sc.Name], entity);
-			s_Data->EntityInstances[entity.GetUUID()] = instance;
+			s_Data->EntityInstances[entityID] = instance;
+
+			if (s_Data->EntityScriptFields.find(entityID) != s_Data->EntityScriptFields.end()) {
+				const ScriptFieldMap& fieldMap = s_Data->EntityScriptFields.at(entityID);
+				for (const auto& [name, fieldInstance] : fieldMap)
+					instance->SetFieldValueInternal(name, fieldInstance._Buffer);
+			}
+
 			instance->InvokeOnCreate();
 		}
 	}
@@ -246,6 +256,23 @@ namespace TAGE {
 		return s_Data->EntityClasses;
 	}
 
+	MEM::Ref<ScriptClass> ScriptEngine::GetEntityClass(const std::string& name)
+	{
+		if (s_Data->EntityClasses.find(name) == s_Data->EntityClasses.end())
+			return nullptr;
+
+		return s_Data->EntityClasses.at(name);
+	}
+
+	ScriptFieldMap& ScriptEngine::GetScriptFieldMap(Entity entity) {
+		ASSERT_NOMSG(entity);
+
+		UUID entityID = entity.GetUUID();
+		//ASSERT_NOMSG(s_Data->EntityScriptFields.find(entityID ) != s_Data->EntityScriptFields.end());
+
+		return s_Data->EntityScriptFields[entityID];
+	}
+
 	MEM::Ref<ScriptInstance> ScriptEngine::GetEntityScriptInstance(UUID uuid)
 	{
 		auto it = s_Data->EntityInstances.find(uuid);
@@ -273,7 +300,7 @@ namespace TAGE {
 		//mono_jit_cleanup(s_Data->RootDomain);
 		s_Data->RootDomain = nullptr;
 	}
-
+	
 	MonoObject* ScriptEngine::InstantiateClass(MonoClass* monoClass)
 	{
 		MonoObject* instance = mono_object_new(s_Data->AppDomain, monoClass);

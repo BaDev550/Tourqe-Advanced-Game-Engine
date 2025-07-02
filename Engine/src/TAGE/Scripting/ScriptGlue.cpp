@@ -64,10 +64,22 @@ namespace TAGE {
 		*outTranslation = entity.GetComponent<TransformComponent>().Position;
 	}
 
+	static void TransformComponent_GetRotation(UUID entityID, glm::vec3* outRotation) {
+		Scene* scene = ScriptEngine::GetSceneContext();
+		Entity entity = scene->GetEntityByUUID(entityID);
+		*outRotation = entity.GetComponent<TransformComponent>().GetRotationEuler();
+	}
+
 	static void TransformComponent_SetTranslation(UUID entityID, glm::vec3* Translation) {
 		Scene* scene = ScriptEngine::GetSceneContext();
 		Entity entity = scene->GetEntityByUUID(entityID);
 		entity.GetComponent<TransformComponent>().Position = *Translation;
+	}
+
+	static void TransformComponent_SetRotation(UUID entityID, glm::vec3* Rotation) {
+		Scene* scene = ScriptEngine::GetSceneContext();
+		Entity entity = scene->GetEntityByUUID(entityID);
+		entity.GetComponent<TransformComponent>().SetRotationEuler(*Rotation);
 	}
 
 	static void RigidBodyComponent_ApplyForce(UUID entityID, glm::vec3* force) {
@@ -87,6 +99,12 @@ namespace TAGE {
 #pragma region Input
 	static bool Input_IsKeyDown(KeyCode keycode) {
 		return Input::IsKeyPressed(keycode);
+	}
+	static void Input_GetMousePos(glm::vec2* pos) {
+		*pos = Input::GetMousePosition();
+	}
+	static void Input_GetMouseDelta(glm::vec2* delta) {
+		*delta = Input::GetMouseDelta();
 	}
 #pragma endregion
 
@@ -136,10 +154,15 @@ namespace TAGE {
 
 		ADD_INTERNAL_CALL(TransformComponent_GetTranslation);
 		ADD_INTERNAL_CALL(TransformComponent_SetTranslation);
+		ADD_INTERNAL_CALL(TransformComponent_GetRotation);
+		ADD_INTERNAL_CALL(TransformComponent_SetRotation);
+
 		ADD_INTERNAL_CALL(RigidBodyComponent_ApplyForce);
 		ADD_INTERNAL_CALL(RigidBodyComponent_SetVelocity);
 
 		ADD_INTERNAL_CALL(Input_IsKeyDown);
+		ADD_INTERNAL_CALL(Input_GetMousePos);
+		ADD_INTERNAL_CALL(Input_GetMouseDelta);
 
 		ADD_INTERNAL_CALL(Entity_HasComponent);
 	}

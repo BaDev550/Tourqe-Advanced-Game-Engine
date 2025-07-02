@@ -19,6 +19,8 @@ namespace TAGE::Editor {
 		std::filesystem::path _CurrentDirectory;
 		MEM::Ref<TARE::Texture2D> _DirectoryIcon;
 		MEM::Ref<TARE::Texture2D> _FileIcon;
+		MEM::Ref<TARE::Texture2D> _TAGESceneFileIcon;
+		MEM::Ref<TARE::Texture2D> _CSharpFileIcon;
 		ThumbnailRenderer _ThumbnailRenderer;
 
 		float _Padding = 16.0f;

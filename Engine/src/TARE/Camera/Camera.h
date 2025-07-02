@@ -26,6 +26,7 @@ namespace TARE
         void CalculateCameraMatrixes();
         void SetPosition(glm::vec3 position);
         void SetEulerRotation(glm::vec3 rotation);
+        void SetQuaternionRotation(const glm::quat& quat);
         void Orbit(float pitchOffset, float yawOffset);
         void AddPitch(float value);
         void AddYaw(float value);
@@ -68,6 +69,7 @@ namespace TARE
         glm::vec3 _forwardXZ = glm::vec3(0.0f, 0.0f, 1.0f);
         glm::vec3 _up = glm::vec3(0.0f, 1.0f, 0.0f);
         glm::vec3 _right = glm::vec3(1.0f, 0.0f, 0.0f);
+        glm::quat _orientation = glm::quat(1.0f, 0.0f, 0.0f, 0.0f);
 
         float _minPitch = -1.5f;
         float _maxPitch = 1.5f;

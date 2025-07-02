@@ -30,6 +30,33 @@ namespace TAGE {
 		MonoClassField* ClassField;
 	};
 
+	struct ScriptFieldInstance {
+	public:
+		ScriptField Field;
+
+		ScriptFieldInstance() {
+			memset(_Buffer, 0, sizeof(_Buffer));
+		}
+
+		template<typename T>
+		T GetValue() {
+			static_assert(sizeof(T) <= 8, "Type too large");
+			return *(T*)_Buffer;
+		}
+
+		template<typename T>
+		void SetValue(T value) {
+			static_assert(sizeof(T) <= 8, "Type too large");
+			memcpy(_Buffer, &value, sizeof(T));
+		}
+	private:
+		uint8 _Buffer[8];
+
+		friend class ScriptEngine;
+	};
+
+	using ScriptFieldMap = std::unordered_map<std::string, ScriptFieldInstance>;
+
 	class ScriptClass {
 	public:
 		ScriptClass() = default;
@@ -64,15 +91,19 @@ namespace TAGE {
 
 		template<typename T>
 		T GetFieldValue(const std::string& name) {
-			bool success = GetFieldValueInternal(name, _FieldValueBuffer);
+			static_assert(sizeof(T) <= 8, "Type too large");
+
+			bool success = GetFieldValueInternal(name, s_FieldValueBuffer);
 			if (!success)
 				return T();
 
-			return *(T*)_FieldValueBuffer;
+			return *(T*)s_FieldValueBuffer;
 		}
 
 		template<typename T>
-		void SetFieldValue(const std::string& name, const T& value) {
+		void SetFieldValue(const std::string& name, T value) {
+			static_assert(sizeof(T) <= 8, "Type too large");
+
 			SetFieldValueInternal(name, &value);
 		}
 	private:
@@ -87,7 +118,9 @@ namespace TAGE {
 		MonoMethod* _OnUpdateMethod = nullptr;
 		MonoMethod* _OnFixedUpdateMethod = nullptr;
 
-		inline static char _FieldValueBuffer[8];
+		inline static char s_FieldValueBuffer[8];
+
+		friend class ScriptEngine;
 	};
 
 	class ScriptEngine
@@ -109,6 +142,8 @@ namespace TAGE {
 		static MonoImage* GetCoreAssemblyImage();
 		static bool EntityClassExists(const std::string& fullClassName);
 		static std::unordered_map<std::string, MEM::Ref<ScriptClass>> GetEntityClasses();
+		static MEM::Ref<ScriptClass> GetEntityClass(const std::string& name);
+		static ScriptFieldMap& GetScriptFieldMap(Entity entity);
 		static MEM::Ref<ScriptInstance> GetEntityScriptInstance(UUID uuid);
 	private:
 		static void InitMono();

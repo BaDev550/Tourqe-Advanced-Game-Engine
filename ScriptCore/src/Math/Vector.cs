@@ -1,4 +1,5 @@
 ﻿using System;
+using System.IO;
 
 namespace TAGE
 {
@@ -31,6 +32,26 @@ namespace TAGE
             }
         }
 
+        public float Length()
+        {
+            float result = (float)Math.Sqrt(X * X + Y * Y + Z * Z);
+            return result;
+        }
+
+        public static Vector3 Normalize(Vector3 v)
+        {
+            float length = (float)Math.Sqrt(v.X * v.X + v.Y * v.Y + v.Z * v.Z);
+
+            if (length > 0f)
+            {
+                v.X /= length;
+                v.Y /= length;
+                v.Z /= length;
+            }
+
+            return v;
+        }
+
         public static Vector3 operator *(Vector3 vector, float scaler)
         {
             return new Vector3(vector.X * scaler, vector.Y * scaler, vector.Z * scaler);
@@ -38,6 +59,10 @@ namespace TAGE
         public static Vector3 operator +(Vector3 a, Vector3 b)
         {
             return new Vector3(a.X + b.X, a.Y + b.Y, a.Z + b.Z);
+        }
+        public static Vector3 operator -(Vector3 a, Vector3 b)
+        {
+            return new Vector3(a.X - b.X, a.Y - b.Y, a.Z - b.Z);
         }
     };
 
@@ -65,6 +90,10 @@ namespace TAGE
         public static Vector2 operator +(Vector2 a, Vector2 b)
         {
             return new Vector2(a.X + b.X, a.Y + b.Y);
+        }
+        public static Vector2 operator -(Vector2 a, Vector2 b)
+        {
+            return new Vector2(a.X - b.X, a.Y - b.Y);
         }
     };
 }

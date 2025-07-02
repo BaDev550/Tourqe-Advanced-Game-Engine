@@ -1653,6 +1653,8 @@
     <ClInclude Include="vendor\stb\stb_image_write.h">
       <Filter>vendor\stb</Filter>
     </ClInclude>
+    <ClInclude Include="src\TAGE\World\Objects\Prefab.h" />
+    <ClInclude Include="src\TAGE\World\Objects\EntityFunctions.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\Platform\DirectX11\DirectX11_RenderContext.cpp">
@@ -1832,6 +1834,8 @@
     <ClCompile Include="vendor\stb\stb_image.cpp">
       <Filter>vendor\stb</Filter>
     </ClCompile>
+    <ClCompile Include="src\TAGE\World\Objects\Prefab.cpp" />
+    <ClCompile Include="src\TAGE\World\Objects\Entity.cpp" />
   </ItemGroup>
   <ItemGroup>
     <None Include="shaders\Common\Material.glsl">

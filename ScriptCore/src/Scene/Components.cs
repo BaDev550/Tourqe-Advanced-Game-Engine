@@ -26,6 +26,20 @@ namespace TAGE
                 InternalCalls.TransformComponent_SetTranslation(Entity.ID, ref value);
             }
         }
+
+        public Vector3 Rotation
+        {
+            get
+            {
+                InternalCalls.TransformComponent_GetRotation(Entity.ID, out Vector3 position);
+                return position;
+            }
+
+            set
+            {
+                InternalCalls.TransformComponent_SetRotation(Entity.ID, ref value);
+            }
+        }
     }
 
     public class RigidBodyComponent : Component

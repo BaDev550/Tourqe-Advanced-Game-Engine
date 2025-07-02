@@ -1,24 +1,10 @@
 #include "tagepch.h"
 #include "Scene.h"
 #include "TAGE/World/Objects/Entity.h"
-#include "TAGE/World/Components/Components.h"
 #include "TAGE/Scripting/ScriptEngine.h"
 #include "TAGE/Application/Application.h"
 
 namespace TAGE {
-	Scene::Scene(const std::string& name) : _Name(name) {
-		TARE::Debug::DebugRenderer::Get().Init();
-
-		_PhysicsSystem = MEM::MakeRef<System_Physics>(_PhysicsWorld);
-		_PhysicsSystem->SetActiveScene(this);
-
-		_RendererSystem = MEM::MakeRef<System_Renderer>(Application::Get()->GetRenderer());
-		_RendererSystem->SetActiveScene(this);
-	}
-
-	Scene::~Scene() {
-	}
-
 	template<typename... Component>
 	static void CopyComponent(entt::registry& dst, entt::registry& src, const std::unordered_map<UUID, entt::entity>& entites)
 	{
@@ -39,19 +25,17 @@ namespace TAGE {
 		CopyComponent<Component...>(dst, src, entites);
 	}
 
-	template<typename... Component>
-	static void CopyComponentIfExists(Entity dst, Entity src)
-	{
-		([&]() {
-			if (src.HasComponent<Component>())
-				dst.AddOrReplaceComponent<Component>(src.GetComponent<Component>());
-			}(), ...);
+	Scene::Scene(const std::string& name) : _Name(name) {
+		TARE::Debug::DebugRenderer::Get().Init();
+
+		_PhysicsSystem = MEM::MakeRef<System_Physics>(_PhysicsWorld);
+		_PhysicsSystem->SetActiveScene(this);
+
+		_RendererSystem = MEM::MakeRef<System_Renderer>(Application::Get()->GetRenderer());
+		_RendererSystem->SetActiveScene(this);
 	}
 
-	template<typename... Component>
-	static void CopyComponentIfExists(ComponentGroup<Component...>, Entity dst, Entity src)
-	{
-		CopyComponentIfExists<Component...>(dst, src);
+	Scene::~Scene() {
 	}
 
 	Entity Scene::CreateEntity(const std::string& name)
@@ -216,6 +200,22 @@ namespace TAGE {
 
 	void Scene::UnparentEntity(Entity entity, bool convertToWorldSpace)
 	{
+		Entity parent = TryGetEntityWithUUID(entity.GetParentUUID());
+		if (!parent)
+			return;
+
+		auto& parentChildren = parent.Children();
+		parentChildren.erase(std::remove(parentChildren.begin(), parentChildren.end(), entity.GetUUID()), parentChildren.end());
+
+		if (convertToWorldSpace)
+			ConvertToWorldSpace(entity);
+
+		entity.SetParentUUID(0);
+	}
+
+	MEM::Ref<Scene> Scene::CreateEmpty()
+	{
+		return MEM::MakeRef<Scene>("Empty");
 	}
 
 	void Scene::DestroyEntity(Entity entity)
@@ -340,7 +340,15 @@ namespace TAGE {
 	{
 		std::string name = entity.GetName();
 		Entity newEntity = CreateEntity(name);
-		CopyComponentIfExists(AllComponents{}, newEntity, entity);
+
+		CopyComponentIfExists<TransformComponent>(newEntity, _Registry, entity);
+		CopyComponentIfExists<MeshComponent>(newEntity, _Registry, entity);
+		CopyComponentIfExists<LightComponent>(newEntity, _Registry, entity);
+		CopyComponentIfExists<SkyboxComponent>(newEntity, _Registry, entity);
+		CopyComponentIfExists<ScriptComponent>(newEntity, _Registry, entity);
+		CopyComponentIfExists<CameraComponent>(newEntity, _Registry, entity);
+		CopyComponentIfExists<RigidBodyComponent>(newEntity, _Registry, entity);
+		CopyComponentIfExists<ColliderComponent>(newEntity, _Registry, entity);
 	}
 
 template<typename T>

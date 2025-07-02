@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Runtime.InteropServices;
 using System.Text;
 using System.Threading.Tasks;
 using TAGE;
@@ -9,27 +10,37 @@ namespace Sandbox
 {
     public class CameraController : Entity
     {
-        float speed = 5.0f;
         public float sensivity = 1.0f;
+        private float _yaw = 0.0f;
+        private float _pitch = 0.0f;
+
+        private Vector2 _lastMousePosition;
+        private TransformComponent _transform;
+
+        void OnCreate()
+        {
+            _transform = GetComponent<TransformComponent>();
+
+            Vector3 initialRotation = _transform.Rotation;
+            _yaw = initialRotation.Y;
+            _pitch = initialRotation.X;
+        }
 
         void OnUpdate(float deltaTime)
         {
-            Vector3 velocity = Vector3.Zero;
+            HandleMouseLook(deltaTime);
+        }
 
-            if (Input.IsKeyDown(KeyCode.Up))
-                velocity.Z = -1.0f;
-            if (Input.IsKeyDown(KeyCode.Down))
-                velocity.Z = 1.0f;
+        private void HandleMouseLook(float deltaTime)
+        {
+            Vector2 currentMousePos = Input.GetMousePos();
+            Vector2 mouseDelta = currentMousePos - _lastMousePosition;
+            _lastMousePosition = currentMousePos;
 
-            if (Input.IsKeyDown(KeyCode.Right))
-                velocity.X = -1.0f;
-            if (Input.IsKeyDown(KeyCode.Left))
-                velocity.X = 1.0f;
-            velocity *= speed;
+            _yaw += mouseDelta.X * sensivity * deltaTime;
+            _pitch -= mouseDelta.Y * sensivity * deltaTime;
 
-            Vector3 pos = Translation;
-            pos += velocity * deltaTime;
-            Translation = pos;
+            _transform.Rotation = new Vector3(-_pitch, _yaw, 0.0f);
         }
     }
 }

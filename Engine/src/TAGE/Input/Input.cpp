@@ -55,11 +55,15 @@ namespace TAGE
 	bool Input::IsMouseButtonJustPressed(MouseCode button) { return _MouseButtonStates[button] && !_PrevMouseButtonStates[button]; }
 	bool Input::IsMouseButtonJustReleased(MouseCode button) { return !_MouseButtonStates[button] && _PrevMouseButtonStates[button]; }
 
-	glm::vec2 Input::GetMousePosition() { return _MousePos; }
+	glm::vec2 Input::GetMousePosition() {
+		if (!_Window)
+			return glm::vec2(0.0);
+		return _MousePos; 
+	}
 	glm::vec2 Input::GetMouseDelta() { return _MouseDelta; }
 	float Input::GetMouseX() { return _MousePos.x; }
 	float Input::GetMouseY() { return _MousePos.y; }
-
+	
 	float Input::GetScrollDelta() { return _ScrollDelta; }
 
 	void Input::ScrollCallback(GLFWwindow* window, double xoffset, double yoffset)

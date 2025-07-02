@@ -294,6 +294,12 @@ namespace TAGE::Editor {
 
 		ImGui::Text("Uniqe ID: %s", std::to_string(entity.GetComponent<IdentityComponent>().UniqeId).c_str());
 
+		if (entity.GetParent()) {
+			if (ImGui::Button("Unparent")) {
+				m_Context->UnparentEntity(entity);
+			}
+		}
+
 		ImGui::PopItemWidth();
 		DrawComponent<TransformComponent>("Transform", entity, [](auto& component)
 			{
@@ -304,7 +310,7 @@ namespace TAGE::Editor {
 				DrawVec3Control("Scale", component.Scale, 1.0f);
 			});
 
-		DrawComponent<ScriptComponent>("Script", entity, [entity](auto& component) mutable
+		DrawComponent<ScriptComponent>("Script", entity, [entity, this](auto& component) mutable
 			{
 				bool scriptClassExist = ScriptEngine::EntityClassExists(component.Name);
 				
@@ -314,27 +320,49 @@ namespace TAGE::Editor {
 				if (!scriptClassExist)
 					ImGui::PushStyleColor(ImGuiCol_Text, ImVec4(0.9, 0.1, 0.3, 1.0f));
 
-				if (ImGui::InputText("Class", buffer, sizeof(buffer))) {
+				if (ImGui::InputText("Class", buffer, sizeof(buffer)))
 					component.Name = buffer;
-				}
 
-				MEM::Ref<ScriptInstance> scriptInstance = ScriptEngine::GetEntityScriptInstance(entity.GetUUID());
-				if (scriptInstance) {
-					const auto& fields = scriptInstance->GetScriptClass()->GetFields();
-					for (const auto& [name, field] : fields) {
-						if (field.Type == ScriptFieldType::Float) 
-						{
-							float data = scriptInstance->GetFieldValue<float>(name);
-							if (ImGui::DragFloat(name.c_str(), &data)) {
-								scriptInstance->SetFieldValue<float>(name, data);
+				if (m_Context->IsRunning()) {
+					MEM::Ref<ScriptInstance> scriptInstance = ScriptEngine::GetEntityScriptInstance(entity.GetUUID());
+					if (scriptInstance) {
+						const auto& fields = scriptInstance->GetScriptClass()->GetFields();
+						for (const auto& [name, field] : fields) {
+							if (field.Type == ScriptFieldType::Float)
+							{
+								float data = scriptInstance->GetFieldValue<float>(name);
+								if (ImGui::DragFloat(name.c_str(), &data)) {
+									scriptInstance->SetFieldValue<float>(name, data);
+								}
 							}
 						}
+					}
+				}
+				else {
+					if (scriptClassExist) {
+						MEM::Ref<ScriptClass> entityClass = ScriptEngine::GetEntityClass(component.Name);
+						const auto& fields = entityClass->GetFields();
+						auto& entityFields = ScriptEngine::GetScriptFieldMap(entity);
 
-						if (field.Type == ScriptFieldType::Bool)
-						{
-							bool data = scriptInstance->GetFieldValue<bool>(name);
-							if (ImGui::Checkbox(name.c_str(), &data)) {
-								scriptInstance->SetFieldValue<bool>(name, data);
+						for (const auto& [name, field] : fields) {
+							if (entityFields.find(name) != entityFields.end()) {
+								ScriptFieldInstance& scriptField = entityFields.at(name);
+
+								if (field.Type == ScriptFieldType::Float) {
+									float data = scriptField.GetValue<float>();
+									if (ImGui::DragFloat(name.c_str(), &data))
+										scriptField.SetValue<float>(data);
+								}
+							}
+							else {
+								if (field.Type == ScriptFieldType::Float) {
+									float data = 0.0f;
+									if (ImGui::DragFloat(name.c_str(), &data)) {
+										ScriptFieldInstance& fieldInstance = entityFields[name];
+										fieldInstance.Field = field;
+										fieldInstance.SetValue(data);
+									}
+								}
 							}
 						}
 					}

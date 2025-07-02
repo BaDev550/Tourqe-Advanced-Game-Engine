@@ -29,6 +29,17 @@ namespace TAGE::Editor {
 		_PlayIcon->LoadTexture("Assets/textures/Icons/Play.png");
 		_StopIcon = TARE::Texture2D::Create();
 		_StopIcon->LoadTexture("Assets/textures/Icons/Stop.png");
+		_SimulateIcon = TARE::Texture2D::Create();
+		_SimulateIcon->LoadTexture("Assets/textures/Icons/Simulate.png");
+		
+		_IconTranslate = TARE::Texture2D::Create();
+		_IconTranslate->LoadTexture("assets/textures/Icons/gizmo_translate.png");
+
+		_IconRotate = TARE::Texture2D::Create();
+		_IconRotate->LoadTexture("assets/textures/Icons/gizmo_rotate.png");
+
+		_IconScale = TARE::Texture2D::Create();
+		_IconScale->LoadTexture("assets/textures/Icons/gizmo_scale.png");
 
 		ImGui::GetIO().IniFilename = "editor_layout.ini";
 	}
@@ -53,7 +64,7 @@ namespace TAGE::Editor {
 			_HoveredEntityID = renderer->GetDeferredRendering().GetGBuffer()->Read(3, mouseX, mouseY);
 			renderer->GetDeferredRendering().GetGBuffer()->Unbind();
 
-			if (Input::IsMouseButtonJustPressed(Mouse::ButtonLeft) && !ImGuizmo::IsOver()) {
+			if (Input::IsMouseButtonJustPressed(Mouse::ButtonLeft) && !ImGuizmo::IsOver() && !_HoveringGizmo) {
 				auto hoveredEntity = _ActiveScene->GetEntityByID((entt::entity)_HoveredEntityID);
 				if (hoveredEntity) {
 					if (hoveredEntity.HasComponent<MeshComponent>())
@@ -147,6 +158,9 @@ namespace TAGE::Editor {
 
 		if (_SceneState == SceneState::EDIT)
 		{
+			if (_ViewportMouseFocused)
+				return false;
+
 			switch (e.GetKey())
 			{
 			case Key::Q: _GizmoType = ImGuizmo::OPERATION::SCALE; break;
@@ -155,9 +169,15 @@ namespace TAGE::Editor {
 
 			case Key::N: if (control) NewScene(); break;
 			case Key::O: if (control) OpenScene(); break;
-			case Key::S: if (control && shift) SaveSceneAs(); break;
 			case Key::D: if (control) OnDuplicateEntity(); break;
 			}
+		}
+
+		if (e.GetKey() == Key::S) {
+			if (control && shift)
+				SaveSceneAs();
+			if (control)
+				SaveScene();
 		}
 
 		switch (e.GetKey())
@@ -210,6 +230,7 @@ namespace TAGE::Editor {
 		SceneSerializer serializer(newScene);
 		if (serializer.Deserialize(path.string()))
 		{
+			_EditorSavePath = path;
 			_EditorScene = newScene;
 			_EditorScene->OnResize((uint)_ViewportSize.x, (uint)_ViewportSize.y);
 			_SceneHierarchyPanel->SetContext(_EditorScene);
@@ -224,6 +245,14 @@ namespace TAGE::Editor {
 		if (!filepath.empty()) {
 			SceneSerializer serializer(_ActiveScene);
 			serializer.Serialize(filepath);
+		}
+	}
+
+	void EditorLayer::SaveScene()
+	{
+		if (!_EditorSavePath.empty()) {
+			SceneSerializer serializer(_ActiveScene);
+			serializer.Serialize(_EditorSavePath.string());
 		}
 	}
 
@@ -355,6 +384,7 @@ namespace TAGE::Editor {
 				if (ImGui::MenuItem("New Scene", "Ctrl+N")) NewScene();
 				if (ImGui::MenuItem("Open Scene...", "Ctrl+O")) OpenScene();
 				if (ImGui::MenuItem("Save Scene As...", "Ctrl+Shift+S")) SaveSceneAs();
+				if (ImGui::MenuItem("Save Scene", "Ctrl+S")) SaveScene();
 				ImGui::Separator();
 				if (ImGui::MenuItem("Exit")) Application::Get()->Close();
 				ImGui::EndMenu();
@@ -451,9 +481,9 @@ namespace TAGE::Editor {
 
 		ImGui::SetCursorPosX((ImGui::GetContentRegionAvail().x - totalButtonsWidth) * 0.5f);
 		ImGui::SetCursorPosY((ImGui::GetWindowHeight() - buttonSize.y) * 0.5f);
-		ImGui::PushStyleColor(ImGuiCol_Button, ImVec4(0.2f, 0.2f, 0.25f, 1.0f));
-		ImGui::PushStyleColor(ImGuiCol_ButtonHovered, ImVec4(0.3f, 0.3f, 0.35f, 1.0f));
-		ImGui::PushStyleColor(ImGuiCol_ButtonActive, ImVec4(0.4f, 0.4f, 0.45f, 1.0f));
+		ImGui::PushStyleColor(ImGuiCol_Button, ImVec4(0.2f, 0.2f, 0.25f, 0.0f));
+		ImGui::PushStyleColor(ImGuiCol_ButtonHovered, ImVec4(0.3f, 0.3f, 0.35f, 0.2f));
+		ImGui::PushStyleColor(ImGuiCol_ButtonActive, ImVec4(0.4f, 0.4f, 0.45f, 0.1f));
 
 		MEM::Ref<TARE::Texture2D> playIcon = (_SceneState == SceneState::EDIT || _SceneState == SceneState::SIMULATE) ? _PlayIcon : _StopIcon;
 		if (ImGui::ImageButton("PlayStop", (ImTextureID)playIcon->GetID(), buttonSize))
@@ -467,7 +497,7 @@ namespace TAGE::Editor {
 
 		ImGui::SameLine();
 
-		MEM::Ref<TARE::Texture2D> simulateIcon = (_SceneState == SceneState::EDIT || _SceneState == SceneState::PLAY) ? _PlayIcon : _StopIcon;
+		MEM::Ref<TARE::Texture2D> simulateIcon = (_SceneState == SceneState::EDIT || _SceneState == SceneState::PLAY) ? _SimulateIcon : _StopIcon;
 		if (ImGui::ImageButton("SimulateStop", (ImTextureID)simulateIcon->GetID(), buttonSize))
 		{
 			if (_SceneState == SceneState::EDIT || _SceneState == SceneState::PLAY)
@@ -488,6 +518,7 @@ namespace TAGE::Editor {
 		ImGui::PushStyleVar(ImGuiStyleVar_WindowPadding, ImVec2{ 0, 0 });
 		ImGui::Begin("Viewport", nullptr, ImGuiWindowFlags_NoDecoration | ImGuiWindowFlags_NoScrollbar | ImGuiWindowFlags_NoScrollWithMouse);
 
+		_HoveringGizmo = false;
 		auto viewportMinRegion = ImGui::GetWindowContentRegionMin();
 		auto viewportMaxRegion = ImGui::GetWindowContentRegionMax();
 		auto viewportOffset = ImGui::GetWindowPos();
@@ -524,16 +555,67 @@ namespace TAGE::Editor {
 		case ViewportDebugMode::GI:               textureID = deferred.GetGIBuffer()->GetColorAttachment(0); break;
 		default: break;
 		}
+
 		ImGui::Image((void*)(uintptr_t)textureID, ImVec2(_ViewportSize.x, _ViewportSize.y), ImVec2{ 0, 1 }, ImVec2{ 1, 0 });
 		if (ImGui::BeginDragDropTarget())
 		{
 			if (const ImGuiPayload* payload = ImGui::AcceptDragDropPayload("CONTENT_BROWSER_ITEM"))
 			{
 				const char* path = (const char*)payload->Data;
-				OpenScene(path);
+				std::filesystem::path filePath(path);
+				std::string ext = filePath.extension().string();
+				if (ext == ".tage")
+					OpenScene(path);
+				else if (ext == ".obj" || ext == ".gltf") {
+					Entity entity = _ActiveScene->CreateEntity(filePath.stem().string());
+					auto& mc = entity.AddComponent<MeshComponent>();
+					mc.LoadMesh(filePath.string());
+				}
 			}
 			ImGui::EndDragDropTarget();
 		}
+
+		float buttonSize = 17.0f;
+		float padding = 8.0f;
+		float toolbarWidth = (buttonSize * 6.0f) + (padding * 4.0f);
+		float toolbarHeight = buttonSize + (padding * 3.0f);
+
+		ImVec2 toolbarPos = {
+			_ViewportBounds[1].x - toolbarWidth - 15.0f,
+			_ViewportBounds[0].y + 15.0f
+		};
+
+		ImGui::SetNextWindowPos(toolbarPos);
+		ImGui::SetNextWindowBgAlpha(0.6f);
+		ImGui::PushStyleVar(ImGuiStyleVar_WindowPadding, ImVec2(padding, padding));
+		ImGui::PushStyleVar(ImGuiStyleVar_ItemSpacing, ImVec2(padding, 0));
+		ImGui::BeginChild("GizmoToolbar", { toolbarWidth, toolbarHeight }, true, ImGuiWindowFlags_NoDecoration | ImGuiWindowFlags_NoScrollbar);
+		_HoveringGizmo |= ImGui::IsWindowHovered();
+
+		ImVec4 activeColor = { 0.2f, 0.6f, 1.0f, 1.0f };
+		ImVec4 inactiveColor = { 0.0f, 0.0f, 0.0f, 0.0f };
+
+		ImGui::PushStyleColor(ImGuiCol_Button, _GizmoType == ImGuizmo::TRANSLATE ? activeColor : inactiveColor);
+		if (ImGui::ImageButton("TranslateGizmo", (ImTextureID)(uintptr_t)_IconTranslate->GetID(), { buttonSize, buttonSize }, { 0, 1 }, { 1, 0 }))
+			_GizmoType = ImGuizmo::TRANSLATE;
+		ImGui::PopStyleColor();
+
+		ImGui::SameLine();
+
+		ImGui::PushStyleColor(ImGuiCol_Button, _GizmoType == ImGuizmo::ROTATE ? activeColor : inactiveColor);
+		if (ImGui::ImageButton("RotateGizmo", (ImTextureID)(uintptr_t)_IconRotate->GetID(), { buttonSize, buttonSize }, { 0, 1 }, { 1, 0 }))
+			_GizmoType = ImGuizmo::ROTATE;
+		ImGui::PopStyleColor();
+
+		ImGui::SameLine();
+
+		ImGui::PushStyleColor(ImGuiCol_Button, _GizmoType == ImGuizmo::SCALE ? activeColor : inactiveColor);
+		if (ImGui::ImageButton("ScaleGizmo", (ImTextureID)(uintptr_t)_IconScale->GetID(), { buttonSize, buttonSize }, { 0, 1 }, { 1, 0 }))
+			_GizmoType = ImGuizmo::SCALE;
+		ImGui::PopStyleColor();
+
+		ImGui::EndChild();
+		ImGui::PopStyleVar(2);
 
 		Entity selectedEntity = _SceneHierarchyPanel->GetSelectedEntity();
 		if (_SceneState == SceneState::EDIT && selectedEntity && _GizmoType != -1)
@@ -569,33 +651,33 @@ namespace TAGE::Editor {
 
 				switch (_GizmoType)
 				{
-				case ImGuizmo::TRANSLATE:
-				{
-					tc.Position = translation;
-					break;
-				}
-				case ImGuizmo::ROTATE:
-				{
-					glm::vec3 originalRotationEuler = tc.GetRotationEuler();
+					case ImGuizmo::TRANSLATE:
+					{
+						tc.Position = translation;
+						break;
+					}
+					case ImGuizmo::ROTATE:
+					{
+						glm::vec3 originalRotationEuler = tc.GetRotationEuler();
 
-					originalRotationEuler.x = fmodf(originalRotationEuler.x + glm::pi<float>(), glm::two_pi<float>()) - glm::pi<float>();
-					originalRotationEuler.y = fmodf(originalRotationEuler.y + glm::pi<float>(), glm::two_pi<float>()) - glm::pi<float>();
-					originalRotationEuler.z = fmodf(originalRotationEuler.z + glm::pi<float>(), glm::two_pi<float>()) - glm::pi<float>();
+						originalRotationEuler.x = fmodf(originalRotationEuler.x + glm::pi<float>(), glm::two_pi<float>()) - glm::pi<float>();
+						originalRotationEuler.y = fmodf(originalRotationEuler.y + glm::pi<float>(), glm::two_pi<float>()) - glm::pi<float>();
+						originalRotationEuler.z = fmodf(originalRotationEuler.z + glm::pi<float>(), glm::two_pi<float>()) - glm::pi<float>();
 
-					glm::vec3 deltaRotationEuler = glm::eulerAngles(rotation) - originalRotationEuler;
+						glm::vec3 deltaRotationEuler = glm::eulerAngles(rotation) - originalRotationEuler;
 
-					if (fabs(deltaRotationEuler.x) < 0.001) deltaRotationEuler.x = 0.0f;
-					if (fabs(deltaRotationEuler.y) < 0.001) deltaRotationEuler.y = 0.0f;
-					if (fabs(deltaRotationEuler.z) < 0.001) deltaRotationEuler.z = 0.0f;
+						if (fabs(deltaRotationEuler.x) < 0.001) deltaRotationEuler.x = 0.0f;
+						if (fabs(deltaRotationEuler.y) < 0.001) deltaRotationEuler.y = 0.0f;
+						if (fabs(deltaRotationEuler.z) < 0.001) deltaRotationEuler.z = 0.0f;
 
-					tc.SetRotationEuler(tc.GetRotationEuler() += deltaRotationEuler);
-					break;
-				}
-				case ImGuizmo::SCALE:
-				{
-					tc.Scale = scale;
-					break;
-				}
+						tc.SetRotationEuler(tc.GetRotationEuler() += deltaRotationEuler);
+						break;
+					}
+					case ImGuizmo::SCALE:
+					{
+						tc.Scale = scale;
+						break;
+					}
 				}
 			}
 		}

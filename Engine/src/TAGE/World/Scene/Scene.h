@@ -3,6 +3,7 @@
 #include "TAGE/World/Systems/System_Renderer.h"
 #include "TAGE/World/Systems/System_Physics.h"
 #include "TAGE/World/Components/BaseComponents.h"
+#include "TAGE/World/Components/Components.h"
 #include "TAGE/Physics/PhysicsWorld.h"
 #include "TARE/Camera/EditorCamera.h"
 #include "TAGE/Utilities/UUID.h"
@@ -55,14 +56,25 @@ namespace TAGE {
 
 		uint GetWidth() const { return _Width; }
 		uint GetHeight() const { return _Height; }
-
-		template<typename... Components>
-		auto GetEntitiesWith() {
-			return _Registry.view<Components...>();
-		}
+		bool IsRunning() const { return _Running; }
 
 		void ParentEntity(Entity entity, Entity parent);
 		void UnparentEntity(Entity entity, bool convertToWorldSpace = true);
+
+		template<typename... Components>
+		auto GetEntitiesWith() { return _Registry.view<Components...>(); }
+	private:
+		template<typename TComponent>
+		void CopyComponentIfExists(entt::entity dst, entt::registry& dstRegistry, entt::entity src)
+		{
+			if (_Registry.any_of<TComponent>(src))
+			{
+				auto& srcComponent = _Registry.get<TComponent>(src);
+				dstRegistry.emplace_or_replace<TComponent>(dst, srcComponent);
+			}
+		}
+
+		static MEM::Ref<Scene> CreateEmpty();
 	private:
 		bool _Running = false;
 		float _FixedTimeStep = 0.02f; 
@@ -82,6 +94,10 @@ namespace TAGE {
 		void OnComponentAdded(Entity entity, T& component);
 	protected:
 		friend class SceneSerializer;
+		friend class SceneHierarchyPanel;
 		friend class Entity;
+		friend class Prefab;
 	};
 }
+
+#include "TAGE/World/Objects/EntityFunctions.h"

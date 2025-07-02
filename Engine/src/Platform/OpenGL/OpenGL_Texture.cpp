@@ -64,7 +64,7 @@ namespace TARE {
 
 		_Width = width;
 		_Height = height;
-		_Channels = 4;
+		_Channels = channels;
 
 		bool hasAlpha = (channels == 4);
 		GLenum internalFormat = hasAlpha ? GL_COMPRESSED_RGBA_S3TC_DXT5_EXT : GL_COMPRESSED_RGB_S3TC_DXT1_EXT;

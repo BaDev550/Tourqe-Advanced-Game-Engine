@@ -21,6 +21,12 @@ namespace TAGE
         internal extern static void TransformComponent_SetTranslation(ulong entityID, ref Vector3 vector);
 
         [MethodImplAttribute(MethodImplOptions.InternalCall)]
+        internal extern static void TransformComponent_GetRotation(ulong entityID, out Vector3 vector);
+
+        [MethodImplAttribute(MethodImplOptions.InternalCall)]
+        internal extern static void TransformComponent_SetRotation(ulong entityID, ref Vector3 vector);
+
+        [MethodImplAttribute(MethodImplOptions.InternalCall)]
         internal extern static void RigidBodyComponent_ApplyForce(ulong entityID, ref Vector3 force);
 
         [MethodImplAttribute(MethodImplOptions.InternalCall)]
@@ -30,6 +36,12 @@ namespace TAGE
         #region INPUT
         [MethodImplAttribute(MethodImplOptions.InternalCall)]
         internal extern static bool Input_IsKeyDown(KeyCode key);
+
+        [MethodImplAttribute(MethodImplOptions.InternalCall)]
+        internal extern static void Input_GetMousePos(out Vector2 pos);
+
+        [MethodImplAttribute(MethodImplOptions.InternalCall)]
+        internal extern static void Input_GetMouseDelta(out Vector2 delta);
         #endregion
 
         #region ENTITY

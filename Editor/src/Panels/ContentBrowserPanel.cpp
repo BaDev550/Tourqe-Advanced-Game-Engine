@@ -11,6 +11,10 @@ namespace TAGE::Editor {
 		_DirectoryIcon->LoadTexture("Assets/textures/Icons/Folder.png");
 		_FileIcon = TARE::Texture2D::Create();
 		_FileIcon->LoadTexture("Assets/textures/Icons/File.png");
+		_CSharpFileIcon = TARE::Texture2D::Create();
+		_CSharpFileIcon->LoadTexture("Assets/textures/Icons/FileCsharp.png");
+		_TAGESceneFileIcon = TARE::Texture2D::Create();
+		_TAGESceneFileIcon->LoadTexture("Assets/textures/Icons/FileTageScene.png");
 	}
 
 	void ContentBrowserPanel::OnImGuiRender()
@@ -102,7 +106,12 @@ namespace TAGE::Editor {
 			}
 			else
 			{
-				iconID = _FileIcon->GetID();
+				if (ext == ".tage")
+					iconID = _TAGESceneFileIcon->GetID();
+				else if (ext == ".cs")
+					iconID = _CSharpFileIcon->GetID();
+				else
+					iconID = _FileIcon->GetID();
 			}
 		}
 
