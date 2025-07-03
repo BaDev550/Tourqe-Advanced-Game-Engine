@@ -11,6 +11,7 @@
 #include "Buffers/Framebuffer.h"
 #include "Deferred/DeferredRendering.h"
 #include "Shadow/ShadowMap.h"
+#include "Skybox/Skybox.h"
 #include "Common/Light.h"
 
 namespace TARE {
@@ -32,7 +33,7 @@ namespace TARE {
 		};
 	public:
 		TARE(int width, int height);
-		void BeginFrame(const TAGE::MEM::Ref<Camera>& cam);
+		void BeginFrame(const TAGE::MEM::Ref<Camera>& cam, const TAGE::MEM::Ref<Skybox>& skybox = nullptr);
 		void EndFrame();
 
 		void BeginShadowPass();

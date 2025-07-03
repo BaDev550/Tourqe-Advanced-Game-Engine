@@ -125,7 +125,7 @@ namespace TAGE {
 			case LightType::DIRECTIONAL:
 			{
 				float shadowRange = 30.0f;
-				glm::mat4 lightProjection = glm::ortho(-shadowRange, shadowRange, -shadowRange, shadowRange, 0.1f, 150.0f);
+				glm::mat4 lightProjection = glm::ortho(-shadowRange, shadowRange, -shadowRange, shadowRange, 2.0f, 150.0f);
 
 				glm::vec3 lightPos = -light.direction * 30.0f;
 				glm::mat4 lightView = glm::lookAt(

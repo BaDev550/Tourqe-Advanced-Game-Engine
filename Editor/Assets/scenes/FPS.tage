@@ -1,5 +1,17 @@
 Scene: FPS
 Entities:
+  - Entity: 4491397979181176463
+    IdentityComponent:
+      Name: FlightHelmet
+    Parent: 0
+    Children:
+      []
+    TransformComponent:
+      Position: [5.49968529, 0.0423209667, -2.51873541]
+      Rotation: [0, 0, 0]
+      Scale: [5.85999966, 5.85999966, 5.85999966]
+    MeshComponent:
+      MeshPath: assets\models\FlightHelmet\FlightHelmet.gltf
   - Entity: 16087763762532886692
     IdentityComponent:
       Name: Floor
@@ -190,13 +202,13 @@ Entities:
       []
     TransformComponent:
       Position: [0, 0, 0]
-      Rotation: [-0.959927738, -1.30665922, 0.0545679033]
+      Rotation: [-0.660000026, -3.21000004, -2.3499999]
       Scale: [1, 1, 1]
     LightComponent:
       Type: 1
       Color: [1, 1, 1]
       Range: 10
-      Intensity: 10
+      Intensity: 11.8500004
   - Entity: 9388116751533317827
     IdentityComponent:
       Name: Mario
@@ -268,3 +280,27 @@ Entities:
       Scale: [0.674999833, 0.674999535, 0.674999952]
     MeshComponent:
       MeshPath: E:\TAGE\Editor\Assets\models\weapons\AR\scene.gltf
+  - Entity: 10562657499120274269
+    IdentityComponent:
+      Name: SciFiHelmet
+    Parent: 0
+    Children:
+      []
+    TransformComponent:
+      Position: [10.26933, 2.76164341, -2.17012501]
+      Rotation: [0, -0.000345289707, 0]
+      Scale: [1, 1, 1]
+    MeshComponent:
+      MeshPath: assets\models\SciFiHelmet\SciFiHelmet.gltf
+  - Entity: 6542852994437265258
+    IdentityComponent:
+      Name: DamagedHelmet
+    Parent: 0
+    Children:
+      []
+    TransformComponent:
+      Position: [-0.000148706982, 2.9986608, 8.53327656]
+      Rotation: [1.57058048, 1.57045102, 0]
+      Scale: [1, 1, 1]
+    MeshComponent:
+      MeshPath: assets\models\DamagedHelmet\DamagedHelmet.gltf

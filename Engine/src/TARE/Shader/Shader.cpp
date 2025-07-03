@@ -15,6 +15,9 @@ namespace TARE
 	void Shader::LoadShader(const char* vertexPath, const char* fragmentPath, const char* geometryPath)
 	{
 		bool hasGeometry = geometryPath[0] != '0';
+		_VertexPath = vertexPath;
+		_FragmentPath = fragmentPath;
+		_GeometryPath = geometryPath;
 
 		std::ifstream vertexFile(vertexPath);
 		std::ifstream fragmentFile(fragmentPath);
@@ -50,6 +53,20 @@ namespace TARE
 		DeleteShader(fragment);
 		if (hasGeometry)
 			DeleteShader(geometry);
+	}
+
+	bool Shader::Reload()
+	{
+		DestroyProgram();
+		try {
+			LOG_INFO("Reloading shader: {}", _VertexPath);
+			LoadShader(_VertexPath.c_str(), _FragmentPath.c_str(), _GeometryPath.c_str());
+			return true;
+		}
+		catch (const std::ifstream::failure& e) {
+			LOG_ERROR("Failed to reload shader file: {}", e.what());
+			return false;
+		}
 	}
 
 	TAGE::MEM::Ref<Shader> TARE::Shader::Create(const char* vertexPath, const char* fragmentPath, const char* geometryPath)

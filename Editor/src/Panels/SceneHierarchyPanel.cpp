@@ -466,7 +466,7 @@ namespace TAGE::Editor {
 				DrawVec3Control("Color", component.Handle.color);
 				ImGui::Checkbox("Cast Shadow", &component.Handle.castShadow);
 				ImGui::DragFloat("Intensity", &component.Handle.intensity, 0.01f, 0.0f, 100.0f);
-				ImGui::DragFloat("Range", &component.Handle.range, 0.1f, 0.0f, 100.0f);
+				ImGui::DragFloat("Range", &component.Handle.range, 0.1f, 0.0f, 400.0f);
 				ImGui::DragFloat("Inner Cone", &component.Handle.innerCone, 0.1f, 0.0f, glm::radians(90.0f));
 				ImGui::DragFloat("Outer Cone", &component.Handle.outerCone, 0.1f, 0.0f, glm::radians(90.0f));
 				ImGui::Combo("Type", (int*)&component.Handle.type, "Point\0Directional\0Spot\0");

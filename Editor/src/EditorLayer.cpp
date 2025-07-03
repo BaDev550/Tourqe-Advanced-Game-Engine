@@ -711,6 +711,14 @@ namespace TAGE::Editor {
 			debugMode = static_cast<ViewportDebugMode>(currentDrawType);
 		}
 
+		for (const auto& [name, shader] : TARE::ShaderLibrary::GetShaders()) {
+			ImGui::Text(name.c_str());
+			ImGui::SameLine();
+			if (ImGui::Button(("Reload##" + name).c_str())) {
+				shader->Reload();
+			}
+		}
+
 		ImGui::End();
 	}
 }

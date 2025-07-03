@@ -54,7 +54,7 @@ enum ClearMode {
 enum DrawPropeties {
 	DEPTH_TEST = 0x0B71,
 	CULL_TEST = 0x0B44,
-	BLEND = 0x0BE2,
+	BLEND_TEST = 0x0BE2,
 };
 
 enum class ShadingMode : uint8 {

@@ -15,6 +15,7 @@ namespace TARE
 
 	void EndlessGrid::Render(glm::mat4& view, glm::mat4& proj, glm::vec3& pos)
 	{
+		RenderCommand::Enable(BLEND_TEST);
 		RenderCommand::Disable(DEPTH_TEST);
 		RenderCommand::Disable(CULL_TEST);
 		glm::mat4 invViewProj = glm::inverse(proj * view);
@@ -33,6 +34,7 @@ namespace TARE
 		RenderCommand::DrawVertex(_VAO);
 		RenderCommand::Enable(DEPTH_TEST);
 		RenderCommand::Enable(CULL_TEST);
+		RenderCommand::Disable(BLEND_TEST);
 	}
 
 	void EndlessGrid::InitGridBuffers()

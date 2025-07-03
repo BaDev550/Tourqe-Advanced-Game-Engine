@@ -16,6 +16,7 @@ namespace TARE {
 	void DeferredRendering::RenderGeometryPass(const TAGE::MEM::Ref<Camera>& camera) const
 	{
 		_GBuffer->Bind();
+		RenderCommand::Disable(BLEND_TEST);
 		RenderCommand::Clear(COLOR_DEPTH_STENCIL);
 		_GBuffer->Clear(3, -1);
 
@@ -33,7 +34,7 @@ namespace TARE {
 	void DeferredRendering::RenderLightingPass(std::vector<Light>& lights, const glm::vec3& cameraPos) const
 	{
 		_LightingBuffer->Bind();
-
+		RenderCommand::Enable(BLEND_TEST);
 		RenderCommand::SetClearColor({ 1.0f, 1.0f, 1.0f, 1.0f });
 		RenderCommand::Clear(COLOR);
 		_LightingBuffer->Clear(0, 0);
@@ -82,7 +83,7 @@ namespace TARE {
 					FramebufferTextureFormat(FramebufferTextureFormat::RGBA16F), // Position
 					FramebufferTextureFormat(FramebufferTextureFormat::RGBA16F), // Normal
 					FramebufferTextureFormat(FramebufferTextureFormat::RGBA8), // Albedo
-					FramebufferTextureFormat(FramebufferTextureFormat::RED_INTEGER),
+					FramebufferTextureFormat(FramebufferTextureFormat::RED_INTEGER), // Entity ID's
 					FramebufferTextureFormat(FramebufferTextureFormat::DEPTH32F) // Depth
 				}),
 			1, width, height
@@ -92,7 +93,7 @@ namespace TARE {
 
 		FramebufferSpecification GIspec(
 			FramebufferAttachmentSpecification({
-					FramebufferTextureFormat(FramebufferTextureFormat::RGBA16F)
+					FramebufferTextureFormat(FramebufferTextureFormat::RGBA16F) // Prev GI Result
 				}),
 				1, width, height
 				);

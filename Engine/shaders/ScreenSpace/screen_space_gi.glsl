@@ -3,7 +3,7 @@
 
 #include "screen_space_common.glsl"
 
-const float GI_INTENSITY = 0.15;
+const float GI_INTENSITY = 1.15;
 
 vec3 calculateSSGI(
     vec3 fragPos,

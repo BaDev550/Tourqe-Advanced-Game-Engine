@@ -1,0 +1,294 @@
+Scene: FPS
+Entities:
+  - Entity: 6542852994437265258
+    IdentityComponent:
+      Name: DamagedHelmet
+    Parent: 0
+    Children:
+      []
+    TransformComponent:
+      Position: [-0.000148706982, 2.9986608, 8.53327656]
+      Rotation: [1.57058048, 1.57045102, 0]
+      Scale: [1, 1, 1]
+    MeshComponent:
+      MeshPath: assets\models\DamagedHelmet\DamagedHelmet.gltf
+  - Entity: 10562657499120274269
+    IdentityComponent:
+      Name: SciFiHelmet
+    Parent: 0
+    Children:
+      []
+    TransformComponent:
+      Position: [-0.739436448, 2.76164341, 5.20739937]
+      Rotation: [0, 1.57045102, 0]
+      Scale: [1, 1, 1]
+    MeshComponent:
+      MeshPath: assets\models\SciFiHelmet\SciFiHelmet.gltf
+  - Entity: 12226881553193720343
+    IdentityComponent:
+      Name: Weapon
+    Parent: 17142303126450688634
+    Children:
+      []
+    TransformComponent:
+      Position: [-1.08253992, 0.94667387, -0.768660545]
+      Rotation: [1.61245, 0.0539318286, 0.00224664365]
+      Scale: [0.674999833, 0.674999535, 0.674999952]
+    MeshComponent:
+      MeshPath: E:\TAGE\Editor\Assets\models\weapons\AR\scene.gltf
+  - Entity: 13663063098940352525
+    IdentityComponent:
+      Name: Floor
+    Parent: 0
+    Children:
+      []
+    TransformComponent:
+      Position: [0, 0, 0]
+      Rotation: [0, 0, 0]
+      Scale: [13.4457235, 0.177173257, 14.9492617]
+    MeshComponent:
+      MeshPath: assets\models\Cube\cube.obj
+    RigidBodyComponent:
+      BodyType: 0
+      LinearFactor: [1, 1, 1]
+      AngularFactor: [1, 1, 1]
+    ColliderComponent:
+      Shape: 0
+      Size: [35, 1, 35]
+      ResponseType: 2
+  - Entity: 17142303126450688634
+    IdentityComponent:
+      Name: Camera
+    Parent: 4052358650009744941
+    Children:
+      - Handle: 12226881553193720343
+    TransformComponent:
+      Position: [-0.0102548832, 1.38964963, -0.728205204]
+      Rotation: [-0.0415927507, -0.0543239675, 3.14159274]
+      Scale: [0.400000006, 0.399999976, 0.400000006]
+    MeshComponent:
+      MeshPath: assets\models\Cube\cube.obj
+    CameraComponent:
+      Camera:
+        AspectRatio: 2.30448723
+        FOV: 90
+        NearClip: 0.0500000007
+        FarClip: 250
+      IsActive: true
+  - Entity: 9388116751533317827
+    IdentityComponent:
+      Name: Mario
+    Parent: 0
+    Children:
+      []
+    TransformComponent:
+      Position: [-9.81309795, 1.34380317, 11.2537804]
+      Rotation: [0, -1.57045102, 0]
+      Scale: [1, 1, 1]
+    MeshComponent:
+      MeshPath: assets\models\mario_2\mario_2.obj
+    RigidBodyComponent:
+      BodyType: 1
+      LinearFactor: [1, 1, 1]
+      AngularFactor: [1, 1, 1]
+    ColliderComponent:
+      Shape: 0
+      Size: [1, 2, 1]
+      ResponseType: 2
+  - Entity: 13235830997300490908
+    IdentityComponent:
+      Name: Sun
+    Parent: 0
+    Children:
+      []
+    TransformComponent:
+      Position: [0, 0, 0]
+      Rotation: [-0.959927738, -1.30665922, 0.0545679033]
+      Scale: [1, 1, 1]
+    LightComponent:
+      Type: 1
+      Color: [1, 1, 1]
+      Range: 10
+      Intensity: 10
+  - Entity: 3977871372191096448
+    IdentityComponent:
+      Name: Floor
+    Parent: 0
+    Children:
+      []
+    TransformComponent:
+      Position: [12.3090172, 2.68241668, 0]
+      Rotation: [0, 0, 1.57079649]
+      Scale: [2.78191519, 0.177173242, 14.9492617]
+    MeshComponent:
+      MeshPath: assets\models\Cube\cube.obj
+    RigidBodyComponent:
+      BodyType: 0
+      LinearFactor: [1, 1, 1]
+      AngularFactor: [1, 1, 1]
+    ColliderComponent:
+      Shape: 0
+      Size: [35, 1, 35]
+      ResponseType: 2
+  - Entity: 4052358650009744941
+    IdentityComponent:
+      Name: Player
+    Parent: 0
+    Children:
+      - Handle: 17142303126450688634
+    TransformComponent:
+      Position: [0, 1.93481266, 0.944977224]
+      Rotation: [0, 0, 0]
+      Scale: [0.5, 0.5, 0.5]
+    MeshComponent:
+      MeshPath: assets\models\Capsule\Capsule.obj
+    RigidBodyComponent:
+      BodyType: 1
+      LinearFactor: [1, 1, 1]
+      AngularFactor: [0, 0, 0]
+    ColliderComponent:
+      Shape: 2
+      Size: [1, 1, 1]
+      ResponseType: 2
+    ScriptComponent:
+      Class: Sandbox.Player
+  - Entity: 16193550393428858559
+    IdentityComponent:
+      Name: Floor
+    Parent: 0
+    Children:
+      []
+    TransformComponent:
+      Position: [-0.83425343, 2.68241811, -15]
+      Rotation: [-1.57079649, 0, 1.57079649]
+      Scale: [2.78191519, 0.177173242, 14.9492617]
+    MeshComponent:
+      MeshPath: assets\models\Cube\cube.obj
+    RigidBodyComponent:
+      BodyType: 0
+      LinearFactor: [1, 1, 1]
+      AngularFactor: [1, 1, 1]
+    ColliderComponent:
+      Shape: 0
+      Size: [35, 1, 35]
+      ResponseType: 2
+  - Entity: 6253064195215941508
+    IdentityComponent:
+      Name: Floor
+    Parent: 0
+    Children:
+      []
+    TransformComponent:
+      Position: [-8.65624237, 2.68241358, -9.47205925]
+      Rotation: [-1.57079649, 0, 1.57079649]
+      Scale: [2.78191471, 0.177173212, 5.04538488]
+    MeshComponent:
+      MeshPath: assets\models\Cube\cube.obj
+    RigidBodyComponent:
+      BodyType: 0
+      LinearFactor: [1, 1, 1]
+      AngularFactor: [1, 1, 1]
+    ColliderComponent:
+      Shape: 0
+      Size: [5, 1, 10]
+      ResponseType: 2
+  - Entity: 4600771098863843773
+    IdentityComponent:
+      Name: Floor
+    Parent: 0
+    Children:
+      []
+    TransformComponent:
+      Position: [-0.834257007, 2.68241453, 15]
+      Rotation: [-1.57079649, 0, 1.57079649]
+      Scale: [2.78191519, 0.177173242, 14.9492617]
+    MeshComponent:
+      MeshPath: assets\models\Cube\cube.obj
+    RigidBodyComponent:
+      BodyType: 0
+      LinearFactor: [1, 1, 1]
+      AngularFactor: [1, 1, 1]
+    ColliderComponent:
+      Shape: 0
+      Size: [35, 1, 35]
+      ResponseType: 2
+  - Entity: 57132544653024393
+    IdentityComponent:
+      Name: Floor
+    Parent: 0
+    Children:
+      []
+    TransformComponent:
+      Position: [-13.3342552, 2.68241501, 0]
+      Rotation: [0, 0, 1.57079649]
+      Scale: [2.78191519, 0.177173242, 14.9492617]
+    MeshComponent:
+      MeshPath: assets\models\Cube\cube.obj
+    RigidBodyComponent:
+      BodyType: 0
+      LinearFactor: [1, 1, 1]
+      AngularFactor: [1, 1, 1]
+    ColliderComponent:
+      Shape: 0
+      Size: [35, 1, 35]
+      ResponseType: 2
+  - Entity: 5811970007237212884
+    IdentityComponent:
+      Name: Floor
+    Parent: 0
+    Children:
+      []
+    TransformComponent:
+      Position: [-3.45310545, 2.68241501, -5.20774412]
+      Rotation: [0, 0, 1.57079649]
+      Scale: [2.78191495, 0.177173227, 4.52101898]
+    MeshComponent:
+      MeshPath: assets\models\Cube\cube.obj
+    RigidBodyComponent:
+      BodyType: 0
+      LinearFactor: [1, 1, 1]
+      AngularFactor: [1, 1, 1]
+    ColliderComponent:
+      Shape: 0
+      Size: [5, 1, 10]
+      ResponseType: 2
+  - Entity: 17908940019515578471
+    IdentityComponent:
+      Name: Floor
+    Parent: 0
+    Children:
+      []
+    TransformComponent:
+      Position: [2.84375715, 2.68241501, -5.20774412]
+      Rotation: [0, 0, 1.57079649]
+      Scale: [2.78191495, 0.177173227, 4.52101898]
+    MeshComponent:
+      MeshPath: assets\models\Cube\cube.obj
+    RigidBodyComponent:
+      BodyType: 0
+      LinearFactor: [1, 1, 1]
+      AngularFactor: [1, 1, 1]
+    ColliderComponent:
+      Shape: 0
+      Size: [5, 1, 10]
+      ResponseType: 2
+  - Entity: 16087763762532886692
+    IdentityComponent:
+      Name: Floor
+    Parent: 0
+    Children:
+      []
+    TransformComponent:
+      Position: [7.34375715, 2.68241549, -9.47205925]
+      Rotation: [-1.57079649, 0, 1.57079649]
+      Scale: [2.78191495, 0.177173227, 4.52101898]
+    MeshComponent:
+      MeshPath: assets\models\Cube\cube.obj
+    RigidBodyComponent:
+      BodyType: 0
+      LinearFactor: [1, 1, 1]
+      AngularFactor: [1, 1, 1]
+    ColliderComponent:
+      Shape: 0
+      Size: [5, 1, 10]
+      ResponseType: 2

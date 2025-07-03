@@ -34,7 +34,6 @@ namespace TARE
 		if (!_scene || !_scene->mRootNode)
 		{
 			LOG_ERROR("Failed to load model: {}. Error: {}", filePath, importer.GetErrorString());
-			ASSERT(false, "Model load failed. See log for details.");
 			return false;
 		}
 		if (_scene->HasSkeletons())

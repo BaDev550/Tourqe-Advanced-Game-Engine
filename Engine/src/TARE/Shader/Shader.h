@@ -19,6 +19,7 @@ namespace TARE
 		virtual void SetUniform(const char* name, glm::mat3 value) const = 0;
 		virtual void SetUniform(const char* name, glm::mat4 value) const = 0;
 		virtual void DestroyProgram() const {};
+		bool Reload();
 
 		static TAGE::MEM::Ref<Shader> Create(const char* vertexPath, const char* fragmentPath, const char* geometryPath = "0");
 	protected:
@@ -29,5 +30,6 @@ namespace TARE
 		virtual void DeleteShader(uint shader) = 0;
 
 		void LoadShader(const char* vertexPath, const char* fragmentPath, const char* geometryPath);
+		std::string _VertexPath, _FragmentPath, _GeometryPath;
 	};
 }

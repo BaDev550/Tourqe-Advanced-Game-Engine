@@ -24,6 +24,10 @@ uniform Light u_Lights[MAX_LIGHTS];
 uniform sampler2D u_ShadowMaps[MAX_LIGHTS];
 uniform int u_LightCount;
 
+float linstep(const float low, const float high, const float value) {
+    return clamp((value - low) / (high - low), 0.0, 1.0);
+}
+
 float ShadowCalculation(sampler2D shadowMap, vec4 fragPosLightSpace, vec3 normal, vec3 lightDir)
 {
     vec3 projCoords = fragPosLightSpace.xyz / fragPosLightSpace.w;

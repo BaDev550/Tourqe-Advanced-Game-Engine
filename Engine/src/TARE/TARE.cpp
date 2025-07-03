@@ -14,7 +14,7 @@ namespace TARE {
 		_ShadowMap = TAGE::MEM::MakeRef<ShadowMap>(SHADOW_MAP_RESOLUTION, SHADOW_MAP_RESOLUTION);
 	}
 
-	void TARE::BeginFrame(const TAGE::MEM::Ref<Camera>& cam)
+	void TARE::BeginFrame(const TAGE::MEM::Ref<Camera>& cam, const TAGE::MEM::Ref<Skybox>& skybox)
 	{
 		_DeferredRendering->RenderGeometryPass(cam);
 
@@ -36,6 +36,11 @@ namespace TARE {
 		_DeferredRendering->GetLightShader()->SetUniform("u_Projection", _Data.ProjectionMatrix);
 		_DeferredRendering->GetLightShader()->SetUniform("u_View", _Data.ViewMatrix);
 		_DeferredRendering->GetLightShader()->SetUniform("u_InverseProjection", glm::inverse(_Data.ProjectionMatrix));
+
+		//if (skybox) {
+		//	skybox->GetTexture()->Bind(CUBEMAP_TEXTURE_SLOT);
+		//	_DeferredRendering->GetLightShader()->SetUniform("u_EnvironmentMap", CUBEMAP_TEXTURE_SLOT);
+		//}
 	}
 
 	void TARE::EndFrame()
