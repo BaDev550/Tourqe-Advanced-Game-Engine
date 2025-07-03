@@ -56,7 +56,7 @@ making it an excellent choice for indie developers and hobbyists.
 
 ## Licens
 
-![Screenshot 2025-07-02 211004](https://github.com/user-attachments/assets/b2c617d7-2631-4deb-8e5f-dfc63d39e7d0)
+![Screenshot 2025-07-03 160711](https://github.com/user-attachments/assets/9449ce1e-d20c-4279-aa93-68b31bd9cb8b)
 
 This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
 
