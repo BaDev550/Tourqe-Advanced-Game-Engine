@@ -349,11 +349,13 @@ namespace TAGE {
 				auto rigidBodyComponent = entity["RigidBodyComponent"];
 				if (rigidBodyComponent) {
 					auto bodyType = (PhysicsBodyType)rigidBodyComponent["BodyType"].as<int>();
-					//auto linearFactor = rigidBodyComponent["LinearFactor"].as<glm::vec3>();
-					//auto angularFactor = rigidBodyComponent["AngularFactor"].as<glm::vec3>();
+					auto linearFactor = rigidBodyComponent["LinearFactor"].as<glm::vec3>();
+					auto angularFactor = rigidBodyComponent["AngularFactor"].as<glm::vec3>();
 
 					auto& rigidBody = deserializedEntity.AddOrReplaceComponent<RigidBodyComponent>();
 					rigidBody.BodyType = bodyType;
+					rigidBody.LinearFactor = linearFactor;
+					rigidBody.AngularFactor = angularFactor;
 				}
 
 				auto scriptComponent = entity["ScriptComponent"];

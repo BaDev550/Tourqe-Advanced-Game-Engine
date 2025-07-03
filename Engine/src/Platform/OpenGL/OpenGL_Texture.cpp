@@ -33,6 +33,7 @@ namespace TARE {
 
 	OpenGL_Texture2D::~OpenGL_Texture2D()
 	{
+		LOG_WARN("OPENGL TEXTURE DELETED");
 		glDeleteTextures(1, &_ID);
 	}
 

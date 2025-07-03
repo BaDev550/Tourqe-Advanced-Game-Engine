@@ -36,15 +36,16 @@ namespace TARE {
 		}
 
 		glEnable(GL_BLEND);
-		glEnable(GL_STENCIL_TEST);
 		glEnable(GL_CULL_FACE);
 		glEnable(GL_DEPTH_TEST);
 		glDepthFunc(GL_LESS);    
 		glDepthMask(GL_TRUE);
 		glEnable(GL_MULTISAMPLE);
 		glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
-		glStencilFunc(GL_ALWAYS, 1, 0xFF);
+
+		glEnable(GL_STENCIL_TEST);
 		glStencilOp(GL_KEEP, GL_KEEP, GL_REPLACE);
+		glStencilFunc(GL_ALWAYS, 1, 0xFF);
 		glStencilMask(0xFF);
 #ifdef _DEBUG
 		glEnable(GL_DEBUG_OUTPUT);

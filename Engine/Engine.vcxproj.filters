@@ -1934,5 +1934,7 @@
     <None Include="shaders\thumbnail_vertex.glsl">
       <Filter>shaders</Filter>
     </None>
+    <None Include="shaders\Common\outline_vertex.glsl" />
+    <None Include="shaders\Common\outline_fragment.glsl" />
   </ItemGroup>
 </Project>

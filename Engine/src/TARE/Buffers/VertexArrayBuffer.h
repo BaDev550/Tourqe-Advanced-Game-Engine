@@ -16,6 +16,7 @@ namespace TARE {
 		virtual void SetCount(size_t count) = 0;
 		virtual size_t GetCount() const = 0;
 		virtual TAGE::MEM::Ref<ElementBufferObject> GetIndexBuffer() const = 0;
+		virtual void Destroy() = 0;
 
 		static TAGE::MEM::Ref<VertexArrayObject> Create();
 	};

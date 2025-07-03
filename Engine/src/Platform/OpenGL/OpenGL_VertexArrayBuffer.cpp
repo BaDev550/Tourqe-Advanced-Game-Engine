@@ -56,4 +56,12 @@ namespace TARE {
 		indexBuffer->Bind();
 		_IndexBuffer = indexBuffer;
 	}
+
+	void OpenGL_VertexArrayObject::Destroy()
+	{
+		if (_ID != 0) {
+			glDeleteVertexArrays(1, &_ID);
+			_ID = 0;
+		}
+	}
 }

@@ -14,11 +14,13 @@ namespace TARE
 	{
 	public:
 		Model() = default;
+		~Model();
 		bool LoadFromFile(const std::string& filePath);
 		void SetTransform(const glm::mat4& transform);
 
 		void Draw(TAGE::MEM::Ref<Shader>& shader) const;
 		void Draw(const std::string& shader) const;
+		void DrawOutlined(const std::string& shader, const glm::mat4& viewProj);
 
 		std::string GetFilePath() const { return _FilePath; }
 		uint GetMeshCount() { return (uint)_meshes.size(); }

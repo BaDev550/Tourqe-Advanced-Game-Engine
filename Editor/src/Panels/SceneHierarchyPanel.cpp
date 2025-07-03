@@ -486,6 +486,8 @@ namespace TAGE::Editor {
 
 					if (ImGui::CollapsingHeader("Constant Movement")) {
 						static bool lockX, lockY, lockZ = false;
+						component.MovementLocked(lockX, lockY, lockZ);
+
 						static bool valueChanged = false;
 						ImGui::Text("Lock Movement");
 						ImGui::SameLine();
@@ -506,6 +508,8 @@ namespace TAGE::Editor {
 
 					if (ImGui::CollapsingHeader("Constant Rotation")) {
 						static bool lockX, lockY, lockZ = false;
+						component.RotationLocked(lockX, lockY, lockZ);
+
 						static bool valueChanged = false;
 						ImGui::Text("Lock Rotation");
 						ImGui::SameLine();

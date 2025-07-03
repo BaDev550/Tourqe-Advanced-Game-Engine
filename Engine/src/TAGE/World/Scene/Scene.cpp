@@ -37,7 +37,7 @@ namespace TAGE {
 
 	Scene::~Scene() {
 	}
-
+	
 	Entity Scene::CreateEntity(const std::string& name)
 	{
 		return CreateEntityWithUUID(name, UUID());
@@ -226,11 +226,8 @@ namespace TAGE {
 
 	void Scene::Clear()
 	{
-		auto view = _Registry.view<IdentityComponent, TransformComponent>();
-		for (auto e : view) {
-			Entity entityToDestroy = { e, this };
-			DestroyEntity(entityToDestroy);
-		}
+		_Entities.clear();
+		_Registry.clear();
 	}
 
 	void Scene::OnRuntimeStart()
@@ -349,6 +346,21 @@ namespace TAGE {
 		CopyComponentIfExists<CameraComponent>(newEntity, _Registry, entity);
 		CopyComponentIfExists<RigidBodyComponent>(newEntity, _Registry, entity);
 		CopyComponentIfExists<ColliderComponent>(newEntity, _Registry, entity);
+	}
+
+	void Scene::OnResize(uint width, uint height)
+	{
+		if (width == 0 || height == 0)
+			return;
+
+		_Width = width;
+		_Height = height;
+		auto view = _Registry.view<IdentityComponent, CameraComponent>();
+		for (auto entity : view) {
+			const auto& camera = view.get<CameraComponent>(entity);
+			if (camera.IsActive)
+				camera.Handle->OnResize(width, height);
+		}
 	}
 
 template<typename T>

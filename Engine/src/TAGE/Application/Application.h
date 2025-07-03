@@ -46,7 +46,8 @@ namespace TAGE {
 
         static Application* Get() { return s_Instance; }
         const float GetDeltaTime() const { return _DeltaTime; }
-        ApplicationState& GetApplicationState() { return _ApplicationState; }
+        ApplicationState GetApplicationState() const { return _ApplicationState; }
+        ApplicationSpecifics GetSpecification() const { return _AppSpecifics; }
 
         void PushLayer(Layer* layer) { _LayerStack.PushLayer(layer); }
         void PushOverlay(Layer* layer) { _LayerStack.PushOverlay(layer); }

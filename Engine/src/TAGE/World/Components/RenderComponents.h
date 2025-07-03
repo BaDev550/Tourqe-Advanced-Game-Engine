@@ -19,6 +19,9 @@ namespace TAGE {
 			Handle = MEM::MakeRef<TARE::Model>();
 			Handle->LoadFromFile(modelpath);
 		}
+		~MeshComponent() {
+			Handle.reset();
+		}
 
 		void LoadMesh(const std::string& meshPath) {
 			Handle.reset(new TARE::Model());

@@ -5,6 +5,7 @@ namespace TARE {
 	TARE::TARE(int width, int height)
 	{
 		ShaderLibrary::Add("MainShader", "../Engine/shaders/main_vertex", "../Engine/shaders/main_fragment");
+		ShaderLibrary::Add("OutlineShader", "../Engine/shaders/Common/outline_vertex", "../Engine/shaders/Common/outline_fragment");
 		_Width = width;
 		_Height = height;
 

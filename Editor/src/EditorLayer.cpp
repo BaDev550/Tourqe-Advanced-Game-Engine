@@ -41,6 +41,12 @@ namespace TAGE::Editor {
 		_IconScale = TARE::Texture2D::Create();
 		_IconScale->LoadTexture("assets/textures/Icons/gizmo_scale.png");
 
+		auto commandLineArgs = Application::Get()->GetSpecification().CommandLineArgs;
+		if (commandLineArgs.Count > 1) {
+			auto sceneFilePath = commandLineArgs[1];
+			OpenScene(sceneFilePath);
+		}
+
 		ImGui::GetIO().IniFilename = "editor_layout.ini";
 	}
 
@@ -67,8 +73,8 @@ namespace TAGE::Editor {
 			if (Input::IsMouseButtonJustPressed(Mouse::ButtonLeft) && !ImGuizmo::IsOver() && !_HoveringGizmo) {
 				auto hoveredEntity = _ActiveScene->GetEntityByID((entt::entity)_HoveredEntityID);
 				if (hoveredEntity) {
-					if (hoveredEntity.HasComponent<MeshComponent>())
-						hoveredEntity.GetComponent<MeshComponent>().IsSelected = true;
+					//if (hoveredEntity.HasComponent<MeshComponent>())
+					//	hoveredEntity.GetComponent<MeshComponent>().IsSelected = true;
 					_SceneHierarchyPanel->SetSelectedEntity(hoveredEntity);
 				}
 				else {
@@ -82,11 +88,8 @@ namespace TAGE::Editor {
 			&& (spec.Width != _ViewportSize.x || spec.Height != _ViewportSize.y)) 
 		{
 			renderer->Resize((uint)_ViewportSize.x, (uint)_ViewportSize.y);
-			_ActiveScene->OnResize((uint)_ViewportSize.x, (uint)_ViewportSize.y);
 			_EditorCamera->OnResize(_ViewportSize.x, _ViewportSize.y);
-			if (_ActiveScene->GetPrimaryCamera()) {
-				_ActiveScene->GetPrimaryCamera().GetComponent<CameraComponent>().Handle->OnResize(_ViewportSize.x, _ViewportSize.y);
-			}
+			_ActiveScene->OnResize((uint)_ViewportSize.x, (uint)_ViewportSize.y);
 			_LastViewportSize = _ViewportSize;
 		}
 
@@ -224,6 +227,11 @@ namespace TAGE::Editor {
 		{
 			LOG_WARN("Could not load {0} - not a scene file", path.filename().string());
 			return;
+		}
+
+		if (_EditorScene) {
+			_EditorScene->Clear();
+			_EditorScene.reset();
 		}
 
 		MEM::Ref<Scene> newScene = MEM::MakeRef<Scene>(path.stem().string());

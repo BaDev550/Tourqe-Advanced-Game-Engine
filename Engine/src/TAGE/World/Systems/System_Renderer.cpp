@@ -72,15 +72,25 @@ namespace TAGE {
 		for (auto entity : view) {
 			Entity& entityObj = _Scene->GetEntityByID(entity);
 			auto& mc = entityObj.GetComponent<MeshComponent>();
+			auto& tc = entityObj.GetComponent<TransformComponent>();
 			if (!mc.Handle) continue;
 
 			glm::mat4 transform = _Scene->GetWorldSpaceTransformMatrix(entityObj);
 			mc.Handle->SetTransform(transform);
 
 			if (mc.IsVisible) {
+				TARE::RenderCommand::ToggleStencilFunc(StencilMode::ENABLE);
 				_Renderer->GetDeferredRendering().GetGBufferShader()->Use();
 				_Renderer->GetDeferredRendering().GetGBufferShader()->SetUniform("u_EntityID", (int)entity);
 				mc.Handle->Draw("GBufferShader");
+
+				if (_EditorCamera && mc.IsSelected) {
+					TARE::RenderCommand::ToggleStencilFunc(StencilMode::DISABLE);
+					TARE::RenderCommand::Disable(DEPTH_TEST);
+					mc.Handle->DrawOutlined("OutlineShader", _EditorCamera->GetViewProjectionMatrix());
+					TARE::RenderCommand::ToggleStencilFunc(StencilMode::ENABLE_FOR_READING);
+					TARE::RenderCommand::Enable(DEPTH_TEST);
+				}
 			}
 		}
 

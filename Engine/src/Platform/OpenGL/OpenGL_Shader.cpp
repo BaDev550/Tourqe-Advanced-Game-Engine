@@ -8,6 +8,10 @@ namespace TARE {
 	{
 		LoadShader(vertexPath, fragmentPath, geometryPath);
 	}
+	OpenGL_Shader::~OpenGL_Shader()
+	{
+		glDeleteProgram(_ID);
+	}
 	void OpenGL_Shader::Use() const
 	{
 		glUseProgram(_ID);

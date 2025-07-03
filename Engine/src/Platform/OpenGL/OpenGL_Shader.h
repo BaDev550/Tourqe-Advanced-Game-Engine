@@ -6,6 +6,7 @@ namespace TARE {
 	{
 	public:
 		OpenGL_Shader(const char* vertexPath, const char* fragmentPath, const char* geometryPath);
+		~OpenGL_Shader();
 
 		virtual void Use() const override;
 		virtual void SetUniform(const char* name, bool value) const override;

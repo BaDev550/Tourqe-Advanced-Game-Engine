@@ -17,6 +17,7 @@ namespace TARE {
 
 		virtual void SetCount(size_t count) override { _Count = count; }
 		virtual size_t GetCount() const override { return _Count; }
+		virtual void Destroy() override;
 	private:
 		std::vector<TAGE::MEM::Ref<VertexBufferObject>> _VertexBuffers;
 		std::shared_ptr<ElementBufferObject> _IndexBuffer;

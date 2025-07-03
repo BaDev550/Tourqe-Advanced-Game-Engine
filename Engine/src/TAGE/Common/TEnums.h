@@ -170,6 +170,12 @@ enum class CullMode : uint8
 	BACK,
 };
 
+enum class StencilMode : uint8 {
+	DISABLE,
+	ENABLE,
+	ENABLE_FOR_READING
+};
+
 enum class BitmapFormat : uint8
 {
 	UBYTE,

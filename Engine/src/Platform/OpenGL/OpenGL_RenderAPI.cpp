@@ -92,15 +92,21 @@ namespace TARE {
 			break;
 		}
 	}
-	void OpenGL_RenderAPI::ToggleStencilFunction(bool mode)
+	void OpenGL_RenderAPI::ToggleStencilFunction(StencilMode mode)
 	{
-		if (mode) {
+		switch (mode)
+		{
+		case StencilMode::DISABLE:
 			glStencilFunc(GL_NOTEQUAL, 1, 0xFF);
 			glStencilMask(0x00);
-		}
-		else {
+		case StencilMode::ENABLE:
+			glStencilFunc(GL_ALWAYS, 1, 0xFF);
+			glStencilMask(0xFF);
+		case StencilMode::ENABLE_FOR_READING:
 			glStencilMask(0xFF);
 			glStencilFunc(GL_ALWAYS, 0, 0xFF);
+		default:
+			break;
 		}
 	}
 }

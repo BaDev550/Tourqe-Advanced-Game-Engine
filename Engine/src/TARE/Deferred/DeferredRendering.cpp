@@ -16,7 +16,7 @@ namespace TARE {
 	void DeferredRendering::RenderGeometryPass(const TAGE::MEM::Ref<Camera>& camera) const
 	{
 		_GBuffer->Bind();
-		RenderCommand::Clear(COLOR_DEPTH);
+		RenderCommand::Clear(COLOR_DEPTH_STENCIL);
 		_GBuffer->Clear(3, -1);
 
 		_GBufferShader->Use();

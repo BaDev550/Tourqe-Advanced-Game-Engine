@@ -671,6 +671,8 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="shaders\Common\Material.glsl" />
+    <None Include="shaders\Common\outline_fragment.glsl" />
+    <None Include="shaders\Common\outline_vertex.glsl" />
     <None Include="shaders\Common\PBR.glsl" />
     <None Include="shaders\Common\light.glsl" />
     <None Include="shaders\Debugger\debug_fragment.glsl" />

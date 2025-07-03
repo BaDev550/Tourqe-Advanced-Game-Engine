@@ -6,6 +6,14 @@
 
 namespace TARE
 {
+	Model::~Model() {
+		for (auto& mesh : _meshes) {
+			if (mesh)
+				mesh.reset();
+		}
+		_meshes.clear();
+	}
+
 	bool Model::LoadFromFile(const std::string& filePath)
 	{
 		Assimp::Importer importer;
@@ -50,6 +58,16 @@ namespace TARE
 	{
 		TAGE::MEM::Ref<Shader> shaderRef = ShaderLibrary::Get(shader);
 		shaderRef->Use();
+		shaderRef->SetUniform("u_Model", _transform);
+		for (const auto& mesh : _meshes)
+			mesh->Draw(shaderRef);
+	}
+
+	void Model::DrawOutlined(const std::string& shader, const glm::mat4& viewProj)
+	{
+		TAGE::MEM::Ref<Shader> shaderRef = ShaderLibrary::Get(shader);
+		shaderRef->Use();
+		shaderRef->SetUniform("u_ViewProj", viewProj);
 		shaderRef->SetUniform("u_Model", _transform);
 		for (const auto& mesh : _meshes)
 			mesh->Draw(shaderRef);

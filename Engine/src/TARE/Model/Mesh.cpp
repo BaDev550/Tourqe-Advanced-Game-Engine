@@ -17,6 +17,10 @@ namespace TARE
 	}
 
 	Mesh::~Mesh() {
+		if (_VAO) {
+			_VAO->Destroy();
+			_VAO.reset();
+		}
 		_vertices.clear();
 		_indices.clear();
 	}
