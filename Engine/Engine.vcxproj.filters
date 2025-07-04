@@ -1655,6 +1655,7 @@
     </ClInclude>
     <ClInclude Include="src\TAGE\World\Objects\Prefab.h" />
     <ClInclude Include="src\TAGE\World\Objects\EntityFunctions.h" />
+    <ClInclude Include="src\TAGE\MultiThread\MultiThread.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\Platform\DirectX11\DirectX11_RenderContext.cpp">
@@ -1836,6 +1837,7 @@
     </ClCompile>
     <ClCompile Include="src\TAGE\World\Objects\Prefab.cpp" />
     <ClCompile Include="src\TAGE\World\Objects\Entity.cpp" />
+    <ClCompile Include="src\TAGE\MultiThread\MultiThread.cpp" />
   </ItemGroup>
   <ItemGroup>
     <None Include="shaders\Common\Material.glsl">

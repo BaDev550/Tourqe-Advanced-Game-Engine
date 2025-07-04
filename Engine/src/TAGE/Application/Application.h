@@ -15,6 +15,7 @@
 
 #include "TAGE/World/Objects/Entity.h"
 #include "TAGE/World/Components/BaseComponents.h"
+#include "TAGE/MultiThread/MultiThread.h"
 
 #include "TARE/TARE.h"
 
@@ -58,15 +59,19 @@ namespace TAGE {
 		}
 
     public:
-        Window* GetWindow() const { return _Window.get(); }
 		TARE::TARE* GetRenderer() const { return _Renderer.get(); }
+        Window* GetWindow() const { return _Window.get(); }
 		ImGuiLayer* GetImGuiLayer() const { return _ImGuiLayer.get(); }
+        ThreadPool& GetThreadPool() { return _ThreadPool; }
+        GrapichDispatcher& GetGraphicDispatcher() { return _GraphicDispatcher; };
     private:
         void OnEvent(Event& event);
     private:
         static Application* s_Instance;
         ApplicationState _ApplicationState = ApplicationState::RUNNING;
 		ApplicationSpecifics _AppSpecifics;
+        ThreadPool _ThreadPool;
+        GrapichDispatcher _GraphicDispatcher;
 
         MEM::Scope<Window> _Window;
         MEM::Scope<TARE::TARE> _Renderer;

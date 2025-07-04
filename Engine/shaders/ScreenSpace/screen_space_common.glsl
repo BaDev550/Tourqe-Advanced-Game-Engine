@@ -6,12 +6,13 @@ const float SAMPLE_RADIUS = 1.5;
 
 #define SSR_MAX_STEPS 30
 #define SSR_STEP_SIZE 1.2
-#define SSR_TOLERANCE 0.05
+#define SSR_TOLERANCE 1.0
 #define SSR_DISTANCE 15.0
 #define SSR_FADE_START 0.1
 #define SSR_FADE_END 0.01
 #define SSR_BINARY_SEARCH_STEPS 5
 #define SSR_THICKNESS 1.5
+#define SSR_INTENSITY 1.0
 #define MAX_REFLECTION_LOD 4.0
 
 const float minRayStep = 1.0;

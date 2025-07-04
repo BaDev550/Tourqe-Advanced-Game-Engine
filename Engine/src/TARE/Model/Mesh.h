@@ -31,11 +31,11 @@ namespace TARE {
 
 		void SetVertices(const std::vector<VertexData>& data) { _vertices = data; }
 		void SetIndices(const std::vector<uint>& data) { _indices = data; }
+		virtual void SetupMesh();
 	protected:
 		std::vector<VertexData> _vertices;
 		std::vector<uint> _indices;
 		TAGE::MEM::Ref<VertexArrayObject> _VAO;
 		TAGE::MEM::Ref<Material> _material;
-		virtual void SetupMesh();
 	};
 }

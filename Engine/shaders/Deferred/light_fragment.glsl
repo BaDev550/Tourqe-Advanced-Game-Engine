@@ -22,6 +22,8 @@ uniform vec3 u_CameraPos;
 uniform mat4 u_View, u_Projection, u_InverseProjection, u_InverseView;
 uniform mat4 u_PrevViewProj, u_CurrViewProj;
 
+uniform float u_Exposure = 0.5;
+
 void main() {
     vec3 FPos = texture(u_gPos, TexCoords).rgb;
     if (dot(FPos, FPos) < 0.001) {
@@ -57,22 +59,21 @@ void main() {
 
     mat4 viewProj = u_Projection * u_View;
     vec3 gi = calculateSSGI(FPos, N, A, TexCoords, u_gPos, u_gNorm, u_gAlb, u_PrevGI, viewProj, u_PrevViewProj);
-    float ao = pow(CalculateSSAO(FPos, N, TexCoords, u_gPos, u_gNorm, float(textureSize(u_gPos, 0).x), float(textureSize(u_gPos, 0).y)), 10.0f);
+    float ao = pow(CalculateSSAO(FPos, N, TexCoords, u_gPos, u_gNorm, float(textureSize(u_gPos, 0).x), float(textureSize(u_gPos, 0).y)), 2.0f);
     vec3 ssr = DoSSR(u_gPos, u_PrevGI, TexCoords, VP, VN, u_Projection, R, M);
 
     vec3 kD = (vec3(1.0) - F_reflect) * (1.0 - M);
     vec3 indirectDiffuse = gi * kD * A;
 
     vec3 ambientFallback = 0.1 * A;
-    vec3 indirectSpecular = ssr * F_reflect;
+    vec3 indirectSpecular = ssr * F_reflect * SSR_INTENSITY;
     vec3 totalIndirect = (ambientFallback + indirectDiffuse) * ao + indirectSpecular;
 
     vec3 indirectLighting = totalIndirect * ao;
     vec3 finalColor = directLighting + indirectLighting;
 
-    float exposure = 0.56;
     float gamma = 2.2;
-    finalColor = vec3(1.0) - exp(-finalColor * exposure);
+    finalColor = vec3(1.0) - exp(-finalColor * u_Exposure);
     finalColor = pow(finalColor, vec3(1.0 / gamma));
 
     FragColor = vec4(finalColor, 1.0);

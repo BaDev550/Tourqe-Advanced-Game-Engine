@@ -2,6 +2,7 @@
 #include "Model.h"
 #include "TARE/Shader/ShaderLibrary.h"
 #include "TAGE/AssetManager/AssetManager.h"
+#include "TAGE/Application/Application.h"
 #include "meshoptimizer.h"
 
 namespace TARE
@@ -43,6 +44,22 @@ namespace TARE
 		_Directory = filePath.substr(0, filePath.find_last_of('/'));
 		ProcessNode(_scene->mRootNode, _scene);
 		return true;
+	}
+
+	void Model::LoadModelAsync(const std::string& path, std::function<void(TAGE::MEM::Ref<Model>)> callback)
+	{
+		std::thread([path, callback]() {
+			auto model = TAGE::MEM::MakeRef<Model>();
+			if (model->LoadCPU(path)) {
+				TAGE::Application::Get()->GetGraphicDispatcher().Enqueue([model, callback]() {
+					model->UploadToGPU();
+					callback(model);
+					});
+			}
+			else {
+				callback(nullptr);
+			}
+			}).detach();
 	}
 
 	void Model::Draw(TAGE::MEM::Ref<Shader>& shader) const
@@ -254,5 +271,40 @@ namespace TARE
 		vertices.clear();
 		indices.clear();
 		return TAGE::MEM::MakeScope<Mesh>(std::move(optimized_vertices), std::move(optimized_indices), std::move(material));
+	}
+
+	bool Model::LoadCPU(const std::string& path)
+	{
+		Assimp::Importer importer;
+		_scene = importer.ReadFile(path, 
+			aiProcess_Triangulate |
+			aiProcess_FlipUVs |
+			aiProcess_CalcTangentSpace |
+			aiProcess_GenNormals |
+			aiProcess_JoinIdenticalVertices |
+			aiProcess_SortByPType |
+			aiProcess_OptimizeMeshes |
+			aiProcess_ImproveCacheLocality |
+			aiProcess_FindDegenerates |
+			aiProcess_FindInvalidData |
+			aiProcess_ValidateDataStructure |
+			aiProcess_OptimizeGraph
+		);
+		if (!_scene || !_scene->mRootNode) {
+			LOG_ERROR("Failed to load model {}", path);
+			return false;
+		}
+
+		_FilePath = path;
+		_Directory = path.substr(0, path.find_last_of('/'));
+		ProcessNode(_scene->mRootNode, _scene);
+		return true;
+	}
+
+	void Model::UploadToGPU()
+	{
+		for (auto& mesh : _meshes) {
+			mesh->SetupMesh();
+		}
 	}
 }

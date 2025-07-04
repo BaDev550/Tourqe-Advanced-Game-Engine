@@ -16,6 +16,7 @@ namespace TARE
 		Model() = default;
 		~Model();
 		bool LoadFromFile(const std::string& filePath);
+		void LoadModelAsync(const std::string& path, std::function<void(TAGE::MEM::Ref<Model>)> callback);
 		void SetTransform(const glm::mat4& transform);
 
 		void Draw(TAGE::MEM::Ref<Shader>& shader) const;
@@ -27,6 +28,9 @@ namespace TARE
 		Mesh& GetMesh(int slot) { return *_meshes[slot]; }
 		BoundingBox GetBoundingBox() const;
 		void AddMesh(TAGE::MEM::Scope<Mesh> mesh) { _meshes.push_back(std::move(mesh)); }
+
+		bool LoadCPU(const std::string& path);
+		void UploadToGPU();
 	private:
 		std::vector<TAGE::MEM::Scope<Mesh>> _meshes;
 		std::string _Directory;

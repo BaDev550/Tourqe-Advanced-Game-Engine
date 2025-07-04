@@ -25,7 +25,6 @@ namespace TAGE {
 		_Renderer = MEM::MakeScope<TARE::TARE>(width, height);
 		_Window->SetEventCallback(BIND_EVENT_FN(Application::OnEvent));
 		_Window->ToggleCursor(true);
-
 		Input::Init(_Window->GetGLFWWindow());
 		ScriptEngine::Init();
 
@@ -62,6 +61,7 @@ namespace TAGE {
 			_ImGuiLayer->End();
 
 			Input::Update();
+			_GraphicDispatcher.ExecutePending();
 			_Window->SwapBuffers();
 		}
 	}

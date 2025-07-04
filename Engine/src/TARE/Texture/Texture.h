@@ -5,6 +5,22 @@
 #include <string>
 
 namespace TARE {
+	struct CPUTextureData
+	{
+		int Width = 0;
+		int Height = 0;
+		int Channels = 0;
+		bool HasAlpha = false;
+		std::vector<uint8> RawData;
+		std::vector<uint8> CompressedData;
+		uint InternalFormat;
+		bool IsCompressed = false;
+
+		bool IsValid() const {
+			return Width > 0 && Height > 0 && !RawData.empty();
+		}
+	};
+
 	class Texture {
 	public:
 		virtual ~Texture() = default;
@@ -30,7 +46,6 @@ namespace TARE {
 		virtual bool LoadTexture(const std::string& path) = 0;
 		virtual bool LoadTextureFromMemory(const uint8* data, size_t size) = 0;
 		virtual bool LoadTextureFromMemory(const uint8* data, int width, int height, int channels) = 0;
-		virtual bool LoadTextureFromAtlas(const std::string& path, int x, int y, int tileWidth, int tileHeight) = 0;
 		virtual bool LoadFallbackTexture() = 0;
 		virtual bool SaveToDisk(const std::string& location) = 0;
 

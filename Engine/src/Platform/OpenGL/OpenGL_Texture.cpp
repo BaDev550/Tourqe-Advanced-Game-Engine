@@ -7,36 +7,34 @@
 
 #include <stb/stb_image.h>
 #include <stb/stb_image_write.h>
+#include "TAGE/Application/Application.h"
 
 namespace TARE {
-	static GLenum GetDataFormat(int channels) {
-		switch (channels) {
-		case 1: return GL_RED;
-		case 3: return GL_RGB;
-		case 4: return GL_RGBA;
-		default:
-			ASSERT(false, "Unsupported channel count");
-			return 0;
+	namespace Utils {
+		static GLenum GetDataFormat(int channels) {
+			switch (channels) {
+			case 1: return GL_RED;
+			case 3: return GL_RGB;
+			case 4: return GL_RGBA;
+			default:
+				ASSERT(false, "Unsupported channel count");
+				return 0;
+			}
+		}
+
+		static GLenum GetInternalFormat(int channels) {
+			switch (channels)
+			{
+			case 1: return GL_RED;
+			case 3: return GL_RGB8;
+			case 4: return GL_RGBA8;
+			default:
+				ASSERT(false, "Unsupported channel count");
+			}
 		}
 	}
 
-	static GLenum GetInternalFormat(int channels) {
-		switch (channels)
-		{
-		case 1: return GL_RED;
-		case 3: return GL_RGB8;
-		case 4: return GL_RGBA8;
-		default:
-			ASSERT(false, "Unsupported channel count");
-		}
-	}
-
-	OpenGL_Texture2D::~OpenGL_Texture2D()
-	{
-		LOG_WARN("OPENGL TEXTURE DELETED");
-		glDeleteTextures(1, &_ID);
-	}
-
+	OpenGL_Texture2D::~OpenGL_Texture2D() { LOG_WARN("OPENGL TEXTURE DELETED"); glDeleteTextures(1, &_ID); }
 	void OpenGL_Texture2D::Bind(uint8 slot) const
 	{
 		glActiveTexture(GL_TEXTURE0 + slot);
@@ -49,147 +47,108 @@ namespace TARE {
 
 	bool OpenGL_Texture2D::LoadTexture(const std::string& path)
 	{
-		if (path.empty()) {
-			LoadFallbackTexture();
-			return true;
-		}
 		_Path = path.c_str();
-
-		int width, height, channels;
-		uint8* raw_data = stbi_load(_Path, &width, &height, &channels, 4);
-		if (!raw_data) {
-			LOG_ERROR("Failed To Load Texture: {}", _Path);
-			LoadFallbackTexture();
-			return false;
+		CPUTextureData cpuData;
+		auto& grapichDistpacher = TAGE::Application::Get()->GetGraphicDispatcher();
+		if (!LoadTextureCPU(path, cpuData)) {
+			return LoadFallbackTexture();
 		}
 
-		_Width = width;
-		_Height = height;
-		_Channels = channels;
-
-		bool hasAlpha = (channels == 4);
-		GLenum internalFormat = hasAlpha ? GL_COMPRESSED_RGBA_S3TC_DXT5_EXT : GL_COMPRESSED_RGB_S3TC_DXT1_EXT;
-
-		int blockSize = (internalFormat == GL_COMPRESSED_RGBA_S3TC_DXT5_EXT) ? 16 : 8;
-		int compressedSize = ((width + 3) / 4) * ((height + 3) / 4) * blockSize;
-
-		auto* compressed_data = new uint8[compressedSize];
-		uint8* dest_ptr = compressed_data;
-
-		for (int y = 0; y < height; y += 4)
-		{
-			for (int x = 0; x < width; x += 4)
-			{
-				uint8 source_block[16 * 4];
-				for (int block_y = 0; block_y < 4; ++block_y)
-				{
-					for (int block_x = 0; block_x < 4; ++block_x)
-					{
-						int src_x = x + block_x;
-						int src_y = y + block_y;
-
-						uint8* src_pixel_ptr;
-						if (src_x < width && src_y < height) {
-							src_pixel_ptr = raw_data + (src_y * width + src_x) * 4;
-						}
-						else {
-							int clamped_x = std::min(width - 1, src_x);
-							int clamped_y = std::min(height - 1, src_y);
-							src_pixel_ptr = raw_data + (clamped_y * width + clamped_x) * 4;
-						}
-						uint8* dest_pixel_ptr = source_block + (block_y * 4 + block_x) * 4;
-						memcpy(dest_pixel_ptr, src_pixel_ptr, 4);
-					}
-				}
-				stb_compress_dxt_block(dest_ptr, source_block, hasAlpha, STB_DXT_HIGHQUAL);
-				dest_ptr += blockSize;
-			}
-		}
-
-		glCreateTextures(GL_TEXTURE_2D, 1, &_ID);
-		int mipLevels = 1 + floor(log2(std::max(width, height)));
-		glTextureStorage2D(_ID, mipLevels, internalFormat, width, height);
-		glCompressedTextureSubImage2D(_ID, 0, 0, 0, width, height, internalFormat, compressedSize, compressed_data);
-		glGenerateTextureMipmap(_ID);
-
-		glTextureParameteri(_ID, GL_TEXTURE_WRAP_S, GL_REPEAT);
-		glTextureParameteri(_ID, GL_TEXTURE_WRAP_T, GL_REPEAT);
-		glTextureParameteri(_ID, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_LINEAR);
-		glTextureParameteri(_ID, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
-
-		stbi_image_free(raw_data);
-		delete[] compressed_data;
+		grapichDistpacher.Enqueue([=]() {
+			UploadToGPU(cpuData);
+			});
 
 		return true;
 	}
 
 	bool OpenGL_Texture2D::LoadTextureFromMemory(const uint8* data, size_t size)
 	{
-		uint8* pixels = stbi_load_from_memory(data, static_cast<int>(size), &_Width, &_Height, &_Channels, 4);
-		if (pixels) {
-			glCreateTextures(GL_TEXTURE_2D, 1, &_ID);
-			glTextureStorage2D(_ID, 1, GetInternalFormat(_Channels), _Width, _Height);
-			glTextureParameteri(_ID, GL_TEXTURE_WRAP_S, GL_REPEAT);
-			glTextureParameteri(_ID, GL_TEXTURE_WRAP_T, GL_REPEAT);
-			glTextureParameteri(_ID, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_LINEAR);
-			glTextureParameteri(_ID, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
-			glTextureSubImage2D(_ID, 0, 0, 0, _Width, _Height, GetDataFormat(_Channels), GL_UNSIGNED_BYTE, data);
-			stbi_image_free(pixels);
+		CPUTextureData cpuData;
+		auto& grapichDistpacher = TAGE::Application::Get()->GetGraphicDispatcher();
+
+		if (!LoadTextureCPUFromMemory(data, size, cpuData)) {
+			return LoadFallbackTexture();
 		}
-		return false;
+		grapichDistpacher.Enqueue([=]() {
+			UploadToGPU(cpuData);
+			});
+		return true;
 	}
+
 	bool OpenGL_Texture2D::LoadTextureFromMemory(const uint8* data, int width, int height, int channels)
 	{
-		if (width <= 0 || height <= 0 || channels <= 0) {
-			LoadFallbackTexture();
-			return true;
-		}
+		CPUTextureData cpuData;
+		cpuData.Width = width;
+		cpuData.Height = height;
+		cpuData.Channels = channels;
+		cpuData.HasAlpha = (channels == 4);
+		cpuData.RawData.assign(data, data + (width * height * channels));
+		cpuData.InternalFormat = cpuData.HasAlpha ? GL_RGBA8 : GL_RGB8;
+		cpuData.IsCompressed = false;
+		auto& grapichDistpacher = TAGE::Application::Get()->GetGraphicDispatcher();
 
-		if (data) {
-			glCreateTextures(GL_TEXTURE_2D, 1, &_ID);
-			glTextureStorage2D(_ID, 1, GetInternalFormat(_Channels), _Width, _Height);
-			glTextureParameteri(_ID, GL_TEXTURE_WRAP_S, GL_REPEAT);
-			glTextureParameteri(_ID, GL_TEXTURE_WRAP_T, GL_REPEAT);
-			glTextureParameteri(_ID, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_LINEAR);
-			glTextureParameteri(_ID, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
-			glTextureSubImage2D(_ID, 0, 0, 0, _Width, _Height, GetDataFormat(_Channels), GL_UNSIGNED_BYTE, data);
-		}
-		return false;
-	}
-	bool OpenGL_Texture2D::LoadTextureFromAtlas(const std::string& path, int x, int y, int tileWidth, int tileHeight)
-	{
-		unsigned char* data = stbi_load(path.c_str(), &_Width, &_Height, &_Channels, 0);
-		if (!data) {
-			LOG_ERROR("Failed to load texture atlas: {0}", path);
-			return false;
-		}
-
-		int tileSize = tileWidth * tileHeight * _Channels;
-		unsigned char* tileData = new unsigned char[tileSize];
-
-		for (int row = 0; row < tileHeight; ++row) {
-			int srcIndex = ((y + row) * _Width + x) * _Channels;
-			int dstIndex = row * tileWidth * _Channels;
-			memcpy(&tileData[dstIndex], &data[srcIndex], tileWidth * _Channels);
-		}
-
-		glCreateTextures(GL_TEXTURE_2D, 1, &_ID);
-		glTextureStorage2D(_ID, 1, GetInternalFormat(_Channels), tileWidth, tileHeight);
-		glTextureSubImage2D(_ID, 0, 0, 0, tileWidth, tileHeight, GetDataFormat(_Channels), GL_UNSIGNED_BYTE, tileData);
-
-		glTextureParameteri(_ID, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
-		glTextureParameteri(_ID, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
-		glTextureParameteri(_ID, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
-		glTextureParameteri(_ID, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
-
-		delete[] tileData;
-		stbi_image_free(data);
+		grapichDistpacher.Enqueue([=]() {
+			UploadToGPU(cpuData);
+			});
 		return true;
 	}
 
 	bool OpenGL_Texture2D::SaveToDisk(const std::string& location)
 	{
 		return false;
+	}
+
+	bool OpenGL_Texture2D::LoadTextureCPU(const std::string& path, CPUTextureData& data)
+	{
+		int width, height, channels;
+		uint8* rawData = stbi_load(path.c_str(), &width, &height, &channels, 4);
+		if (!rawData) {
+			LOG_ERROR("Failed to load Texture: {}", path);
+			return false;
+		}
+		data.Width = width;
+		data.Height = height;
+		data.Channels = channels;
+		data.HasAlpha = true;
+		data.RawData.assign(rawData, rawData + (width * height * 4));
+		stbi_image_free(rawData);
+
+		data.IsCompressed = false;
+		data.InternalFormat = GL_RGBA8;
+		return true;
+	}
+
+	void OpenGL_Texture2D::UploadToGPU(const CPUTextureData& data)
+	{
+		glCreateTextures(GL_TEXTURE_2D, 1, &_ID);
+		int mipLevels = 1 + floor(log2(std::max(data.Width, data.Height)));
+		glTextureStorage2D(_ID, mipLevels, data.InternalFormat, data.Width, data.Height);
+		glTextureSubImage2D(_ID, 0, 0, 0, data.Width, data.Height, GL_RGBA, GL_UNSIGNED_BYTE, data.RawData.data());
+		glGenerateTextureMipmap(_ID);
+		glTextureParameteri(_ID, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_LINEAR);
+		glTextureParameteri(_ID, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+		glTextureParameteri(_ID, GL_TEXTURE_WRAP_S, GL_REPEAT);
+		glTextureParameteri(_ID, GL_TEXTURE_WRAP_T, GL_REPEAT);
+		_Width = data.Width;
+		_Height = data.Height;
+		_Channels = data.Channels;
+	}
+
+	bool OpenGL_Texture2D::LoadTextureCPUFromMemory(const uint8* data, size_t size, CPUTextureData& outData)
+	{
+		int width, height, channels;
+		uint8_t* raw = stbi_load_from_memory(data, (int)size, &width, &height, &channels, 4);
+		if (!raw) return false;
+		outData.Width = width;
+		outData.Height = height;
+		outData.Channels = 4;
+		outData.HasAlpha = true;
+		outData.RawData.assign(raw, raw + (width * height * 4));
+		stbi_image_free(raw);
+
+		outData.IsCompressed = false;
+		outData.InternalFormat = GL_RGBA8;
+		return true;
 	}
 
 	bool OpenGL_Texture2D::LoadFallbackTexture()

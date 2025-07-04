@@ -18,7 +18,6 @@ namespace TARE {
 		virtual bool LoadTexture(const std::string& path) override;
 		virtual bool LoadTextureFromMemory(const uint8* data, size_t size) override;
 		virtual bool LoadTextureFromMemory(const uint8* data, int width, int height, int channels) override;
-		virtual bool LoadTextureFromAtlas(const std::string& path, int x, int y, int tileWidth, int tileHeight) override;
 		virtual bool LoadFallbackTexture() override;
 		virtual bool SaveToDisk(const std::string& location) override;
 	private:
@@ -26,6 +25,10 @@ namespace TARE {
 		int _Channels;
 		int _Width, _Height;
 		const char* _Path;
+
+		bool LoadTextureCPU(const std::string& path, CPUTextureData& data);
+		bool LoadTextureCPUFromMemory(const uint8* data, size_t size, CPUTextureData& outData);
+		void UploadToGPU(const CPUTextureData& data);
 	};
 
 	class OpenGL_CubemapTexture : public CubemapTexture
