@@ -98,21 +98,18 @@ namespace TAGE::Editor {
 		else
 		{
 			std::string ext = path.extension().string();
-			if (ext == ".fbx" || ext == ".obj" || ext == ".gltf")
-			{
-				_ThumbnailRenderer.SubmitModel(path);
-				iconID = _ThumbnailRenderer.GetThumbnail(path);
-				flipUV = true;
-			}
+			//if (ext == ".fbx" || ext == ".obj" || ext == ".gltf")
+			//{
+			//	_ThumbnailRenderer.SubmitModel(path);
+			//	iconID = _ThumbnailRenderer.GetThumbnail(path);
+			//	flipUV = true;
+			//}
+			if (ext == ".tage")
+				iconID = _TAGESceneFileIcon->GetID();
+			else if (ext == ".cs")
+				iconID = _CSharpFileIcon->GetID();
 			else
-			{
-				if (ext == ".tage")
-					iconID = _TAGESceneFileIcon->GetID();
-				else if (ext == ".cs")
-					iconID = _CSharpFileIcon->GetID();
-				else
-					iconID = _FileIcon->GetID();
-			}
+				iconID = _FileIcon->GetID();
 		}
 
 		ImVec2 uv0 = flipUV ? ImVec2(0, 1) : ImVec2(0, 0);

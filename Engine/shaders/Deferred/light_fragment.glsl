@@ -24,6 +24,19 @@ uniform mat4 u_PrevViewProj, u_CurrViewProj;
 
 uniform float u_Exposure = 0.5;
 
+vec3 boostContrast(vec3 color, float contrast, float gamma) {
+    color = (color - 0.5) * contrast + 0.5;
+    return pow(clamp(color, 0.0, 1.0), vec3(1.0 / gamma));
+}
+
+float rand(vec2 co) {
+    return fract(sin(dot(co.xy, vec2(12.9898,78.233))) * 43758.5453);
+}
+
+vec2 pixelate(vec2 uv, float pixelsize){
+    return floor(uv * pixelsize) / pixelsize;
+}
+
 void main() {
     vec3 FPos = texture(u_gPos, TexCoords).rgb;
     if (dot(FPos, FPos) < 0.001) {
@@ -72,9 +85,12 @@ void main() {
     vec3 indirectLighting = totalIndirect * ao;
     vec3 finalColor = directLighting + indirectLighting;
 
-    float gamma = 2.2;
+    float gamma = 1.7;
     finalColor = vec3(1.0) - exp(-finalColor * u_Exposure);
     finalColor = pow(finalColor, vec3(1.0 / gamma));
+
+    //finalColor = boostContrast(finalColor, 1.4, 2.2);
+    //finalColor += (rand(gl_FragCoord.xy) - 0.5) * 0.03;
 
     FragColor = vec4(finalColor, 1.0);
 }

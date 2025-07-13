@@ -9,7 +9,7 @@ namespace TAGE {
 		_ActiveScene = MEM::MakeRef<Scene>("SCENE");
 		_ActiveScene->Clear();
 		SceneSerializer serializer(_ActiveScene);
-		if (serializer.Deserialize("Assets/scenes/TPSMario.tage"))
+		if (serializer.Deserialize("Assets/scenes/FPS.tage"))
 		{
 			_ActiveScene->OnResize((uint)_ViewportSize.x, (uint)_ViewportSize.y);
 		}

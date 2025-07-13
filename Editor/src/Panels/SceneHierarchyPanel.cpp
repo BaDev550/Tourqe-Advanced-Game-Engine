@@ -271,6 +271,10 @@ namespace TAGE::Editor {
 			{
 				tag = std::string(buffer);
 			}
+
+			if (ImGui::Button("Delete")) {
+				m_Context->DestroyEntity(entity);
+			}
 		}
 
 		ImGui::SameLine();

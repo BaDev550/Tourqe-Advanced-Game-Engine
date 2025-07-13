@@ -1,0 +1,14 @@
+# Blender 4.4.3 MTL File: 'AnimationBL.blend'
+# www.blender.org
+
+newmtl DogRetopo
+Ns 0.000000
+Ka 1.000000 1.000000 1.000000
+Ks 0.500000 0.500000 0.500000
+Ke 3.500000 3.500000 3.500000
+Ni 1.500000
+d 1.000000
+illum 2
+map_Kd DogRetopo_Color.001.png
+map_Ks DogZombie_Emission.png
+map_Bump DogZombie_Normal.png

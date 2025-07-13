@@ -36,7 +36,7 @@ float ShadowCalculation(sampler2D shadowMap, vec4 fragPosLightSpace, vec3 normal
     if (projCoords.x < 0.0 || projCoords.x > 1.0 || projCoords.y < 0.0 || projCoords.y > 1.0 || projCoords.z > 1.0)
         return 0.0;
 
-    float bias = max(0.001 * (1.0 - dot(normal, lightDir)), 0.0025);
+    float bias = max(0.005 * (1.0 - dot(normal, lightDir)), 0.0025);
     vec2 texelSize = 1.0 / textureSize(shadowMap, 0);
 
     float avgBlockerDepth = 0.0;

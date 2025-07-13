@@ -136,7 +136,7 @@ namespace TAGE {
 				s_HasComponentFuncs[managedType] = [](Entity entity) { return entity.HasComponent<Component>(); };
 			}(), ...);
 	}
-
+	
 	template<typename... Component>
 	static void RegisterComponent(ComponentGroup<Component...>) {
 		RegisterComponent<Component...>();

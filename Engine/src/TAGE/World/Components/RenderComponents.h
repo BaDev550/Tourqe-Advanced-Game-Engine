@@ -19,7 +19,7 @@ namespace TAGE {
 			Handle = MEM::MakeRef<TARE::Model>();
 
 			Handle->LoadModelAsync(modelpath, [&](TAGE::MEM::Ref<TARE::Model> model) {
-				if (model) { Handle = model; }
+				if (model) { Handle = std::move(model); }
 				else { LOG_ERROR("Failed to load async model"); }
 				});
 		}
@@ -31,7 +31,7 @@ namespace TAGE {
 			Handle.reset(new TARE::Model());
 
 			Handle->LoadModelAsync(meshPath, [&](TAGE::MEM::Ref<TARE::Model> model) {
-				if (model) { Handle = model; }
+				if (model) { Handle = std::move(model); }
 				else { LOG_ERROR("Failed to load async model"); }
 				});
 		}

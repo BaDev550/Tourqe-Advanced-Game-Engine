@@ -17,12 +17,14 @@ namespace TAGE::Editor {
 
 	void ThumbnailRenderer::OnUpdate()
 	{
+#if 0
 		if (!_PendingModels.empty())
 		{
 			const auto& modelPath = _PendingModels.front();
 			RenderThumbnail(modelPath);
 			_PendingModels.pop();
 		}
+#endif
 	}
 
 	uint ThumbnailRenderer::GetThumbnail(const std::filesystem::path& modelPath)
@@ -34,32 +36,41 @@ namespace TAGE::Editor {
 	}
 	void ThumbnailRenderer::RenderThumbnail(const std::filesystem::path& modelPath)
 	{
+#if 0
 		ModelPreview preview;
+		static bool ModelLoaded = false;
 		preview.LoadedModel = MEM::MakeRef<TARE::Model>();
-		preview.LoadedModel->LoadFromFile(modelPath.string());
-		ComputeCameraForModel(*preview.LoadedModel);
+		preview.LoadedModel->LoadModelAsync(modelPath.string(), [&](MEM::Ref<TARE::Model> model) {
+			if (model) { 
+				preview.LoadedModel = std::move(model);
+				ComputeCameraForModel(*preview.LoadedModel);
+				ModelLoaded = true;
+			}
+			else { LOG_ERROR("Failed to load async model"); }
+			});
 
-		FramebufferSpecification spec(
-			FramebufferAttachmentSpecification({ FramebufferTextureFormat::RGBA, FramebufferTextureFormat::DEPTH24 }),
-			1,
-			64, 64
-		);
-		preview.Framebuffer = TARE::Framebuffer::Create(spec);
+			FramebufferSpecification spec(
+				FramebufferAttachmentSpecification({ FramebufferTextureFormat::RGBA8 }),
+				1,
+				64, 64
+			);
+			preview.Framebuffer = TARE::Framebuffer::Create(spec);
 
-		preview.Framebuffer->Bind();
-		TARE::RenderCommand::SetClearColor({ 0.1f, 0.1f, 0.1f, 1.0f });
-		TARE::RenderCommand::Clear(COLOR_DEPTH);
+			preview.Framebuffer->Bind();
+			TARE::RenderCommand::SetClearColor({ 0.1f, 0.1f, 0.1f, 1.0f });
+			TARE::RenderCommand::Clear(COLOR_DEPTH);
 
-		_ThumbnailShader->Use();
-		_ThumbnailShader->SetUniform("u_View", _ThumbnailCamera.GetViewMatrix());
-		_ThumbnailShader->SetUniform("u_Projection", _ThumbnailCamera.GetProjectionMatrix());
+			_ThumbnailShader->Use();
+			_ThumbnailShader->SetUniform("u_View", _ThumbnailCamera.GetViewMatrix());
+			_ThumbnailShader->SetUniform("u_Projection", _ThumbnailCamera.GetProjectionMatrix());
 
-		preview.LoadedModel->SetTransform(glm::mat4(1.0f));
-		preview.LoadedModel->Draw(_ThumbnailShader);
+			preview.LoadedModel->SetTransform(glm::mat4(1.0f));
+			preview.LoadedModel->Draw(_ThumbnailShader);
 
-		preview.Framebuffer->Unbind();
-		preview.IsRendered = true;
-		_Cache[modelPath] = preview;
+			preview.Framebuffer->Unbind();
+			preview.IsRendered = true;
+			_Cache[modelPath] = preview;
+#endif
 	}
 
 	void ThumbnailRenderer::ComputeCameraForModel(TARE::Model& model)

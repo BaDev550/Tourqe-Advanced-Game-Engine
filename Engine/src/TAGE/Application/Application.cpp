@@ -65,7 +65,7 @@ namespace TAGE {
 			_Window->SwapBuffers();
 		}
 	}
-
+	
 	void Application::OnEvent(Event& event)
 	{
 		for (auto it = _LayerStack.rbegin(); it != _LayerStack.rend(); ++it)
