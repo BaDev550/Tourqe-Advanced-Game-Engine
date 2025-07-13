@@ -23,7 +23,7 @@ making it an excellent choice for indie developers and hobbyists.
 1. **Clone the Repository**:
 
    ```bash
-   git clone https://github.com/BaDev550/TAGE.git
+   git clone https://github.com/BaDev550/Tourqe-Advanced-Game-Engine.git
    cd TAGE
    ```
 
