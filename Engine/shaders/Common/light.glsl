@@ -1,7 +1,7 @@
 #ifndef LIGHT_GLSL
 #define LIGHT_GLSL
 
-#define MAX_LIGHTS 16
+#define MAX_LIGHTS 64
 #include "Material.glsl"
 
 struct Light {

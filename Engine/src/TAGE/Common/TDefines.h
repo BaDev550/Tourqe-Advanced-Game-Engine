@@ -23,7 +23,7 @@ typedef unsigned long long	uint64;
 #define SHADOW_MAP_TEXTURE_SLOT 10
 
 #define PI 3.14159265358979323846f
-#define MAX_LIGHTS 32
+#define MAX_LIGHTS 64
 #define MAX_BONES 124
 #define MAX_MATERIALS 32
 #define MAX_INSTANCES 1024

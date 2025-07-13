@@ -168,7 +168,7 @@
     <ClInclude Include="src\TARE\Common\RenderAPI.h" />
     <ClInclude Include="src\TARE\Common\RenderCommands.h" />
     <ClInclude Include="src\TARE\Common\RenderContext.h" />
-    <ClInclude Include="src\TARE\Debug\DebugRenderer.h" />
+    <ClInclude Include="src\TARE\DebugRenderer\DebugRenderer.h" />
     <ClInclude Include="src\TARE\Deferred\DeferredRendering.h" />
     <ClInclude Include="src\TARE\Material\Material.h" />
     <ClInclude Include="src\TARE\Model\EndlessGrid.h" />
@@ -651,7 +651,7 @@
     <ClCompile Include="src\TARE\Common\RenderAPI.cpp" />
     <ClCompile Include="src\TARE\Common\RenderCommands.cpp" />
     <ClCompile Include="src\TARE\Common\RenderContext.cpp" />
-    <ClCompile Include="src\TARE\Debug\DebugRenderer.cpp" />
+    <ClCompile Include="src\TARE\DebugRenderer\DebugRenderer.cpp" />
     <ClCompile Include="src\TARE\Deferred\DeferredRendering.cpp" />
     <ClCompile Include="src\TARE\Material\Material.cpp" />
     <ClCompile Include="src\TARE\Model\EndlessGrid.cpp" />

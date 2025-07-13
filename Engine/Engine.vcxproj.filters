@@ -345,7 +345,7 @@
     <ClInclude Include="src\TARE\Common\RenderContext.h">
       <Filter>src\TARE\Common</Filter>
     </ClInclude>
-    <ClInclude Include="src\TARE\Debug\DebugRenderer.h">
+    <ClInclude Include="src\TARE\DebugRenderer\DebugRenderer.h">
       <Filter>src\TARE\Debug</Filter>
     </ClInclude>
     <ClInclude Include="src\TARE\Deferred\DeferredRendering.h">
@@ -1784,7 +1784,7 @@
     <ClCompile Include="src\TARE\Common\RenderContext.cpp">
       <Filter>src\TARE\Common</Filter>
     </ClCompile>
-    <ClCompile Include="src\TARE\Debug\DebugRenderer.cpp">
+    <ClCompile Include="src\TARE\DebugRenderer\DebugRenderer.cpp">
       <Filter>src\TARE\Debug</Filter>
     </ClCompile>
     <ClCompile Include="src\TARE\Deferred\DeferredRendering.cpp">
