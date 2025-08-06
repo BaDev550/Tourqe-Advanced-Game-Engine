@@ -57,7 +57,8 @@ project "Engine"
         "dxgi.lib",
         "d3dcompiler.lib",
         "meshoptimizer",
-        
+
+        "%{Library.VulkanSDK}",
         "%{Library.mono}",
        }
 

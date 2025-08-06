@@ -6,8 +6,13 @@
 #include "TARE/Common/RenderContext.h"
 
 struct GLFWwindow;
+struct Device {
+	VkPhysicalDevice physicalDevice;
+	VkDevice logicalDevice;
+};
 
 namespace TARE {
+
 	namespace Utilities {
 		struct QueueFamilyIndices {
 			int graphicsFamily = -1;
@@ -23,11 +28,11 @@ namespace TARE {
 
 		virtual void Init() override;
 		virtual void SwapBuffers() override;
+		virtual void* GetDevice() override {
+			return &_MainDevice;
+		}
 	private:
-		struct {
-			VkPhysicalDevice physicalDevice;
-			VkDevice logicalDevice;
-		} _MainDevice;
+		Device _MainDevice;
 		VkQueue graphicsQueue;
 
 		GLFWwindow* _Window;

@@ -71,7 +71,7 @@
       <GenerateDebugInformation>true</GenerateDebugInformation>
     </Link>
     <Lib>
-      <AdditionalDependencies>opengl32.lib;d3d11.lib;dxgi.lib;d3dcompiler.lib;C:\VulkanSDK\1.4.313.2\lib\vulkan-1.lib;vendor\mono\lib\Debug\libmono-static-sgen.lib;Ws2_32.lib;winmm.lib;version.lib;Bcrypt.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>opengl32.lib;d3d11.lib;dxgi.lib;d3dcompiler.lib;C:\VulkanSDK\1.4.313.2\Lib\vulkan-1.lib;vendor\mono\lib\Debug\libmono-static-sgen.lib;Ws2_32.lib;winmm.lib;version.lib;Bcrypt.lib;C:\VulkanSDK\1.4.313.2\Lib\shaderc_shared.lib;C:\VulkanSDK\1.4.313.2\Lib\spirv-cross-core.lib;C:\VulkanSDK\1.4.313.2\Lib\spirv-cross-glsl.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Lib>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
@@ -97,11 +97,10 @@
       <OptimizeReferences>true</OptimizeReferences>
     </Link>
     <Lib>
-      <AdditionalDependencies>opengl32.lib;d3d11.lib;dxgi.lib;d3dcompiler.lib;C:\VulkanSDK\1.4.313.2\lib\vulkan-1.lib;vendor\mono\lib\Release\libmono-static-sgen.lib;Ws2_32.lib;winmm.lib;version.lib;Bcrypt.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>opengl32.lib;d3d11.lib;dxgi.lib;d3dcompiler.lib;C:\VulkanSDK\1.4.313.2\Lib\vulkan-1.lib;vendor\mono\lib\Release\libmono-static-sgen.lib;Ws2_32.lib;winmm.lib;version.lib;Bcrypt.lib;C:\VulkanSDK\1.4.313.2\Lib\shaderc_shared.lib;C:\VulkanSDK\1.4.313.2\Lib\spirv-cross-core.lib;C:\VulkanSDK\1.4.313.2\Lib\spirv-cross-glsl.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Lib>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClInclude Include="src\Platform\DirectX11\DirectX11_RenderContext.h" />
     <ClInclude Include="src\Platform\OpenGL\OpenGL_Buffers.h" />
     <ClInclude Include="src\Platform\OpenGL\OpenGL_Framebuffer.h" />
     <ClInclude Include="src\Platform\OpenGL\OpenGL_RenderAPI.h" />
@@ -110,6 +109,8 @@
     <ClInclude Include="src\Platform\OpenGL\OpenGL_Texture.h" />
     <ClInclude Include="src\Platform\OpenGL\OpenGL_VertexArrayBuffer.h" />
     <ClInclude Include="src\Platform\Vulkan\Vulkan_RenderContext.h" />
+    <ClInclude Include="src\Platform\Vulkan\Vulkan_Shader.h" />
+    <ClInclude Include="src\Platform\Vulkan\Vulkan_ShaderCompiler.h" />
     <ClInclude Include="src\TAGE\Application\Application.h" />
     <ClInclude Include="src\TAGE\Application\EntryPoint.h" />
     <ClInclude Include="src\TAGE\AssetManager\AssetManager.h" />
@@ -607,7 +608,6 @@
     <ClInclude Include="vendor\stb\stb_image_write.h" />
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="src\Platform\DirectX11\DirectX11_RenderContext.cpp" />
     <ClCompile Include="src\Platform\OpenGL\OpenGL_Buffers.cpp" />
     <ClCompile Include="src\Platform\OpenGL\OpenGL_CubemapTexture.cpp" />
     <ClCompile Include="src\Platform\OpenGL\OpenGL_Framebuffer.cpp" />
@@ -617,6 +617,8 @@
     <ClCompile Include="src\Platform\OpenGL\OpenGL_Texture.cpp" />
     <ClCompile Include="src\Platform\OpenGL\OpenGL_VertexArrayBuffer.cpp" />
     <ClCompile Include="src\Platform\Vulkan\Vulkan_RenderContext.cpp" />
+    <ClCompile Include="src\Platform\Vulkan\Vulkan_Shader.cpp" />
+    <ClCompile Include="src\Platform\Vulkan\Vulkan_ShaderCompiler.cpp" />
     <ClCompile Include="src\Platform\Windows\WindowsPlatformUtils.cpp" />
     <ClCompile Include="src\TAGE\Application\Application.cpp" />
     <ClCompile Include="src\TAGE\AssetManager\AssetManager.cpp" />

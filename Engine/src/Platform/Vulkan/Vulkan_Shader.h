@@ -1,12 +1,13 @@
 #pragma once
 #include "TARE/Shader/Shader.h"
 
+struct Device;
 namespace TARE {
-	class OpenGL_Shader : public Shader
+	class Vulkan_Shader : public Shader
 	{
 	public:
-		OpenGL_Shader(const char* vertexPath, const char* fragmentPath, const char* geometryPath);
-		~OpenGL_Shader();
+		Vulkan_Shader(const char* vertexPath, const char* fragmentPath, const char* geometryPath);
+		~Vulkan_Shader();
 
 		virtual void Use() const override;
 		virtual void SetUniform(const char* name, bool value) const override;
@@ -24,7 +25,9 @@ namespace TARE {
 		virtual void CompileShader(uint& shader, const char* code, const char* type) override;
 		virtual void CompileProgram(uint vertex, uint fragment, uint* geometry) override;
 		virtual void DeleteShader(uint shader) override;
+
 	private:
 		uint _ID;
+		Device* _Device;
 	};
 }

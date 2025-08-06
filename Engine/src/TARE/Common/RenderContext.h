@@ -6,6 +6,7 @@ namespace TARE {
 	public:
 		virtual void Init() = 0;
 		virtual void SwapBuffers() = 0;
+		virtual void* GetDevice() { return nullptr; };
 
 		static TAGE::MEM::Ref<RenderContext> Create(void* handle);
 	};
