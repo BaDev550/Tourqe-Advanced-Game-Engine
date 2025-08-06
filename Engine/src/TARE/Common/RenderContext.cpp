@@ -5,6 +5,7 @@
 
 #include "Platform/OpenGL/OpenGL_RenderContext.h"
 #include "Platform/DirectX11/DirectX11_RenderContext.h"
+#include "Platform/Vulkan/Vulkan_RenderContext.h"
 
 namespace TARE{
 	TAGE::MEM::Ref<RenderContext> RenderContext::Create(void* handle)
@@ -14,7 +15,7 @@ namespace TARE{
 		case RAPI::UNDEFINED:
 		case RAPI::OPENGL: return TAGE::MEM::MakeRef<OpenGL_RenderContext>(static_cast<GLFWwindow*>(handle));
 		case RAPI::DIRECTX11: return TAGE::MEM::MakeRef<DirectX11_RenderContext>(static_cast<GLFWwindow*>(handle));
-		case RAPI::VULKAN:
+		case RAPI::VULKAN: return TAGE::MEM::MakeRef<Vulkan_RenderContext>(static_cast<GLFWwindow*>(handle));
 		default:
 			ASSERT_NOMSG(false);
 			break;

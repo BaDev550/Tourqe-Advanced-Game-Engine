@@ -389,7 +389,7 @@ namespace TAGE::Editor {
 		{
 			if (ImGui::BeginMenu("File"))
 			{
-				if (ImGui::MenuItem("New Scene", "Ctrl+N")) NewScene();
+				if (ImGui::MenuItem("Yeni Sahne", "Ctrl+N")) NewScene();
 				if (ImGui::MenuItem("Open Scene...", "Ctrl+O")) OpenScene();
 				if (ImGui::MenuItem("Save Scene As...", "Ctrl+Shift+S")) SaveSceneAs();
 				if (ImGui::MenuItem("Save Scene", "Ctrl+S")) SaveScene();

@@ -2,7 +2,7 @@
 #include "TARE/TARE.h"
 #include "Raycaster.h"
 #include "PhysicsDebugRenderer.h"
-#include "TARE/Debug/DebugRenderer.h"
+#include "TARE/DebugRenderer/DebugRenderer.h"
 #include "Raycaster.h"
 
 namespace TAGE::Physics {

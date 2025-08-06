@@ -11,7 +11,7 @@ namespace TARE {
 		case RAPI::UNDEFINED:
 		case RAPI::OPENGL: return ".glsl";
 		case RAPI::DIRECTX11: return ".hlsl";
-		case RAPI::VULKAN:
+		case RAPI::VULKAN: return ".glsl";
 		default:
 			ASSERT_NOMSG(false);
 			break;
