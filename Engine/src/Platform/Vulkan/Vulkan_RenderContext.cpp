@@ -100,7 +100,7 @@ bool TARE::Vulkan_RenderContext::checkInstanceExtensionSupport(std::vector<const
 	for (const auto& checkExtension : *checkExtensions) {
 		bool hasExtension = false;
 		for (const auto& extension : extensions) {
-			if (strcmp(checkExtension, extension.extensionName)) {
+			if (strcmp(checkExtension, extension.extensionName) == 0) {
 				hasExtension = true;
 				break;
 			}

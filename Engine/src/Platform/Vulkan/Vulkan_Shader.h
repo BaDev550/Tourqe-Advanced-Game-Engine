@@ -1,5 +1,6 @@
 #pragma once
 #include "TARE/Shader/Shader.h"
+#include <vulkan/vulkan.h>
 
 struct Device;
 namespace TARE {
@@ -28,6 +29,25 @@ namespace TARE {
 
 	private:
 		uint _ID;
+
+		struct PushConstantData {
+			glm::vec3 u_CameraPos;
+			float u_Exposure;
+
+			glm::mat4 u_View;
+			glm::mat4 u_Projection;
+			glm::mat4 u_InverseView;
+			glm::mat4 u_InverseProjection;
+			glm::mat4 u_PrevViewProj;
+			glm::mat4 u_CurrViewProj;
+		} _pushConstants{};
+
 		Device* _Device;
+		VkShaderModule _VertexShaderModule = VK_NULL_HANDLE;
+		VkShaderModule _FragmentShaderModule = VK_NULL_HANDLE;
+		VkShaderModule _GeometryShaderModule = VK_NULL_HANDLE;
+
+		std::vector<char> ReadFileBinary(const std::string& filepath) const;
+		VkShaderModule CreateShaderModule(const std::vector<char>& code) const;
 	};
 }
