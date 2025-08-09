@@ -1,6 +1,5 @@
 #include "tagepch.h"
 #include "ShaderLibrary.h"
-#include "TAGE/Application/Application.h"
 #include "TARE/Common/RenderAPI.h"
 
 namespace TARE {

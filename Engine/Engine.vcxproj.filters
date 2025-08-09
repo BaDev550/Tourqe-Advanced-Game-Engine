@@ -1,27 +1,6 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup>
-    <Filter Include="shaders">
-      <UniqueIdentifier>{0F45D591-7B24-542D-843C-DF03F09ABA8E}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="shaders\Common">
-      <UniqueIdentifier>{672BC2EC-53F9-B5F2-3C8D-261928FA9157}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="shaders\Debugger">
-      <UniqueIdentifier>{43A859F7-2FA1-7849-58D3-5DCE442B5855}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="shaders\Deferred">
-      <UniqueIdentifier>{9FF992FF-8BF2-B151-B424-97D6A07C915D}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="shaders\Screen">
-      <UniqueIdentifier>{FE293E11-EAF7-3117-D38B-A23DBFF80D7C}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="shaders\ScreenSpace">
-      <UniqueIdentifier>{CA1E1B82-3680-F88F-BFED-3E422B4E2F4F}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="shaders\Shadow">
-      <UniqueIdentifier>{244F8F11-101D-8317-F9B0-F33DE51D5F7C}</UniqueIdentifier>
-    </Filter>
     <Filter Include="src">
       <UniqueIdentifier>{2DAB880B-99B4-887C-2230-9F7C8E38947C}</UniqueIdentifier>
     </Filter>
@@ -126,6 +105,9 @@
     </Filter>
     <Filter Include="src\TARE\Texture">
       <UniqueIdentifier>{882B9D9F-7424-BCF1-9D56-A17689AE9BFD}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="src\TARE\Window">
+      <UniqueIdentifier>{0FEE84BE-7B79-F282-848A-7577F0944E83}</UniqueIdentifier>
     </Filter>
     <Filter Include="vendor">
       <UniqueIdentifier>{B3738122-9F15-ACF8-88D0-BF4C74113349}</UniqueIdentifier>
@@ -333,6 +315,9 @@
     <ClInclude Include="src\TARE\Camera\FrustumCulling.h">
       <Filter>src\TARE\Camera</Filter>
     </ClInclude>
+    <ClInclude Include="src\TARE\Camera\PostProcess.h">
+      <Filter>src\TARE\Camera</Filter>
+    </ClInclude>
     <ClInclude Include="src\TARE\Common\Light.h">
       <Filter>src\TARE\Common</Filter>
     </ClInclude>
@@ -389,6 +374,9 @@
     </ClInclude>
     <ClInclude Include="src\TARE\Texture\Texture.h">
       <Filter>src\TARE\Texture</Filter>
+    </ClInclude>
+    <ClInclude Include="src\TARE\Window\Window.h">
+      <Filter>src\TARE\Window</Filter>
     </ClInclude>
     <ClInclude Include="src\tagepch.h">
       <Filter>src</Filter>
@@ -1775,6 +1763,9 @@
     <ClCompile Include="src\TARE\Camera\EditorCamera.cpp">
       <Filter>src\TARE\Camera</Filter>
     </ClCompile>
+    <ClCompile Include="src\TARE\Camera\PostProcess.cpp">
+      <Filter>src\TARE\Camera</Filter>
+    </ClCompile>
     <ClCompile Include="src\TARE\Common\RenderAPI.cpp">
       <Filter>src\TARE\Common</Filter>
     </ClCompile>
@@ -1829,6 +1820,9 @@
     <ClCompile Include="src\TARE\Texture\Texture.cpp">
       <Filter>src\TARE\Texture</Filter>
     </ClCompile>
+    <ClCompile Include="src\TARE\Window\Window.cpp">
+      <Filter>src\TARE\Window</Filter>
+    </ClCompile>
     <ClCompile Include="src\tagepch.cpp">
       <Filter>src</Filter>
     </ClCompile>
@@ -1839,6 +1833,7 @@
     <ClCompile Include="src\TAGE\World\Objects\Entity.cpp" />
     <ClCompile Include="src\TAGE\MultiThread\MultiThread.cpp" />
   </ItemGroup>
+<<<<<<< Updated upstream
   <ItemGroup>
     <None Include="shaders\Common\Material.glsl">
       <Filter>shaders\Common</Filter>
@@ -1939,4 +1934,6 @@
     <None Include="shaders\Common\outline_vertex.glsl" />
     <None Include="shaders\Common\outline_fragment.glsl" />
   </ItemGroup>
+=======
+>>>>>>> Stashed changes
 </Project>

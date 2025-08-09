@@ -15,7 +15,7 @@ namespace TARE
     public:
         EndlessGrid();
 
-        void Render(glm::mat4& view, glm::mat4& proj, glm::vec3& pos);
+        void Render();
     private:
         TAGE::MEM::Ref<VertexArrayObject> _VAO;
         TAGE::MEM::Ref<Shader> _GridShader;

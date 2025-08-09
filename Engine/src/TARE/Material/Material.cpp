@@ -1,7 +1,6 @@
 #include "tagepch.h"
 #include "Material.h"
 #include "TARE/Shader/ShaderLibrary.h"
-#include "TAGE/AssetManager/AssetManager.h"
 
 namespace TARE {
 	Material::Material(const char* name)

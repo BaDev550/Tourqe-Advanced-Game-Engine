@@ -1,8 +1,7 @@
 #include "tagepch.h"
 #include "Model.h"
-#include "TARE/Shader/ShaderLibrary.h"
-#include "TAGE/AssetManager/AssetManager.h"
 #include "TAGE/Application/Application.h"
+#include "TARE/Shader/ShaderLibrary.h"
 #include "meshoptimizer.h"
 
 namespace TARE

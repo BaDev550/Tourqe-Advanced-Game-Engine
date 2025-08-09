@@ -8,8 +8,22 @@ out vec3 Normal;
 out vec2 TexCoords;
 
 uniform mat4 u_Model;
-uniform mat4 u_View;
-uniform mat4 u_Projection;
+
+layout(std140, binding = 0) uniform CameraUBO
+{
+    mat4 u_View;
+    mat4 u_Projection;
+    mat4 u_InverseProjection;
+    mat4 u_InverseView;
+    mat4 u_PrevViewProj;
+    mat4 u_CurrViewProj;
+
+    vec3 u_CameraPos;
+    vec3 u_CameraDir;
+    vec3 u_CameraUp;
+
+    float u_Exposure;
+};
 
 void main()
 {
