@@ -17,7 +17,7 @@ namespace TARE::Debug {
 		_VAO = VertexArrayObject::Create();
 		_VAO->AddVertexBuffer(_VBO);
 
-		_debugShader = ShaderLibrary::Add("DebugSingleColorShader", "../Engine/shaders/Debugger/single_color_vertex", "../Engine/shaders/Debugger/single_color_fragment");
+		_debugShader = ShaderLibrary::Add("DebugSingleColorShader", "shaders/Debugger/single_color_vertex", "shaders/Debugger/single_color_fragment");
 		_initialized = true;
 	}
 

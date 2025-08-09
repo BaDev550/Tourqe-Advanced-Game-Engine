@@ -4,6 +4,7 @@
 #include "TARE/Common/RenderAPI.h"
 
 #include "Platform/OpenGL/OpenGL_Shader.h"
+#include "Platform/Vulkan/Vulkan_Shader.h"
 
 namespace TARE
 {
@@ -77,11 +78,7 @@ namespace TARE
 		case RAPI::UNDEFINED:
 		case RAPI::OPENGL: return TAGE::MEM::MakeRef<OpenGL_Shader>(vertexPath, fragmentPath, geometryPath);
 		case RAPI::DIRECTX11:
-<<<<<<< Updated upstream
-		case RAPI::VULKAN:
-=======
 		case RAPI::VULKAN: return TAGE::MEM::MakeRef<Vulkan_Shader>(vertexPath, fragmentPath);
->>>>>>> Stashed changes
 		default:
 			ASSERT_NOMSG(false);
 			break;

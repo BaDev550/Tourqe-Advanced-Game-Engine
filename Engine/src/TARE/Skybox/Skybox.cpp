@@ -5,7 +5,7 @@
 namespace TARE {
 	Skybox::Skybox(const char* path)
 	{
-		_SkyboxShader = ShaderLibrary::Add("SkyboxShader", "../Engine/shaders/skybox_vertex", "../Engine/shaders/skybox_fragment");
+		_SkyboxShader = ShaderLibrary::Add("SkyboxShader", "shaders/Visual/skybox_vertex", "shaders/Visual/skybox_fragment");
 		_SkyboxTexture = CubemapTexture::Create();
 		_SkyboxTexture->LoadCubemap(path);
 

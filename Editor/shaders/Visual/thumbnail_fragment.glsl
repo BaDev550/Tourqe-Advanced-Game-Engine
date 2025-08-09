@@ -1,6 +1,6 @@
 #version 450 core
 layout(location = 0) out vec4 FragColor;
-#include "Common/Material.glsl"
+#include "../Common/Material.glsl"
 
 in vec2 TexCoord;
 uniform Material u_Material;

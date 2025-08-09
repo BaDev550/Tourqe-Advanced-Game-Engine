@@ -7,9 +7,6 @@
     <Filter Include="src\Platform">
       <UniqueIdentifier>{21CA02E5-0D2D-9289-B6B2-CA3FA2F45D0C}</UniqueIdentifier>
     </Filter>
-    <Filter Include="src\Platform\DirectX11">
-      <UniqueIdentifier>{2549C2B7-1143-EB09-FAAF-811AE6485176}</UniqueIdentifier>
-    </Filter>
     <Filter Include="src\Platform\OpenGL">
       <UniqueIdentifier>{35A49437-A105-7245-2A73-B8F796D3A804}</UniqueIdentifier>
     </Filter>
@@ -141,9 +138,6 @@
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="src\Platform\DirectX11\DirectX11_RenderContext.h">
-      <Filter>src\Platform\DirectX11</Filter>
-    </ClInclude>
     <ClInclude Include="src\Platform\OpenGL\OpenGL_Buffers.h">
       <Filter>src\Platform\OpenGL</Filter>
     </ClInclude>
@@ -169,6 +163,9 @@
       <Filter>src\Platform\Vulkan</Filter>
     </ClInclude>
     <ClInclude Include="src\Platform\Vulkan\Vulkan_Shader.h">
+      <Filter>src\Platform\Vulkan</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Platform\Vulkan\Vulkan_ShaderCompiler.h">
       <Filter>src\Platform\Vulkan</Filter>
     </ClInclude>
     <ClInclude Include="src\TAGE\Application\Application.h">
@@ -1664,9 +1661,6 @@
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="src\Platform\DirectX11\DirectX11_RenderContext.cpp">
-      <Filter>src\Platform\DirectX11</Filter>
-    </ClCompile>
     <ClCompile Include="src\Platform\OpenGL\OpenGL_Buffers.cpp">
       <Filter>src\Platform\OpenGL</Filter>
     </ClCompile>
@@ -1691,7 +1685,13 @@
     <ClCompile Include="src\Platform\OpenGL\OpenGL_VertexArrayBuffer.cpp">
       <Filter>src\Platform\OpenGL</Filter>
     </ClCompile>
+    <ClCompile Include="src\Platform\Vulkan\Vulkan_RenderContext.cpp">
+      <Filter>src\Platform\Vulkan</Filter>
+    </ClCompile>
     <ClCompile Include="src\Platform\Vulkan\Vulkan_Shader.cpp">
+      <Filter>src\Platform\Vulkan</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Platform\Vulkan\Vulkan_ShaderCompiler.cpp">
       <Filter>src\Platform\Vulkan</Filter>
     </ClCompile>
     <ClCompile Include="src\Platform\Windows\WindowsPlatformUtils.cpp">
