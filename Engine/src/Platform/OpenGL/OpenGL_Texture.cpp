@@ -1,13 +1,13 @@
 #include "tagepch.h"
 #include "OpenGL_Texture.h"
 #include <glad/glad.h>
+#include "TAGE/Application/Application.h"
 
 #define STB_DXT_IMPLEMENTATION
 #include <stb/stb_dxt.h>
 
 #include <stb/stb_image.h>
 #include <stb/stb_image_write.h>
-#include "TAGE/Application/Application.h"
 
 namespace TARE {
 	namespace Utils {
@@ -53,7 +53,6 @@ namespace TARE {
 		if (!LoadTextureCPU(path, cpuData)) {
 			return LoadFallbackTexture();
 		}
-
 		grapichDistpacher.Enqueue([=]() {
 			UploadToGPU(cpuData);
 			});
@@ -72,6 +71,7 @@ namespace TARE {
 		grapichDistpacher.Enqueue([=]() {
 			UploadToGPU(cpuData);
 			});
+		
 		return true;
 	}
 
@@ -86,10 +86,10 @@ namespace TARE {
 		cpuData.InternalFormat = cpuData.HasAlpha ? GL_RGBA8 : GL_RGB8;
 		cpuData.IsCompressed = false;
 		auto& grapichDistpacher = TAGE::Application::Get()->GetGraphicDispatcher();
-
 		grapichDistpacher.Enqueue([=]() {
 			UploadToGPU(cpuData);
 			});
+
 		return true;
 	}
 

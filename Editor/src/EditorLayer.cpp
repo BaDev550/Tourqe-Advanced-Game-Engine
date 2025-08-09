@@ -550,7 +550,7 @@ namespace TAGE::Editor {
 
 		auto renderer = Application::Get()->GetRenderer();
 		auto deferred = renderer->GetDeferredRendering();
-		uint64_t textureID = deferred.GetLightingBuffer()->GetColorAttachment(0);
+		uint64_t textureID = renderer->GetSceneData().PostProcess->GetPostProcessTexture();
 
 		switch (debugMode)
 		{
@@ -559,7 +559,6 @@ namespace TAGE::Editor {
 		case ViewportDebugMode::GBuffer_Albedo:   textureID = deferred.GetGBuffer()->GetColorAttachment(2); break;
 		case ViewportDebugMode::GBuffer_Depth:    textureID = deferred.GetGBuffer()->GetDepthAttachment(); break;
 		case ViewportDebugMode::Lighting:         textureID = deferred.GetLightingBuffer()->GetColorAttachment(0); break;
-		case ViewportDebugMode::ShadowMap:        textureID = renderer->GetSceneData().Lights[0].shadowMap->GetTextureID(); break;
 		case ViewportDebugMode::GI:               textureID = deferred.GetGIBuffer()->GetColorAttachment(0); break;
 		default: break;
 		}

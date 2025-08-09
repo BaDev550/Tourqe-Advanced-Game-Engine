@@ -12,22 +12,24 @@ namespace TARE {
         ShadowMap(int width, int height);
         ~ShadowMap() = default;
 
-        void BeginRender(const glm::mat4& lightViewProj);
+        void BeginRender(const TAGE::MEM::Ref<Camera>& cam, const glm::vec3& lightDir);
         void EndRender();
-        void BeginPointLightShadowPass(const glm::vec3& lightPos);
-        void SetFaceViewProjection(int faceIndex, const glm::mat4& vpMatrix);
-        void EndPointLightShadowPass();
 
         void BindTexture(uint slot = 0) const;
 		void UseShader() const { _depthShader->Use(); }
 		uint GetTextureID() const { return _depthFBO->GetDepthAttachment(); }
 
+		std::vector<float>& GetShadowCascadeLevels() { return _shadowCascadeLevels; }
 		TAGE::MEM::Ref<Framebuffer>& GetFramebuffer() { return _depthFBO; }
     private:
         TAGE::MEM::Ref<Framebuffer> _depthFBO;
         TAGE::MEM::Ref<Shader> _depthShader;
-        TAGE::MEM::Ref<Shader> _pointLightDepthShader;
-        TAGE::MEM::Ref<CubemapTexture> _pointDepthCubemap;
+		std::vector<float> _shadowCascadeLevels = { 10.0f, 20.0f, 30.0f, 50.0f };
+		TAGE::MEM::Weak<Camera> _camera;
+		int width, height;
+
+        std::vector<glm::mat4> getLightSpaceMatrices(const glm::vec3& lightDir) const;
+        glm::mat4 getLightSpaceMatrix(const float nearPlane, const float farPlane, const glm::vec3& lightDir) const;
 	};
 }
 

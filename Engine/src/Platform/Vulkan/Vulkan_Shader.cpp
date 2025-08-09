@@ -1,106 +1,123 @@
 #include "tagepch.h"
-#include <TAGE/Application/Application.h>
 #include "Vulkan_Shader.h"
 #include "Vulkan_ShaderCompiler.h"
 #include "Vulkan_RenderContext.h"
+#include "TAGE/Application/Application.h"
 
 namespace TARE {
-	Vulkan_Shader::Vulkan_Shader(const char* vertexPath, const char* fragmentPath, const char* geometryPath)
-	{
-		auto renderContext = TAGE::Application::Get()->GetWindow()->GetRenderContext();
-		_Device = reinterpret_cast<Device*>(renderContext->GetDevice());
+    Vulkan_Shader::Vulkan_Shader(const std::string& vertPath, const std::string& fragPath)
+    {
+		_device = static_cast<Vulkan_RenderContext*>(TAGE::Application::Get()->GetWindow()->GetRenderContext())->GetVulkanDevice();
+        auto vertCode = ReadFile(vertPath);
+        auto fragCode = ReadFile(fragPath);
 
-		auto vertCode = ReadFileBinary(vertexPath);
-		auto fragCode = ReadFileBinary(fragmentPath);
+        if (!CreateShaderModule(vertCode, &_vertShaderModule))
+            throw std::runtime_error("Failed to create vertex shader module");
 
-		_VertexShaderModule = CreateShaderModule(vertCode);
-		_FragmentShaderModule = CreateShaderModule(fragCode);
+        if (!CreateShaderModule(fragCode, &_fragShaderModule))
+            throw std::runtime_error("Failed to create fragment shader module");
+    }
 
-		if (geometryPath) {
-			auto geomCode = ReadFileBinary(geometryPath);
-			_GeometryShaderModule = CreateShaderModule(geomCode);
-		}
-	}
+    Vulkan_Shader::~Vulkan_Shader()
+    {
+        for (auto& [_, buffer] : _uboBuffers)
+        {
+            if (buffer.buffer != VK_NULL_HANDLE) vkDestroyBuffer(_device, buffer.buffer, nullptr);
+            if (buffer.memory != VK_NULL_HANDLE) vkFreeMemory(_device, buffer.memory, nullptr);
+        }
+        for (auto& [_, buffer] : _ssboBuffers)
+        {
+            if (buffer.buffer != VK_NULL_HANDLE) vkDestroyBuffer(_device, buffer.buffer, nullptr);
+            if (buffer.memory != VK_NULL_HANDLE) vkFreeMemory(_device, buffer.memory, nullptr);
+        }
 
-	Vulkan_Shader::~Vulkan_Shader()
-	{
-		if (_VertexShaderModule != VK_NULL_HANDLE)
-			vkDestroyShaderModule(_Device->logicalDevice, _VertexShaderModule, nullptr);
-		if (_FragmentShaderModule != VK_NULL_HANDLE)
-			vkDestroyShaderModule(_Device->logicalDevice, _FragmentShaderModule, nullptr);
-		if (_GeometryShaderModule != VK_NULL_HANDLE)
-			vkDestroyShaderModule(_Device->logicalDevice, _GeometryShaderModule, nullptr);
-	}
+        if (_vertShaderModule != VK_NULL_HANDLE)
+            vkDestroyShaderModule(_device, _vertShaderModule, nullptr);
 
-	void Vulkan_Shader::Use() const
-	{
-	}
+        if (_fragShaderModule != VK_NULL_HANDLE)
+            vkDestroyShaderModule(_device, _fragShaderModule, nullptr);
+    }
 
-	void Vulkan_Shader::SetUniform(const char* name, bool value) const {}
-	void Vulkan_Shader::SetUniform(const char* name, int value) const {}
-	void Vulkan_Shader::SetUniform(const char* name, float value) const {}
-	void Vulkan_Shader::SetUniform(const char* name, glm::vec2 value) const {}
-	void Vulkan_Shader::SetUniform(const char* name, glm::vec3 value) const {}
-	void Vulkan_Shader::SetUniform(const char* name, glm::vec4 value) const {}
-	void Vulkan_Shader::SetUniform(const char* name, glm::mat3 value) const {}
-	void Vulkan_Shader::SetUniform(const char* name, glm::mat4 value) const {}
+    void Vulkan_Shader::Use() const
+    {
+    }
 
-	void Vulkan_Shader::DestroyProgram() const
-	{
-	}
+    bool Vulkan_Shader::CreateShaderModule(const std::vector<char>& code, VkShaderModule* shaderModule)
+    {
+        VkShaderModuleCreateInfo createInfo{};
+        createInfo.sType = VK_STRUCTURE_TYPE_SHADER_MODULE_CREATE_INFO;
+        createInfo.codeSize = code.size();
+        createInfo.pCode = reinterpret_cast<const uint32_t*>(code.data());
 
-	int Vulkan_Shader::GetUniformLocation(unsigned int program, const char* name) const
-	{
-		return 0;
-	}
+        if (vkCreateShaderModule(_device, &createInfo, nullptr, shaderModule) != VK_SUCCESS)
+        {
+            std::cerr << "Failed to create shader module!" << std::endl;
+            return false;
+        }
+        return true;
+    }
 
-	void Vulkan_Shader::CheckCompileErrors(uint shader, const char* type) const
-	{
-	}
+    std::vector<char> Vulkan_Shader::ReadFile(const std::string& filename)
+    {
+        std::ifstream file(filename, std::ios::ate | std::ios::binary);
+        if (!file.is_open())
+            throw std::runtime_error("failed to open file: " + filename);
 
-	void Vulkan_Shader::CompileShader(uint& shader, const char* code, const char* type)
-	{
-	}
+        size_t fileSize = (size_t)file.tellg();
+        std::vector<char> buffer(fileSize);
 
-	void Vulkan_Shader::CompileProgram(uint vertex, uint fragment, uint* geometry)
-	{
-	}
+        file.seekg(0);
+        file.read(buffer.data(), fileSize);
+        file.close();
 
-	void Vulkan_Shader::DeleteShader(uint shader)
-	{
-	}
+        return buffer;
+    }
 
-	std::vector<char> Vulkan_Shader::ReadFileBinary(const std::string& filepath) const
-	{
-		std::ifstream file(filepath, std::ios::ate | std::ios::binary);
+    bool Vulkan_Shader::CreateUBO(const char* blockName, size_t size, unsigned int bindingPoint)
+    {
+        BufferInfo bufferInfo{};
+        bufferInfo.size = size;
+        _uboBuffers[bindingPoint] = bufferInfo;
+        return true;
+    }
 
-		if (!file.is_open()) {
-			LOG_ERROR("Failed to open shader file: {}", filepath);
-			throw std::runtime_error("Failed to open shader file: " + filepath);
-		}
+    void Vulkan_Shader::UpdateUBO(unsigned int bindingPoint, const void* data, size_t size)
+    {
+        auto it = _uboBuffers.find(bindingPoint);
+        if (it == _uboBuffers.end())
+            return;
 
-		size_t fileSize = (size_t)file.tellg();
-		std::vector<char> buffer(fileSize);
+        BufferInfo& buf = it->second;
 
-		file.seekg(0);
-		file.read(buffer.data(), fileSize);
-		file.close();
+        void* mapped;
+        vkMapMemory(_device, buf.memory, 0, size, 0, &mapped);
+        memcpy(mapped, data, size);
+        vkUnmapMemory(_device, buf.memory);
+    }
 
-		return buffer;
-	}
+    bool Vulkan_Shader::CreateSSBO(unsigned int bindingPoint, size_t size)
+    {
+        BufferInfo bufferInfo{};
+        bufferInfo.size = size;
+        _ssboBuffers[bindingPoint] = bufferInfo;
+        return true;
+    }
 
-	VkShaderModule Vulkan_Shader::CreateShaderModule(const std::vector<char>& code) const
-	{
-		VkShaderModuleCreateInfo createInfo{};
-		createInfo.sType = VK_STRUCTURE_TYPE_SHADER_MODULE_CREATE_INFO;
-		createInfo.codeSize = code.size();
-		createInfo.pCode = reinterpret_cast<const uint32_t*>(code.data());
+    void Vulkan_Shader::UpdateSSBO(unsigned int bindingPoint, const void* data, size_t size)
+    {
+        auto it = _ssboBuffers.find(bindingPoint);
+        if (it == _ssboBuffers.end())
+            return;
 
-		VkShaderModule shaderModule;
-		if (vkCreateShaderModule(_Device->logicalDevice, &createInfo, nullptr, &shaderModule) != VK_SUCCESS) {
-			throw std::runtime_error("Failed to create shader module.");
-		}
+        BufferInfo& buf = it->second;
 
-		return shaderModule;
-	}
+        void* mapped;
+        vkMapMemory(_device, buf.memory, 0, size, 0, &mapped);
+        memcpy(mapped, data, size);
+        vkUnmapMemory(_device, buf.memory);
+    }
+
+    void Vulkan_Shader::DestroyProgram() const
+    {
+    }
 }

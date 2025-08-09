@@ -16,8 +16,6 @@ namespace TAGE {
 		void Render(const MEM::Ref<TARE::Camera>& cam, float dt, bool runtime = false);
 		void RenderObjects();
 		void RenderShadowObject(bool point = false);
-		void RenderShadowPass(std::vector<Light>& lights);
-		void AssignShadowsMaps(std::vector<Light>& lights);
 		void GetLights(std::vector<Light>& lights, MEM::Ref<TARE::Skybox>& skybox);
 	private:
 		MEM::Ref<TARE::EditorCamera> _EditorCamera;

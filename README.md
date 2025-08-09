@@ -1,7 +1,6 @@
 # Tourqe Advanced Game Engine
 
-**TAGE** is a modular, lightweight, and efficient game engine developed in C++ for Windows platforms. Designed with simplicity and flexibility in mind, TAGE provides a solid foundation for developing 3D games, 
-making it an excellent choice for indie developers and hobbyists.
+**TAGE** is a modular, lightweight, and efficient game engine developed in C++ for Windows platforms. Designed with simplicity and flexibility in mind, TAGE provides a solid foundation for developing 3D games.
 
 ![Screenshot 2025-07-02 210917](https://github.com/user-attachments/assets/1a3589a0-b51e-42be-ab91-8dca6b9f943c)
 

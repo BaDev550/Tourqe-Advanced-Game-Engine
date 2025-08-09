@@ -20,6 +20,7 @@ namespace TARE
 		_projectionMatrix = glm::perspective(glm::radians(_fov), _aspectRatio, _nearClip, _farClip);
 
 		_inverseViewMatrix = glm::inverse(_viewMatrix);
+		_inverseProjectionMatrix = glm::inverse(_projectionMatrix);
 		_viewProjectionMatrix = _projectionMatrix * _viewMatrix;
 	}
 
@@ -90,6 +91,7 @@ namespace TARE
 	const glm::mat4& Camera::GetProjectionMatrix() const { return _projectionMatrix; }
 	const glm::mat4& Camera::GetViewProjectionMatrix() const { return _viewProjectionMatrix; }
 	const glm::mat4& Camera::GetInverseViewMatrix() const { return _inverseViewMatrix; }
+	const glm::mat4& Camera::GetInverseProjectionMatrix() const { return _inverseProjectionMatrix; }
 	const glm::vec3& Camera::GetPosition() const { return _position; }
 	const glm::vec3& Camera::GetEulerRotation() const { return _rotation; }
 	const glm::vec3& Camera::GetForward() const { return _forward; }

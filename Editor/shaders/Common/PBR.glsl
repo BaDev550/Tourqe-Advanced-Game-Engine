@@ -5,16 +5,16 @@ const float PI = 3.14159265359;
 const float EPSILON = 0.0001;
 
 float DistributionGGX(vec3 N, vec3 H, float roughness) {
-    float a = roughness * roughness;
-    float a2 = a * a;
+    float a = roughness*roughness;
+    float a2 = a*a;
     float NdotH = max(dot(N, H), 0.0);
-    float NdotH2 = NdotH * NdotH;
+    float NdotH2 = NdotH*NdotH;
 
     float nom   = a2;
     float denom = (NdotH2 * (a2 - 1.0) + 1.0);
     denom = PI * denom * denom;
 
-    return nom / max(denom, EPSILON);
+    return nom / denom;
 }
 
 float GeometrySchlickGGX(float NdotV, float roughness) {
@@ -51,7 +51,7 @@ void GetLightProperties(Light light, vec3 fragPos, out vec3 lightDir, out float 
 
     if (light.type == LIGHT_TYPE_DIRECTIONAL)
     {
-        lightDir = normalize(-light.direction);
+        lightDir = normalize(light.direction);
     }
     else
     {
@@ -134,9 +134,10 @@ vec3 CalculatePBRLight(
     vec3 kS = F;
     vec3 kD = (vec3(1.0) - kS) * (1.0 - metallic);
 
-    vec3 diffuse = kD * albedo / PI;
+    vec3 diffuse = (kD * pow(albedo, vec3(2.2))) / PI;
     
     return (diffuse + specular) * radiance * NdotL;
 }
+
 
 #endif

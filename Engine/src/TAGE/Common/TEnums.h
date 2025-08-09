@@ -84,7 +84,7 @@ enum class DebugPrimitiveType {
 	CAPSULE
 };
 
-enum class LightType : uint8 {
+enum class LightType : uint {
 	POINT,
 	DIRECTIONAL,
 	SPOT
@@ -157,10 +157,13 @@ enum class FramebufferTextureFormat : uint8 {
 	RGBA,
 	RGBA8,
 	RGBA16F,
+	R16F,
+	R8,
 	RED_INTEGER,
 	DEPTH24STENCIL8,
 	DEPTH32F,
 	DEPTH24,
+	DEPTH_ARRAY
 };
 
 enum class CullMode : uint8

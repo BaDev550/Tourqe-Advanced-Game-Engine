@@ -28,30 +28,29 @@ namespace TARE {
 
 		SetPosition(position);
 
-		double xpos, ypos;
-		xpos = TAGE::Input::GetMousePosition().x;
-		ypos = TAGE::Input::GetMousePosition().y;
+		if (_proccessingMouse) {
+			double xpos, ypos;
+			xpos = TAGE::Input::GetMousePosition().x;
+			ypos = TAGE::Input::GetMousePosition().y;
 
-		if (IsFirstMouse()) {
+			if (IsFirstMouse()) {
+				_lastX = xpos;
+				_lastY = ypos;
+				SetFirstMouse(false);
+			}
+
+			float xoffset = static_cast<float>(xpos - _lastX);
+			float yoffset = static_cast<float>(_lastY - ypos);
+
 			_lastX = xpos;
 			_lastY = ypos;
-			SetFirstMouse(false);
+
+			xoffset *= 1.0f * dt;
+			yoffset *= 1.0f * dt;
+
+			Orbit(yoffset, xoffset);
 		}
 
-		float xoffset = static_cast<float>(xpos - _lastX);
-		float yoffset = static_cast<float>(_lastY - ypos);
-
-		_lastX = xpos;
-		_lastY = ypos;
-
-		xoffset *= 1.0f * dt;
-		yoffset *= 1.0f * dt;
-
-		Orbit(yoffset, xoffset);
 		CalculateCameraMatrixes();
-	}
-
-	void EditorCamera::OnEvent(TAGE::Event& event)
-	{
 	}
 }

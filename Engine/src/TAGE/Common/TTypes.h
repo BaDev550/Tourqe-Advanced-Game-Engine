@@ -145,7 +145,9 @@ struct FramebufferSpecification
 	uint Width = 0, Height = 0;
 	FramebufferAttachmentSpecification Attachments;
 	uint Samples = 1;
+	uint DepthArrayLayers = 1;
 
 	bool SwapChainTarget = false;
-	FramebufferSpecification(FramebufferAttachmentSpecification attachments, uint samples, uint width, uint height) : Attachments(attachments), Samples(samples), Width(width), Height(height) {}
+	FramebufferSpecification(FramebufferAttachmentSpecification attachments, uint samples, uint width, uint height, uint depthArrayLayers = 1) 
+		: Attachments(attachments), Samples(samples), Width(width), Height(height), DepthArrayLayers(depthArrayLayers) {}
 };

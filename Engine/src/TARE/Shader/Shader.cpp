@@ -4,7 +4,6 @@
 #include "TARE/Common/RenderAPI.h"
 
 #include "Platform/OpenGL/OpenGL_Shader.h"
-#include "Platform/Vulkan/Vulkan_Shader.h"
 
 namespace TARE
 {
@@ -34,6 +33,7 @@ namespace TARE
 
 		std::string vertexCode = ShaderPreprocessor::Preprocess(vertexPath);
 		std::string fragmentCode = ShaderPreprocessor::Preprocess(fragmentPath);
+		_FragmentSource = fragmentCode;
 		std::string geometryCode;
 		if (hasGeometry)
 			geometryCode = ShaderPreprocessor::Preprocess(geometryPath);
@@ -60,7 +60,7 @@ namespace TARE
 	{
 		DestroyProgram();
 		try {
-			LOG_INFO("Reloading shader: {}", _VertexPath);
+			LOG_INFO("Reloading shader: {}, {}", _VertexPath, _FragmentPath);
 			LoadShader(_VertexPath.c_str(), _FragmentPath.c_str(), _GeometryPath.c_str());
 			return true;
 		}
@@ -77,7 +77,11 @@ namespace TARE
 		case RAPI::UNDEFINED:
 		case RAPI::OPENGL: return TAGE::MEM::MakeRef<OpenGL_Shader>(vertexPath, fragmentPath, geometryPath);
 		case RAPI::DIRECTX11:
-		case RAPI::VULKAN: return TAGE::MEM::MakeRef<Vulkan_Shader>(vertexPath, fragmentPath, geometryPath);
+<<<<<<< Updated upstream
+		case RAPI::VULKAN:
+=======
+		case RAPI::VULKAN: return TAGE::MEM::MakeRef<Vulkan_Shader>(vertexPath, fragmentPath);
+>>>>>>> Stashed changes
 		default:
 			ASSERT_NOMSG(false);
 			break;

@@ -1,8 +1,6 @@
 #pragma once
 
 #include <vulkan/vulkan.h>
-#include <stdexcept>
-#include <vector>
 #include "TARE/Common/RenderContext.h"
 
 struct GLFWwindow;
@@ -30,6 +28,9 @@ namespace TARE {
 		virtual void SwapBuffers() override;
 		virtual void* GetDevice() override {
 			return &_MainDevice;
+		}
+		VkDevice Vulkan_RenderContext::GetVulkanDevice() const {
+			return _MainDevice.logicalDevice;
 		}
 	private:
 		Device _MainDevice;

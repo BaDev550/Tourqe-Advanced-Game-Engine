@@ -58,7 +58,7 @@
       <PrecompiledHeaderFile>tagepch.h</PrecompiledHeaderFile>
       <WarningLevel>Level3</WarningLevel>
       <PreprocessorDefinitions>_CRT_SECURE_NO_WARNINGS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <AdditionalIncludeDirectories>src;vendor;vendor\spdlog;vendor\GLFW\include;vendor\GLAD\include;C:\VulkanSDK\1.4.313.2\Include;vendor\assimp\include;vendor\imgui;vendor\ImGuizmo;vendor\glm;vendor\entt\include;vendor\yaml-cpp\include;vendor\bullet-physics\src;vendor\mono\include;vendor\meshoptimizer;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>src;vendor;vendor\spdlog;vendor\GLFW\include;vendor\GLAD\include;vendor\assimp\include;vendor\imgui;vendor\ImGuizmo;vendor\glm;vendor\entt\include;vendor\yaml-cpp\include;vendor\bullet-physics\src;vendor\mono\include;vendor\meshoptimizer;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <DebugInformationFormat>EditAndContinue</DebugInformationFormat>
       <Optimization>Disabled</Optimization>
       <RuntimeLibrary>MultiThreadedDebugDLL</RuntimeLibrary>
@@ -71,7 +71,7 @@
       <GenerateDebugInformation>true</GenerateDebugInformation>
     </Link>
     <Lib>
-      <AdditionalDependencies>opengl32.lib;d3d11.lib;dxgi.lib;d3dcompiler.lib;C:\VulkanSDK\1.4.313.2\Lib\vulkan-1.lib;vendor\mono\lib\Debug\libmono-static-sgen.lib;Ws2_32.lib;winmm.lib;version.lib;Bcrypt.lib;C:\VulkanSDK\1.4.313.2\Lib\shaderc_shared.lib;C:\VulkanSDK\1.4.313.2\Lib\spirv-cross-core.lib;C:\VulkanSDK\1.4.313.2\Lib\spirv-cross-glsl.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>opengl32.lib;d3d11.lib;dxgi.lib;d3dcompiler.lib;vendor\mono\lib\Debug\libmono-static-sgen.lib;Ws2_32.lib;winmm.lib;version.lib;Bcrypt.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Lib>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
@@ -80,7 +80,7 @@
       <PrecompiledHeaderFile>tagepch.h</PrecompiledHeaderFile>
       <WarningLevel>Level3</WarningLevel>
       <PreprocessorDefinitions>_CRT_SECURE_NO_WARNINGS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <AdditionalIncludeDirectories>src;vendor;vendor\spdlog;vendor\GLFW\include;vendor\GLAD\include;C:\VulkanSDK\1.4.313.2\Include;vendor\assimp\include;vendor\imgui;vendor\ImGuizmo;vendor\glm;vendor\entt\include;vendor\yaml-cpp\include;vendor\bullet-physics\src;vendor\mono\include;vendor\meshoptimizer;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>src;vendor;vendor\spdlog;vendor\GLFW\include;vendor\GLAD\include;vendor\assimp\include;vendor\imgui;vendor\ImGuizmo;vendor\glm;vendor\entt\include;vendor\yaml-cpp\include;vendor\bullet-physics\src;vendor\mono\include;vendor\meshoptimizer;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <Optimization>Full</Optimization>
       <FunctionLevelLinking>true</FunctionLevelLinking>
       <IntrinsicFunctions>true</IntrinsicFunctions>
@@ -97,10 +97,11 @@
       <OptimizeReferences>true</OptimizeReferences>
     </Link>
     <Lib>
-      <AdditionalDependencies>opengl32.lib;d3d11.lib;dxgi.lib;d3dcompiler.lib;C:\VulkanSDK\1.4.313.2\Lib\vulkan-1.lib;vendor\mono\lib\Release\libmono-static-sgen.lib;Ws2_32.lib;winmm.lib;version.lib;Bcrypt.lib;C:\VulkanSDK\1.4.313.2\Lib\shaderc_shared.lib;C:\VulkanSDK\1.4.313.2\Lib\spirv-cross-core.lib;C:\VulkanSDK\1.4.313.2\Lib\spirv-cross-glsl.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>opengl32.lib;d3d11.lib;dxgi.lib;d3dcompiler.lib;vendor\mono\lib\Release\libmono-static-sgen.lib;Ws2_32.lib;winmm.lib;version.lib;Bcrypt.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Lib>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClInclude Include="src\Platform\DirectX11\DirectX11_RenderContext.h" />
     <ClInclude Include="src\Platform\OpenGL\OpenGL_Buffers.h" />
     <ClInclude Include="src\Platform\OpenGL\OpenGL_Framebuffer.h" />
     <ClInclude Include="src\Platform\OpenGL\OpenGL_RenderAPI.h" />
@@ -110,7 +111,6 @@
     <ClInclude Include="src\Platform\OpenGL\OpenGL_VertexArrayBuffer.h" />
     <ClInclude Include="src\Platform\Vulkan\Vulkan_RenderContext.h" />
     <ClInclude Include="src\Platform\Vulkan\Vulkan_Shader.h" />
-    <ClInclude Include="src\Platform\Vulkan\Vulkan_ShaderCompiler.h" />
     <ClInclude Include="src\TAGE\Application\Application.h" />
     <ClInclude Include="src\TAGE\Application\EntryPoint.h" />
     <ClInclude Include="src\TAGE\AssetManager\AssetManager.h" />
@@ -166,6 +166,7 @@
     <ClInclude Include="src\TARE\Camera\Camera.h" />
     <ClInclude Include="src\TARE\Camera\EditorCamera.h" />
     <ClInclude Include="src\TARE\Camera\FrustumCulling.h" />
+    <ClInclude Include="src\TARE\Camera\PostProcess.h" />
     <ClInclude Include="src\TARE\Common\Light.h" />
     <ClInclude Include="src\TARE\Common\RenderAPI.h" />
     <ClInclude Include="src\TARE\Common\RenderCommands.h" />
@@ -185,6 +186,7 @@
     <ClInclude Include="src\TARE\TARE.h" />
     <ClInclude Include="src\TARE\Texture\Bitmap.h" />
     <ClInclude Include="src\TARE\Texture\Texture.h" />
+    <ClInclude Include="src\TARE\Window\Window.h" />
     <ClInclude Include="src\tagepch.h" />
     <ClInclude Include="vendor\glm\glm\common.hpp" />
     <ClInclude Include="vendor\glm\glm\detail\_features.hpp" />
@@ -608,6 +610,7 @@
     <ClInclude Include="vendor\stb\stb_image_write.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="src\Platform\DirectX11\DirectX11_RenderContext.cpp" />
     <ClCompile Include="src\Platform\OpenGL\OpenGL_Buffers.cpp" />
     <ClCompile Include="src\Platform\OpenGL\OpenGL_CubemapTexture.cpp" />
     <ClCompile Include="src\Platform\OpenGL\OpenGL_Framebuffer.cpp" />
@@ -616,9 +619,7 @@
     <ClCompile Include="src\Platform\OpenGL\OpenGL_Shader.cpp" />
     <ClCompile Include="src\Platform\OpenGL\OpenGL_Texture.cpp" />
     <ClCompile Include="src\Platform\OpenGL\OpenGL_VertexArrayBuffer.cpp" />
-    <ClCompile Include="src\Platform\Vulkan\Vulkan_RenderContext.cpp" />
     <ClCompile Include="src\Platform\Vulkan\Vulkan_Shader.cpp" />
-    <ClCompile Include="src\Platform\Vulkan\Vulkan_ShaderCompiler.cpp" />
     <ClCompile Include="src\Platform\Windows\WindowsPlatformUtils.cpp" />
     <ClCompile Include="src\TAGE\Application\Application.cpp" />
     <ClCompile Include="src\TAGE\AssetManager\AssetManager.cpp" />
@@ -652,6 +653,7 @@
     <ClCompile Include="src\TARE\Buffers\VertexArrayBuffer.cpp" />
     <ClCompile Include="src\TARE\Camera\Camera.cpp" />
     <ClCompile Include="src\TARE\Camera\EditorCamera.cpp" />
+    <ClCompile Include="src\TARE\Camera\PostProcess.cpp" />
     <ClCompile Include="src\TARE\Common\RenderAPI.cpp" />
     <ClCompile Include="src\TARE\Common\RenderCommands.cpp" />
     <ClCompile Include="src\TARE\Common\RenderContext.cpp" />
@@ -670,46 +672,13 @@
     <ClCompile Include="src\TARE\TARE.cpp" />
     <ClCompile Include="src\TARE\Texture\FallbackTexture.cpp" />
     <ClCompile Include="src\TARE\Texture\Texture.cpp" />
+    <ClCompile Include="src\TARE\Window\Window.cpp">
+      <ObjectFileName>$(IntDir)\Window1.obj</ObjectFileName>
+    </ClCompile>
     <ClCompile Include="src\tagepch.cpp">
       <PrecompiledHeader>Create</PrecompiledHeader>
     </ClCompile>
     <ClCompile Include="vendor\stb\stb_image.cpp" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="shaders\Common\Material.glsl" />
-    <None Include="shaders\Common\PBR.glsl" />
-    <None Include="shaders\Common\light.glsl" />
-    <None Include="shaders\Common\outline_fragment.glsl" />
-    <None Include="shaders\Common\outline_vertex.glsl" />
-    <None Include="shaders\Debugger\debug_fragment.glsl" />
-    <None Include="shaders\Debugger\debug_vertex.glsl" />
-    <None Include="shaders\Debugger\single_color_fragment.glsl" />
-    <None Include="shaders\Debugger\single_color_vertex.glsl" />
-    <None Include="shaders\Deferred\gbuffer_fragment.glsl" />
-    <None Include="shaders\Deferred\gbuffer_vertex.glsl" />
-    <None Include="shaders\Deferred\light_fragment.glsl" />
-    <None Include="shaders\Deferred\light_vertex.glsl" />
-    <None Include="shaders\Screen\bloom_fragment.glsl" />
-    <None Include="shaders\Screen\bloom_vertex.glsl" />
-    <None Include="shaders\Screen\postprocess_fragment.glsl" />
-    <None Include="shaders\Screen\postprocess_vertex.glsl" />
-    <None Include="shaders\ScreenSpace\screen_space_ambient_occlusion.glsl" />
-    <None Include="shaders\ScreenSpace\screen_space_common.glsl" />
-    <None Include="shaders\ScreenSpace\screen_space_gi.glsl" />
-    <None Include="shaders\ScreenSpace\screen_space_reflection.glsl" />
-    <None Include="shaders\Shadow\point_light_shadow_fragment.glsl" />
-    <None Include="shaders\Shadow\point_light_shadow_geometry.glsl" />
-    <None Include="shaders\Shadow\point_light_shadow_vertex.glsl" />
-    <None Include="shaders\Shadow\shadow_fragment.glsl" />
-    <None Include="shaders\Shadow\shadow_vertex.glsl" />
-    <None Include="shaders\grid_Fragment.glsl" />
-    <None Include="shaders\grid_Vertex.glsl" />
-    <None Include="shaders\main_fragment.glsl" />
-    <None Include="shaders\main_vertex.glsl" />
-    <None Include="shaders\skybox_fragment.glsl" />
-    <None Include="shaders\skybox_vertex.glsl" />
-    <None Include="shaders\thumbnail_fragment.glsl" />
-    <None Include="shaders\thumbnail_vertex.glsl" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="vendor\GLAD\GLAD.vcxproj">
