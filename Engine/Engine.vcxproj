@@ -101,9 +101,6 @@
     </Lib>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClInclude Include="src\TAGE\MultiThread\MultiThread.h" />
-    <ClInclude Include="src\TAGE\World\Objects\EntityFunctions.h" />
-    <ClInclude Include="src\TAGE\World\Objects\Prefab.h" />
     <ClInclude Include="src\Platform\DirectX11\DirectX11_RenderContext.h" />
     <ClInclude Include="src\Platform\OpenGL\OpenGL_Buffers.h" />
     <ClInclude Include="src\Platform\OpenGL\OpenGL_Framebuffer.h" />
@@ -112,6 +109,8 @@
     <ClInclude Include="src\Platform\OpenGL\OpenGL_Shader.h" />
     <ClInclude Include="src\Platform\OpenGL\OpenGL_Texture.h" />
     <ClInclude Include="src\Platform\OpenGL\OpenGL_VertexArrayBuffer.h" />
+    <ClInclude Include="src\Platform\Vulkan\Vulkan_RenderContext.h" />
+    <ClInclude Include="src\Platform\Vulkan\Vulkan_Shader.h" />
     <ClInclude Include="src\TAGE\Application\Application.h" />
     <ClInclude Include="src\TAGE\Application\EntryPoint.h" />
     <ClInclude Include="src\TAGE\AssetManager\AssetManager.h" />
@@ -130,6 +129,7 @@
     <ClInclude Include="src\TAGE\Layers\ImGuiLayer.h" />
     <ClInclude Include="src\TAGE\Layers\Layer.h" />
     <ClInclude Include="src\TAGE\Layers\LayerStack.h" />
+    <ClInclude Include="src\TAGE\MultiThread\MultiThread.h" />
     <ClInclude Include="src\TAGE\Physics\ContactListener.h" />
     <ClInclude Include="src\TAGE\Physics\PhysicsDebugRenderer.h" />
     <ClInclude Include="src\TAGE\Physics\PhysicsWorld.h" />
@@ -152,6 +152,8 @@
     <ClInclude Include="src\TAGE\World\Components\RenderComponents.h" />
     <ClInclude Include="src\TAGE\World\Components\ScriptingComponents.h" />
     <ClInclude Include="src\TAGE\World\Objects\Entity.h" />
+    <ClInclude Include="src\TAGE\World\Objects\EntityFunctions.h" />
+    <ClInclude Include="src\TAGE\World\Objects\Prefab.h" />
     <ClInclude Include="src\TAGE\World\Objects\ScriptableEntity.h" />
     <ClInclude Include="src\TAGE\World\Scene\Scene.h" />
     <ClInclude Include="src\TAGE\World\Scene\SceneSerializer.h" />
@@ -608,9 +610,6 @@
     <ClInclude Include="vendor\stb\stb_image_write.h" />
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="src\TAGE\MultiThread\MultiThread.cpp" />
-    <ClCompile Include="src\TAGE\World\Objects\Entity.cpp" />
-    <ClCompile Include="src\TAGE\World\Objects\Prefab.cpp" />
     <ClCompile Include="src\Platform\DirectX11\DirectX11_RenderContext.cpp" />
     <ClCompile Include="src\Platform\OpenGL\OpenGL_Buffers.cpp" />
     <ClCompile Include="src\Platform\OpenGL\OpenGL_CubemapTexture.cpp" />
@@ -620,6 +619,7 @@
     <ClCompile Include="src\Platform\OpenGL\OpenGL_Shader.cpp" />
     <ClCompile Include="src\Platform\OpenGL\OpenGL_Texture.cpp" />
     <ClCompile Include="src\Platform\OpenGL\OpenGL_VertexArrayBuffer.cpp" />
+    <ClCompile Include="src\Platform\Vulkan\Vulkan_Shader.cpp" />
     <ClCompile Include="src\Platform\Windows\WindowsPlatformUtils.cpp" />
     <ClCompile Include="src\TAGE\Application\Application.cpp" />
     <ClCompile Include="src\TAGE\AssetManager\AssetManager.cpp" />
@@ -632,6 +632,7 @@
     <ClCompile Include="src\TAGE\Layers\ImGuiBuild.cpp" />
     <ClCompile Include="src\TAGE\Layers\ImGuiLayer.cpp" />
     <ClCompile Include="src\TAGE\Layers\LayerStack.cpp" />
+    <ClCompile Include="src\TAGE\MultiThread\MultiThread.cpp" />
     <ClCompile Include="src\TAGE\Physics\ContactListener.cpp" />
     <ClCompile Include="src\TAGE\Physics\PhysicsDebugRenderer.cpp" />
     <ClCompile Include="src\TAGE\Physics\PhysicsWorld.cpp" />
@@ -641,6 +642,8 @@
     <ClCompile Include="src\TAGE\Utilities\UUID.cpp" />
     <ClCompile Include="src\TAGE\Utilities\Utilities.cpp" />
     <ClCompile Include="src\TAGE\Window\Window.cpp" />
+    <ClCompile Include="src\TAGE\World\Objects\Entity.cpp" />
+    <ClCompile Include="src\TAGE\World\Objects\Prefab.cpp" />
     <ClCompile Include="src\TAGE\World\Scene\Scene.cpp" />
     <ClCompile Include="src\TAGE\World\Scene\SceneSerializer.cpp" />
     <ClCompile Include="src\TAGE\World\Systems\System_Physics.cpp" />
@@ -678,45 +681,6 @@
     <ClCompile Include="vendor\stb\stb_image.cpp" />
   </ItemGroup>
   <ItemGroup>
-<<<<<<< Updated upstream
-    <None Include="shaders\Common\Material.glsl" />
-    <None Include="shaders\Common\outline_fragment.glsl" />
-    <None Include="shaders\Common\outline_vertex.glsl" />
-    <None Include="shaders\Common\PBR.glsl" />
-    <None Include="shaders\Common\light.glsl" />
-    <None Include="shaders\Debugger\debug_fragment.glsl" />
-    <None Include="shaders\Debugger\debug_vertex.glsl" />
-    <None Include="shaders\Debugger\single_color_fragment.glsl" />
-    <None Include="shaders\Debugger\single_color_vertex.glsl" />
-    <None Include="shaders\Deferred\gbuffer_fragment.glsl" />
-    <None Include="shaders\Deferred\gbuffer_vertex.glsl" />
-    <None Include="shaders\Deferred\light_fragment.glsl" />
-    <None Include="shaders\Deferred\light_vertex.glsl" />
-    <None Include="shaders\Screen\bloom_fragment.glsl" />
-    <None Include="shaders\Screen\bloom_vertex.glsl" />
-    <None Include="shaders\Screen\postprocess_fragment.glsl" />
-    <None Include="shaders\Screen\postprocess_vertex.glsl" />
-    <None Include="shaders\ScreenSpace\screen_space_ambient_occlusion.glsl" />
-    <None Include="shaders\ScreenSpace\screen_space_common.glsl" />
-    <None Include="shaders\ScreenSpace\screen_space_gi.glsl" />
-    <None Include="shaders\ScreenSpace\screen_space_reflection.glsl" />
-    <None Include="shaders\Shadow\point_light_shadow_fragment.glsl" />
-    <None Include="shaders\Shadow\point_light_shadow_geometry.glsl" />
-    <None Include="shaders\Shadow\point_light_shadow_vertex.glsl" />
-    <None Include="shaders\Shadow\shadow_fragment.glsl" />
-    <None Include="shaders\Shadow\shadow_vertex.glsl" />
-    <None Include="shaders\grid_Fragment.glsl" />
-    <None Include="shaders\grid_Vertex.glsl" />
-    <None Include="shaders\main_fragment.glsl" />
-    <None Include="shaders\main_vertex.glsl" />
-    <None Include="shaders\skybox_fragment.glsl" />
-    <None Include="shaders\skybox_vertex.glsl" />
-    <None Include="shaders\thumbnail_fragment.glsl" />
-    <None Include="shaders\thumbnail_vertex.glsl" />
-  </ItemGroup>
-  <ItemGroup>
-=======
->>>>>>> Stashed changes
     <ProjectReference Include="vendor\GLAD\GLAD.vcxproj">
       <Project>{5D4A857C-4981-860D-F26D-6C10DE83020F}</Project>
     </ProjectReference>
