@@ -33,6 +33,7 @@ project "Engine"
         "%{IncludeDir.yaml}",
         "%{IncludeDir.BulletPhysics}",
         "%{IncludeDir.mono}",
+        "%{IncludeDir.Vulkan}",
         "%{IncludeDir.meshoptimizer}"
    }
 
@@ -58,6 +59,7 @@ project "Engine"
         "meshoptimizer",
 
         "%{Library.mono}",
+        "%{Library.VulkanSDK}",
        }
 
    buildoptions "/utf-8"
@@ -76,6 +78,20 @@ project "Engine"
        runtime "Debug"
        symbols "on"
 
+       links
+       {
+           "%{Library.ShaderC_Debug}",
+           "%{Library.SPIRV_Cross_Debug}",
+           "%{Library.SPIRV_Cross_GLSL_Debug}"
+       }
+
    filter "configurations:Release"
        runtime "Release"
        optimize "on"
+
+       links
+       {
+           "%{Library.ShaderC_Release}",
+           "%{Library.SPIRV_Cross_Release}",
+           "%{Library.SPIRV_Cross_GLSL_Release}"
+       }

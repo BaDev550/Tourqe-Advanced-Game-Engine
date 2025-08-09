@@ -7,7 +7,7 @@
 namespace TARE {
     Vulkan_Shader::Vulkan_Shader(const std::string& vertPath, const std::string& fragPath)
     {
-		_device = static_cast<Vulkan_RenderContext*>(TAGE::Application::Get()->GetWindow()->GetRenderContext())->GetVulkanDevice();
+		_device = static_cast<Vulkan_RenderContext*>(TAGE::Application::Get()->GetWindow()->GetRenderContext()->GetDevice())->GetVulkanDevice();
         auto vertCode = ReadFile(vertPath);
         auto fragCode = ReadFile(fragPath);
 
@@ -51,7 +51,7 @@ namespace TARE {
 
         if (vkCreateShaderModule(_device, &createInfo, nullptr, shaderModule) != VK_SUCCESS)
         {
-            std::cerr << "Failed to create shader module!" << std::endl;
+            LOG_CRITICAL("Failed to create shader module!");
             return false;
         }
         return true;

@@ -61,7 +61,7 @@ namespace TARE {
 			TAGE::MEM::Ref<PostProcess> PostProcess;
 			std::vector<Light> Lights;
 
-			bool UseSSGI = false;
+			bool UseSSGI = true;
 			bool UseSSReflections = true;
 		} _Data;
 	public:

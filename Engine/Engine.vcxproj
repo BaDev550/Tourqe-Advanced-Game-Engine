@@ -58,7 +58,7 @@
       <PrecompiledHeaderFile>tagepch.h</PrecompiledHeaderFile>
       <WarningLevel>Level3</WarningLevel>
       <PreprocessorDefinitions>_CRT_SECURE_NO_WARNINGS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <AdditionalIncludeDirectories>src;vendor;vendor\spdlog;vendor\GLFW\include;vendor\GLAD\include;C:\VulkanSDK\1.4.313.2\Include;vendor\assimp\include;vendor\imgui;vendor\ImGuizmo;vendor\glm;vendor\entt\include;vendor\yaml-cpp\include;vendor\bullet-physics\src;vendor\mono\include;vendor\meshoptimizer;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>src;vendor;vendor\spdlog;vendor\GLFW\include;vendor\GLAD\include;vendor\assimp\include;vendor\imgui;vendor\ImGuizmo;vendor\glm;vendor\entt\include;vendor\yaml-cpp\include;vendor\bullet-physics\src;vendor\mono\include;C:\VulkanSDK\1.4.313.2\Include;vendor\meshoptimizer;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <DebugInformationFormat>EditAndContinue</DebugInformationFormat>
       <Optimization>Disabled</Optimization>
       <RuntimeLibrary>MultiThreadedDebugDLL</RuntimeLibrary>
@@ -71,7 +71,7 @@
       <GenerateDebugInformation>true</GenerateDebugInformation>
     </Link>
     <Lib>
-      <AdditionalDependencies>opengl32.lib;d3d11.lib;dxgi.lib;d3dcompiler.lib;C:\VulkanSDK\1.4.313.2\Lib\vulkan-1.lib;vendor\mono\lib\Debug\libmono-static-sgen.lib;Ws2_32.lib;winmm.lib;version.lib;Bcrypt.lib;C:\VulkanSDK\1.4.313.2\Lib\shaderc_shared.lib;C:\VulkanSDK\1.4.313.2\Lib\spirv-cross-core.lib;C:\VulkanSDK\1.4.313.2\Lib\spirv-cross-glsl.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>opengl32.lib;d3d11.lib;dxgi.lib;d3dcompiler.lib;vendor\mono\lib\Debug\libmono-static-sgen.lib;C:\VulkanSDK\1.4.313.2\Lib\vulkan-1.lib;Ws2_32.lib;winmm.lib;version.lib;Bcrypt.lib;C:\VulkanSDK\1.4.313.2\Lib\shaderc_shared.lib;C:\VulkanSDK\1.4.313.2\Lib\spirv-cross-core.lib;C:\VulkanSDK\1.4.313.2\Lib\spirv-cross-glsl.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Lib>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
@@ -80,7 +80,7 @@
       <PrecompiledHeaderFile>tagepch.h</PrecompiledHeaderFile>
       <WarningLevel>Level3</WarningLevel>
       <PreprocessorDefinitions>_CRT_SECURE_NO_WARNINGS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <AdditionalIncludeDirectories>src;vendor;vendor\spdlog;vendor\GLFW\include;vendor\GLAD\include;C:\VulkanSDK\1.4.313.2\Include;vendor\assimp\include;vendor\imgui;vendor\ImGuizmo;vendor\glm;vendor\entt\include;vendor\yaml-cpp\include;vendor\bullet-physics\src;vendor\mono\include;vendor\meshoptimizer;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>src;vendor;vendor\spdlog;vendor\GLFW\include;vendor\GLAD\include;vendor\assimp\include;vendor\imgui;vendor\ImGuizmo;vendor\glm;vendor\entt\include;vendor\yaml-cpp\include;vendor\bullet-physics\src;vendor\mono\include;C:\VulkanSDK\1.4.313.2\Include;vendor\meshoptimizer;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <Optimization>Full</Optimization>
       <FunctionLevelLinking>true</FunctionLevelLinking>
       <IntrinsicFunctions>true</IntrinsicFunctions>
@@ -97,7 +97,7 @@
       <OptimizeReferences>true</OptimizeReferences>
     </Link>
     <Lib>
-      <AdditionalDependencies>opengl32.lib;d3d11.lib;dxgi.lib;d3dcompiler.lib;C:\VulkanSDK\1.4.313.2\Lib\vulkan-1.lib;vendor\mono\lib\Release\libmono-static-sgen.lib;Ws2_32.lib;winmm.lib;version.lib;Bcrypt.lib;C:\VulkanSDK\1.4.313.2\Lib\shaderc_shared.lib;C:\VulkanSDK\1.4.313.2\Lib\spirv-cross-core.lib;C:\VulkanSDK\1.4.313.2\Lib\spirv-cross-glsl.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>opengl32.lib;d3d11.lib;dxgi.lib;d3dcompiler.lib;vendor\mono\lib\Release\libmono-static-sgen.lib;C:\VulkanSDK\1.4.313.2\Lib\vulkan-1.lib;Ws2_32.lib;winmm.lib;version.lib;Bcrypt.lib;C:\VulkanSDK\1.4.313.2\Lib\shaderc_shared.lib;C:\VulkanSDK\1.4.313.2\Lib\spirv-cross-core.lib;C:\VulkanSDK\1.4.313.2\Lib\spirv-cross-glsl.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Lib>
   </ItemDefinitionGroup>
   <ItemGroup>

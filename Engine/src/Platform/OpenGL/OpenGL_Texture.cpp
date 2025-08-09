@@ -53,7 +53,7 @@ namespace TARE {
 		if (!LoadTextureCPU(path, cpuData)) {
 			return LoadFallbackTexture();
 		}
-		grapichDistpacher.Enqueue([=]() {
+		grapichDistpacher.Enqueue([=] {
 			UploadToGPU(cpuData);
 			});
 
@@ -68,7 +68,7 @@ namespace TARE {
 		if (!LoadTextureCPUFromMemory(data, size, cpuData)) {
 			return LoadFallbackTexture();
 		}
-		grapichDistpacher.Enqueue([=]() {
+		grapichDistpacher.Enqueue([=] {
 			UploadToGPU(cpuData);
 			});
 		
@@ -86,7 +86,7 @@ namespace TARE {
 		cpuData.InternalFormat = cpuData.HasAlpha ? GL_RGBA8 : GL_RGB8;
 		cpuData.IsCompressed = false;
 		auto& grapichDistpacher = TAGE::Application::Get()->GetGraphicDispatcher();
-		grapichDistpacher.Enqueue([=]() {
+		grapichDistpacher.Enqueue([=] {
 			UploadToGPU(cpuData);
 			});
 

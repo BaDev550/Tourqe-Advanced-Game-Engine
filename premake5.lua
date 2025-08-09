@@ -9,6 +9,7 @@ workspace "TAGE"
    }
 
    outputdir = "%{cfg.buildcfg}-%{cfg.system}-%{cfg.architecture}"
+   VULKAN_SDK = os.getenv("VULKAN_SDK")
 
     IncludeDir = {}
     IncludeDir["Engine"] =        "%{wks.location}/Engine/src/"
@@ -23,6 +24,7 @@ workspace "TAGE"
     IncludeDir["yaml"] =          "%{wks.location}/Engine/vendor/yaml-cpp/include"
     IncludeDir["mono"] =          "%{wks.location}/Engine/vendor/mono/include"
     IncludeDir["meshoptimizer"] = "%{wks.location}/Engine/vendor/meshoptimizer/"
+    IncludeDir["Vulkan"] = "%{VULKAN_SDK}/Include"
 
     LibaryDir = {}
     LibaryDir["mono"] = "%{wks.location}/Engine/vendor/mono/lib/%{cfg.buildcfg}"
@@ -33,6 +35,15 @@ workspace "TAGE"
     Library["Winmm"] = "winmm.lib";
     Library["WinVersion"] = "version.lib";
     Library["WinBcrypt"] = "Bcrypt.lib";
+    Library["Vulkan"] = "%{VULKAN_SDK}/Lib"
+    Library["VulkanSDK"] = "%{VULKAN_SDK}/Lib/vulkan-1.lib"
+    Library["ShaderC_Debug"] = "%{Library.Vulkan}/shaderc_shared.lib"
+    Library["SPIRV_Cross_Debug"] = "%{Library.Vulkan}/spirv-cross-core.lib"
+    Library["SPIRV_Cross_GLSL_Debug"] = "%{Library.Vulkan}/spirv-cross-glsl.lib"
+    Library["SPIRV_Tools_Debug"] = "%{Library.Vulkan}/SPIRV-Tools.lib"
+    Library["ShaderC_Release"] = "%{Library.Vulkan}/shaderc_shared.lib"
+    Library["SPIRV_Cross_Release"] = "%{Library.Vulkan}/spirv-cross-core.lib"
+    Library["SPIRV_Cross_GLSL_Release"] = "%{Library.Vulkan}/spirv-cross-glsl.lib"
     
     group "Dependencies"
         include "Engine/vendor/imgui"

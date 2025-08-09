@@ -30,7 +30,6 @@ namespace TARE {
 		virtual void CompileShader(uint& shader, const char* code, const char* type) override;
 		virtual void CompileProgram(uint vertex, uint fragment, uint* geometry) override;
 		virtual void DeleteShader(uint shader) override;
-
 	private:
 		uint _ID;
 		std::unordered_map<unsigned int, unsigned int> _ubos;

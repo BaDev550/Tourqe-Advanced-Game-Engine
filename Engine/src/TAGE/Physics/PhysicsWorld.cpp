@@ -1,6 +1,6 @@
 #include "tagepch.h"
 #include "PhysicsWorld.h"
-#include "TARE/Debug/DebugRenderer.h"
+#include "TARE/DebugRenderer/DebugRenderer.h"
 #include "TAGE/World/Objects/Entity.h"
 #include "TAGE/World/Components/RenderComponents.h"
 

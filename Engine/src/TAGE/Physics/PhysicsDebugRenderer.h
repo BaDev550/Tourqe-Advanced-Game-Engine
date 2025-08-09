@@ -2,7 +2,7 @@
 
 #include <btBulletDynamicsCommon.h>
 #include "TAGE/Common/TTypes.h"
-#include "TARE/Debug/DebugRenderer.h"
+#include "TARE/DebugRenderer/DebugRenderer.h"
 #include <glm/glm.hpp>
 
 namespace TAGE::Physics {

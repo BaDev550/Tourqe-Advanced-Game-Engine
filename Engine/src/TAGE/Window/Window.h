@@ -57,6 +57,7 @@ namespace TAGE {
 		bool IsMinimized() const { return glfwGetWindowAttrib(_Window, GLFW_ICONIFIED); }
 		void GetWindowPos(int* x, int* y);
 		GLFWwindow* GetGLFWWindow() const { return _Window; }
+		MEM::Ref<TARE::RenderContext> GetRenderContext() const { return _RenderContext; }
 
 		int GetWidth() const { return _Properties.Width; }
 		int GetHeight() const { return _Properties.Height; }
