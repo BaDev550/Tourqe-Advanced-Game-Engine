@@ -23,6 +23,7 @@ namespace TARE {
 		virtual uint GetID() const override { return _BufferID; }
 
 		virtual void Blit(const TAGE::MEM::Ref<Framebuffer>& target) const override;
+		virtual void BlitToScreen() const override;
 		virtual void BindRead() const override;
 		virtual void BindWrite() const override;
 	private:

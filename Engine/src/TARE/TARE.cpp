@@ -4,139 +4,101 @@
 namespace TARE {
 	TARE::TARE(int width, int height)
 	{
-		ShaderLibrary::Add("MainShader", "../Engine/shaders/main_vertex", "../Engine/shaders/main_fragment");
-		ShaderLibrary::Add("OutlineShader", "../Engine/shaders/Common/outline_vertex", "../Engine/shaders/Common/outline_fragment");
 		_Width = width;
 		_Height = height;
 
 		_Grid = TAGE::MEM::MakeScope<EndlessGrid>();
 		_DeferredRendering = TAGE::MEM::MakeRef<DeferredRendering>(width, height);
 		_ShadowMap = TAGE::MEM::MakeRef<ShadowMap>(SHADOW_MAP_RESOLUTION, SHADOW_MAP_RESOLUTION);
+
+		_DeferredRendering->GetLightShader()->CreateUBO("CameraUBO", sizeof(_Data.CameraData), 0);
+		_DeferredRendering->GetLightShader()->CreateSSBO(1, sizeof(Light) * MAX_LIGHTS + sizeof(int));
+		_DeferredRendering->GetLightShader()->CreateUBO("ScreenSpaceUBO", sizeof(_Data.ScreenSpaceData),  2);
 	}
 
 	void TARE::BeginFrame(const TAGE::MEM::Ref<Camera>& cam, const TAGE::MEM::Ref<Skybox>& skybox)
 	{
-		_DeferredRendering->RenderGeometryPass(cam);
-
-		_Data.PrevViewProjMatrix = _Data.ViewProjectionMatrix;
-		_Data.CameraPosition = cam->GetPosition();
-		_Data.CameraDirection = cam->GetForward();
-		_Data.CameraUp = cam->GetUp();
-		_Data.ViewMatrix = cam->GetViewMatrix();
-		_Data.ProjectionMatrix = cam->GetProjectionMatrix();
-		_Data.ViewProjectionMatrix = cam->GetViewProjectionMatrix();
-		_Data.InversedViewMatrix = cam->GetInverseViewMatrix();
+		_Data.CameraData.PrevViewProjMatrix = _Data.CameraData.ViewProjectionMatrix;
+		_Data.CameraData.CameraPosition = cam->GetPosition();
+		_Data.CameraData.CameraDirection = cam->GetForward();
+		_Data.CameraData.CameraUp = cam->GetUp();
+		_Data.CameraData.ViewMatrix = cam->GetViewMatrix();
+		_Data.CameraData.ProjectionMatrix = cam->GetProjectionMatrix();
+		_Data.CameraData.ViewProjectionMatrix = cam->GetViewProjectionMatrix();
+		_Data.CameraData.InversedViewMatrix = cam->GetInverseViewMatrix();
+		_Data.CameraData.InversedProjectionMatrix = cam->GetInverseProjectionMatrix();
+		_Data.CameraData.farPlane = cam->GetFarClip();
+		_Data.CameraData.nearPlane = cam->GetNearClip();
 
 		_DeferredRendering->GetLightShader()->Use();
-		_DeferredRendering->GetLightShader()->SetUniform("u_CameraPos", _Data.CameraPosition);
-		_DeferredRendering->GetLightShader()->SetUniform("u_InverseView", _Data.InversedViewMatrix);
+		_DeferredRendering->GetLightShader()->UpdateUBO(0, &_Data.CameraData, sizeof(_Data.CameraData));
+		_DeferredRendering->GetLightShader()->UpdateUBO(2, &_Data.ScreenSpaceData, sizeof(_Data.ScreenSpaceData));
+		_DeferredRendering->GetLightShader()->SetUniform("u_SceneData.useSSGI", _Data.UseSSGI);
+		_DeferredRendering->GetLightShader()->SetUniform("u_SceneData.UseSSR",  _Data.UseSSReflections);
 
-		_DeferredRendering->GetLightShader()->SetUniform("u_PrevViewProj", _Data.PrevViewProjMatrix);
-		_DeferredRendering->GetLightShader()->SetUniform("u_CurrViewProj", _Data.ViewProjectionMatrix);
-		_DeferredRendering->GetLightShader()->SetUniform("u_Projection", _Data.ProjectionMatrix);
-		_DeferredRendering->GetLightShader()->SetUniform("u_View", _Data.ViewMatrix);
-		_DeferredRendering->GetLightShader()->SetUniform("u_InverseProjection", glm::inverse(_Data.ProjectionMatrix));
+		_DeferredRendering->RenderGeometryPass(cam);
 
-		//if (skybox) {
-		//	skybox->GetTexture()->Bind(CUBEMAP_TEXTURE_SLOT);
-		//	_DeferredRendering->GetLightShader()->SetUniform("u_EnvironmentMap", CUBEMAP_TEXTURE_SLOT);
-		//}
+		if (cam->GetPostProcess()) { _Data.PostProcess = cam->GetPostProcess(); }
+		if (skybox) { skybox->Bind(cam->GetViewMatrix(), cam->GetProjectionMatrix()); }
 	}
 
 	void TARE::EndFrame()
 	{
 		_DeferredRendering->UnbindGBuffer();
-		_DeferredRendering->RenderLightingPass(_Data.Lights, _Data.CameraPosition);
+		_DeferredRendering->RenderLightingPass(_Data.Lights, _Data.CameraData.CameraPosition);
+
+		_Data.PostProcess->Render(_DeferredRendering->GetLightingBuffer());
 	}
 
-	void TARE::BeginShadowPass()
+	void TARE::BeginShadowPass(const TAGE::MEM::Ref<Camera>& cam, const glm::vec3& lightDir)
 	{
 		if (_Data.Lights.empty()) return;
-
-		_ShadowMap->BeginRender(_Data.LightViewProjectionMatrix);
+		_ShadowMap->BeginRender(cam, lightDir);
 	}
 
 	void TARE::EndShadowPass()
 	{
 		_ShadowMap->EndRender();
 		RenderCommand::SetViewport(0, 0, _Width, _Height);
+
+		_DeferredRendering->GetLightShader()->Use();
+		_DeferredRendering->GetLightShader()->SetUniform("u_CascadeCount", (int)_ShadowMap->GetShadowCascadeLevels().size());
+		for (size_t i = 0; i < _ShadowMap->GetShadowCascadeLevels().size(); ++i) {
+			_DeferredRendering->GetLightShader()->SetUniform(("u_CascadePlaneDistances[" + std::to_string(i) + "]").c_str(), _ShadowMap->GetShadowCascadeLevels()[i]);
+		}
 	}
 
 	void TARE::DrawGrid()
 	{
-		if (_Data.DrawGrid && DEBUG_RENDERER_USE_GRID)
-			_Grid->Render(_Data.ViewMatrix, _Data.ProjectionMatrix, _Data.CameraPosition);
+		_Grid->Render();
+	}
+
+	void TARE::Resize(int width, int height)
+	{
+		_Width = width;
+		_Height = height;
+		_DeferredRendering->GetGBuffer()->Resize(width, height);
+		_DeferredRendering->GetGIBuffer()->Resize(width, height);
+		_DeferredRendering->GetLightingBuffer()->Resize(width, height);
+		if (_Data.PostProcess) {
+			_Data.PostProcess->Resize(width, height);
+		}
 	}
 
 	void TARE::SetLights(std::vector<Light>& lights)
 	{
 		if (lights.empty()) return;
+		int index = 0;
 
-		int count = (int)lights.size();
-		_DeferredRendering->GetLightShader()->Use();
-		_DeferredRendering->GetLightShader()->SetUniform("u_LightCount", count);
-
-		for (int i = 0; i < MAX_LIGHTS; ++i) {
-			if (i < count)
-				CalculateLight(lights[i], i);
-			else
-				ClearLight(i);
+		for (auto it : lights) {
+			_Data.LightData.Lights[index] = it;
+			index++;
 		}
-		_Data.Lights = lights;
-	}
+		_Data.LightData.LightCount = index;
+		index = 0;
 
-	void TARE::CalculateLight(const Light& light, int index)
-	{
-        auto shader = _DeferredRendering->GetLightShader();
-        shader->Use();
-
-        std::string baseUniform = "u_Lights[" + std::to_string(index) + "]";
-
-        shader->SetUniform((baseUniform + ".type").c_str(), static_cast<int>(light.type));
-        shader->SetUniform((baseUniform + ".position").c_str(), light.position);
-        shader->SetUniform((baseUniform + ".direction").c_str(), light.direction);
-        shader->SetUniform((baseUniform + ".color").c_str(), light.color);
-        shader->SetUniform((baseUniform + ".intensity").c_str(), light.intensity);
-        shader->SetUniform((baseUniform + ".range").c_str(), light.range);
-        shader->SetUniform((baseUniform + ".innerCone").c_str(), light.innerCone);
-        shader->SetUniform((baseUniform + ".outerCone").c_str(), light.outerCone);
-
-		if (light.castShadow && light.shadowMap) {
-			int textureSlot = SHADOW_MAP_TEXTURE_SLOT + index;
-			shader->SetUniform((baseUniform + ".lightSpaceMatrix").c_str(), light.lightSpaceMatrix);
-
-			light.shadowMap->BindTexture(textureSlot);
-			shader->SetUniform(("u_ShadowMaps[" + std::to_string(index) + "]").c_str(), textureSlot);
-		}
-		else {
-			ClearShadowLight(index);
-		}
-	}
-
-	void TARE::ClearLight(int index)
-	{
 		auto shader = _DeferredRendering->GetLightShader();
-		std::string baseUniform = "u_Lights[" + std::to_string(index) + "]";
-
-		shader->SetUniform((baseUniform + ".type").c_str(), -1);
-		shader->SetUniform((baseUniform + ".position").c_str(), glm::vec3(0.0f));
-		shader->SetUniform((baseUniform + ".direction").c_str(), glm::vec3(0.0f));
-		shader->SetUniform((baseUniform + ".color").c_str(), glm::vec3(0.0f));
-		shader->SetUniform((baseUniform + ".intensity").c_str(), 0.0f);
-		shader->SetUniform((baseUniform + ".range").c_str(), 0.0f);
-		shader->SetUniform((baseUniform + ".innerCone").c_str(), 0.0f);
-		shader->SetUniform((baseUniform + ".outerCone").c_str(), 0.0f);
-		shader->SetUniform((baseUniform + ".lightSpaceMatrix").c_str(), glm::mat4(1.0f));
-
-		shader->SetUniform(("u_ShadowMaps[" + std::to_string(index) + "]").c_str(), 0);
-	}
-
-	void TARE::ClearShadowLight(int index)
-	{
-		auto shader = _DeferredRendering->GetLightShader();
-		std::string baseUniform = "u_Lights[" + std::to_string(index) + "]";
-
-		shader->SetUniform((baseUniform + ".lightSpaceMatrix").c_str(), glm::mat4(1.0f));
-		shader->SetUniform(("u_ShadowMaps[" + std::to_string(index) + "]").c_str(), 0);
+		shader->Use();
+		_DeferredRendering->GetLightShader()->UpdateSSBO(1, lights.data(), sizeof(Light) + sizeof(int)); //*_Data.LightData.LightCount
 	}
 }

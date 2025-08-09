@@ -1,8 +1,6 @@
 #ifndef SCREEN_SPACE_REFLECTION_GLSL
 #define SCREEN_SPACE_REFLECTION_GLSL
 
-#include "screen_space_common.glsl"
-
 vec3 BinarySearch(in sampler2D pos, inout vec3 dir, inout vec3 hitCoord, inout float dDepth, in mat4 projection) {
     float depth;
     vec4 projectedCoord;
@@ -60,7 +58,7 @@ vec3 hash(vec3 a) {
     return fract((a.xxy + a.yxx) * a.zyx);
 }
 
-vec3 DoSSR(
+vec3 CalculateSSR(
     sampler2D position,
     sampler2D sceneColor,
     vec2 texCoords,

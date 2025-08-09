@@ -1,8 +1,22 @@
 #version 460 core
 
-uniform mat4 u_View;
-uniform mat4 u_Projection;
-uniform vec3 u_CameraPosition;
+layout(std140, set = 0, binding = 0) uniform CameraUBO
+{
+    mat4 u_View;
+    mat4 u_Projection;
+    mat4 u_InverseProjection;
+    mat4 u_InverseView;
+    mat4 u_PrevViewProj;
+    mat4 u_CurrViewProj;
+
+    vec3 u_CameraPos;
+    vec3 u_CameraDir;
+    vec3 u_CameraUp;
+
+    float u_NearPlane;
+    float u_FarPlane;
+};
+
 uniform float u_GridSize = 100.0f;
 
 const vec3 Pos[4] = vec3[](
@@ -26,10 +40,10 @@ void main()
     int Index = Indices[gl_VertexID];
     vec3 vPos3D = Pos[Index] * u_GridSize;
 
-    vPos3D.x += u_CameraPosition.x;
-    vPos3D.z += u_CameraPosition.z;
+    vPos3D.x += u_CameraPos.x;
+    vPos3D.z += u_CameraPos.z;
     v_GridSize = u_GridSize;
-    v_CameraPosition = u_CameraPosition;
+    v_CameraPosition = u_CameraPos;
 
     vec4 vPos = vec4(vPos3D, 1.0);
     gl_Position = u_Projection * u_View * vPos;

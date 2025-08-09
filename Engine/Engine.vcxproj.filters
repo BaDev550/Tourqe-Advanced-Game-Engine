@@ -1,27 +1,6 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup>
-    <Filter Include="shaders">
-      <UniqueIdentifier>{0F45D591-7B24-542D-843C-DF03F09ABA8E}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="shaders\Common">
-      <UniqueIdentifier>{672BC2EC-53F9-B5F2-3C8D-261928FA9157}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="shaders\Debugger">
-      <UniqueIdentifier>{43A859F7-2FA1-7849-58D3-5DCE442B5855}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="shaders\Deferred">
-      <UniqueIdentifier>{9FF992FF-8BF2-B151-B424-97D6A07C915D}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="shaders\Screen">
-      <UniqueIdentifier>{FE293E11-EAF7-3117-D38B-A23DBFF80D7C}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="shaders\ScreenSpace">
-      <UniqueIdentifier>{CA1E1B82-3680-F88F-BFED-3E422B4E2F4F}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="shaders\Shadow">
-      <UniqueIdentifier>{244F8F11-101D-8317-F9B0-F33DE51D5F7C}</UniqueIdentifier>
-    </Filter>
     <Filter Include="src">
       <UniqueIdentifier>{2DAB880B-99B4-887C-2230-9F7C8E38947C}</UniqueIdentifier>
     </Filter>
@@ -33,6 +12,9 @@
     </Filter>
     <Filter Include="src\Platform\OpenGL">
       <UniqueIdentifier>{35A49437-A105-7245-2A73-B8F796D3A804}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="src\Platform\Vulkan">
+      <UniqueIdentifier>{81084748-ED69-2456-76D7-6A08E2375B15}</UniqueIdentifier>
     </Filter>
     <Filter Include="src\Platform\Windows">
       <UniqueIdentifier>{5B054582-4794-CE4B-F0B2-E246DC20DFF1}</UniqueIdentifier>
@@ -60,6 +42,9 @@
     </Filter>
     <Filter Include="src\TAGE\Layers">
       <UniqueIdentifier>{DC9CF8A2-4828-6667-5139-E95BBD43C267}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="src\TAGE\MultiThread">
+      <UniqueIdentifier>{2FF220F2-1B81-AABB-C49F-BEB6B00DBB61}</UniqueIdentifier>
     </Filter>
     <Filter Include="src\TAGE\Physics">
       <UniqueIdentifier>{2FCD5046-1BC6-6F98-44F8-541D30504FA4}</UniqueIdentifier>
@@ -103,8 +88,8 @@
     <Filter Include="src\TARE\Common">
       <UniqueIdentifier>{60EE4990-CC79-B754-D58A-3A4941951355}</UniqueIdentifier>
     </Filter>
-    <Filter Include="src\TARE\Debug">
-      <UniqueIdentifier>{9E66F732-8A34-EB38-73C8-5B5F5F35C79D}</UniqueIdentifier>
+    <Filter Include="src\TARE\DebugRenderer">
+      <UniqueIdentifier>{15A97DC7-01A3-A619-EA0F-3D2AD6A80C86}</UniqueIdentifier>
     </Filter>
     <Filter Include="src\TARE\Deferred">
       <UniqueIdentifier>{D85E17A4-4475-153A-8DEC-A05BF941E6C1}</UniqueIdentifier>
@@ -126,6 +111,9 @@
     </Filter>
     <Filter Include="src\TARE\Texture">
       <UniqueIdentifier>{882B9D9F-7424-BCF1-9D56-A17689AE9BFD}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="src\TARE\Window">
+      <UniqueIdentifier>{0FEE84BE-7B79-F282-848A-7577F0944E83}</UniqueIdentifier>
     </Filter>
     <Filter Include="vendor">
       <UniqueIdentifier>{B3738122-9F15-ACF8-88D0-BF4C74113349}</UniqueIdentifier>
@@ -176,6 +164,12 @@
     </ClInclude>
     <ClInclude Include="src\Platform\OpenGL\OpenGL_VertexArrayBuffer.h">
       <Filter>src\Platform\OpenGL</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Platform\Vulkan\Vulkan_RenderContext.h">
+      <Filter>src\Platform\Vulkan</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Platform\Vulkan\Vulkan_Shader.h">
+      <Filter>src\Platform\Vulkan</Filter>
     </ClInclude>
     <ClInclude Include="src\TAGE\Application\Application.h">
       <Filter>src\TAGE\Application</Filter>
@@ -230,6 +224,9 @@
     </ClInclude>
     <ClInclude Include="src\TAGE\Layers\LayerStack.h">
       <Filter>src\TAGE\Layers</Filter>
+    </ClInclude>
+    <ClInclude Include="src\TAGE\MultiThread\MultiThread.h">
+      <Filter>src\TAGE\MultiThread</Filter>
     </ClInclude>
     <ClInclude Include="src\TAGE\Physics\ContactListener.h">
       <Filter>src\TAGE\Physics</Filter>
@@ -297,6 +294,12 @@
     <ClInclude Include="src\TAGE\World\Objects\Entity.h">
       <Filter>src\TAGE\World\Objects</Filter>
     </ClInclude>
+    <ClInclude Include="src\TAGE\World\Objects\EntityFunctions.h">
+      <Filter>src\TAGE\World\Objects</Filter>
+    </ClInclude>
+    <ClInclude Include="src\TAGE\World\Objects\Prefab.h">
+      <Filter>src\TAGE\World\Objects</Filter>
+    </ClInclude>
     <ClInclude Include="src\TAGE\World\Objects\ScriptableEntity.h">
       <Filter>src\TAGE\World\Objects</Filter>
     </ClInclude>
@@ -333,6 +336,9 @@
     <ClInclude Include="src\TARE\Camera\FrustumCulling.h">
       <Filter>src\TARE\Camera</Filter>
     </ClInclude>
+    <ClInclude Include="src\TARE\Camera\PostProcess.h">
+      <Filter>src\TARE\Camera</Filter>
+    </ClInclude>
     <ClInclude Include="src\TARE\Common\Light.h">
       <Filter>src\TARE\Common</Filter>
     </ClInclude>
@@ -346,7 +352,7 @@
       <Filter>src\TARE\Common</Filter>
     </ClInclude>
     <ClInclude Include="src\TARE\DebugRenderer\DebugRenderer.h">
-      <Filter>src\TARE\Debug</Filter>
+      <Filter>src\TARE\DebugRenderer</Filter>
     </ClInclude>
     <ClInclude Include="src\TARE\Deferred\DeferredRendering.h">
       <Filter>src\TARE\Deferred</Filter>
@@ -389,6 +395,9 @@
     </ClInclude>
     <ClInclude Include="src\TARE\Texture\Texture.h">
       <Filter>src\TARE\Texture</Filter>
+    </ClInclude>
+    <ClInclude Include="src\TARE\Window\Window.h">
+      <Filter>src\TARE\Window</Filter>
     </ClInclude>
     <ClInclude Include="src\tagepch.h">
       <Filter>src</Filter>
@@ -1653,9 +1662,6 @@
     <ClInclude Include="vendor\stb\stb_image_write.h">
       <Filter>vendor\stb</Filter>
     </ClInclude>
-    <ClInclude Include="src\TAGE\World\Objects\Prefab.h" />
-    <ClInclude Include="src\TAGE\World\Objects\EntityFunctions.h" />
-    <ClInclude Include="src\TAGE\MultiThread\MultiThread.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\Platform\DirectX11\DirectX11_RenderContext.cpp">
@@ -1684,6 +1690,9 @@
     </ClCompile>
     <ClCompile Include="src\Platform\OpenGL\OpenGL_VertexArrayBuffer.cpp">
       <Filter>src\Platform\OpenGL</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Platform\Vulkan\Vulkan_Shader.cpp">
+      <Filter>src\Platform\Vulkan</Filter>
     </ClCompile>
     <ClCompile Include="src\Platform\Windows\WindowsPlatformUtils.cpp">
       <Filter>src\Platform\Windows</Filter>
@@ -1721,6 +1730,9 @@
     <ClCompile Include="src\TAGE\Layers\LayerStack.cpp">
       <Filter>src\TAGE\Layers</Filter>
     </ClCompile>
+    <ClCompile Include="src\TAGE\MultiThread\MultiThread.cpp">
+      <Filter>src\TAGE\MultiThread</Filter>
+    </ClCompile>
     <ClCompile Include="src\TAGE\Physics\ContactListener.cpp">
       <Filter>src\TAGE\Physics</Filter>
     </ClCompile>
@@ -1747,6 +1759,12 @@
     </ClCompile>
     <ClCompile Include="src\TAGE\Window\Window.cpp">
       <Filter>src\TAGE\Window</Filter>
+    </ClCompile>
+    <ClCompile Include="src\TAGE\World\Objects\Entity.cpp">
+      <Filter>src\TAGE\World\Objects</Filter>
+    </ClCompile>
+    <ClCompile Include="src\TAGE\World\Objects\Prefab.cpp">
+      <Filter>src\TAGE\World\Objects</Filter>
     </ClCompile>
     <ClCompile Include="src\TAGE\World\Scene\Scene.cpp">
       <Filter>src\TAGE\World\Scene</Filter>
@@ -1775,6 +1793,9 @@
     <ClCompile Include="src\TARE\Camera\EditorCamera.cpp">
       <Filter>src\TARE\Camera</Filter>
     </ClCompile>
+    <ClCompile Include="src\TARE\Camera\PostProcess.cpp">
+      <Filter>src\TARE\Camera</Filter>
+    </ClCompile>
     <ClCompile Include="src\TARE\Common\RenderAPI.cpp">
       <Filter>src\TARE\Common</Filter>
     </ClCompile>
@@ -1785,7 +1806,7 @@
       <Filter>src\TARE\Common</Filter>
     </ClCompile>
     <ClCompile Include="src\TARE\DebugRenderer\DebugRenderer.cpp">
-      <Filter>src\TARE\Debug</Filter>
+      <Filter>src\TARE\DebugRenderer</Filter>
     </ClCompile>
     <ClCompile Include="src\TARE\Deferred\DeferredRendering.cpp">
       <Filter>src\TARE\Deferred</Filter>
@@ -1829,114 +1850,14 @@
     <ClCompile Include="src\TARE\Texture\Texture.cpp">
       <Filter>src\TARE\Texture</Filter>
     </ClCompile>
+    <ClCompile Include="src\TARE\Window\Window.cpp">
+      <Filter>src\TARE\Window</Filter>
+    </ClCompile>
     <ClCompile Include="src\tagepch.cpp">
       <Filter>src</Filter>
     </ClCompile>
     <ClCompile Include="vendor\stb\stb_image.cpp">
       <Filter>vendor\stb</Filter>
     </ClCompile>
-    <ClCompile Include="src\TAGE\World\Objects\Prefab.cpp" />
-    <ClCompile Include="src\TAGE\World\Objects\Entity.cpp" />
-    <ClCompile Include="src\TAGE\MultiThread\MultiThread.cpp" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="shaders\Common\Material.glsl">
-      <Filter>shaders\Common</Filter>
-    </None>
-    <None Include="shaders\Common\PBR.glsl">
-      <Filter>shaders\Common</Filter>
-    </None>
-    <None Include="shaders\Common\light.glsl">
-      <Filter>shaders\Common</Filter>
-    </None>
-    <None Include="shaders\Debugger\debug_fragment.glsl">
-      <Filter>shaders\Debugger</Filter>
-    </None>
-    <None Include="shaders\Debugger\debug_vertex.glsl">
-      <Filter>shaders\Debugger</Filter>
-    </None>
-    <None Include="shaders\Debugger\single_color_fragment.glsl">
-      <Filter>shaders\Debugger</Filter>
-    </None>
-    <None Include="shaders\Debugger\single_color_vertex.glsl">
-      <Filter>shaders\Debugger</Filter>
-    </None>
-    <None Include="shaders\Deferred\gbuffer_fragment.glsl">
-      <Filter>shaders\Deferred</Filter>
-    </None>
-    <None Include="shaders\Deferred\gbuffer_vertex.glsl">
-      <Filter>shaders\Deferred</Filter>
-    </None>
-    <None Include="shaders\Deferred\light_fragment.glsl">
-      <Filter>shaders\Deferred</Filter>
-    </None>
-    <None Include="shaders\Deferred\light_vertex.glsl">
-      <Filter>shaders\Deferred</Filter>
-    </None>
-    <None Include="shaders\Screen\bloom_fragment.glsl">
-      <Filter>shaders\Screen</Filter>
-    </None>
-    <None Include="shaders\Screen\bloom_vertex.glsl">
-      <Filter>shaders\Screen</Filter>
-    </None>
-    <None Include="shaders\Screen\postprocess_fragment.glsl">
-      <Filter>shaders\Screen</Filter>
-    </None>
-    <None Include="shaders\Screen\postprocess_vertex.glsl">
-      <Filter>shaders\Screen</Filter>
-    </None>
-    <None Include="shaders\ScreenSpace\screen_space_ambient_occlusion.glsl">
-      <Filter>shaders\ScreenSpace</Filter>
-    </None>
-    <None Include="shaders\ScreenSpace\screen_space_common.glsl">
-      <Filter>shaders\ScreenSpace</Filter>
-    </None>
-    <None Include="shaders\ScreenSpace\screen_space_gi.glsl">
-      <Filter>shaders\ScreenSpace</Filter>
-    </None>
-    <None Include="shaders\ScreenSpace\screen_space_reflection.glsl">
-      <Filter>shaders\ScreenSpace</Filter>
-    </None>
-    <None Include="shaders\Shadow\point_light_shadow_fragment.glsl">
-      <Filter>shaders\Shadow</Filter>
-    </None>
-    <None Include="shaders\Shadow\point_light_shadow_geometry.glsl">
-      <Filter>shaders\Shadow</Filter>
-    </None>
-    <None Include="shaders\Shadow\point_light_shadow_vertex.glsl">
-      <Filter>shaders\Shadow</Filter>
-    </None>
-    <None Include="shaders\Shadow\shadow_fragment.glsl">
-      <Filter>shaders\Shadow</Filter>
-    </None>
-    <None Include="shaders\Shadow\shadow_vertex.glsl">
-      <Filter>shaders\Shadow</Filter>
-    </None>
-    <None Include="shaders\grid_Fragment.glsl">
-      <Filter>shaders</Filter>
-    </None>
-    <None Include="shaders\grid_Vertex.glsl">
-      <Filter>shaders</Filter>
-    </None>
-    <None Include="shaders\main_fragment.glsl">
-      <Filter>shaders</Filter>
-    </None>
-    <None Include="shaders\main_vertex.glsl">
-      <Filter>shaders</Filter>
-    </None>
-    <None Include="shaders\skybox_fragment.glsl">
-      <Filter>shaders</Filter>
-    </None>
-    <None Include="shaders\skybox_vertex.glsl">
-      <Filter>shaders</Filter>
-    </None>
-    <None Include="shaders\thumbnail_fragment.glsl">
-      <Filter>shaders</Filter>
-    </None>
-    <None Include="shaders\thumbnail_vertex.glsl">
-      <Filter>shaders</Filter>
-    </None>
-    <None Include="shaders\Common\outline_vertex.glsl" />
-    <None Include="shaders\Common\outline_fragment.glsl" />
   </ItemGroup>
 </Project>

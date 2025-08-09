@@ -9,10 +9,12 @@ namespace TARE {
 		{
 			switch (format)
 			{
-			case FramebufferTextureFormat::RGBA8:       return GL_RGBA8;
-			case FramebufferTextureFormat::RGBA16F: return GL_RGBA16F;
-			case FramebufferTextureFormat::RGBA: return GL_RGBA;
-			case FramebufferTextureFormat::RED_INTEGER: return GL_RED_INTEGER;
+			case FramebufferTextureFormat::RGBA8:        return GL_RGBA;
+			case FramebufferTextureFormat::RGBA16F:		 return GL_RGBA;
+			case FramebufferTextureFormat::RGBA:		 return GL_RGBA;
+			case FramebufferTextureFormat::RED_INTEGER:  return GL_RED_INTEGER;
+			case FramebufferTextureFormat::R8:           return GL_RED;
+			case FramebufferTextureFormat::R16F:         return GL_RED;
 			}
 
 			ASSERT_NOMSG(false);
@@ -27,15 +29,37 @@ namespace TARE {
 			case FramebufferTextureFormat::RGBA16F:       return GL_HALF_FLOAT;
 			case FramebufferTextureFormat::RGBA:          return GL_FLOAT;
 			case FramebufferTextureFormat::RED_INTEGER:   return GL_INT;
+			case FramebufferTextureFormat::R8:            return GL_UNSIGNED_BYTE;
+			case FramebufferTextureFormat::R16F:          return GL_HALF_FLOAT;
 			}
 
 			ASSERT_NOMSG(false);
 			return 0;
 		}
 
-		static GLenum TextureTarget(bool multisampled) { return multisampled ? GL_TEXTURE_2D_MULTISAMPLE : GL_TEXTURE_2D; }
-		static void CreateTextures(bool multisampled, uint* outID, uint count) { glCreateTextures(TextureTarget(multisampled), count, outID); }
-		static void BindTexture(bool multisampled, uint id) { glBindTexture(TextureTarget(multisampled), id); }
+		static GLenum TextureFormatTo_OpenGLInternal(FramebufferTextureFormat format)
+		{
+			switch (format)
+			{
+			case FramebufferTextureFormat::RGBA8:        return GL_RGBA8;
+			case FramebufferTextureFormat::RGBA16F:      return GL_RGBA16F;
+			case FramebufferTextureFormat::RGBA:         return GL_RGBA32F;
+			case FramebufferTextureFormat::RED_INTEGER:  return GL_R32I;
+			case FramebufferTextureFormat::R8:           return GL_R8;
+			case FramebufferTextureFormat::R16F:         return GL_R16F;
+			}
+			ASSERT_NOMSG(false);
+			return 0;
+		}
+
+		static GLenum TextureTarget(bool multisampled, bool array = false) { 
+			if (multisampled)
+				return array ? GL_TEXTURE_2D_MULTISAMPLE_ARRAY : GL_TEXTURE_2D_MULTISAMPLE;
+			else
+				return array ? GL_TEXTURE_2D_ARRAY : GL_TEXTURE_2D;
+		}
+		static void CreateTextures(bool multisampled, uint* outID, uint count, bool array = false) { glCreateTextures(TextureTarget(multisampled, array), count, outID); }
+		static void BindTexture(bool multisampled, uint id, bool array = false) { glBindTexture(TextureTarget(multisampled, array), id); }
 		static void AttachColorTexture(uint id, int samples, FramebufferTextureFormat formatEnum, GLenum internalFormat, GLenum format, uint width, uint height, int index)
 		{
 			bool multisampled = samples > 1;
@@ -49,8 +73,15 @@ namespace TARE {
 
 				glTexImage2D(GL_TEXTURE_2D, 0, internalFormat, width, height, 0, format, type, nullptr);
 
-				glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
-				glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+
+				if (formatEnum == FramebufferTextureFormat::RED_INTEGER) {
+					glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
+					glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
+				}
+				else {
+					glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+					glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+				}
 				glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_R, GL_CLAMP_TO_EDGE);
 				glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
 				glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
@@ -68,7 +99,7 @@ namespace TARE {
 			}
 			else
 			{
-				glTexStorage2D(GL_TEXTURE_2D, 1, format, width, height);
+				glTexImage2D(GL_TEXTURE_2D, 0, format, width, height, 0, GL_DEPTH_COMPONENT, GL_FLOAT, nullptr);
 
 				glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
 				glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
@@ -79,6 +110,27 @@ namespace TARE {
 
 			glFramebufferTexture2D(GL_FRAMEBUFFER, attachmentType, TextureTarget(multisampled), id, 0);
 		}
+		static void AttachDepthTextureArray(uint id, int layers, int samples, GLenum format, GLenum attachmentType, uint width, uint height)
+		{
+			bool multisampled = samples > 1;
+			GLenum target = multisampled ? GL_TEXTURE_2D_MULTISAMPLE_ARRAY : GL_TEXTURE_2D_ARRAY;
+
+			glBindTexture(target, id);
+			if (multisampled)
+			{
+				glTexImage3DMultisample(target, samples, format, width, height, layers, GL_FALSE);
+			}
+			else
+			{
+				glTexStorage3D(target, 1, format, width, height, layers);
+
+				glTexParameteri(target, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+				glTexParameteri(target, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+				glTexParameteri(target, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
+				glTexParameteri(target, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
+			}
+			glFramebufferTexture(GL_FRAMEBUFFER, attachmentType, id, 0);
+		}
 
 		static bool IsDepthFormat(FramebufferTextureFormat format)
 		{
@@ -87,8 +139,9 @@ namespace TARE {
 			case FramebufferTextureFormat::DEPTH24STENCIL8:  return true;
 			case FramebufferTextureFormat::DEPTH24:  return true;
 			case FramebufferTextureFormat::DEPTH32F:  return true;
+			case FramebufferTextureFormat::DEPTH_ARRAY:  return true;
 			}
-
+			
 			return false;
 		}
 	}
@@ -135,29 +188,26 @@ namespace TARE {
 
 			for (size_t i = 0; i < _ColorAttachments.size(); i++)
 			{
+				auto fmt = _ColorAttachmentSpecifications[i].format;
 				Utils::BindTexture(multisample, _ColorAttachments[i]);
-				switch (_ColorAttachmentSpecifications[i].format)
-				{
-				case FramebufferTextureFormat::RGBA8:
-					Utils::AttachColorTexture(_ColorAttachments[i], _Specification.Samples, FramebufferTextureFormat::RGBA8, GL_RGBA8, GL_RGBA, _Specification.Width, _Specification.Height, i);
-					break;
-				case FramebufferTextureFormat::RGBA:
-					Utils::AttachColorTexture(_ColorAttachments[i], _Specification.Samples, FramebufferTextureFormat::RGBA, GL_RGBA, GL_RGBA, _Specification.Width, _Specification.Height, i);
-					break;
-				case FramebufferTextureFormat::RGBA16F:
-					Utils::AttachColorTexture(_ColorAttachments[i], _Specification.Samples, FramebufferTextureFormat::RGBA16F, GL_RGBA16F, GL_RGBA, _Specification.Width, _Specification.Height, i);
-					break;
-				case FramebufferTextureFormat::RED_INTEGER:
-					Utils::AttachColorTexture(_ColorAttachments[i], _Specification.Samples, FramebufferTextureFormat::RED_INTEGER, GL_R32I, GL_RED_INTEGER, _Specification.Width, _Specification.Height, i);
-					break;
-				}
+				Utils::AttachColorTexture(
+					_ColorAttachments[i],
+					_Specification.Samples,
+					fmt,
+					Utils::TextureFormatTo_OpenGLInternal(fmt),
+					Utils::TextureFormatTo_OpenGLFormat(fmt),
+					_Specification.Width,
+					_Specification.Height,
+					i
+				);
 			}
 		}
 
 		if (_DepthAttachmentSpecification.format != FramebufferTextureFormat::NONE)
 		{
-			Utils::CreateTextures(multisample, &_DepthAttachment, 1);
-			Utils::BindTexture(multisample, _DepthAttachment);
+			bool array = _DepthAttachmentSpecification.format == FramebufferTextureFormat::DEPTH_ARRAY;
+			Utils::CreateTextures(multisample, &_DepthAttachment, 1, array);
+			Utils::BindTexture(multisample, _DepthAttachment, array);
 			switch (_DepthAttachmentSpecification.format)
 			{
 			case FramebufferTextureFormat::DEPTH24STENCIL8:
@@ -169,13 +219,16 @@ namespace TARE {
 			case FramebufferTextureFormat::DEPTH24:
 				Utils::AttachDepthTexture(_DepthAttachment, _Specification.Samples, GL_DEPTH_COMPONENT24, GL_DEPTH_ATTACHMENT, _Specification.Width, _Specification.Height);
 				break;
+			case FramebufferTextureFormat::DEPTH_ARRAY:
+				Utils::AttachDepthTextureArray(_DepthAttachment, _Specification.DepthArrayLayers, _Specification.Samples, GL_DEPTH_COMPONENT32F, GL_DEPTH_ATTACHMENT, _Specification.Width, _Specification.Height);
+				break;
 			}
 		}
 
 		if (_ColorAttachments.size() > 1)
 		{
-			ASSERT_NOMSG(_ColorAttachments.size() <= 5);
-			GLenum buffers[5] = { GL_COLOR_ATTACHMENT0, GL_COLOR_ATTACHMENT1, GL_COLOR_ATTACHMENT2, GL_COLOR_ATTACHMENT3, GL_COLOR_ATTACHMENT4 };
+			ASSERT_NOMSG(_ColorAttachments.size() <= 7);
+			GLenum buffers[7] = { GL_COLOR_ATTACHMENT0, GL_COLOR_ATTACHMENT1, GL_COLOR_ATTACHMENT2, GL_COLOR_ATTACHMENT3, GL_COLOR_ATTACHMENT4, GL_COLOR_ATTACHMENT5, GL_COLOR_ATTACHMENT6 };
 			glDrawBuffers(_ColorAttachments.size(), buffers);
 		}
 		else if (_ColorAttachments.empty())
@@ -249,6 +302,16 @@ namespace TARE {
 			GL_COLOR_BUFFER_BIT, GL_NEAREST
 		);
 
+		glBindFramebuffer(GL_FRAMEBUFFER, 0);
+	}
+
+	void OpenGL_Framebuffer::BlitToScreen() const
+	{
+		glBindFramebuffer(GL_READ_FRAMEBUFFER, _BufferID);
+		glBindFramebuffer(GL_DRAW_FRAMEBUFFER, 0);
+		glBlitFramebuffer(0, 0, _Specification.Width, _Specification.Height,
+			0, 0, _Specification.Width, _Specification.Height,
+			GL_COLOR_BUFFER_BIT, GL_NEAREST);
 		glBindFramebuffer(GL_FRAMEBUFFER, 0);
 	}
 

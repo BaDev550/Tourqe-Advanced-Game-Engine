@@ -11,10 +11,10 @@ namespace TARE {
 			Camera(win_Width, win_Height, fov, nearClip, farClip) {}
 
 		virtual void OnUpdate(float dt) override;
-		virtual void OnEvent(TAGE::Event& event) override;
-
+		void SetProccessingMouse(bool processing) { _proccessingMouse = processing; }
 	private:
 		float _lastX = 0.0f;
 		float _lastY = 0.0f;
+		bool _proccessingMouse = true;
 	};
 }

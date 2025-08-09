@@ -1,18 +1,21 @@
 #ifndef SCREEN_SPACE_AO_GLSL
 #define SCREEN_SPACE_AO_GLSL
 
-#include "screen_space_common.glsl"
-
 float CalculateSSAO(
     vec3 fragPos, 
-	vec3 normal,
-	vec2 uv,
+    vec3 normal,
+    float metallic,
+    float roughness,
+    vec2 uv,
     sampler2D u_gPos,
-	sampler2D u_gNorm,
+    sampler2D u_gNorm,
+    sampler2D u_gMetallic,
+    sampler2D u_gRoughness,
+    sampler2D u_gAO,
     float screenW, 
-	float screenH
+    float screenH
 ){
-    float ao = 0.0;
+    float ao = 0.0f;
     float depthCenter = texture(u_gPos, uv).z;
     float sigmaDepth = SAMPLE_RADIUS * 0.5;
     
@@ -37,7 +40,7 @@ float CalculateSSAO(
         ao += (sampleDepth >= samplePos.z ? 1.0 : 0.0) * range * bw;
     }
     ao = clamp(1.0 - (ao / float(NUM_SAMPLES)), 0.0, 1.0);
-    return ao;
+    return ao * texture(u_gAO, uv).r;
 }
 
 #endif

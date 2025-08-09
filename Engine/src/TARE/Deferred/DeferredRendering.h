@@ -17,7 +17,6 @@ namespace TARE {
 		void BindLightingBuffer() const { _LightingBuffer->Bind(); _LightShader->Use(); }
 		void UnbindGBuffer() const { _GBuffer->Unbind(); }
 		void UnbindLightingBuffer() const { _LightingBuffer->Unbind(); }
-		void BlitToScreen() const;
 
 		TAGE::MEM::Ref<Framebuffer> GetGBuffer() const { return _GBuffer; }
 		TAGE::MEM::Ref<Framebuffer> GetGIBuffer() const { return _GIBuffer; }
@@ -28,7 +27,6 @@ namespace TARE {
 		TAGE::MEM::Ref<Framebuffer> _GBuffer;
 		TAGE::MEM::Ref<Framebuffer> _GIBuffer;
 		TAGE::MEM::Ref<Framebuffer> _LightingBuffer;
-		TAGE::MEM::Ref<Shader> _FinalShader;
 		TAGE::MEM::Ref<Shader> _GBufferShader;
 		TAGE::MEM::Ref<Shader> _LightShader;
 

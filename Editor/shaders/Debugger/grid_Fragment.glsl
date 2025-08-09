@@ -7,8 +7,8 @@ in vec3 v_CameraPosition;
 
 uniform float u_GridCellSize = 0.15f;
 uniform float u_GridMinPixelsBetweenCells = 2.0;
-uniform vec4 u_GridColorThin = vec4(0.5f, 0.5f, 0.5f, 1.0f);
-uniform vec4 u_GridColorThick = vec4(0.0f, 0.0f, 0.0f, 1.0f);
+uniform vec4 u_GridColorThin = vec4(0.0f, 0.0f, 0.0f, 1.0f);
+uniform vec4 u_GridColorThick = vec4(0.5f, 0.5f, 0.5f, 1.0f);
 
 float log10(float x)
 {
