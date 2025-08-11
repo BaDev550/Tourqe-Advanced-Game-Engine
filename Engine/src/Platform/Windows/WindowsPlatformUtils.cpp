@@ -41,7 +41,7 @@ namespace TAGE {
             ofn.nMaxFile = sizeof(szFile);
             ofn.lpstrFilter = filter;
             ofn.nFilterIndex = 1;
-            ofn.lpstrDefExt = ".tage";
+            ofn.lpstrDefExt = ".scene";
             ofn.Flags = OFN_PATHMUSTEXIST | OFN_OVERWRITEPROMPT | OFN_NOCHANGEDIR;
 
             if (GetSaveFileNameA(&ofn) == TRUE)

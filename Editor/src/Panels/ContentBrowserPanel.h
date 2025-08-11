@@ -22,7 +22,7 @@ namespace TAGE::Editor {
 		MEM::Ref<TARE::Texture2D> _TAGESceneFileIcon;
 		MEM::Ref<TARE::Texture2D> _CSharpFileIcon;
 		ThumbnailRenderer _ThumbnailRenderer;
-
+		
 		float _Padding = 16.0f;
 		float _ThumbnailSize = 80.0f;
 	};

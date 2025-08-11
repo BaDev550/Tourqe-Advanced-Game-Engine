@@ -40,17 +40,17 @@ namespace TAGE {
 
 		template<typename T>
 		T GetValue() {
-			static_assert(sizeof(T) <= 8, "Type too large");
+			static_assert(sizeof(T) <= 16, "Type too large");
 			return *(T*)_Buffer;
 		}
 
 		template<typename T>
 		void SetValue(T value) {
-			static_assert(sizeof(T) <= 8, "Type too large");
+			static_assert(sizeof(T) <= 16, "Type too large");
 			memcpy(_Buffer, &value, sizeof(T));
 		}
 	private:
-		uint8 _Buffer[8];
+		uint8 _Buffer[16];
 
 		friend class ScriptEngine;
 	};
@@ -91,7 +91,7 @@ namespace TAGE {
 
 		template<typename T>
 		T GetFieldValue(const std::string& name) {
-			static_assert(sizeof(T) <= 8, "Type too large");
+			static_assert(sizeof(T) <= 16, "Type too large");
 
 			bool success = GetFieldValueInternal(name, s_FieldValueBuffer);
 			if (!success)
@@ -102,7 +102,7 @@ namespace TAGE {
 
 		template<typename T>
 		void SetFieldValue(const std::string& name, T value) {
-			static_assert(sizeof(T) <= 8, "Type too large");
+			static_assert(sizeof(T) <= 16, "Type too large");
 
 			SetFieldValueInternal(name, &value);
 		}
@@ -155,4 +155,51 @@ namespace TAGE {
 		friend class ScriptClass;
 		friend class ScriptGlue;
 	};
+
+	namespace Utils {
+		inline const char* ScriptFieldTypeToString(ScriptFieldType type) {
+			switch (type)
+			{
+			case TAGE::ScriptFieldType::None:   return "None";
+			case TAGE::ScriptFieldType::Float:  return "Float";
+			case TAGE::ScriptFieldType::Double: return "Double";
+			case TAGE::ScriptFieldType::Byte:   return "Byte";
+			case TAGE::ScriptFieldType::Short:  return "Short";
+			case TAGE::ScriptFieldType::Int:    return "Int";
+			case TAGE::ScriptFieldType::Long:   return "Long";
+			case TAGE::ScriptFieldType::Bool:   return "Bool";
+			case TAGE::ScriptFieldType::Char:   return "Char";
+			case TAGE::ScriptFieldType::UShort: return "UShort";
+			case TAGE::ScriptFieldType::UInt:   return "UInt";
+			case TAGE::ScriptFieldType::ULong:  return "ULong";
+			case TAGE::ScriptFieldType::Vector2:return "Vector2";
+			case TAGE::ScriptFieldType::Vector3:return "Vector3";
+			case TAGE::ScriptFieldType::Vector4:return "Vector4";
+			case TAGE::ScriptFieldType::Entity: return "Entity";
+			}
+			ASSERT(false, "Unknown Field Type");
+			return "None";
+		}
+
+		inline ScriptFieldType StringToScriptFieldType(std::string_view type) {
+			if (type == "Float")   return ScriptFieldType::Float;
+			if (type == "Double")  return ScriptFieldType::Double;
+			if (type == "Byte")    return ScriptFieldType::Byte;
+			if (type == "Short")   return ScriptFieldType::Short;
+			if (type == "Int")     return ScriptFieldType::Int;
+			if (type == "Long")    return ScriptFieldType::Long;
+			if (type == "Bool")    return ScriptFieldType::Bool;
+			if (type == "Char")    return ScriptFieldType::Char;
+			if (type == "UShort")  return ScriptFieldType::UShort;
+			if (type == "UInt")    return ScriptFieldType::UInt;
+			if (type == "ULong")   return ScriptFieldType::ULong;
+			if (type == "Vector2") return ScriptFieldType::Vector2;
+			if (type == "Vector3") return ScriptFieldType::Vector3;
+			if (type == "Vector4") return ScriptFieldType::Vector4;
+			if (type == "Entity")  return ScriptFieldType::Entity;
+
+			ASSERT(false, "Unknown Field Type");
+			return ScriptFieldType::None;
+		}
+	}
 }

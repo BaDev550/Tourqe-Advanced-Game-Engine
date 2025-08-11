@@ -69,8 +69,8 @@ namespace TARE {
 		RenderCommand::SetViewport(0, 0, _Width, _Height);
 
 		_DeferredRendering->GetLightShader()->Use();
-		RenderCommand::BindTextureArrayFromID(_ShadowMap->GetTextureID(), 0);
-		_DeferredRendering->GetLightShader()->SetUniform("u_ShadowMap", 0);
+		RenderCommand::BindTextureArrayFromID(_ShadowMap->GetTextureID(), SHADOW_MAP_TEXTURE_SLOT);
+		_DeferredRendering->GetLightShader()->SetUniform("u_ShadowMap",   SHADOW_MAP_TEXTURE_SLOT);
 		_DeferredRendering->GetLightShader()->SetUniform("u_CascadeCount", (int)_ShadowMap->GetShadowCascadeLevels().size());
 		for (size_t i = 0; i < _ShadowMap->GetShadowCascadeLevels().size(); ++i) {
 			_DeferredRendering->GetLightShader()->SetUniform(("u_CascadePlaneDistances[" + std::to_string(i) + "]").c_str(), _ShadowMap->GetShadowCascadeLevels()[i]);

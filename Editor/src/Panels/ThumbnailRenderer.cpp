@@ -17,14 +17,12 @@ namespace TAGE::Editor {
 
 	void ThumbnailRenderer::OnUpdate()
 	{
-#if 0
 		if (!_PendingModels.empty())
 		{
 			const auto& modelPath = _PendingModels.front();
 			RenderThumbnail(modelPath);
 			_PendingModels.pop();
 		}
-#endif
 	}
 
 	uint ThumbnailRenderer::GetThumbnail(const std::filesystem::path& modelPath)
@@ -36,18 +34,22 @@ namespace TAGE::Editor {
 	}
 	void ThumbnailRenderer::RenderThumbnail(const std::filesystem::path& modelPath)
 	{
-#if 0
-		ModelPreview preview;
+		ModelPreview& preview = _Cache[modelPath];
 		static bool ModelLoaded = false;
 		preview.LoadedModel = MEM::MakeRef<TARE::Model>();
-		preview.LoadedModel->LoadModelAsync(modelPath.string(), [&](MEM::Ref<TARE::Model> model) {
-			if (model) { 
-				preview.LoadedModel = std::move(model);
-				ComputeCameraForModel(*preview.LoadedModel);
-				ModelLoaded = true;
-			}
-			else { LOG_ERROR("Failed to load async model"); }
-			});
+		preview.LoadedModel->LoadFromFile(modelPath.string());
+		//preview.LoadedModel->LoadModelAsync(modelPath.string(),
+		//	[this, &preview](MEM::Ref<TARE::Model> model)
+		//	{
+		//		if (model) {
+		//			preview.LoadedModel = std::move(model);
+		//			ComputeCameraForModel(*preview.LoadedModel);
+		//			ModelLoaded = true;
+		//		}
+		//		else {
+		//			LOG_ERROR("Failed to load async model");
+		//		}
+		//	});
 
 			FramebufferSpecification spec(
 				FramebufferAttachmentSpecification({ FramebufferTextureFormat::RGBA8 }),
@@ -64,13 +66,14 @@ namespace TAGE::Editor {
 			_ThumbnailShader->SetUniform("u_View", _ThumbnailCamera.GetViewMatrix());
 			_ThumbnailShader->SetUniform("u_Projection", _ThumbnailCamera.GetProjectionMatrix());
 
-			preview.LoadedModel->SetTransform(glm::mat4(1.0f));
-			preview.LoadedModel->Draw(_ThumbnailShader);
+			if (preview.LoadedModel) {
+				preview.LoadedModel->SetTransform(glm::mat4(1.0f));
+				preview.LoadedModel->Draw(_ThumbnailShader);
+			}
 
 			preview.Framebuffer->Unbind();
 			preview.IsRendered = true;
 			_Cache[modelPath] = preview;
-#endif
 	}
 
 	void ThumbnailRenderer::ComputeCameraForModel(TARE::Model& model)

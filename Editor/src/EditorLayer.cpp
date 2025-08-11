@@ -188,7 +188,7 @@ namespace TAGE::Editor {
 
 	void EditorLayer::OpenScene()
 	{
-		std::string filepath = Platform::FileDialog::OpenFile("TAGE Scene (*.tage)\0*.tage\0");
+		std::string filepath = Platform::FileDialog::OpenFile("TAGE Scene (*.scene)\0*.scene\0");
 		if (!filepath.empty()) {
 			OpenScene(filepath);
 		}
@@ -199,7 +199,7 @@ namespace TAGE::Editor {
 		if (_SceneState != SceneState::EDIT)
 			OnSceneStop();
 
-		if (path.extension().string() != ".tage")
+		if (path.extension().string() != ".scene")
 		{
 			LOG_WARN("Could not load {0} - not a scene file", path.filename().string());
 			return;
@@ -225,7 +225,7 @@ namespace TAGE::Editor {
 
 	void EditorLayer::SaveSceneAs()
 	{
-		std::string filepath = Platform::FileDialog::SaveFile("TAGE Scene (*.tage)\0*.tage\0");
+		std::string filepath = Platform::FileDialog::SaveFile("TAGE Scene (*.scene)\0*.scene\0");
 		if (!filepath.empty()) {
 			SceneSerializer serializer(_ActiveScene);
 			serializer.Serialize(filepath);
@@ -536,7 +536,7 @@ namespace TAGE::Editor {
 				const char* path = (const char*)payload->Data;
 				std::filesystem::path filePath(path);
 				std::string ext = filePath.extension().string();
-				if (ext == ".tage")
+				if (ext == ".scene")
 					OpenScene(path);
 				else if (ext == ".obj" || ext == ".gltf") {
 					Entity entity = _ActiveScene->CreateEntity(filePath.stem().string());

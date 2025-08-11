@@ -6,6 +6,7 @@ namespace TARE {
 	Material::Material(const char* name)
 		: _Name(name)
 		, _Textures{}
+		, _Color{}
 	{
 
 	}
@@ -21,7 +22,7 @@ namespace TARE {
 		for (uint i = 0; i < static_cast<uint>(TextureType::COUNT); ++i) {
 			if (i == SHADOW_MAP_TEXTURE_SLOT) continue;
 
-			const auto& texture = _Textures[i];
+			const auto texture = _Textures[i];
 			if (texture)
 				texture->Bind(i);
 			else if (_Textures[0])
@@ -30,7 +31,10 @@ namespace TARE {
 				fallbackTexture->Bind(i);
 		}
 
-		shader->SetUniform("u_Material.DiffuseTex", static_cast<int>(TextureType::DIFFUSE));
+		bool hasDiffuseTex = _Textures[static_cast<uint>(TextureType::DIFFUSE)] != nullptr;
+		shader->SetUniform("u_Material.HasDiffuseTex", hasDiffuseTex);
+		if (hasDiffuseTex) { shader->SetUniform("u_Material.DiffuseTex", static_cast<int>(TextureType::DIFFUSE)); }
+		else { shader->SetUniform("u_Material.DiffuseColor", _Color[static_cast<uint>(TextureType::DIFFUSE)]); }
 		shader->SetUniform("u_Material.SpecularTex", static_cast<int>(TextureType::SPECULAR));
 		shader->SetUniform("u_Material.NormalTex", static_cast<int>(TextureType::NORMAL));
 		shader->SetUniform("u_Material.HeightTex", static_cast<int>(TextureType::HEIGHT));
@@ -47,7 +51,21 @@ namespace TARE {
 
 	Texture2D* Material::GetTexture(TextureType type) const
 	{
-		return _Textures[static_cast<uint>(type)].get();
+		if (_Textures[static_cast<uint>(type)])
+			return _Textures[static_cast<uint>(type)].get();
+
+		return nullptr;
+	}
+
+	void Material::SetColor(TextureType slot, const glm::vec4& color) {
+		if (slot < TextureType::COUNT)
+			_Color[static_cast<uint>(slot)] = color;
+	}
+
+	glm::vec4 Material::GetColor(TextureType slot) const {
+		if (slot < TextureType::COUNT)
+			return _Color[static_cast<uint>(slot)];
+		return glm::vec4(1.0f);
 	}
 
 	void Material::SetTexturePaths(const std::vector<std::pair<TextureType, std::string>>& paths) {

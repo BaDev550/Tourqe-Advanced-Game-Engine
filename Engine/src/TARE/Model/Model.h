@@ -28,6 +28,14 @@ namespace TARE
 		Mesh& GetMesh(int slot) { return *_meshes[slot]; }
 		BoundingBox GetBoundingBox() const;
 		void AddMesh(TAGE::MEM::Scope<Mesh> mesh) { _meshes.push_back(std::move(mesh)); }
+		std::vector<Mesh*> GetMeshes() const
+		{
+			std::vector<Mesh*> meshes;
+			meshes.reserve(_meshes.size());
+			for (const auto& mesh : _meshes)
+				meshes.push_back(mesh.get());
+			return meshes;
+		}
 
 		bool LoadCPU(const std::string& path);
 		void UploadToGPU();

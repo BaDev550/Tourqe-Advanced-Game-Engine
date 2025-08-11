@@ -305,7 +305,7 @@ namespace TAGE::Editor {
 		}
 
 		ImGui::PopItemWidth();
-		DrawComponent<TransformComponent>("Transform", entity, [](auto& component)
+		DrawComponent<TransformComponent>("Transform", entity, [](TransformComponent& component)
 			{
 				DrawVec3Control("Translation", component.Position);
 				glm::vec3 eulerDegrees = component.GetRotationEuler();
@@ -314,7 +314,7 @@ namespace TAGE::Editor {
 				DrawVec3Control("Scale", component.Scale, 1.0f);
 			});
 
-		DrawComponent<ScriptComponent>("Script", entity, [entity, this](auto& component) mutable
+		DrawComponent<ScriptComponent>("Script", entity, [entity, this](ScriptComponent& component) mutable
 			{
 				bool scriptClassExist = ScriptEngine::EntityClassExists(component.Name);
 				
@@ -376,11 +376,55 @@ namespace TAGE::Editor {
 					ImGui::PopStyleColor();
 			});
 
-		DrawComponent<MeshComponent>("Mesh", entity, [](auto& component)
+		DrawComponent<MeshComponent>("Mesh", entity, [](MeshComponent& component)
 			{
 				if (component.Handle)
 				{
 					ImGui::Text("Mesh Path: %s", component.Handle->GetFilePath().c_str());
+					int index = 0;
+					for (auto mesh : component.Handle->GetMeshes()) {
+						auto material = mesh->GetMaterial();
+						auto diffuseTex = material->GetTexture(TextureType::DIFFUSE);
+						glm::vec4 color = material->GetColor(TextureType::DIFFUSE);
+
+						ImGui::PushID(index);
+
+						if (diffuseTex) {
+							if (ImGui::ImageButton(("Diffuse Texture ##MaterialPreview" + std::to_string(index)).c_str(),
+								(ImTextureID)(uint64_t)diffuseTex->GetID(), ImVec2(100, 100))) {
+								std::string texturePath = Platform::FileDialog::OpenFile("Texture Files (*.png;*.jpg;*.jpeg)\0*.png;*.jpg;*.jpeg\0");
+								if (!texturePath.empty()) {
+									MEM::Ref<TARE::Texture2D> texture = TARE::Texture2D::Create();
+									texture->LoadTexture(texturePath);
+									material->SetTexture(TextureType::DIFFUSE, std::move(texture));
+								}
+							}
+
+							ImGui::SameLine();
+							if (ImGui::Button("Remove Texture")) {
+								material->SetTexture(TextureType::DIFFUSE, nullptr);
+							}
+						}
+						else {
+							if (ImGui::ColorEdit3(("Diffuse Color ##MaterialColor" + std::to_string(index)).c_str(), glm::value_ptr(color))) {
+								material->SetColor(TextureType::DIFFUSE, color);
+							}
+
+							ImGui::SameLine();
+
+							if (ImGui::Button("Add Texture")) {
+								std::string texturePath = Platform::FileDialog::OpenFile("Texture Files (*.png;*.jpg;*.jpeg)\0*.png;*.jpg;*.jpeg\0");
+								if (!texturePath.empty()) {
+									MEM::Ref<TARE::Texture2D> texture = TARE::Texture2D::Create();
+									texture->LoadTexture(texturePath);
+									material->SetTexture(TextureType::DIFFUSE, std::move(texture));
+								}
+							}
+						}
+
+						ImGui::PopID();
+						index++;
+					}
 				}
 				else
 				{
@@ -421,7 +465,7 @@ namespace TAGE::Editor {
 				ImGui::Checkbox("Cast Shadows", &component.CastShadows);
 			});
 
-		DrawComponent<CameraComponent>("Camera", entity, [](auto& component)
+		DrawComponent<CameraComponent>("Camera", entity, [](CameraComponent& component)
 			{
 				ImGui::Checkbox("Active", &component.IsActive);
 
@@ -444,7 +488,7 @@ namespace TAGE::Editor {
 				}
 			});
 
-		DrawComponent<SkyboxComponent>("Skybox", entity, [](auto& component)
+		DrawComponent<SkyboxComponent>("Skybox", entity, [](SkyboxComponent& component)
 			{
 				if (component.Handle)
 				{
@@ -465,10 +509,10 @@ namespace TAGE::Editor {
 				}
 			});
 
-		DrawComponent<LightComponent>("Light", entity, [](auto& component)
+		DrawComponent<LightComponent>("Light", entity, [](LightComponent& component)
 			{
 				DrawVec3Control("Color", component.Handle.color);
-				//ImGui::Checkbox("Cast Shadow", &component.Handle.castShadow);
+				ImGui::Checkbox("Cast Shadow", &component.Handle.castShadow);
 				ImGui::DragFloat("Intensity", &component.Handle.intensity, 0.01f, 0.0f, 100.0f);
 				ImGui::DragFloat("Range", &component.Handle.range, 0.1f, 0.0f, 400.0f);
 				ImGui::DragFloat("Inner Cone", &component.Handle.innerCone, 0.1f, 0.0f, glm::radians(90.0f));
@@ -476,7 +520,7 @@ namespace TAGE::Editor {
 				ImGui::Combo("Type", (int*)&component.Handle.type, "Point\0Directional\0Spot\0");
 			});
 
-		DrawComponent<RigidBodyComponent>("Rigid Body", entity, [&](auto& component)
+		DrawComponent<RigidBodyComponent>("Rigid Body", entity, [&](RigidBodyComponent& component)
 			{
 				if (entity.HasComponent<ColliderComponent>()) {
 					ImGui::Text("Body Pointer: 0x%p", component.Body);
@@ -537,7 +581,7 @@ namespace TAGE::Editor {
 				}
 			});
 
-		DrawComponent<ColliderComponent>("Collider", entity, [](auto& component)
+		DrawComponent<ColliderComponent>("Collider", entity, [](ColliderComponent& component)
 			{
 				DrawVec3Control("Offset", component.Offset);
 				DrawVec3Control("Size", component.Size);

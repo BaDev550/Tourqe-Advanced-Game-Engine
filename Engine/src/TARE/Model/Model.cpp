@@ -179,6 +179,20 @@ namespace TARE
 				LOG_WARN("Texture not found: {}", fullPath.string());
 			}
 		}
+		else
+		{
+			if (type == TextureType::DIFFUSE)
+			{
+				aiColor4D diffuseColor;
+				if (AI_SUCCESS == material->Get(AI_MATKEY_COLOR_DIFFUSE, diffuseColor)) {
+					outMaterial->SetColor(TextureType::DIFFUSE,
+						glm::vec4(diffuseColor.r, diffuseColor.g, diffuseColor.b, diffuseColor.a));
+				}
+				else {
+					outMaterial->SetColor(TextureType::DIFFUSE, glm::vec4(1.0f));
+				}
+			}
+		}
 	}
 
 

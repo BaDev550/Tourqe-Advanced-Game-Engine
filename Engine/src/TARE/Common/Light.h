@@ -4,26 +4,9 @@
 #include "TAGE/Utilities/Memory.h"
 #include "TARE/Shadow/ShadowMap.h"
 
-struct PointLight {
-	glm::vec3 position = glm::vec3(0.0f);
-	glm::vec3 color = glm::vec3(1.0f);
-	float intensity = 1.0f;
-	float range = 10.0f;
-};
-
-struct SpotLight : public PointLight {
-	glm::vec3 direction = glm::vec3(0.0f, -1.0f, 0.0f);
-	float innerCone = glm::radians(15.0f);
-	float outerCone = glm::radians(30.0f);
-};
-
-struct DirectionalLight : public SpotLight {
-
-};
-
 struct Light {
 	LightType type;
-	int castShadow = false;
+	bool castShadow = false;
 	float intensity = 1.0f;
 	float pad0;
 

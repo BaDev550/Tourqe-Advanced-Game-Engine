@@ -21,10 +21,10 @@ namespace TAGE {
 		MEM::Ref<TARE::Camera> camera = nullptr;
 		auto& cc = primaryCameraEntity.GetComponent<CameraComponent>();
 		auto& tc = _Scene->GetWorldSpaceTransform(primaryCameraEntity);
+		if (!cc.Handle) { LOG_ERROR("Primary camera does not have a camera handle."); return; }
 		cc.Handle->SetPosition(tc.Position);
 		cc.Handle->SetEulerRotation(tc.GetRotationEuler());
 		camera = cc.Handle;
-		if (!camera) return;
 
 		Render(camera, deltaTime, true);
 	}

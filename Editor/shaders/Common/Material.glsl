@@ -3,6 +3,9 @@
 
 struct Material {
     sampler2D DiffuseTex;
+    vec4 DiffuseColor;
+    bool HasDiffuseTex;
+
     sampler2D SpecularTex;
     sampler2D NormalTex;
     sampler2D HeightTex;

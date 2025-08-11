@@ -4,9 +4,29 @@
 #include "TAGE/World/Components/RenderComponents.h"
 #include "TAGE/World/Components/ScriptingComponents.h"
 #include "TAGE/World/Components/PhysicsComponents.h"
+#include "TAGE/Scripting/ScriptEngine.h"
+#include "TAGE/Utilities/UUID.h"
 #include <yaml-cpp/yaml.h>
 
 namespace YAML {
+	template<>
+	struct convert<glm::vec2> {
+		static Node encode(const glm::vec2& rhs) {
+			Node node;
+			node.push_back(rhs.x);
+			node.push_back(rhs.y);
+			return node;
+		}
+
+		static bool decode(const Node& node, glm::vec2& rhs) {
+			if (!node.IsSequence() || node.size() != 3)
+				return false;
+			rhs.x = node[0].as<float>();
+			rhs.y = node[1].as<float>();
+			return true;
+		}
+	};
+
 	template<>
 	struct convert<glm::vec3> {
 		static Node encode(const glm::vec3& rhs) {
@@ -69,9 +89,40 @@ namespace YAML {
 			return true;
 		}
 	};
+
+	template<>
+	struct convert<TAGE::UUID> {
+		static Node encode(const TAGE::UUID& uuid) {
+			Node node;
+			node.push_back((uint64)uuid);
+			return node;
+		}
+		static bool decode(const Node& node, TAGE::UUID& uuid) {
+			uuid = node[0].as<uint64>();
+			return true;
+		}
+	};
 }
 namespace TAGE {
+#define WRITE_FIELD_DATA(FieldType, Type) case ScriptFieldType::FieldType: \
+	out << scriptField.GetValue<Type>(); \
+	break;
+
+#define READ_FIELD_DATA(FieldType, Type) \
+	case ScriptFieldType::FieldType:\
+	{ \
+		Type data = scriptField["Data"].as<Type>(); \
+		fieldInstance.SetValue(data); \
+		break; \
+	}
+
 	SceneSerializer::SceneSerializer(const MEM::Ref<Scene>& scene) : _Scene(scene) {}
+
+	YAML::Emitter& operator<<(YAML::Emitter& out, const glm::vec2& vec) {
+		out << YAML::Flow;
+		out << YAML::BeginSeq << vec.x << vec.y << YAML::EndSeq;
+		return out;
+	}
 
 	YAML::Emitter& operator<<(YAML::Emitter& out, const glm::vec3& vec) {
 		out << YAML::Flow;
@@ -213,10 +264,51 @@ namespace TAGE {
 		}
 
 		if (entity.HasComponent<ScriptComponent>()) {
+			auto& sc = entity.GetComponent<ScriptComponent>();
+
 			out << YAML::Key << "ScriptComponent";
 			out << YAML::BeginMap;
-			auto& sc = entity.GetComponent<ScriptComponent>();
 			out << YAML::Key << "Class" << YAML::Value << sc.Name;
+
+			MEM::Ref<ScriptClass> entityClass = ScriptEngine::GetEntityClass(sc.Name);
+			const auto& fields = entityClass->GetFields();
+
+			if (!fields.empty()) {
+				out << YAML::Key << "ScriptFields" << YAML::Value;
+				auto& scriptFields = ScriptEngine::GetScriptFieldMap(entity);
+				out << YAML::BeginSeq;
+				for (const auto& [name, field] : fields) {
+					if (scriptFields.find(name) == scriptFields.end())
+						continue;
+
+					out << YAML::BeginMap;
+					out << YAML::Key << "Name" << YAML::Value << name;
+					out << YAML::Key << "Type" << YAML::Value << Utils::ScriptFieldTypeToString(field.Type);
+					out << YAML::Key << "Data" << YAML::Value;
+					ScriptFieldInstance& scriptField = scriptFields.at(name);
+
+					switch (field.Type)
+					{
+						WRITE_FIELD_DATA(Float,   float);
+						WRITE_FIELD_DATA(Int,     int);
+						WRITE_FIELD_DATA(Double,  double);
+						WRITE_FIELD_DATA(Bool,    bool);
+						WRITE_FIELD_DATA(Char,    char);
+						WRITE_FIELD_DATA(Byte,    uint8);
+						WRITE_FIELD_DATA(Short,   int16);
+						WRITE_FIELD_DATA(Long,    int64);
+						WRITE_FIELD_DATA(UShort,  uint16);
+						WRITE_FIELD_DATA(UInt,    uint);
+						WRITE_FIELD_DATA(ULong,   uint64);
+						WRITE_FIELD_DATA(Vector2, glm::vec2);
+						WRITE_FIELD_DATA(Vector3, glm::vec3);
+						WRITE_FIELD_DATA(Vector4, glm::vec4);
+						WRITE_FIELD_DATA(Entity,  UUID);
+					}
+					out << YAML::EndMap;
+				}
+				out << YAML::EndSeq;
+			}
 			out << YAML::EndMap;
 		}
 
@@ -362,6 +454,44 @@ namespace TAGE {
 				if (scriptComponent) {
 					auto className = scriptComponent["Class"].as<std::string>();
 					auto& script = deserializedEntity.AddOrReplaceComponent<ScriptComponent>(className);
+
+					auto scriptFields = scriptComponent["ScriptFields"];
+					if (scriptFields) {
+						MEM::Ref<ScriptClass> entityClass = ScriptEngine::GetEntityClass(script.Name);
+						const auto& fields = entityClass->GetFields();
+						auto& entityFields = ScriptEngine::GetScriptFieldMap(deserializedEntity);
+
+						for (auto scriptField : scriptFields) {
+							std::string name = scriptField["Name"].as<std::string>();
+							std::string typeString = scriptField["Type"].as<std::string>();
+							std::string data = scriptField["Data"].as<std::string>();
+							ScriptFieldType type = Utils::StringToScriptFieldType(typeString);
+							ScriptFieldInstance& fieldInstance = entityFields[name];
+							if (fields.find(name) == fields.end())
+								continue;
+
+							fieldInstance.Field = fields.at(name);
+
+							switch (type)
+							{
+								READ_FIELD_DATA(Float,   float);
+								READ_FIELD_DATA(Int,     int);
+								READ_FIELD_DATA(Double,  double);
+								READ_FIELD_DATA(Bool,    bool);
+								READ_FIELD_DATA(Char,    char);
+								READ_FIELD_DATA(Byte,    uint8);
+								READ_FIELD_DATA(Short,   int16);
+								READ_FIELD_DATA(Long,    int64);
+								READ_FIELD_DATA(UShort,  uint16);
+								READ_FIELD_DATA(UInt,    uint);
+								READ_FIELD_DATA(ULong,   uint64);
+								READ_FIELD_DATA(Vector2, glm::vec2);
+								READ_FIELD_DATA(Vector3, glm::vec3);
+								READ_FIELD_DATA(Vector4, glm::vec4);
+								READ_FIELD_DATA(Entity,  UUID);
+							}
+						}
+					}
 				}
 			}
 		}

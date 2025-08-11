@@ -99,9 +99,8 @@ void main() {
     vec3 kD_ambient = (1.0 - kS_ambient) * (1.0 - M);
 
     vec3 L = vec3(0.0);
-    float shadow = 0.0f;
     for (int i = 0; i < MAX_LIGHTS; i++) {
-        shadow = ShadowCalculation(u_View, FPos, N, u_Lights[i].direction);
+        float shadow = ShadowCalculation(u_View, FPos, N, u_Lights[i].direction);
         vec3 Light = CalculatePBRLight(u_Lights[i], N, Vdir, FPos, A, M, R, F0);
         L += Light * (1.0 - shadow);
     }

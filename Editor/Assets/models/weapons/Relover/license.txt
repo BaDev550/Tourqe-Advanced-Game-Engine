@@ -1,0 +1,11 @@
+Model Information:
+* title:	Revolver Navy Colt 1851 Silver
+* source:	https://sketchfab.com/3d-models/revolver-navy-colt-1851-silver-c254bb8ee01a4d9db9e6bbdc652d6c11
+* author:	Johan Pindeville (https://sketchfab.com/johanpindeville)
+
+Model License:
+* license type:	CC-BY-4.0 (http://creativecommons.org/licenses/by/4.0/)
+* requirements:	Author must be credited. Commercial use is allowed.
+
+If you use this 3D model in your project be sure to copy paste this credit wherever you share it:
+This work is based on "Revolver Navy Colt 1851 Silver" (https://sketchfab.com/3d-models/revolver-navy-colt-1851-silver-c254bb8ee01a4d9db9e6bbdc652d6c11) by Johan Pindeville (https://sketchfab.com/johanpindeville) licensed under CC-BY-4.0 (http://creativecommons.org/licenses/by/4.0/)

@@ -19,8 +19,6 @@ namespace TAGE::Editor {
 
 	void ContentBrowserPanel::OnImGuiRender()
 	{
-		_ThumbnailRenderer.OnUpdate();
-
 		ImGui::Begin("Content Browser");
 
 		DrawNavigationBar();
@@ -82,6 +80,8 @@ namespace TAGE::Editor {
 
 	void ContentBrowserPanel::DrawDirectoryEntry(const std::filesystem::directory_entry& directoryEntry)
 	{
+		//_ThumbnailRenderer.OnUpdate();
+
 		const auto& path = directoryEntry.path();
 		std::string filenameStr = path.filename().string();
 
@@ -104,7 +104,7 @@ namespace TAGE::Editor {
 			//	iconID = _ThumbnailRenderer.GetThumbnail(path);
 			//	flipUV = true;
 			//}
-			if (ext == ".tage")
+			if (ext == ".scene")
 				iconID = _TAGESceneFileIcon->GetID();
 			else if (ext == ".cs")
 				iconID = _CSharpFileIcon->GetID();
@@ -132,7 +132,7 @@ namespace TAGE::Editor {
 			{
 				_CurrentDirectory /= path.filename();
 			}
-			else if (path.extension() == ".tage")
+			else if (path.extension() == ".scene")
 			{
 				LOG_INFO("Request to open scene: {0}", path.string());
 			}

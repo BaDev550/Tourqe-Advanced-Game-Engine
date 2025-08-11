@@ -1,0 +1,85 @@
+Scene: playground
+Entities:
+  - Entity: 15531941800979562327
+    IdentityComponent:
+      Name: Empty Entity
+    Parent: 0
+    Children:
+      []
+    TransformComponent:
+      Position: [-3.90432477, 6.27806568, 10.3528452]
+      Rotation: [5.9000001, 1, 0]
+      Scale: [0.49000001, 0.49000001, 0.49000001]
+    MeshComponent:
+      MeshPath: assets\models\Cube\cube.obj
+    CameraComponent:
+      Camera:
+        AspectRatio: 1.77777779
+        FOV: 45
+        NearClip: 0.0500000007
+        FarClip: 500
+      IsActive: true
+  - Entity: 15643853870868146485
+    IdentityComponent:
+      Name: mario_2
+    Parent: 0
+    Children:
+      []
+    TransformComponent:
+      Position: [3.25908542, 2.90407419, 3.82515526]
+      Rotation: [0, 0, 0]
+      Scale: [1, 1, 1]
+    MeshComponent:
+      MeshPath: assets\models\mario_2\mario_2.obj
+    RigidBodyComponent:
+      BodyType: 1
+      LinearFactor: [1, 1, 1]
+      AngularFactor: [0, 0, 0]
+    ColliderComponent:
+      Shape: 0
+      Size: [1, 1.5, 1]
+      ResponseType: 2
+    ScriptComponent:
+      Class: Sandbox.Player
+      ScriptFields:
+        - Name: sens
+          Type: Float
+          Data: 2
+        - Name: speed
+          Type: Float
+          Data: 500
+  - Entity: 16702355214022495623
+    IdentityComponent:
+      Name: Empty Entity
+    Parent: 0
+    Children:
+      []
+    TransformComponent:
+      Position: [0, 0, 0]
+      Rotation: [20, 16.2999992, 0]
+      Scale: [1, 1, 1]
+    LightComponent:
+      Type: 1
+      Color: [1, 1, 1]
+      Range: 2
+      Intensity: 1
+  - Entity: 9556259806995614566
+    IdentityComponent:
+      Name: cube
+    Parent: 0
+    Children:
+      []
+    TransformComponent:
+      Position: [0, 0, 0]
+      Rotation: [0, 0, 0]
+      Scale: [15, 0.0954152793, 15]
+    MeshComponent:
+      MeshPath: assets\models\Cube\cube.obj
+    RigidBodyComponent:
+      BodyType: 0
+      LinearFactor: [1, 1, 1]
+      AngularFactor: [1, 1, 1]
+    ColliderComponent:
+      Shape: 0
+      Size: [15, 1, 15]
+      ResponseType: 2
