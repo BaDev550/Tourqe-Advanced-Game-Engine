@@ -21,7 +21,7 @@ namespace TAGE {
 	Application* CreateApplication(ApplicationCommandLineArgs args)
 	{
 		ApplicationSpecifics spec;
-		spec.AppName = "Tourqe Editor";
+		spec.AppName = "Tourqe Advanced Game Engine";
 		spec.CommandLineArgs = args;
 
 		return new TAGE::Editor::TourqeEditor(spec);

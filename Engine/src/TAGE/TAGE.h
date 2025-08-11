@@ -26,4 +26,6 @@
 #include "TAGE/World/Components/RenderComponents.h"
 #include "TAGE/World/Systems/System_Renderer.h"
 
+#include "TAGE/Project/Project.h"
+
 #include "TARE/Camera/EditorCamera.h"

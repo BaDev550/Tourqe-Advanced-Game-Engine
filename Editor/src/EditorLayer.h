@@ -18,7 +18,7 @@ namespace TAGE::Editor {
 	public:
 		EditorLayer();
 		virtual ~EditorLayer() = default;
-
+		
 		virtual void OnAttach() override;
 		virtual void OnDetach() override;
 
@@ -31,9 +31,13 @@ namespace TAGE::Editor {
 
 		void NewScene();
 		void OpenScene();
-		void OpenScene(const std::filesystem::path&);
+		void OpenScene(const std::filesystem::path& path);
 		void SaveSceneAs();
 		void SaveScene();
+
+		void NewProject();
+		void OpenProject(const std::filesystem::path& path);
+		void SaveProject();
 
 		void SaveLayout();
 		void LoadLayout();

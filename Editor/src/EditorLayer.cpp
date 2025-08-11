@@ -22,7 +22,6 @@ namespace TAGE::Editor {
 		_ActiveScene = _EditorScene;
 		_EditorCamera = MEM::MakeRef<TARE::EditorCamera>(_ActiveScene->GetWidth(), _ActiveScene->GetHeight());
 		_SceneHierarchyPanel = MEM::MakeScope<SceneHierarchyPanel>(_ActiveScene);
-		_ContentBrowserPanel = MEM::MakeScope<ContentBrowserPanel>();
 		_OutputPanel = MEM::MakeScope<OutputPanel>();
 
 		_PlayIcon = TARE::Texture2D::Create(); _PlayIcon->LoadTexture("Assets/textures/Icons/Play.png");
@@ -34,8 +33,11 @@ namespace TAGE::Editor {
 
 		auto commandLineArgs = Application::Get()->GetSpecification().CommandLineArgs;
 		if (commandLineArgs.Count > 1) {
-			auto sceneFilePath = commandLineArgs[1];
-			OpenScene(sceneFilePath);
+			auto projectFilePath = commandLineArgs[1];
+			OpenProject(projectFilePath);
+		}
+		else {
+			NewProject();
 		}
 
 		ImGui::GetIO().IniFilename = "editor_layout.ini";
@@ -238,6 +240,25 @@ namespace TAGE::Editor {
 			SceneSerializer serializer(_ActiveScene);
 			serializer.Serialize(_EditorSavePath.string());
 		}
+	}
+
+	void EditorLayer::NewProject()
+	{
+		Project::New();
+	}
+
+	void EditorLayer::OpenProject(const std::filesystem::path& path)
+	{
+		if (Project::Load(path)) {
+			auto startScenePath = Project::GetAssetFileSystemPath(Project::GetActive()->GetConfig().StartScene);
+			OpenScene(startScenePath);
+			_ContentBrowserPanel = MEM::MakeScope<ContentBrowserPanel>();
+			_ContentBrowserPanel->Init();
+		}
+	}
+
+	void EditorLayer::SaveProject()
+	{
 	}
 
 	void EditorLayer::SaveLayout()

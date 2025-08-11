@@ -101,11 +101,15 @@ namespace TARE {
 	bool OpenGL_Texture2D::LoadTextureCPU(const std::string& path, CPUTextureData& data)
 	{
 		int width, height, channels;
-		uint8* rawData = stbi_load(path.c_str(), &width, &height, &channels, 4);
+		stbi_uc* rawData = nullptr;
+		{
+			rawData = stbi_load(path.c_str(), &width, &height, &channels, 4);
+		}
 		if (!rawData) {
 			LOG_ERROR("Failed to load Texture: {}", path);
 			return false;
 		}
+
 		data.Width = width;
 		data.Height = height;
 		data.Channels = channels;
