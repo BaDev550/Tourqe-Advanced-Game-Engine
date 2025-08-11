@@ -81,7 +81,7 @@ namespace TARE {
         return true;
     }
 
-    void Vulkan_Shader::UpdateUBO(unsigned int bindingPoint, const void* data, size_t size)
+    void Vulkan_Shader::UpdateUBO(unsigned int bindingPoint, const void* data, size_t size, size_t offset)
     {
         auto it = _uboBuffers.find(bindingPoint);
         if (it == _uboBuffers.end())
@@ -90,7 +90,7 @@ namespace TARE {
         BufferInfo& buf = it->second;
 
         void* mapped;
-        vkMapMemory(_device, buf.memory, 0, size, 0, &mapped);
+        vkMapMemory(_device, buf.memory, offset, size, 0, &mapped);
         memcpy(mapped, data, size);
         vkUnmapMemory(_device, buf.memory);
     }

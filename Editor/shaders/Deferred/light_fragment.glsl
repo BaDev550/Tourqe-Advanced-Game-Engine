@@ -34,7 +34,7 @@ layout(std140, set = 0, binding = 0) uniform CameraUBO
     float u_FarPlane;
 };
 
-layout(std430, set = 0, binding = 1) buffer LightsUBO
+layout(std430, set = 0, binding = 1) buffer LightsSSBO
 {
     Light u_Lights[MAX_LIGHTS];
     int u_LightCount;
@@ -103,7 +103,7 @@ void main() {
     for (int i = 0; i < MAX_LIGHTS; i++) {
         shadow = ShadowCalculation(u_View, FPos, N, u_Lights[i].direction);
         vec3 Light = CalculatePBRLight(u_Lights[i], N, Vdir, FPos, A, M, R, F0);
-        L += Light;
+        L += Light * (1.0 - shadow);
     }
 
     vec3  gi =  vec3(0.0f);

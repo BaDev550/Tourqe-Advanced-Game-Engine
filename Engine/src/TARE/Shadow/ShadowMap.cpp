@@ -9,7 +9,7 @@ namespace TARE {
 		this->height = height;
 		FramebufferSpecification spec({
 				FramebufferTextureFormat::DEPTH_ARRAY
-			}, 1, width, height, 5);
+			}, 1, width, height, int(_shadowCascadeLevels.size()) + 1);
 		_depthFBO = Framebuffer::Create(spec);
 		_depthShader = ShaderLibrary::Add("ShadowDepth", "shaders/Shadow/depth_vertex", "shaders/Shadow/depth_fragment", "shaders/Shadow/depth_geometry");
 		_depthShader->CreateUBO("LightSpaceMatricesUBO", sizeof(glm::mat4x4) * 16, 3);
@@ -20,12 +20,10 @@ namespace TARE {
 		_camera = cam;
 
 		_depthFBO->Bind();
-		RenderCommand::Clear(DEPTH);
+		RenderCommand::Clear(COLOR_DEPTH);
 		_depthShader->Use();
 		const auto lightMatrices = getLightSpaceMatrices(lightDir);
-		for (size_t i = 0; i < lightMatrices.size(); ++i) {
-			_depthShader->UpdateUBO(3, &lightMatrices[i], i * sizeof(glm::mat4x4));
-		}
+		for (size_t i = 0; i < lightMatrices.size(); ++i) { _depthShader->UpdateUBO(3, &lightMatrices[i], sizeof(glm::mat4x4), i * sizeof(glm::mat4x4)); }
 
 		RenderCommand::SetCullingMode(CullMode::FRONT);
 	}
@@ -33,7 +31,6 @@ namespace TARE {
 	void ShadowMap::EndRender()
 	{
 		RenderCommand::SetCullingMode(CullMode::BACK);
-		_depthFBO->Unbind();
 	}
 
 	void ShadowMap::BindTexture(uint slot) const
@@ -66,6 +63,7 @@ namespace TARE {
     {
         if (auto camera = _camera.lock()) {
 
+			const glm::vec3 lightDirNormalized = glm::normalize(lightDir);
             const auto proj = glm::perspective(
                 glm::radians(camera->GetFOV()), (float)width / (float)height, nearPlane,
                 farPlane);
@@ -77,7 +75,7 @@ namespace TARE {
                 center += glm::vec3(v);
             }
             center /= corners.size();
-            const auto lightView = glm::lookAt(center + lightDir, center, glm::vec3(0.0f, 1.0f, 0.0f));
+            const auto lightView = glm::lookAt(center + lightDirNormalized, center, glm::vec3(0.0f, 1.0f, 0.0f));
 
             float minX = std::numeric_limits<float>::max();
             float maxX = std::numeric_limits<float>::lowest();

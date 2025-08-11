@@ -45,8 +45,11 @@ namespace TAGE {
 		std::vector<Light> lights;
 		MEM::Ref<TARE::Skybox> skybox = nullptr;
 		GetLights(lights, skybox);
-
 		_Renderer->SetLights(lights);
+
+		_Renderer->BeginShadowPass(cam);
+		RenderShadowObject();
+		_Renderer->EndShadowPass();
 
 		_Renderer->BeginFrame(cam, skybox);
 		if (!runtime)
@@ -81,13 +84,13 @@ namespace TAGE {
 		for (auto entity : view) {
 			Entity& entityObj = _Scene->GetEntityByID(entity);
 			auto& mc = entityObj.GetComponent<MeshComponent>();
+
 			if (!mc.Handle) continue;
+			if (!mc.CastShadows) continue;
 
 			glm::mat4 transform = _Scene->GetWorldSpaceTransformMatrix(entityObj);
 			mc.Handle->SetTransform(transform);
-
-			if (mc.CastShadows)
-				mc.Handle->Draw("ShadowDepth");
+			mc.Handle->Draw("ShadowDepth");
 		}
 	}
 

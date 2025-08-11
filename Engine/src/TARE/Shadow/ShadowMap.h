@@ -24,7 +24,7 @@ namespace TARE {
     private:
         TAGE::MEM::Ref<Framebuffer> _depthFBO;
         TAGE::MEM::Ref<Shader> _depthShader;
-		std::vector<float> _shadowCascadeLevels = { 10.0f, 20.0f, 30.0f, 50.0f };
+		std::vector<float> _shadowCascadeLevels = { 500.0f / 50.0f, 500.0f / 25.0f, 500.0f / 10.0f, 500.0f / 2.0f };
 		TAGE::MEM::Weak<Camera> _camera;
 		int width, height;
 

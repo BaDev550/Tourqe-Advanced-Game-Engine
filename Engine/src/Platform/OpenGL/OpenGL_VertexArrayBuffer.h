@@ -13,7 +13,10 @@ namespace TARE {
 
 		virtual void AddVertexBuffer(const TAGE::MEM::Ref<VertexBufferObject>& vertexBuffer) override;
 		virtual void SetIndexBuffer(const  TAGE::MEM::Ref<ElementBufferObject>& indexBuffer) override;
-		virtual TAGE::MEM::Ref<ElementBufferObject> GetIndexBuffer() const override { return _IndexBuffer; }
+		virtual TAGE::MEM::Ref<ElementBufferObject> GetIndexBuffer() const override {
+			static TAGE::MEM::Ref<ElementBufferObject> empty{};
+			return _IndexBuffer ? _IndexBuffer : empty;
+		}
 
 		virtual void SetCount(size_t count) override { _Count = count; }
 		virtual size_t GetCount() const override { return _Count; }

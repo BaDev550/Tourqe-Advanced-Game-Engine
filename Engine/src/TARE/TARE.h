@@ -61,7 +61,7 @@ namespace TARE {
 			TAGE::MEM::Ref<PostProcess> PostProcess;
 			std::vector<Light> Lights;
 
-			bool UseSSGI = true;
+			bool UseSSGI = false;
 			bool UseSSReflections = true;
 		} _Data;
 	public:
@@ -69,7 +69,7 @@ namespace TARE {
 		void BeginFrame(const TAGE::MEM::Ref<Camera>& cam, const TAGE::MEM::Ref<Skybox>& skybox = nullptr);
 		void EndFrame();
 
-		void BeginShadowPass(const TAGE::MEM::Ref<Camera>& cam, const glm::vec3& lightDir);
+		void BeginShadowPass(const TAGE::MEM::Ref<Camera>& cam);
 		void EndShadowPass();
 
 		void DrawGrid();

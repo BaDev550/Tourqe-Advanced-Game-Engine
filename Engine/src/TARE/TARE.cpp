@@ -50,9 +50,16 @@ namespace TARE {
 		_Data.PostProcess->Render(_DeferredRendering->GetLightingBuffer());
 	}
 
-	void TARE::BeginShadowPass(const TAGE::MEM::Ref<Camera>& cam, const glm::vec3& lightDir)
+	void TARE::BeginShadowPass(const TAGE::MEM::Ref<Camera>& cam)
 	{
 		if (_Data.Lights.empty()) return;
+		glm::vec3 lightDir;
+
+		for (size_t i = 0; i < _Data.Lights.size(); ++i) {
+			if (_Data.Lights[i].type == LightType::DIRECTIONAL) {
+				lightDir = _Data.Lights[i].direction;
+			}
+		}
 		_ShadowMap->BeginRender(cam, lightDir);
 	}
 
@@ -62,6 +69,8 @@ namespace TARE {
 		RenderCommand::SetViewport(0, 0, _Width, _Height);
 
 		_DeferredRendering->GetLightShader()->Use();
+		RenderCommand::BindTextureArrayFromID(_ShadowMap->GetTextureID(), 0);
+		_DeferredRendering->GetLightShader()->SetUniform("u_ShadowMap", 0);
 		_DeferredRendering->GetLightShader()->SetUniform("u_CascadeCount", (int)_ShadowMap->GetShadowCascadeLevels().size());
 		for (size_t i = 0; i < _ShadowMap->GetShadowCascadeLevels().size(); ++i) {
 			_DeferredRendering->GetLightShader()->SetUniform(("u_CascadePlaneDistances[" + std::to_string(i) + "]").c_str(), _ShadowMap->GetShadowCascadeLevels()[i]);
@@ -94,6 +103,7 @@ namespace TARE {
 			_Data.LightData.Lights[index] = it;
 			index++;
 		}
+		_Data.Lights = lights;
 		_Data.LightData.LightCount = index;
 		index = 0;
 

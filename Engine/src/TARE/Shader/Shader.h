@@ -21,7 +21,7 @@ namespace TARE
 		virtual void DestroyProgram() const {};
 		virtual int GetUniformLocation(unsigned int program, const char* name) const { return 0; }
 		virtual bool CreateUBO(const char* blockName, size_t size, unsigned int bindingPoint) { return 0; }
-		virtual void UpdateUBO(unsigned int bindingPoint, const void* data, size_t size) {}
+		virtual void UpdateUBO(unsigned int bindingPoint, const void* data, size_t size, size_t offset = 0) {}
 		virtual bool CreateSSBO(unsigned int bindingPoint, size_t size) { return false; }
 		virtual void UpdateSSBO(unsigned int bindingPoint, const void* data, size_t size) {}
 		bool Reload();

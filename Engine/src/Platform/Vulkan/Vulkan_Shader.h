@@ -25,7 +25,7 @@ namespace TARE {
         virtual int GetUniformLocation(unsigned int program, const char* name) const override { return -1; }
 
         virtual bool CreateUBO(const char* blockName, size_t size, unsigned int bindingPoint) override;
-        virtual void UpdateUBO(unsigned int bindingPoint, const void* data, size_t size) override;
+        virtual void UpdateUBO(unsigned int bindingPoint, const void* data, size_t size, size_t offset = 0) override;
 
         virtual bool CreateSSBO(unsigned int bindingPoint, size_t size) override;
         virtual void UpdateSSBO(unsigned int bindingPoint, const void* data, size_t size) override;

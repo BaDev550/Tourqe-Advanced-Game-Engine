@@ -14,6 +14,7 @@ namespace TARE {
 		virtual void Enable(uint properties) = 0;
 		virtual void Disable(uint properties) = 0;
 		virtual void BindTextureFromID(uint64 textureID, uint slot) = 0;
+		virtual void BindTextureArrayFromID(uint64 textureID, uint slot) = 0;
 		virtual void DrawFullScreenQuad() = 0;
 		virtual void SetCullingMode(CullMode mode) = 0;
 		virtual void ToggleStencilFunction(StencilMode mode) = 0;

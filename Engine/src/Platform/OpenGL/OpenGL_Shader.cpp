@@ -57,14 +57,14 @@ namespace TARE {
 		return true;
 	}
 
-	void OpenGL_Shader::UpdateUBO(unsigned int bindingPoint, const void* data, size_t size)
+	void OpenGL_Shader::UpdateUBO(unsigned int bindingPoint, const void* data, size_t size, size_t offset)
 	{
 		auto it = _ubos.find(bindingPoint);
 		if (it == _ubos.end())
 			return;
 
 		glBindBuffer(GL_UNIFORM_BUFFER, it->second);
-		glBufferSubData(GL_UNIFORM_BUFFER, 0, size, data);
+		glBufferSubData(GL_UNIFORM_BUFFER, offset, size, data);
 		glBindBuffer(GL_UNIFORM_BUFFER, 0);
 	}
 

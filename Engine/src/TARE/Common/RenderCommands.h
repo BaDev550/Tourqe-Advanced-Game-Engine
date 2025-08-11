@@ -33,6 +33,9 @@ namespace TARE {
 		inline static void BindTextureFromID(uint64 textureID, uint slot) {
 			_API->BindTextureFromID(textureID, slot);
 		}
+		inline static void BindTextureArrayFromID(uint64 textureID, uint slot) {
+			_API->BindTextureArrayFromID(textureID, slot);
+		}
 		inline static void DrawFullScreenQuad() {
 			_API->DrawFullScreenQuad();
 		}

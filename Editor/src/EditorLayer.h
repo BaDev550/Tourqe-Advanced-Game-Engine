@@ -6,18 +6,6 @@
 #include "Panels/OutputPanel.h"
 
 namespace TAGE::Editor {
-	enum class ViewportDebugMode
-	{
-		Default = 0,
-		GBuffer_Position,
-		GBuffer_Normal,
-		GBuffer_Albedo,
-		GBuffer_Depth,
-		Lighting,
-		ShadowMap,
-		GI
-	};
-
 	enum class SceneState
 	{
 		EDIT = 0,
@@ -77,7 +65,6 @@ namespace TAGE::Editor {
 		int _GizmoType = -1;
 		bool _HoveringGizmo = false;
 		SceneState _SceneState = SceneState::EDIT;
-		ViewportDebugMode debugMode = ViewportDebugMode::Default;
 
 		MEM::Scope<SceneHierarchyPanel> _SceneHierarchyPanel;
 		MEM::Scope<ContentBrowserPanel> _ContentBrowserPanel;

@@ -24,7 +24,7 @@ namespace TARE {
 			return 0;
 		}
 	}
-	OpenGL_VertexArrayObject::OpenGL_VertexArrayObject() { glCreateVertexArrays(1, &_ID); }
+	OpenGL_VertexArrayObject::OpenGL_VertexArrayObject() : _IndexBuffer(nullptr) { glCreateVertexArrays(1, &_ID); }
 	void OpenGL_VertexArrayObject::Bind() const { glBindVertexArray(_ID); }
 	void OpenGL_VertexArrayObject::Unbind() const { glBindVertexArray(0); }
 

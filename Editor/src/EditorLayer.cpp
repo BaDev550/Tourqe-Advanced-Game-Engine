@@ -25,21 +25,12 @@ namespace TAGE::Editor {
 		_ContentBrowserPanel = MEM::MakeScope<ContentBrowserPanel>();
 		_OutputPanel = MEM::MakeScope<OutputPanel>();
 
-		_PlayIcon = TARE::Texture2D::Create();
-		_PlayIcon->LoadTexture("Assets/textures/Icons/Play.png");
-		_StopIcon = TARE::Texture2D::Create();
-		_StopIcon->LoadTexture("Assets/textures/Icons/Stop.png");
-		_SimulateIcon = TARE::Texture2D::Create();
-		_SimulateIcon->LoadTexture("Assets/textures/Icons/Simulate.png");
-		
-		_IconTranslate = TARE::Texture2D::Create();
-		_IconTranslate->LoadTexture("assets/textures/Icons/gizmo_translate.png");
-
-		_IconRotate = TARE::Texture2D::Create();
-		_IconRotate->LoadTexture("assets/textures/Icons/gizmo_rotate.png");
-
-		_IconScale = TARE::Texture2D::Create();
-		_IconScale->LoadTexture("assets/textures/Icons/gizmo_scale.png");
+		_PlayIcon = TARE::Texture2D::Create(); _PlayIcon->LoadTexture("Assets/textures/Icons/Play.png");
+		_StopIcon = TARE::Texture2D::Create(); _StopIcon->LoadTexture("Assets/textures/Icons/Stop.png");
+		_SimulateIcon = TARE::Texture2D::Create(); _SimulateIcon->LoadTexture("Assets/textures/Icons/Simulate.png");
+		_IconTranslate = TARE::Texture2D::Create(); _IconTranslate->LoadTexture("assets/textures/Icons/gizmo_translate.png");
+		_IconRotate = TARE::Texture2D::Create(); _IconRotate->LoadTexture("assets/textures/Icons/gizmo_rotate.png");
+		_IconScale = TARE::Texture2D::Create(); _IconScale->LoadTexture("assets/textures/Icons/gizmo_scale.png");
 
 		auto commandLineArgs = Application::Get()->GetSpecification().CommandLineArgs;
 		if (commandLineArgs.Count > 1) {
@@ -67,14 +58,11 @@ namespace TAGE::Editor {
 		auto renderer = Application::Get()->GetRenderer();
 		if (mouseX >= 0 && mouseY >= 0 && mouseX < (int)viewportSize.x && mouseY < (int)viewportSize.y) {
 			renderer->GetDeferredRendering().GetGBuffer()->Bind();
-			_HoveredEntityID = renderer->GetDeferredRendering().GetGBuffer()->Read(3, mouseX, mouseY);
+			_HoveredEntityID = renderer->GetDeferredRendering().GetGBuffer()->Read(6, mouseX, mouseY);
 			renderer->GetDeferredRendering().GetGBuffer()->Unbind();
-
 			if (Input::IsMouseButtonJustPressed(Mouse::ButtonLeft) && !ImGuizmo::IsOver() && !_HoveringGizmo) {
 				auto hoveredEntity = _ActiveScene->GetEntityByID((entt::entity)_HoveredEntityID);
 				if (hoveredEntity) {
-					//if (hoveredEntity.HasComponent<MeshComponent>())
-					//	hoveredEntity.GetComponent<MeshComponent>().IsSelected = true;
 					_SceneHierarchyPanel->SetSelectedEntity(hoveredEntity);
 				}
 				else {
@@ -181,18 +169,6 @@ namespace TAGE::Editor {
 				SaveSceneAs();
 			if (control)
 				SaveScene();
-		}
-
-		switch (e.GetKey())
-		{
-		case Key::F1: debugMode = ViewportDebugMode::Default; break;
-		case Key::F2: debugMode = ViewportDebugMode::GBuffer_Position; break;
-		case Key::F3: debugMode = ViewportDebugMode::GBuffer_Normal; break;
-		case Key::F4: debugMode = ViewportDebugMode::GBuffer_Albedo; break;
-		case Key::F5: debugMode = ViewportDebugMode::GBuffer_Depth; break;
-		case Key::F6: debugMode = ViewportDebugMode::Lighting; break;
-		case Key::F7: debugMode = ViewportDebugMode::ShadowMap; break;
-		case Key::F8: debugMode = ViewportDebugMode::GI; break;
 		}
 
 		if (e.GetKey() == Key::Escape)
@@ -552,17 +528,6 @@ namespace TAGE::Editor {
 		auto deferred = renderer->GetDeferredRendering();
 		uint64_t textureID = renderer->GetSceneData().PostProcess->GetPostProcessTexture();
 
-		switch (debugMode)
-		{
-		case ViewportDebugMode::GBuffer_Position: textureID = deferred.GetGBuffer()->GetColorAttachment(0); break;
-		case ViewportDebugMode::GBuffer_Normal:   textureID = deferred.GetGBuffer()->GetColorAttachment(1); break;
-		case ViewportDebugMode::GBuffer_Albedo:   textureID = deferred.GetGBuffer()->GetColorAttachment(2); break;
-		case ViewportDebugMode::GBuffer_Depth:    textureID = deferred.GetGBuffer()->GetDepthAttachment(); break;
-		case ViewportDebugMode::Lighting:         textureID = deferred.GetLightingBuffer()->GetColorAttachment(0); break;
-		case ViewportDebugMode::GI:               textureID = deferred.GetGIBuffer()->GetColorAttachment(0); break;
-		default: break;
-		}
-
 		ImGui::Image((void*)(uintptr_t)textureID, ImVec2(_ViewportSize.x, _ViewportSize.y), ImVec2{ 0, 1 }, ImVec2{ 1, 0 });
 		if (ImGui::BeginDragDropTarget())
 		{
@@ -701,13 +666,6 @@ namespace TAGE::Editor {
 		if (ImGui::Checkbox("Draw Colliders", &drawColliders))
 		{
 			TARE::RenderAPI::SetRenderMode(drawColliders ? DebugRenderMode::BOUNDING_BOX : DebugRenderMode::NONE);
-		}
-
-		const char* drawTypeString[] = { "Default", "GBuffer Position", "GBuffer Normal", "GBuffer Albedo", "GBuffer Depth", "Lighting", "ShadowMap", "GI" };
-		int currentDrawType = static_cast<int>(debugMode);
-		if (ImGui::Combo("Debug Viewport", &currentDrawType, drawTypeString, IM_ARRAYSIZE(drawTypeString)))
-		{
-			debugMode = static_cast<ViewportDebugMode>(currentDrawType);
 		}
 
 		for (const auto& [name, shader] : TARE::ShaderLibrary::GetShaders()) {

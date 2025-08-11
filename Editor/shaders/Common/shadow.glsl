@@ -1,8 +1,7 @@
 #ifndef SHADOW_GLSL
 #define SHADOW_GLSL
 
-uniform sampler2DArray shadowMap;
-
+uniform sampler2DArray u_ShadowMap;
 uniform float u_CascadePlaneDistances[16];
 uniform int u_CascadeCount;
 
@@ -45,12 +44,12 @@ float ShadowCalculation(mat4 view, vec3 fragPosWorldSpace, vec3 Normal, vec3 lig
     }
 
     float shadow = 0.0;
-    vec2 texelSize = 1.0 / vec2(textureSize(shadowMap, 0));
+    vec2 texelSize = 1.0 / vec2(textureSize(u_ShadowMap, 0));
     for(int x = -1; x <= 1; ++x)
     {
         for(int y = -1; y <= 1; ++y)
         {
-            float pcfDepth = texture(shadowMap, vec3(projCoords.xy + vec2(x, y) * texelSize, layer)).r;
+            float pcfDepth = texture(u_ShadowMap, vec3(projCoords.xy + vec2(x, y) * texelSize, layer)).r;
             shadow += (currentDepth - bias) > pcfDepth ? 1.0 : 0.0;        
         }    
     }

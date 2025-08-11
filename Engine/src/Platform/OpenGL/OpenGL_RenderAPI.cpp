@@ -8,8 +8,11 @@ namespace TARE {
 	void OpenGL_RenderAPI::SetViewport(int x, int y, int width, int height) { glViewport(x, y, width, height); }
 
 	void OpenGL_RenderAPI::DrawIndexed(const TAGE::MEM::Ref<VertexArrayObject>& VAO) {
-		VAO->Bind();
-		glDrawElements(GL_TRIANGLES, VAO->GetIndexBuffer()->GetCount(), GL_UNSIGNED_INT, 0);
+		if (VAO->GetIndexBuffer() == nullptr) return;
+		if (VAO->GetIndexBuffer()->GetCount() > 0) {
+			VAO->Bind();
+			glDrawElements(GL_TRIANGLES, VAO->GetIndexBuffer()->GetCount(), GL_UNSIGNED_INT, 0);
+		}
 	}
 	void OpenGL_RenderAPI::DrawVertex(const TAGE::MEM::Ref<VertexArrayObject>& VAO) { 
 		VAO->Bind();
@@ -37,6 +40,11 @@ namespace TARE {
 	{
 		glActiveTexture(GL_TEXTURE0 + slot);
 		glBindTexture(GL_TEXTURE_2D, static_cast<GLuint>(textureID));
+	}
+	void OpenGL_RenderAPI::BindTextureArrayFromID(uint64 textureID, uint slot)
+	{
+		glActiveTexture(GL_TEXTURE0 + slot);
+		glBindTexture(GL_TEXTURE_2D_ARRAY, static_cast<GLuint>(textureID));
 	}
 	void OpenGL_RenderAPI::DrawFullScreenQuad()
 	{

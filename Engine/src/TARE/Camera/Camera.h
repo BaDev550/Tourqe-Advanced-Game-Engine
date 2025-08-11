@@ -87,6 +87,6 @@ namespace TARE
 		float _aspectRatio = 1.0f;
         float _fov{ 45.0f };
         float _nearClip{ 0.1f };
-        float _farClip{ 1000.0f };
+        float _farClip{ 500.0f };
 	};
 }

@@ -71,6 +71,8 @@ namespace TARE
 
 	void Model::Draw(const std::string& shader) const
 	{
+		if (_meshes.empty()) return;
+
 		TAGE::MEM::Ref<Shader> shaderRef = ShaderLibrary::Get(shader);
 		shaderRef->Use();
 		shaderRef->SetUniform("u_Model", _transform);
