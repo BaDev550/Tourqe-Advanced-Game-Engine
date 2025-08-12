@@ -3,6 +3,9 @@
 #include "TAGE/Application/Application.h"
 #include "TARE/Shader/ShaderLibrary.h"
 #include "meshoptimizer.h"
+#include "TAGE/AssetManager/AssetManager.h"
+#include "TAGE/AssetManager/Importers/TextureImporter.h"
+#include "TAGE/AssetManager/Asset.h"
 
 namespace TARE
 {
@@ -50,7 +53,7 @@ namespace TARE
 		std::thread([path, callback]() {
 			auto model = TAGE::MEM::MakeRef<Model>();
 			if (model->LoadCPU(path)) {
-				TAGE::Application::Get()->GetGraphicDispatcher().Enqueue([model, callback]() {
+				TAGE::GrapichDispatcher::Get()->Enqueue([model, callback]() {
 					model->UploadToGPU();
 					callback(model);
 					});
@@ -147,50 +150,21 @@ namespace TARE
 		if (material->GetTexture(aiType, 0, &path) == AI_SUCCESS && path.length > 0)
 		{
 			std::string texPath = path.C_Str();
-
-			const aiTexture* aiTex = _scene->GetEmbeddedTexture(texPath.c_str());
-			if (aiTex)
-			{
-				TAGE::MEM::Ref<Texture2D> texture = Texture2D::Create();
-				if (aiTex->mHeight == 0)
-					texture->LoadTextureFromMemory(reinterpret_cast<const unsigned char*>(aiTex->pcData), aiTex->mWidth);
-				else
-					texture->LoadTextureFromMemory(reinterpret_cast<const unsigned char*>(aiTex->pcData), aiTex->mWidth, aiTex->mHeight, 4);
-				outMaterial->SetTexture(type, std::move(texture));
-				return;
-			}
-
 			std::replace(texPath.begin(), texPath.end(), '\\', '/');
 			std::filesystem::path modelDir = std::filesystem::path(_Directory).parent_path();
 			std::filesystem::path textureFilename = std::filesystem::path(texPath).filename();
 			std::filesystem::path fullPath = modelDir / textureFilename;
-
 			std::filesystem::path fallback = std::filesystem::path(_Directory) / textureFilename;
 			if (std::filesystem::exists(fallback)) {
 				fullPath = fallback;
 			}
 
 			if (std::filesystem::exists(fullPath)) {
-				TAGE::MEM::Ref<Texture2D> texture = Texture2D::Create();
-				texture->LoadTexture(fullPath.string());
-				outMaterial->SetTexture(type, std::move(texture));
+				//TAGE::MEM::Ref<Texture2D> texture = TAGE::TextureImporter::ImportTexture2D(fullPath);
+				//outMaterial->SetTexture(type, texture->_handle);
 			}
 			else {
 				LOG_WARN("Texture not found: {}", fullPath.string());
-			}
-		}
-		else
-		{
-			if (type == TextureType::DIFFUSE)
-			{
-				aiColor4D diffuseColor;
-				if (AI_SUCCESS == material->Get(AI_MATKEY_COLOR_DIFFUSE, diffuseColor)) {
-					outMaterial->SetColor(TextureType::DIFFUSE,
-						glm::vec4(diffuseColor.r, diffuseColor.g, diffuseColor.b, diffuseColor.a));
-				}
-				else {
-					outMaterial->SetColor(TextureType::DIFFUSE, glm::vec4(1.0f));
-				}
 			}
 		}
 	}

@@ -381,50 +381,6 @@ namespace TAGE::Editor {
 				if (component.Handle)
 				{
 					ImGui::Text("Mesh Path: %s", component.Handle->GetFilePath().c_str());
-					int index = 0;
-					for (auto mesh : component.Handle->GetMeshes()) {
-						auto material = mesh->GetMaterial();
-						auto diffuseTex = material->GetTexture(TextureType::DIFFUSE);
-						glm::vec4 color = material->GetColor(TextureType::DIFFUSE);
-
-						ImGui::PushID(index);
-
-						if (diffuseTex) {
-							if (ImGui::ImageButton(("Diffuse Texture ##MaterialPreview" + std::to_string(index)).c_str(),
-								(ImTextureID)(uint64_t)diffuseTex->GetID(), ImVec2(100, 100))) {
-								std::string texturePath = Platform::FileDialog::OpenFile("Texture Files (*.png;*.jpg;*.jpeg)\0*.png;*.jpg;*.jpeg\0");
-								if (!texturePath.empty()) {
-									MEM::Ref<TARE::Texture2D> texture = TARE::Texture2D::Create();
-									texture->LoadTexture(texturePath);
-									material->SetTexture(TextureType::DIFFUSE, std::move(texture));
-								}
-							}
-
-							ImGui::SameLine();
-							if (ImGui::Button("Remove Texture")) {
-								material->SetTexture(TextureType::DIFFUSE, nullptr);
-							}
-						}
-						else {
-							if (ImGui::ColorEdit3(("Diffuse Color ##MaterialColor" + std::to_string(index)).c_str(), glm::value_ptr(color))) {
-								material->SetColor(TextureType::DIFFUSE, color);
-							}
-
-							ImGui::SameLine();
-
-							if (ImGui::Button("Add Texture")) {
-								std::string texturePath = Platform::FileDialog::OpenFile("Texture Files (*.png;*.jpg;*.jpeg)\0*.png;*.jpg;*.jpeg\0");
-								if (!texturePath.empty()) {
-									MEM::Ref<TARE::Texture2D> texture = TARE::Texture2D::Create();
-									texture->LoadTexture(texturePath);
-									material->SetTexture(TextureType::DIFFUSE, std::move(texture));
-								}
-							}
-						}
-
-						ImGui::PopID();
-						index++;
-					}
 				}
 				else
 				{

@@ -61,7 +61,7 @@ namespace TAGE {
 			_ImGuiLayer->End();
 
 			Input::Update();
-			_GraphicDispatcher.ExecutePending();
+			GrapichDispatcher::Get()->ExecutePending();
 			_Window->SwapBuffers();
 		}
 	}

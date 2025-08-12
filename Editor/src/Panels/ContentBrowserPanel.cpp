@@ -2,12 +2,13 @@
 #include "imgui.h"
 #include "TAGE/World/Scene/SceneSerializer.h"
 #include "TAGE/Project/Project.h"
+#include "TAGE/AssetManager/Importers/TextureImporter.h"
 
 namespace TAGE::Editor {
 	ContentBrowserPanel::ContentBrowserPanel()
 	{
-		_DirectoryIcon = TARE::Texture2D::Create(); _DirectoryIcon->LoadTexture("Assets/textures/Icons/Folder.png");
-		_FileIcon = TARE::Texture2D::Create(); _FileIcon->LoadTexture("Assets/textures/Icons/File.png");
+		_DirectoryIcon = TAGE::TextureImporter::LoadTexture2D("Assets/textures/Icons/Folder.png");
+		_FileIcon =      TAGE::TextureImporter::LoadTexture2D("Assets/textures/Icons/File.png");
 	}
 
 	void ContentBrowserPanel::Init()

@@ -5,12 +5,12 @@
 #include "Platform/OpenGL/OpenGL_Texture.h"
 
 namespace TARE {
-	TAGE::MEM::Ref<Texture2D> TARE::Texture2D::Create()
+	TAGE::MEM::Ref<Texture2D> TARE::Texture2D::Create(const TextureSpecs& specs, TAGE::Buffer data)
 	{
 		switch (RenderAPI::GetRenderAPI())
 		{
 		case RAPI::UNDEFINED:
-		case RAPI::OPENGL: return TAGE::MEM::MakeRef<OpenGL_Texture2D>();
+		case RAPI::OPENGL: return TAGE::MEM::MakeRef<OpenGL_Texture2D>(specs, data);
 		case RAPI::DIRECTX11:
 		case RAPI::VULKAN:
 		default:

@@ -1663,6 +1663,7 @@
     <ClInclude Include="src\TAGE\AssetManager\AssetMetadata.h" />
     <ClInclude Include="src\TAGE\AssetManager\AssetImporter.h" />
     <ClInclude Include="src\TAGE\AssetManager\Importers\TextureImporter.h" />
+    <ClInclude Include="src\TAGE\Utilities\Buffer.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\Platform\OpenGL\OpenGL_Buffers.cpp">

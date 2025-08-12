@@ -2,23 +2,21 @@
 #include "TAGE/Common/TEnums.h"
 #include "TAGE/Utilities/Memory.h"
 #include "TAGE/AssetManager/Asset.h"
+#include "TAGE/Utilities/Buffer.h"
 #include "Bitmap.h"
 #include <string>
 
 namespace TARE {
-	struct CPUTextureData
+	struct TextureSpecs
 	{
 		int Width = 0;
 		int Height = 0;
 		int Channels = 0;
-		bool HasAlpha = false;
-		std::vector<uint8> RawData;
-		std::vector<uint8> CompressedData;
 		uint InternalFormat;
-		bool IsCompressed = false;
+		uint format;
 
 		bool IsValid() const {
-			return Width > 0 && Height > 0 && !RawData.empty();
+			return Width > 0 && Height > 0;
 		}
 	};
 
@@ -39,18 +37,15 @@ namespace TARE {
 		virtual void Bind(uint8 slot = 0) const = 0;
 		virtual void Unbind() const = 0;
 
-		virtual std::string GetPath() const = 0;
 		virtual uint GetID() const = 0;
 		virtual int GetWidth() const = 0;
 		virtual int GetHeight() const = 0;
 	public:
-		virtual bool LoadTexture(const std::string& path) = 0;
+		virtual bool LoadTexture(const TAGE::Buffer& data) = 0;
 		virtual bool LoadTextureFromMemory(const uint8* data, size_t size) = 0;
 		virtual bool LoadTextureFromMemory(const uint8* data, int width, int height, int channels) = 0;
-		virtual bool LoadFallbackTexture() = 0;
-		virtual bool SaveToDisk(const std::string& location) = 0;
 
-		static TAGE::MEM::Ref<Texture2D> Create();
+		static TAGE::MEM::Ref<Texture2D> Create(const TextureSpecs& specs, TAGE::Buffer data = TAGE::Buffer());
 
 		static TAGE::AssetType GetStaticType() { return TAGE::AssetType::Texture; }
 		virtual TAGE::AssetType GetType() const { return GetStaticType(); };

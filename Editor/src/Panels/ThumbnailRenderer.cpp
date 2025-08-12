@@ -4,9 +4,6 @@
 
 namespace TAGE::Editor {
 	ThumbnailRenderer::ThumbnailRenderer() {
-		_FallbackTextureIcon = TARE::Texture2D::Create();
-		_FallbackTextureIcon->LoadTexture("assets/textures/Icons/File.png");
-		_ThumbnailShader = TARE::ShaderLibrary::Add("ThumbnailShader", "shaders/Visual/thumbnail_vertex", "shaders/Visual/thumbnail_fragment");
 	}
 
 	void ThumbnailRenderer::SubmitModel(const std::filesystem::path& modelPath)

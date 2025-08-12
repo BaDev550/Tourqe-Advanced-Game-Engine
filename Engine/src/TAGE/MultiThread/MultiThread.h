@@ -30,6 +30,10 @@ namespace TAGE {
         void Enqueue(std::function<void()> glCommand);
         void ExecutePending();
 
+        static GrapichDispatcher* Get() {
+            static GrapichDispatcher instance;
+            return &instance;
+        }
     private:
         std::queue<std::function<void()>> commandQueue;
         std::mutex queueMutex;

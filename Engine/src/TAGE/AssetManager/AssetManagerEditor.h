@@ -14,6 +14,9 @@ namespace TAGE {
 		virtual MEM::Ref<Asset> GetAsset(AssetHandle handle) const override;
 
 		const AssetMetadata& GetMetadata(AssetHandle handle) const;
+
+		void SerializeAssetRegistry();
+		bool DeserializeAssetRegistry();
 	private:
 		AssetRegistry _AssetRegistry;
 		AssetMap _LoadedAssets;

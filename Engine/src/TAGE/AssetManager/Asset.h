@@ -7,7 +7,11 @@ namespace TAGE {
 		Scene,
 		Mesh,
 		Texture,
+		Material
 	};
+
+	std::string_view AssetTypeToString(AssetType type);
+	AssetType StringToAssetType(std::string_view type);
 
 	using AssetHandle = UUID;
 	class Asset

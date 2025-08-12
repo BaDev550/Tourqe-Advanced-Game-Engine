@@ -8,6 +8,7 @@
 
 #include "TAGE/World/Scene/SceneSerializer.h"
 #include "TAGE/Utilities/Platform.h"
+#include "TAGE/AssetManager/Importers/TextureImporter.h"
 #include "TAGE/Common/TMath.h"
 
 namespace TAGE::Editor {
@@ -24,12 +25,12 @@ namespace TAGE::Editor {
 		_SceneHierarchyPanel = MEM::MakeScope<SceneHierarchyPanel>(_ActiveScene);
 		_OutputPanel = MEM::MakeScope<OutputPanel>();
 
-		_PlayIcon = TARE::Texture2D::Create(); _PlayIcon->LoadTexture("Assets/textures/Icons/Play.png");
-		_StopIcon = TARE::Texture2D::Create(); _StopIcon->LoadTexture("Assets/textures/Icons/Stop.png");
-		_SimulateIcon = TARE::Texture2D::Create(); _SimulateIcon->LoadTexture("Assets/textures/Icons/Simulate.png");
-		_IconTranslate = TARE::Texture2D::Create(); _IconTranslate->LoadTexture("assets/textures/Icons/gizmo_translate.png");
-		_IconRotate = TARE::Texture2D::Create(); _IconRotate->LoadTexture("assets/textures/Icons/gizmo_rotate.png");
-		_IconScale = TARE::Texture2D::Create(); _IconScale->LoadTexture("assets/textures/Icons/gizmo_scale.png");
+		_PlayIcon =      TAGE::TextureImporter::LoadTexture2D("Assets/textures/Icons/Play.png");
+		_StopIcon =      TAGE::TextureImporter::LoadTexture2D("Assets/textures/Icons/Stop.png");
+		_SimulateIcon =  TAGE::TextureImporter::LoadTexture2D("Assets/textures/Icons/Simulate.png");
+		_IconTranslate = TAGE::TextureImporter::LoadTexture2D("assets/textures/Icons/gizmo_translate.png");
+		_IconRotate =    TAGE::TextureImporter::LoadTexture2D("assets/textures/Icons/gizmo_rotate.png");
+		_IconScale =     TAGE::TextureImporter::LoadTexture2D("assets/textures/Icons/gizmo_scale.png");
 
 		auto commandLineArgs = Application::Get()->GetSpecification().CommandLineArgs;
 		if (commandLineArgs.Count > 1) {
