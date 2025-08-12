@@ -1,6 +1,7 @@
 #pragma once
 #include "TAGE/Common/TEnums.h"
 #include "TAGE/Utilities/Memory.h"
+#include "TAGE/AssetManager/Asset.h"
 #include "Bitmap.h"
 #include <string>
 
@@ -21,7 +22,7 @@ namespace TARE {
 		}
 	};
 
-	class Texture {
+	class Texture : public TAGE::Asset {
 	public:
 		virtual ~Texture() = default;
 		virtual void Bind(uint8 slot = 0) const = 0;
@@ -50,6 +51,9 @@ namespace TARE {
 		virtual bool SaveToDisk(const std::string& location) = 0;
 
 		static TAGE::MEM::Ref<Texture2D> Create();
+
+		static TAGE::AssetType GetStaticType() { return TAGE::AssetType::Texture; }
+		virtual TAGE::AssetType GetType() const { return GetStaticType(); };
 	};
 
 	class CubemapTexture {

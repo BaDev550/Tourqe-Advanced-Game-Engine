@@ -1,6 +1,9 @@
 #pragma once
 
 #include "TAGE/Utilities/Logger.h"
+
+#include "TAGE/AssetManager/AssetManagerRuntime.h"
+#include "TAGE/AssetManager/AssetManagerEditor.h"
 #include <string>
 #include <filesystem>
 
@@ -34,12 +37,17 @@ namespace TAGE {
 
 		ProjectConfig& GetConfig() { return _Config; }
 		static MEM::Ref<Project> GetActive() { return _ActiveProject; }
+		MEM::Ref<AssetManagerBase>    GetAssetManager() { return _AssetManager; }
+		MEM::Ref<AssetManagerRuntime> GetRuntimeAssetManager() { return std::static_pointer_cast<AssetManagerRuntime>(_AssetManager); }
+		MEM::Ref<AssetManagerEditor>  GetEditorAssetManager() {  return std::static_pointer_cast<AssetManagerEditor>(_AssetManager); }
+
 		static MEM::Ref<Project> New();
 		static MEM::Ref<Project> Load(const std::filesystem::path& path);
 		static bool SaveActive(const std::filesystem::path& path);
 	private:
 		ProjectConfig _Config;
 		std::filesystem::path _ProjectDirectory;
+		MEM::Ref<AssetManagerBase> _AssetManager;
 
 		inline static MEM::Ref<Project> _ActiveProject;
 	};

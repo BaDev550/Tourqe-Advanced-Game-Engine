@@ -27,8 +27,8 @@ namespace TARE {
 				texture->Bind(i);
 			else if (_Textures[0])
 				_Textures[0]->Bind(i);
-			else
-				fallbackTexture->Bind(i);
+			//else
+			//	fallbackTexture->Bind(i);
 		}
 
 		bool hasDiffuseTex = _Textures[static_cast<uint>(TextureType::DIFFUSE)] != nullptr;

@@ -43,7 +43,7 @@ namespace TAGE
 		else {
 			_Properties.Width = properties.Width;
 			_Properties.Height = properties.Height;
-			glfwWindowHint(GLFW_DECORATED, GLFW_FALSE);
+			glfwWindowHint(GLFW_DECORATED, GLFW_TRUE);
 			glfwWindowHint(GLFW_MAXIMIZED, GLFW_FALSE);
 			_Window = glfwCreateWindow(_Properties.Width, _Properties.Height, _Properties.Title, nullptr, nullptr);
 		}

@@ -407,65 +407,6 @@ namespace TAGE::Editor {
 				if (ImGui::MenuItem("Load Layout")) LoadLayout();
 				ImGui::EndMenu();
 			}
-
-			float windowWidth = ImGui::GetWindowWidth();
-			const char* title = "Tourqe Advanced Game Engine";
-			float titleWidth = ImGui::CalcTextSize(title).x;
-			ImGui::SetCursorPosX((windowWidth - titleWidth) * 0.5f);
-			ImGui::TextUnformatted(title);
-
-			float buttonHeight = ImGui::GetFrameHeight() * 0.8f;
-			float buttonWidth = buttonHeight * 1.2f;
-			ImVec2 buttonSize = { buttonWidth, buttonHeight };
-
-			float spacing = ImGui::GetStyle().ItemSpacing.x;
-			float rightPadding = 10.0f;
-
-			float totalButtonsWidth = (buttonWidth * 3.0f) + (spacing * 2.0f);
-			ImGui::SameLine(ImGui::GetWindowWidth() - totalButtonsWidth - rightPadding);
-			ImGui::SetCursorPosY(ImGui::GetCursorPosY() + (ImGui::GetFrameHeight() - buttonHeight) * 0.5f - 1.0f);
-
-			if (ImGui::Button("-", buttonSize))
-			{
-				//Application::Get()->GetWindow()->IconifyWindow();
-			}
-			ImGui::SameLine();
-
-			if (ImGui::Button(isMaximized ? "[]" : "[]", buttonSize))
-			{
-				Application::Get()->GetWindow()->RestoreWindow(isMaximized);
-				isMaximized = !isMaximized;
-			}
-			ImGui::SameLine();
-
-			if (ImGui::Button("X", buttonSize))
-			{
-				Application::Get()->Close();
-			}
-
-			if (ImGui::IsMouseReleased(ImGuiMouseButton_Left))
-				isDraggingWindow = false;
-
-			if (ImGui::IsWindowHovered() && ImGui::IsMouseDown(ImGuiMouseButton_Left))
-			{
-				if (!isDraggingWindow)
-				{
-					isDraggingWindow = true;
-					dragStartPos = ImGui::GetMousePos();
-				}
-			}
-
-			if (isDraggingWindow)
-			{
-				ImVec2 currentPos = ImGui::GetMousePos();
-				ImVec2 delta = ImVec2(currentPos.x - dragStartPos.x, currentPos.y - dragStartPos.y);
-				dragStartPos = currentPos;
-
-				int x, y;
-				Application::Get()->GetWindow()->GetWindowPos(&x, &y);
-				Application::Get()->GetWindow()->SetWindowPos(x + (int)delta.x, y + (int)delta.y);
-			}
-
 			ImGui::EndMainMenuBar();
 		}
 
