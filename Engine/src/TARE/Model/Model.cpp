@@ -2,6 +2,7 @@
 #include "Model.h"
 #include "TAGE/Application/Application.h"
 #include "TARE/Shader/ShaderLibrary.h"
+#include "TAGE/Project/Project.h"
 #include "meshoptimizer.h"
 #include "TAGE/AssetManager/AssetManager.h"
 #include "TAGE/AssetManager/Importers/TextureImporter.h"
@@ -43,7 +44,6 @@ namespace TARE
 			_Type = ModelType::SKINNED_MODEL;
 
 		_FilePath = filePath;
-		_Directory = filePath.substr(0, filePath.find_last_of('/'));
 		ProcessNode(_scene->mRootNode, _scene);
 		return true;
 	}
@@ -143,28 +143,28 @@ namespace TARE
 	{
 		aiTextureType aiType = ToAiTextureType(type);
 
-		if (outMaterial->GetTexture(type))
+		if (outMaterial->GetTexture(type) != 0)
 			return;
 
 		aiString path;
 		if (material->GetTexture(aiType, 0, &path) == AI_SUCCESS && path.length > 0)
 		{
-			std::string texPath = path.C_Str();
-			std::replace(texPath.begin(), texPath.end(), '\\', '/');
-			std::filesystem::path modelDir = std::filesystem::path(_Directory).parent_path();
-			std::filesystem::path textureFilename = std::filesystem::path(texPath).filename();
-			std::filesystem::path fullPath = modelDir / textureFilename;
-			std::filesystem::path fallback = std::filesystem::path(_Directory) / textureFilename;
-			if (std::filesystem::exists(fallback)) {
-				fullPath = fallback;
-			}
+			std::filesystem::path assetDir = TAGE::Project::GetAssetDirectory();
 
-			if (std::filesystem::exists(fullPath)) {
-				//TAGE::MEM::Ref<Texture2D> texture = TAGE::TextureImporter::ImportTexture2D(fullPath);
-				//outMaterial->SetTexture(type, texture->_handle);
+			std::filesystem::path modelDir = _FilePath.parent_path();
+			std::filesystem::path texturePath = modelDir / path.C_Str();
+
+			if (std::filesystem::exists(texturePath)) {
+				//std::filesystem::path relativePath = std::filesystem::relative(texturePath, assetDir);
+
+				//const auto& assetMG = TAGE::Project::GetActive()->GetEditorAssetManager();
+				//TAGE::AssetHandle TextureHandle = assetMG->ImportAsset(relativePath);
+				//outMaterial->SetTexture(type, TextureHandle);
+
+				//LOG_INFO("FilePath: {}", relativePath.generic_string());
 			}
 			else {
-				LOG_WARN("Texture not found: {}", fullPath.string());
+				LOG_WARN("Texture not found: {}", texturePath.string());
 			}
 		}
 	}
@@ -285,7 +285,6 @@ namespace TARE
 		}
 
 		_FilePath = path;
-		_Directory = path.substr(0, path.find_last_of('/'));
 		ProcessNode(_scene->mRootNode, _scene);
 		return true;
 	}

@@ -2,4 +2,5 @@ Project:
   Name: Sandbox
   StartScene: "Scenes/playground.scene"
   AssetDirectory: "Assets"
+  AssetRegistryPath: "AssetRegistry.tage"
   ScriptModulePath: "Scripts/Binaries/Sandbox.dll"

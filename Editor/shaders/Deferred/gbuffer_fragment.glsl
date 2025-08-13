@@ -18,10 +18,12 @@ uniform int u_EntityID;
 void main()
 {
     vec3 Albedo;
-    if (u_Material.HasDiffuseTex)
+    if (u_Material.HasDiffuseTex) {
         Albedo = texture(u_Material.DiffuseTex, TexCoords).rgb;
-    else
+    }
+    else {
         Albedo = u_Material.DiffuseColor.rgb;
+    }
 
     float spec = texture(u_Material.SpecularTex, TexCoords).r;
 

@@ -93,6 +93,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClInclude Include="src\Panels\AssetManagerPanel.h" />
     <ClInclude Include="src\EditorLayer.h" />
     <ClInclude Include="src\Gamelayer\GameLayer.h" />
     <ClInclude Include="src\Panels\ContentBrowserPanel.h" />
@@ -101,6 +102,7 @@
     <ClInclude Include="src\Panels\ThumbnailRenderer.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="src\Panels\AssetManagerPanel.cpp" />
     <ClCompile Include="src\EditorLayer.cpp" />
     <ClCompile Include="src\Gamelayer\GameLayer.cpp" />
     <ClCompile Include="src\Panels\ContentBrowserPanel.cpp" />

@@ -1,6 +1,7 @@
 #include "tagepch.h"
 #include "TextureImporter.h"
 #include "TAGE/MultiThread/MultiThread.h"
+#include "TAGE/Project/Project.h"
 
 #define STB_DXT_IMPLEMENTATION
 #include <stb/stb_dxt.h>
@@ -11,7 +12,7 @@
 namespace TAGE {
 	MEM::Ref<TARE::Texture2D> TextureImporter::ImportTexture2D(AssetHandle handle, const AssetMetadata& metadata)
 	{
-		return LoadTexture2D(metadata.FilePath);
+		return LoadTexture2D(Project::GetAssetDirectory() / metadata.FilePath);
 	}
 
 	MEM::Ref<TARE::Texture2D> TextureImporter::LoadTexture2D(const std::filesystem::path& filepath)

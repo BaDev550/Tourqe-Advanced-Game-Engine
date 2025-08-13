@@ -52,6 +52,22 @@ namespace TAGE {
         return asset;
     }
 
+    AssetHandle AssetManagerEditor::ImportAsset(const std::filesystem::path& path)
+    {
+        AssetHandle handle;
+        AssetMetadata metadata;
+        metadata.FilePath = path;
+        metadata.Type = AssetType::Texture;
+        MEM::Ref<Asset> asset = AssetImporter::ImportAsset(handle, metadata);
+        asset->_handle = handle;
+        if (asset) {
+            _LoadedAssets[handle] = asset;
+            _AssetRegistry[handle] = metadata;
+            SerializeAssetRegistry();
+        }
+        return _LoadedAssets[handle]->_handle;
+    }
+
     void AssetManagerEditor::SerializeAssetRegistry()
     {
         auto path = Project::GetAssetRegistryPath();
@@ -59,13 +75,18 @@ namespace TAGE {
         YAML::Emitter out;
         out << YAML::BeginMap;
         out << YAML::Key << "AssetRegistry" << YAML::Value;
+
+        out << YAML::BeginSeq;
         for (const auto [handle, metadata] : _AssetRegistry) {
             out << YAML::BeginMap;
             out << YAML::Key << "Handle" << YAML::Value << handle;
-            out << YAML::Key << "FilePath" << YAML::Value << metadata.FilePath.string();
+            std::string filepathStr = metadata.FilePath.generic_string();
+            out << YAML::Key << "FilePath" << YAML::Value << filepathStr;
             out << YAML::Key << "Type" << YAML::Value << AssetTypeToString(metadata.Type);
             out << YAML::EndMap;
         }
+        out << YAML::EndSeq;
+
         out << YAML::EndMap;
 
         std::ofstream fout(path);
@@ -90,7 +111,6 @@ namespace TAGE {
 
         for (const auto node : registryNode) {
             AssetHandle handle = node["Handle"].as<uint64>();
-
             auto& assetMetadata = _AssetRegistry[handle];
             assetMetadata.FilePath = node["FilePath"].as<std::string>();
             assetMetadata.Type = StringToAssetType(node["Type"].as<std::string>());

@@ -19,19 +19,20 @@
 #define DEBUG_BREAK raise(SIGTRAP)
 #endif
 #define CHECK_LOGGER if(TAGE::Logger::GetCoreLogger() != nullptr)
+#define CHECK_SINK   if(TAGE::Logger::GetSink() != nullptr)
 #define CHECK_APP_LOGGER if(TAGE::Logger::GetClientLogger() != nullptr)
 
-#define LOG_TRACE(...)    CHECK_LOGGER{TAGE::Logger::GetCoreLogger()->trace(__VA_ARGS__); }
-#define LOG_INFO(...)     CHECK_LOGGER{TAGE::Logger::GetCoreLogger()->info(__VA_ARGS__); }
-#define LOG_WARN(...)     CHECK_LOGGER{TAGE::Logger::GetCoreLogger()->warn(__VA_ARGS__); }
-#define LOG_ERROR(...)    CHECK_LOGGER{TAGE::Logger::GetCoreLogger()->error(__VA_ARGS__); } 
-#define LOG_CRITICAL(...) CHECK_LOGGER{TAGE::Logger::GetCoreLogger()->critical(__VA_ARGS__); }
+#define LOG_TRACE(...)    CHECK_SINK{CHECK_LOGGER{TAGE::Logger::GetCoreLogger()->trace(__VA_ARGS__); } }
+#define LOG_INFO(...)     CHECK_SINK{CHECK_LOGGER{TAGE::Logger::GetCoreLogger()->info(__VA_ARGS__); } }
+#define LOG_WARN(...)     CHECK_SINK{CHECK_LOGGER{TAGE::Logger::GetCoreLogger()->warn(__VA_ARGS__); } }
+#define LOG_ERROR(...)    CHECK_SINK{CHECK_LOGGER{TAGE::Logger::GetCoreLogger()->error(__VA_ARGS__); } } 
+#define LOG_CRITICAL(...) CHECK_SINK{CHECK_LOGGER{TAGE::Logger::GetCoreLogger()->critical(__VA_ARGS__); } }
 
-#define APP_LOG_TRACE(...)    CHECK_APP_LOGGER{TAGE::Logger::GetClientLogger()->trace(__VA_ARGS__); }
-#define APP_LOG_INFO(...)     CHECK_APP_LOGGER{TAGE::Logger::GetClientLogger()->info(__VA_ARGS__); }
-#define APP_LOG_WARN(...)     CHECK_APP_LOGGER{TAGE::Logger::GetClientLogger()->warn(__VA_ARGS__); }
-#define APP_LOG_ERROR(...)    CHECK_APP_LOGGER{TAGE::Logger::GetClientLogger()->error(__VA_ARGS__); } 
-#define APP_LOG_CRITICAL(...) CHECK_APP_LOGGER{TAGE::Logger::GetClientLogger()->critical(__VA_ARGS__); }
+#define APP_LOG_TRACE(...)    CHECK_SINK{CHECK_APP_LOGGER{TAGE::Logger::GetClientLogger()->trace(__VA_ARGS__); } }
+#define APP_LOG_INFO(...)     CHECK_SINK{CHECK_APP_LOGGER{TAGE::Logger::GetClientLogger()->info(__VA_ARGS__); } }
+#define APP_LOG_WARN(...)     CHECK_SINK{CHECK_APP_LOGGER{TAGE::Logger::GetClientLogger()->warn(__VA_ARGS__); } }
+#define APP_LOG_ERROR(...)    CHECK_SINK{CHECK_APP_LOGGER{TAGE::Logger::GetClientLogger()->error(__VA_ARGS__); } } 
+#define APP_LOG_CRITICAL(...) CHECK_SINK{CHECK_APP_LOGGER{TAGE::Logger::GetClientLogger()->critical(__VA_ARGS__); } }
 #define ASSERT(x, ...) \
     if (!(x)) { \
         LOG_CRITICAL("ASSERTION FAILED: ({0})", #x); \
@@ -45,7 +46,7 @@
         DEBUG_BREAK; \
     }
 
-#define GET_MESSAGES() TAGE::Logger::GetSink()->GetMessages();
+#define GET_MESSAGES()   TAGE::Logger::GetSink()->GetMessages();
 #define CLEAR_MESSAGES() TAGE::Logger::GetSink()->Clear();
 namespace TAGE
 {

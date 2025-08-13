@@ -1,5 +1,7 @@
 #pragma once
 #include <string>
+#include <filesystem>
+
 #include "glm/glm.hpp"
 #include "TAGE/Common/TTypes.h"
 #include "Mesh.h"
@@ -23,7 +25,7 @@ namespace TARE
 		void Draw(const std::string& shader) const;
 		void DrawOutlined(const std::string& shader, const glm::mat4& viewProj);
 
-		std::string GetFilePath() const { return _FilePath; }
+		std::string GetFilePath() const { return _FilePath.string(); }
 		uint GetMeshCount() { return (uint)_meshes.size(); }
 		Mesh& GetMesh(int slot) { return *_meshes[slot]; }
 		BoundingBox GetBoundingBox() const;
@@ -41,8 +43,7 @@ namespace TARE
 		void UploadToGPU();
 	private:
 		std::vector<TAGE::MEM::Scope<Mesh>> _meshes;
-		std::string _Directory;
-		std::string _FilePath;
+		std::filesystem::path _FilePath;
 		ModelType _Type = ModelType::MODEL;
 
 		glm::mat4 _transform{ 1.0f };

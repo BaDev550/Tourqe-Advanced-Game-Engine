@@ -28,7 +28,10 @@ namespace TARE {
 		}
 	}
 
-	OpenGL_Texture2D::~OpenGL_Texture2D() { LOG_WARN("OPENGL TEXTURE DELETED"); glDeleteTextures(1, &_ID); }
+	OpenGL_Texture2D::~OpenGL_Texture2D() { 
+		LOG_WARN("OPENGL TEXTURE DELETED"); 
+		glDeleteTextures(1, &_ID); 
+	}
 	OpenGL_Texture2D::OpenGL_Texture2D(const TextureSpecs& specs, TAGE::Buffer data)
 	{
 		_Specification = specs;

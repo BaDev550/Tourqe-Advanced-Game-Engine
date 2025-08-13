@@ -17,7 +17,9 @@ namespace TAGE {
 		if (serializer.Deserialize(path)) {
 			project->_ProjectDirectory = path.parent_path();
 			_ActiveProject = std::move(project);
-			_ActiveProject->_AssetManager = MEM::MakeRef<AssetManagerEditor>();
+			MEM::Ref<AssetManagerEditor> editorAssetManager = MEM::MakeRef<AssetManagerEditor>();
+			_ActiveProject->_AssetManager = editorAssetManager;
+			editorAssetManager->DeserializeAssetRegistry();
 			return _ActiveProject;
 		}
 		 
