@@ -23,12 +23,13 @@ namespace TAGE::Editor {
 
 		struct TreeNode {
 			std::filesystem::path Path;
+			AssetHandle Handle = 0;
 
 			uint Parent = (uint)-1;
 			std::map<std::filesystem::path, uint> Children;
 
 			TreeNode() = default;
-			TreeNode(const std::filesystem::path& path) : Path(path) {}
+			TreeNode(const std::filesystem::path& path, AssetHandle handle) : Path(path), Handle(handle) {}
 		};
 		std::vector<TreeNode> _TreeNodes;
 

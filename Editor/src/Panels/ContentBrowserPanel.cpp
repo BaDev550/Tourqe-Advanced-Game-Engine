@@ -15,7 +15,7 @@ namespace TAGE::Editor {
 	{
 		_BaseDirectory = Project::GetAssetDirectory();
 		_CurrentDirectory = _BaseDirectory;
-		_TreeNodes.push_back(TreeNode("/"));
+		_TreeNodes.push_back(TreeNode("/", 0));
 
 		RefreshAssetTree();
 	}
@@ -73,11 +73,18 @@ namespace TAGE::Editor {
 				ImGui::ImageButton("#ICON", (ImTextureID)(void*)icon->GetID(), { _ThumbnailSize, _ThumbnailSize }, { 1, 0 }, { 0, 1 });
 
 				if (ImGui::BeginPopupContextItem()) {
-					if (ImGui::MenuItem("Import")) {
-						auto relativePath = std::filesystem::relative(item, Project::GetActive()->GetAssetDirectory());
-						Project::GetActive()->GetEditorAssetManager()->ImportAsset(relativePath);
+					if (ImGui::MenuItem("Delete")) {
+
 					}
 					ImGui::EndPopup();
+				}
+
+				if (ImGui::BeginDragDropSource())
+				{
+					AssetHandle handle = _TreeNodes[index].Handle;
+					ImGui::SetDragDropPayload("CONTENT_BROWSER_ITEM", &handle, sizeof(AssetHandle));
+					ImGui::Text("%s", item.stem().string().c_str());
+					ImGui::EndDragDropSource();
 				}
 
 				ImGui::PopStyleColor();
@@ -109,21 +116,9 @@ namespace TAGE::Editor {
 					if (ImGui::MenuItem("Import")) {
 						auto relativePath = std::filesystem::relative(path, Project::GetActive()->GetAssetDirectory());
 						Project::GetActive()->GetEditorAssetManager()->ImportAsset(relativePath);
+						RefreshAssetTree();
 					}
 					ImGui::EndPopup();
-				}
-
-				if (ImGui::BeginDragDropSource())
-				{
-					std::filesystem::path relativePath(path);
-					std::string pathStr = relativePath.string();
-					ImGui::SetDragDropPayload(
-						"CONTENT_BROWSER_ITEM",
-						pathStr.c_str(),
-						pathStr.size() + 1
-					);
-					ImGui::Text("%s", relativePath.stem().string().c_str());
-					ImGui::EndDragDropSource();
 				}
 
 				ImGui::PopStyleColor();
@@ -158,7 +153,7 @@ namespace TAGE::Editor {
 					currentNodeIndex = it->second;
 				}
 				else {
-					TreeNode newNode(p);
+					TreeNode newNode(p, handle);
 					newNode.Parent = currentNodeIndex;
 					_TreeNodes.push_back(newNode);
 

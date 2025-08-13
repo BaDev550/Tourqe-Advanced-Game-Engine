@@ -149,19 +149,17 @@ namespace TARE
 		aiString path;
 		if (material->GetTexture(aiType, 0, &path) == AI_SUCCESS && path.length > 0)
 		{
-			std::filesystem::path assetDir = TAGE::Project::GetAssetDirectory();
-
 			std::filesystem::path modelDir = _FilePath.parent_path();
-			std::filesystem::path texturePath = modelDir / path.C_Str();
+			std::filesystem::path assetDir = std::filesystem::absolute(TAGE::Project::GetAssetDirectory());
+			std::filesystem::path texturePath = std::filesystem::absolute(modelDir / path.C_Str());
+			std::filesystem::path relativePath = std::filesystem::relative(texturePath, assetDir);
 
-			if (std::filesystem::exists(texturePath)) {
-				//std::filesystem::path relativePath = std::filesystem::relative(texturePath, assetDir);
+			if (std::filesystem::exists(TAGE::Project::GetAssetDirectory() / relativePath)) {
+				const auto& assetMG = TAGE::Project::GetActive()->GetEditorAssetManager();
+				TAGE::AssetHandle TextureHandle = assetMG->ImportAsset(relativePath);
+				outMaterial->SetTexture(type, TextureHandle);
 
-				//const auto& assetMG = TAGE::Project::GetActive()->GetEditorAssetManager();
-				//TAGE::AssetHandle TextureHandle = assetMG->ImportAsset(relativePath);
-				//outMaterial->SetTexture(type, TextureHandle);
-
-				//LOG_INFO("FilePath: {}", relativePath.generic_string());
+				LOG_INFO("FilePath: {}", relativePath.string());
 			}
 			else {
 				LOG_WARN("Texture not found: {}", texturePath.string());

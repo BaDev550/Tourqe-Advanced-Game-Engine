@@ -40,16 +40,12 @@ namespace TARE {
 
 	void Material::SetTexture(TextureType type, TAGE::AssetHandle texture)
 	{
-		if (texture != 0)
-			_Textures[(int)type] = texture;
+		_Textures[(int)type] = texture;
 	}
 
 	TAGE::AssetHandle Material::GetTexture(TextureType type) const
 	{
-		if (_Textures[(int)type])
-			return _Textures[(int)type];
-
-		return 0;
+		return _Textures[(int)type];
 	}
 
 	void Material::SetColor(TextureType slot, const glm::vec4& color) {

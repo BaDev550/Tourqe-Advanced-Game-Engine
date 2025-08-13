@@ -4,6 +4,19 @@
 #include <yaml-cpp/yaml.h>
 
 namespace TAGE {
+    static std::map<std::filesystem::path, AssetType> s_AssetExtensionMap = {
+        { ".png", AssetType::Texture },
+        { ".jpg", AssetType::Texture },
+        { ".tscene", AssetType::Scene}
+    };
+
+    static AssetType GetAssetTypeFromExtension(const std::filesystem::path& e) {
+        if (s_AssetExtensionMap.find(e) == s_AssetExtensionMap.end()) {
+            return AssetType::None;
+        }
+        return s_AssetExtensionMap.at(e);
+    }
+
     YAML::Emitter& operator<<(YAML::Emitter& out, const std::string_view& v) {
         out << std::string(v.data(), v.size());
         return out;
@@ -32,7 +45,7 @@ namespace TAGE {
         return it->second;
     }
 
-    MEM::Ref<Asset> AssetManagerEditor::GetAsset(AssetHandle handle) const
+    MEM::Ref<Asset> AssetManagerEditor::GetAsset(AssetHandle handle)
     {
         if (!IsAssetHandleValid(handle))
             return nullptr;
@@ -48,8 +61,17 @@ namespace TAGE {
             if (!asset) {
                 LOG_ERROR("asset import failed");
             }
+            _LoadedAssets[handle] = asset;
         }
         return asset;
+    }
+
+    AssetType AssetManagerEditor::GetAssetType(AssetHandle handle) const
+    {
+        if (!IsAssetHandleValid(handle))
+            return AssetType::None;
+
+        return _AssetRegistry.at(handle).Type;
     }
 
     AssetHandle AssetManagerEditor::ImportAsset(const std::filesystem::path& path)
@@ -57,7 +79,7 @@ namespace TAGE {
         AssetHandle handle;
         AssetMetadata metadata;
         metadata.FilePath = path;
-        metadata.Type = AssetType::Texture;
+        metadata.Type = GetAssetTypeFromExtension(path.extension());
         MEM::Ref<Asset> asset = AssetImporter::ImportAsset(handle, metadata);
         asset->_handle = handle;
         if (asset) {
