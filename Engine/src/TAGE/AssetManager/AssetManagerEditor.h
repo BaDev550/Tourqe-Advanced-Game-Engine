@@ -18,6 +18,7 @@ namespace TAGE {
 		virtual bool IsAssetLoaded(AssetHandle handle) const override;
 		virtual MEM::Ref<Asset> GetAsset(AssetHandle handle) override;
 		virtual AssetType GetAssetType(AssetHandle handle) const override;
+		AssetHandle TryToGetLoadedAssetFromPath(const std::filesystem::path& path) const;
 
 		AssetHandle ImportAsset(const std::filesystem::path& path);
 

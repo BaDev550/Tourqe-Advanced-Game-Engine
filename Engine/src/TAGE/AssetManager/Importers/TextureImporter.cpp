@@ -12,14 +12,19 @@
 namespace TAGE {
 	MEM::Ref<TARE::Texture2D> TextureImporter::ImportTexture2D(AssetHandle handle, const AssetMetadata& metadata)
 	{
+		PROFILE_FUNCTION();
+
 		return LoadTexture2D(Project::GetAssetDirectory() / metadata.FilePath);
 	}
 
 	MEM::Ref<TARE::Texture2D> TextureImporter::LoadTexture2D(const std::filesystem::path& filepath)
 	{
+		PROFILE_FUNCTION();
+
 		int width, height, channels;
 		Buffer data;
 		{
+			PROFILE_SCOPE("stbi_load - TextureImporter::ImportTexture2D");
 			data.Data = stbi_load(filepath.string().c_str(), &width, &height, &channels, 0);
 		}
 

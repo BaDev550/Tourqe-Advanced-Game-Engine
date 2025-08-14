@@ -150,6 +150,7 @@
     <ClInclude Include="src\TAGE\Utilities\Logger.h" />
     <ClInclude Include="src\TAGE\Utilities\Memory.h" />
     <ClInclude Include="src\TAGE\Utilities\Platform.h" />
+    <ClInclude Include="src\TAGE\Utilities\Profiler.h" />
     <ClInclude Include="src\TAGE\Utilities\TimeStep.h" />
     <ClInclude Include="src\TAGE\Utilities\Timer.h" />
     <ClInclude Include="src\TAGE\Utilities\UUID.h" />

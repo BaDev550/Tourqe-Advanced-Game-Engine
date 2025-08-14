@@ -157,16 +157,14 @@ namespace TARE
 			if (std::filesystem::exists(TAGE::Project::GetAssetDirectory() / relativePath)) {
 				const auto& assetMG = TAGE::Project::GetActive()->GetEditorAssetManager();
 				TAGE::AssetHandle TextureHandle = assetMG->ImportAsset(relativePath);
-				outMaterial->SetTexture(type, TextureHandle);
-
-				LOG_INFO("FilePath: {}", relativePath.string());
+				if (TextureHandle != 0)
+					outMaterial->SetTexture(type, TextureHandle);
 			}
 			else {
 				LOG_WARN("Texture not found: {}", texturePath.string());
 			}
 		}
 	}
-
 
 	inline int8 QuantizeSigned(float value) { return static_cast<int8>(std::roundf(glm::clamp(value, -1.0f, 1.0f) * 127.0f)); }
 	inline int16 QuantizePosition(float value) { return static_cast<int16>(value * 10000.0f); }

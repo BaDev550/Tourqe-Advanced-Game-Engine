@@ -62,6 +62,7 @@ namespace TAGE {
                 LOG_ERROR("asset import failed");
             }
             _LoadedAssets[handle] = asset;
+            _AssetRegistry[handle] = metadata;
         }
         return asset;
     }
@@ -74,8 +75,20 @@ namespace TAGE {
         return _AssetRegistry.at(handle).Type;
     }
 
+    AssetHandle AssetManagerEditor::TryToGetLoadedAssetFromPath(const std::filesystem::path& path) const
+    {
+        for (const auto& [asset, metadata] : _AssetRegistry) {
+            if (metadata.FilePath == path)
+                return asset;
+        }
+        return 0;
+    }
+
     AssetHandle AssetManagerEditor::ImportAsset(const std::filesystem::path& path)
     {
+        if (TryToGetLoadedAssetFromPath(path) != 0)
+            return TryToGetLoadedAssetFromPath(path);
+
         AssetHandle handle;
         AssetMetadata metadata;
         metadata.FilePath = path;
@@ -86,8 +99,9 @@ namespace TAGE {
             _LoadedAssets[handle] = asset;
             _AssetRegistry[handle] = metadata;
             SerializeAssetRegistry();
+            return _LoadedAssets[handle]->_handle;
         }
-        return _LoadedAssets[handle]->_handle;
+        return 0;
     }
 
     void AssetManagerEditor::SerializeAssetRegistry()

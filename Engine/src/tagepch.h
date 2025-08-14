@@ -15,3 +15,4 @@
 #include "TAGE/Utilities/Logger.h"
 #include "TAGE/Utilities/Memory.h"
 #include "TAGE/Utilities/UUID.h"
+#include "TAGE/Utilities/Profiler.h"

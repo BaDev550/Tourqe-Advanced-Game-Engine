@@ -14,7 +14,7 @@ namespace TARE {
 		virtual int GetWidth() const override { return _Specification.Width; }
 		virtual int GetHeight() const override { return _Specification.Height; }
 	public:
-		virtual bool LoadTexture(const TAGE::Buffer& data) override;
+		virtual bool LoadTexture(TAGE::Buffer& data) override;
 		virtual bool LoadTextureFromMemory(const uint8* data, size_t size) override;
 		virtual bool LoadTextureFromMemory(const uint8* data, int width, int height, int channels) override;
 	private:

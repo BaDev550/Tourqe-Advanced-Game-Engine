@@ -41,7 +41,7 @@ namespace TARE {
 		virtual int GetWidth() const = 0;
 		virtual int GetHeight() const = 0;
 	public:
-		virtual bool LoadTexture(const TAGE::Buffer& data) = 0;
+		virtual bool LoadTexture(TAGE::Buffer& data) = 0;
 		virtual bool LoadTextureFromMemory(const uint8* data, size_t size) = 0;
 		virtual bool LoadTextureFromMemory(const uint8* data, int width, int height, int channels) = 0;
 

@@ -17,11 +17,12 @@ namespace TAGE {
 		MeshComponent(const MeshComponent&) = default;
 		MeshComponent(const std::string& modelpath) {
 			Handle = MEM::MakeRef<TARE::Model>();
+			Handle->LoadFromFile(modelpath);
 
-			Handle->LoadModelAsync(modelpath, [&](TAGE::MEM::Ref<TARE::Model> model) {
-				if (model) { Handle = std::move(model); }
-				else { LOG_ERROR("Failed to load async model"); }
-				});
+			//Handle->LoadModelAsync(modelpath, [&](TAGE::MEM::Ref<TARE::Model> model) {
+			//	if (model) { Handle = std::move(model); }
+			//	else { LOG_ERROR("Failed to load async model"); }
+			//	});
 		}
 		~MeshComponent() {
 			Handle.reset();
