@@ -1,7 +1,7 @@
 Project:
   Name: Sandbox
-  StartScene: "Scenes/playground.scene"
-  CacheDirectory: "Cache"
-  AssetDirectory: "Assets"
-  AssetRegistryPath: "AssetRegistry.tage"
-  ScriptModulePath: "Binaries/Sandbox.dll"
+  CacheDirectory: Cache
+  ConfigDirectory: Config
+  AssetDirectory: Assets
+  AssetRegistryPath: AssetRegistry.tage
+  ScriptModulePath: Binaries/Sandbox.dll

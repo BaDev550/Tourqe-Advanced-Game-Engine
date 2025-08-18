@@ -121,6 +121,8 @@ namespace TAGE::Editor {
 		_SceneHierarchyPanel->OnImGuiRender();
 		_ContentBrowserPanel->OnImGuiRender();
 		_OutputPanel->OnImGuiRender();
+		if (_ProjectSettingsPanel.IsOpen())
+			_ProjectSettingsPanel.OnImGuiRender();
 
 		UI_DrawSettingsPanel();
 		UI_DrawViewport();
@@ -260,6 +262,12 @@ namespace TAGE::Editor {
 
 	void EditorLayer::SaveProject()
 	{
+		if (Project::GetActive()) {
+			Project::GetActive()->SaveActive();
+		}
+		else {
+			LOG_ERROR("No active project to save.");
+		}
 	}
 
 	void EditorLayer::SaveLayout()
@@ -391,6 +399,7 @@ namespace TAGE::Editor {
 				if (ImGui::MenuItem("Open Scene...", "Ctrl+O")) OpenScene();
 				if (ImGui::MenuItem("Save Scene As...", "Ctrl+Shift+S")) SaveSceneAs();
 				if (ImGui::MenuItem("Save Scene", "Ctrl+S")) SaveScene();
+				if (ImGui::MenuItem("Save Project")) SaveProject();
 				ImGui::Separator();
 				if (ImGui::MenuItem("Exit")) Application::Get()->Close();
 				ImGui::EndMenu();
@@ -399,6 +408,10 @@ namespace TAGE::Editor {
 			if (ImGui::BeginMenu("Edit"))
 			{
 				if (ImGui::MenuItem("Duplicate Entity", "Ctrl+D")) OnDuplicateEntity();
+				if (ImGui::MenuItem("Project Settings"))
+				{
+					_ProjectSettingsPanel.Open();
+				}
 				ImGui::EndMenu();
 			}
 

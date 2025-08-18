@@ -15,6 +15,7 @@ namespace TAGE {
 
 		std::filesystem::path AssetDirectory;
 		std::filesystem::path CacheDirectory;
+		std::filesystem::path ConfigDirectory;
 		std::filesystem::path AssetRegistryPath;
 		std::filesystem::path ScriptPath;
 	};
@@ -48,6 +49,10 @@ namespace TAGE {
 			ASSERT_NOMSG(_ActiveProject);
 			return GetProjectDirectory() / _ActiveProject->_Config.ScriptPath;
 		}
+		static std::filesystem::path GetConfigDirectory() {
+			ASSERT_NOMSG(_ActiveProject);
+			return GetProjectDirectory() / _ActiveProject->_Config.ConfigDirectory;
+		}
 
 		ProjectConfig& GetConfig() { return _Config; }
 		static MEM::Ref<Project> GetActive() { return _ActiveProject; }
@@ -57,10 +62,12 @@ namespace TAGE {
 
 		static MEM::Ref<Project> New();
 		static MEM::Ref<Project> Load(const std::filesystem::path& path);
-		static bool SaveActive(const std::filesystem::path& path);
+		static bool SaveActive();
 	private:
 		ProjectConfig _Config;
 		std::filesystem::path _ProjectDirectory;
+		std::filesystem::path _ProjectSavePath;
+
 		MEM::Ref<AssetManagerBase> _AssetManager;
 
 		inline static MEM::Ref<Project> _ActiveProject;

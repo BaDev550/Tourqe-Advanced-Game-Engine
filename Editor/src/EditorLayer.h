@@ -3,6 +3,7 @@
 #include "TAGE/TAGE.h"
 #include "Panels/SceneHierarchyPanel.h"
 #include "Panels/ContentBrowserPanel.h"
+#include "Panels/ProjectSettingsPanel.h"
 #include "Panels/OutputPanel.h"
 
 namespace TAGE::Editor {
@@ -73,6 +74,7 @@ namespace TAGE::Editor {
 		MEM::Scope<SceneHierarchyPanel> _SceneHierarchyPanel;
 		MEM::Scope<ContentBrowserPanel> _ContentBrowserPanel;
 		MEM::Scope<OutputPanel> _OutputPanel;
+		ProjectSettingsPanel _ProjectSettingsPanel;
 
 		MEM::Ref<TARE::Texture2D> _PlayIcon;
 		MEM::Ref<TARE::Texture2D> _StopIcon;

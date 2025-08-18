@@ -18,8 +18,8 @@ namespace TAGE {
 		out << YAML::Key << "Project" << YAML::Value;
 		out << YAML::BeginMap;
 		out << YAML::Key << "Name" << YAML::Value << config.Name;
-		out << YAML::Key << "StartScene" << YAML::Value << config.StartScene.string();
 		out << YAML::Key << "CacheDirectory" << YAML::Value << config.CacheDirectory.string();
+		out << YAML::Key << "ConfigDirectory" << YAML::Value << config.ConfigDirectory.string();
 		out << YAML::Key << "AssetDirectory" << YAML::Value << config.AssetDirectory.string();
 		out << YAML::Key << "AssetRegistryPath" << YAML::Value << config.AssetRegistryPath.string();
 		out << YAML::Key << "ScriptModulePath" << YAML::Value << config.ScriptPath.string();
@@ -48,8 +48,8 @@ namespace TAGE {
 			return false;
 
 		config.Name = projectNode["Name"].as<std::string>();
-		config.StartScene = projectNode["StartScene"].as<std::string>();
 		config.CacheDirectory = projectNode["CacheDirectory"].as<std::string>();
+		config.ConfigDirectory = projectNode["ConfigDirectory"].as<std::string>();
 		config.AssetDirectory = projectNode["AssetDirectory"].as<std::string>();
 		config.ScriptPath = projectNode["ScriptModulePath"].as<std::string>();
 		if (projectNode["AssetRegistryPath"])

@@ -6,13 +6,14 @@
 #include "TAGE/World/Components/Components.h"
 #include "TAGE/Physics/PhysicsWorld.h"
 #include "TARE/Camera/EditorCamera.h"
+#include "TAGE/AssetManager/Asset.h"
 #include "TAGE/Utilities/UUID.h"
 #include "entt/entt.hpp"
 #include <vector>
 
 namespace TAGE {
 	class Entity;
-	class Scene
+	class Scene : public Asset
 	{
 	public:
 		Scene(const std::string& name);
@@ -63,6 +64,9 @@ namespace TAGE {
 
 		template<typename... Components>
 		auto GetEntitiesWith() { return _Registry.view<Components...>(); }
+
+		static AssetType GetStaticType() { return AssetType::Scene; }
+		AssetType GetType() const override { return GetStaticType(); }
 	private:
 		template<typename TComponent>
 		void CopyComponentIfExists(entt::entity dst, entt::registry& dstRegistry, entt::entity src)

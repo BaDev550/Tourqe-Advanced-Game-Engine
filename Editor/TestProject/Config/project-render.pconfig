@@ -1,0 +1,17 @@
+RenderSettings:
+  ScreenSpace:
+    NumSamples: 17
+    SampleRadius: 1.5
+    MaxSteps: 1
+    StepSize: 15
+    Tolerance: 1
+    Distance: 15
+    FadeStart: 0.100000001
+    FadeEnd: 0.00999999978
+    BinarySearchSteps: 5
+    Thickness: 1.5
+    Intensity: 1
+    MaxReflectionLOD: 4
+    GlobalIlluminationIntensity: 3
+    UseSSGI: false
+    UseSSR: false
