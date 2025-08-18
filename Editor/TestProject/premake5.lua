@@ -1,4 +1,4 @@
-local TAGERootDir = "../../../../"
+local TAGERootDir = "../../"
 
 workspace "Sandbox"
     architecture "x86_64"
@@ -31,8 +31,8 @@ project "Sandbox"
     }
 
    files {
-       "src/**.cs",
-       "properties/**.cs"
+       "Scripts/src/**.cs",
+       "Scripts/properties/**.cs"
    }
 
    filter "configurations:Debug"

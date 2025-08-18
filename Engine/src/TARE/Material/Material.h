@@ -29,7 +29,17 @@ namespace TARE
 		virtual TAGE::AssetType GetType() const { return GetStaticType(); };
 	private:
 		std::string _Name;
-		std::array<TAGE::AssetHandle, static_cast<size_t>(TextureType::COUNT)> _Textures;
-		std::array<glm::vec4, static_cast<size_t>(TextureType::COUNT)> _Color;
+		struct TextureMaps {
+			TAGE::AssetHandle Diffuse = 0;
+			TAGE::AssetHandle Specular = 0;
+			TAGE::AssetHandle Normal = 0;
+			TAGE::AssetHandle Roughness = 0;
+			TAGE::AssetHandle Metallic = 0;
+			TAGE::AssetHandle AmbientOcclusion = 0;
+		} _TextureMaps;
+
+		struct Colors {
+			glm::vec4 Diffuse = glm::vec4(1.0f, 1.0f, 1.0f, 1.0f);
+		} _Colors;
 	};
 }

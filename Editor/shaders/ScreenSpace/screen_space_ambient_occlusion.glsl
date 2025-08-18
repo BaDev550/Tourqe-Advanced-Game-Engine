@@ -40,7 +40,10 @@ float CalculateSSAO(
         ao += (sampleDepth >= samplePos.z ? 1.0 : 0.0) * range * bw;
     }
     ao = clamp(1.0 - (ao / float(NUM_SAMPLES)), 0.0, 1.0);
-    return ao * texture(u_gAO, uv).r;
+
+    float aoTexture = texture(u_gAO, uv).r;
+    ao = mix(ao, aoTexture, 0.5);
+    return ao;
 }
 
 #endif

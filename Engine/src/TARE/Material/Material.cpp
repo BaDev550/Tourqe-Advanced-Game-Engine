@@ -7,11 +7,7 @@
 namespace TARE {
 	Material::Material(const char* name)
 		: _Name(name)
-		, _Textures{}
-		, _Color{}
 	{
-		_Color[(uint8)TextureType::DIFFUSE] = glm::vec4(1.0f, 1.0f, 1.0f, 1.0f);
-		for (size_t i = 0; i < _Textures.size(); i++) { _Textures[i] = 0; }
 	}
 
 	void Material::Use(TAGE::MEM::Ref<Shader>& shader)
@@ -19,44 +15,73 @@ namespace TARE {
 		shader->Use();
 		 
 		for (uint8 i = 0; i < (uint8)TextureType::COUNT; ++i) {
-			if (i == SHADOW_MAP_TEXTURE_SLOT) continue;
+			TAGE::AssetHandle& handle = GetTexture((TextureType)i);
+			if (handle == 0)
+				continue;
 
-			if (_Textures[i] != 0) {
-				const auto& texture = TAGE::AssetManager::GetAsset<Texture2D>(_Textures[i]);
-				if (texture)
-					texture->Bind(i);
-			}
+			auto& texture = TAGE::AssetManager::GetAsset<Texture2D>(handle);
+			if (texture)
+				texture->Bind(i);
 		}
 
-		bool hasDiffuseTex = true;
+		bool hasDiffuseTex = _TextureMaps.Diffuse != 0;
+		bool hasAmbientOcclusionTex = _TextureMaps.AmbientOcclusion != 0;
 		shader->SetUniform("u_Material.HasDiffuseTex", hasDiffuseTex);
-		shader->SetUniform("u_Material.DiffuseTex",          static_cast<uint8>(TextureType::DIFFUSE));
-		shader->SetUniform("u_Material.SpecularTex",         static_cast<uint8>(TextureType::SPECULAR));
-		shader->SetUniform("u_Material.NormalTex",           static_cast<uint8>(TextureType::NORMAL));
-		shader->SetUniform("u_Material.HeightTex",           static_cast<uint8>(TextureType::HEIGHT));
-		shader->SetUniform("u_Material.RoughnessTex",        static_cast<uint8>(TextureType::ROUGHNESS));
-		shader->SetUniform("u_Material.MetallicTex",         static_cast<uint8>(TextureType::METALLIC));
-		shader->SetUniform("u_Material.AmbientOcclusionTex", static_cast<uint8>(TextureType::AMBIENT_OCCLUSION));
+		shader->SetUniform("u_Material.HasAmbientOcclusionTex", hasAmbientOcclusionTex);
+		shader->SetUniform("u_Material.DiffuseTex",          (uint8)TextureType::DIFFUSE);
+		shader->SetUniform("u_Material.DiffuseColor",        _Colors.Diffuse);
+		shader->SetUniform("u_Material.SpecularTex",         (uint8)TextureType::SPECULAR);
+		shader->SetUniform("u_Material.NormalTex",           (uint8)TextureType::NORMAL);
+		shader->SetUniform("u_Material.RoughnessTex",        (uint8)TextureType::ROUGHNESS);
+		shader->SetUniform("u_Material.MetallicTex",         (uint8)TextureType::METALLIC);
+		shader->SetUniform("u_Material.AmbientOcclusionTex", (uint8)TextureType::AMBIENT_OCCLUSION);
 	}
 
 	void Material::SetTexture(TextureType type, TAGE::AssetHandle texture)
 	{
-		_Textures[(uint8)type] = texture;
+		switch (type)
+		{
+		case TextureType::DIFFUSE:   _TextureMaps.Diffuse = texture; break;
+		case TextureType::SPECULAR:  _TextureMaps.Specular = texture; break;
+		case TextureType::NORMAL:    _TextureMaps.Normal = texture; break;
+		case TextureType::ROUGHNESS: _TextureMaps.Roughness = texture; break;
+		case TextureType::METALLIC:  _TextureMaps.Metallic = texture; break;
+		case TextureType::AMBIENT_OCCLUSION: _TextureMaps.AmbientOcclusion = texture; break;
+		default:
+			break;
+		}
 	}
 
 	TAGE::AssetHandle Material::GetTexture(TextureType type) const
 	{
-		return _Textures[(uint8)type];
+		switch (type)
+		{
+		case TextureType::DIFFUSE:   return _TextureMaps.Diffuse;
+		case TextureType::SPECULAR:  return _TextureMaps.Specular;
+		case TextureType::NORMAL:    return _TextureMaps.Normal;
+		case TextureType::ROUGHNESS: return _TextureMaps.Roughness;
+		case TextureType::METALLIC:  return _TextureMaps.Metallic;
+		case TextureType::AMBIENT_OCCLUSION: return _TextureMaps.AmbientOcclusion;
+		default:
+			break;
+		}
 	}
 
 	void Material::SetColor(TextureType slot, const glm::vec4& color) {
-		if (slot < TextureType::COUNT)
-			_Color[static_cast<uint8>(slot)] = color;
+		switch (slot)
+		{
+		case TextureType::DIFFUSE: _Colors.Diffuse = color; break;
+		default:
+			break;
+		}
 	}
 
 	glm::vec4 Material::GetColor(TextureType slot) const {
-		if (slot < TextureType::COUNT)
-			return _Color[static_cast<uint8>(slot)];
-		return glm::vec4(1.0f);
+		switch (slot)
+		{
+		case TextureType::DIFFUSE:   return _Colors.Diffuse;
+		default:
+			break;
+		}
 	}
 }

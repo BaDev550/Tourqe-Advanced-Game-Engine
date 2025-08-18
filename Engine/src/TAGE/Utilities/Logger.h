@@ -4,6 +4,7 @@
 #include "spdlog/spdlog.h"
 #include "TAGE/Common/TEnums.h"
 #include "spdlog/sinks/stdout_color_sinks.h"
+#include "spdlog/sinks/basic_file_sink.h"
 #define GLM_ENABLE_EXPERIMENTAL
 #include "glm/gtx/string_cast.hpp"
 #include "LogSink.h"
@@ -48,6 +49,8 @@
 
 #define GET_MESSAGES()   TAGE::Logger::GetSink()->GetMessages();
 #define CLEAR_MESSAGES() TAGE::Logger::GetSink()->Clear();
+#define CREATE_FILE_LOGGER() TAGE::Logger::createFileLogger();
+#define SAVE_LOG_TO_CACHE() TAGE::Logger::SaveLogToCache();
 namespace TAGE
 {
     class Logger {
@@ -66,14 +69,17 @@ namespace TAGE
             spdlog::register_logger(s_ClientLogger);
             s_ClientLogger->set_level(spdlog::level::trace);
         }
+        static void createFileLogger();
 
         inline static MEM::Ref<spdlog::logger>& GetCoreLogger() { return s_CoreLogger; }
         inline static MEM::Ref<spdlog::logger>& GetClientLogger() { return s_ClientLogger; }
         inline static MEM::Ref<LogSink>& GetSink() { return s_Sink; }
 
+        static void SaveLogToCache();
     private:
         static MEM::Ref<spdlog::logger> s_CoreLogger;
         static MEM::Ref<spdlog::logger> s_ClientLogger;
         inline static MEM::Ref<LogSink> s_Sink;
+		inline static MEM::Ref<spdlog::sinks::basic_file_sink_mt> s_FileSink;
     };
 }

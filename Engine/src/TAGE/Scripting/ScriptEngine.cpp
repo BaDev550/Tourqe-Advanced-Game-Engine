@@ -2,6 +2,7 @@
 #include "ScriptEngine.h"
 #include "TAGE/World/Scene/Scene.h"
 #include "TAGE/World/Objects/Entity.h"
+#include "TAGE/Project/Project.h"
 
 #include "TAGE/World/Components/ScriptingComponents.h"
 
@@ -165,9 +166,9 @@ namespace TAGE {
 		s_Data = new ScriptEngineData();
 		InitMono();
 		LoadAssembly("Resources/Scripts/ScriptCore.dll");
-		LoadAppAssembly("TestProject/Assets/Scripts/Binaries/Sandbox.dll");
+		LoadAppAssembly(Project::GetActive()->GetScriptPath());
 		LoadAssemblyClasses();
-
+		
 		ScriptGlue::RegisterComponents();
 		ScriptGlue::RegisterFunctions();
 

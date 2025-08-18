@@ -3,6 +3,7 @@
 #include <mutex>
 #include <vector>
 #include <string>
+#include <deque>
 
 namespace TAGE {
 	class LogSink : public spdlog::sinks::base_sink<std::mutex> {
@@ -12,7 +13,7 @@ namespace TAGE {
 			std::string message;
 		};
 
-		const std::vector<LogMessage>& GetMessages() const { return _messages; }
+		const std::deque<LogMessage>& GetMessages() const { return _messages; }
 		void Clear() { _messages.clear(); }
 
 	protected:
@@ -26,6 +27,6 @@ namespace TAGE {
 		void flush_() override {}
 
 	private:
-		std::vector<LogMessage> _messages;
+		std::deque<LogMessage> _messages;
 	};
 }

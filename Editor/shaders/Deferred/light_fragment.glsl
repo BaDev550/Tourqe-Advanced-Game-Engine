@@ -110,7 +110,7 @@ void main() {
     if (u_SceneData.useSSGI) { gi =  calculateSSGI(FPos, N, A, M, R, aoVal, TexCoords, u_gPos, u_gNorm, u_gAlb, u_gMetallic, u_gRoughness, u_gAO, u_PrevGI, u_CurrViewProj, u_PrevViewProj); }
     if (u_SceneData.useSSR) {  ssr = CalculateSSR(u_gPos, u_SceneColor, TexCoords, VP, VN, u_Projection, R, M); }
 
-    float ao =  CalculateSSAO(FPos, N, M, R, TexCoords, u_gPos, u_gNorm, u_gMetallic, u_gRoughness, u_gAO, float(textureSize(u_gPos, 0).x), float(textureSize(u_gPos, 0).y));
+    float ao = CalculateSSAO(FPos, N, M, R, TexCoords, u_gPos, u_gNorm, u_gMetallic, u_gRoughness, u_gAO, float(textureSize(u_gPos, 0).x), float(textureSize(u_gPos, 0).y));
     vec3 ambientFallback  = kD_ambient * A * 0.1 + kS_ambient * 0.1;
     vec3 indirectDiffuse =  gi * F_reflect * A;
     vec3 indirectSpecular = ssr * F_reflect * SSR_INTENSITY;

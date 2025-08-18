@@ -26,6 +26,7 @@
       <Filter>Panels</Filter>
     </ClInclude>
     <ClInclude Include="src\Panels\AssetManagerPanel.h" />
+    <ClInclude Include="src\Panels\ProjectSettingsPanel.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\EditorLayer.cpp" />
@@ -43,5 +44,6 @@
     </ClCompile>
     <ClCompile Include="src\TourqeEditor.cpp" />
     <ClCompile Include="src\Panels\AssetManagerPanel.cpp" />
+    <ClCompile Include="src\Panels\ProjectSettingsPanel.cpp" />
   </ItemGroup>
 </Project>

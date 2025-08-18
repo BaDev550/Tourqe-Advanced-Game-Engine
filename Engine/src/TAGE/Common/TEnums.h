@@ -94,8 +94,6 @@ enum class TextureType : uint8 {
 	DIFFUSE = 0,
 	SPECULAR,
 	NORMAL,
-	EMISSIVE,
-	HEIGHT,
 	ROUGHNESS,
 	METALLIC,
 	AMBIENT_OCCLUSION,

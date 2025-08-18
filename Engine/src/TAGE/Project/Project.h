@@ -14,6 +14,7 @@ namespace TAGE {
 		std::filesystem::path StartScene;
 
 		std::filesystem::path AssetDirectory;
+		std::filesystem::path CacheDirectory;
 		std::filesystem::path AssetRegistryPath;
 		std::filesystem::path ScriptPath;
 	};
@@ -27,17 +28,25 @@ namespace TAGE {
 			ASSERT_NOMSG(_ActiveProject);
 			return _ActiveProject->_ProjectDirectory;
 		}
+		static std::filesystem::path GetCacheDirectory() {
+			ASSERT_NOMSG(_ActiveProject);
+			return GetProjectDirectory() / _ActiveProject->_Config.CacheDirectory;
+		}
 		static std::filesystem::path GetAssetDirectory() {
 			ASSERT_NOMSG(_ActiveProject);
 			return GetProjectDirectory() / _ActiveProject->_Config.AssetDirectory;
 		}
 		static std::filesystem::path GetAssetRegistryPath() {
 			ASSERT_NOMSG(_ActiveProject);
-			return GetAssetDirectory() / _ActiveProject->_Config.AssetRegistryPath;
+			return GetCacheDirectory() / _ActiveProject->_Config.AssetRegistryPath;
 		}
 		static std::filesystem::path GetAssetFileSystemPath(const std::filesystem::path& path) {
 			ASSERT_NOMSG(_ActiveProject);
 			return GetAssetDirectory() / path;
+		}
+		static std::filesystem::path GetScriptPath() {
+			ASSERT_NOMSG(_ActiveProject);
+			return GetProjectDirectory() / _ActiveProject->_Config.ScriptPath;
 		}
 
 		ProjectConfig& GetConfig() { return _Config; }

@@ -25,6 +25,13 @@ void main()
         Albedo = u_Material.DiffuseColor.rgb;
     }
 
+    if (u_Material.HasAmbientOcclusionTex) {
+        gAO = texture(u_Material.AmbientOcclusionTex, TexCoords).r;
+    }
+    else {
+        gAO = 1.0f;
+    }
+
     float spec = texture(u_Material.SpecularTex, TexCoords).r;
 
     gPosition = vec4(FragPos, 1.0f);
@@ -32,7 +39,6 @@ void main()
     gAlbedo = vec4(Albedo, 1.0f);
     gMetallic = texture(u_Material.MetallicTex, TexCoords).r;
     gRoughness = texture(u_Material.RoughnessTex, TexCoords).r;
-    gAO = texture(u_Material.AmbientOcclusionTex, TexCoords).r;
 
     gEntityID = u_EntityID;
 }

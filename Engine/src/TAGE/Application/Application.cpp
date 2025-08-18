@@ -26,7 +26,6 @@ namespace TAGE {
 		_Window->SetEventCallback(BIND_EVENT_FN(Application::OnEvent));
 		_Window->ToggleCursor(true);
 		Input::Init(_Window->GetGLFWWindow());
-		ScriptEngine::Init();
 
 		_ImGuiLayer = MEM::MakeScope<ImGuiLayer>();
 		PushOverlay(_ImGuiLayer.get());
@@ -41,6 +40,7 @@ namespace TAGE {
 
 		LOG_WARN("Application terminated!");
 		LOG_WARN("Exiting...");
+		SAVE_LOG_TO_CACHE();
 	}
 
 	void Application::Run()

@@ -2,13 +2,14 @@
 #define MATERIAL_GLSL
 
 struct Material {
+    bool HasDiffuseTex;
+    bool HasAmbientOcclusionTex;
+
     sampler2D DiffuseTex;
     vec4 DiffuseColor;
-    bool HasDiffuseTex;
 
     sampler2D SpecularTex;
     sampler2D NormalTex;
-    sampler2D HeightTex;
     sampler2D RoughnessTex;
     sampler2D MetallicTex;
     sampler2D AmbientOcclusionTex;

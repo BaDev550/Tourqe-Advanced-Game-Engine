@@ -109,6 +109,6 @@ namespace TARE {
 
 		auto shader = _DeferredRendering->GetLightShader();
 		shader->Use();
-		_DeferredRendering->GetLightShader()->UpdateSSBO(1, lights.data(), sizeof(Light) + sizeof(int)); //*_Data.LightData.LightCount
+		_DeferredRendering->GetLightShader()->UpdateSSBO(1, lights.data(), sizeof(Light) * _Data.LightData.LightCount + sizeof(int));
 	}
 }

@@ -1745,7 +1745,7 @@
     <ClCompile Include="src\TAGE\Utilities\UUID.cpp">
       <Filter>src\TAGE\Utilities</Filter>
     </ClCompile>
-    <ClCompile Include="src\TAGE\Utilities\Utilities.cpp">
+    <ClCompile Include="src\TAGE\Utilities\Timer.cpp">
       <Filter>src\TAGE\Utilities</Filter>
     </ClCompile>
     <ClCompile Include="src\TAGE\Window\Window.cpp">
@@ -1859,5 +1859,7 @@
     <ClCompile Include="src\TAGE\AssetManager\Asset.cpp" />
     <ClCompile Include="src\TAGE\AssetManager\AssetImporter.cpp" />
     <ClCompile Include="src\TAGE\AssetManager\Importers\TextureImporter.cpp" />
+    <ClCompile Include="src\TAGE\Utilities\Platform.cpp" />
+    <ClCompile Include="src\TAGE\Utilities\Logger.cpp" />
   </ItemGroup>
 </Project>

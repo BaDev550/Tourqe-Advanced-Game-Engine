@@ -3,9 +3,6 @@
 #include "Timer.h"
 
 namespace TAGE {
-	MEM::Ref<spdlog::logger> Logger::s_CoreLogger;
-	MEM::Ref<spdlog::logger> Logger::s_ClientLogger;
-
 	struct TimerTask {
 		float timeRemaining;
 		std::function<void()> callback;

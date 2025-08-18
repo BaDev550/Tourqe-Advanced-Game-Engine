@@ -1,5 +1,22 @@
 Scene: playground
 Entities:
+  - Entity: 470247041551332446
+    IdentityComponent:
+      Name: Camera
+    Parent: 0
+    Children:
+      []
+    TransformComponent:
+      Position: [-2.34757543, 1.59483325, 2.09224677]
+      Rotation: [0, 0, 0]
+      Scale: [1, 1, 1]
+    CameraComponent:
+      Camera:
+        AspectRatio: 1.77777779
+        FOV: 65
+        NearClip: 0.0500000007
+        FarClip: 250
+      IsActive: true
   - Entity: 17498813774572800101
     IdentityComponent:
       Name: Helmet

@@ -653,8 +653,10 @@
     <ClCompile Include="src\TAGE\Physics\Raycaster.cpp" />
     <ClCompile Include="src\TAGE\Scripting\ScriptEngine.cpp" />
     <ClCompile Include="src\TAGE\Scripting\ScriptGlue.cpp" />
+    <ClCompile Include="src\TAGE\Utilities\Logger.cpp" />
+    <ClCompile Include="src\TAGE\Utilities\Platform.cpp" />
     <ClCompile Include="src\TAGE\Utilities\UUID.cpp" />
-    <ClCompile Include="src\TAGE\Utilities\Utilities.cpp" />
+    <ClCompile Include="src\TAGE\Utilities\Timer.cpp" />
     <ClCompile Include="src\TAGE\Window\Window.cpp" />
     <ClCompile Include="src\TAGE\World\Objects\Entity.cpp" />
     <ClCompile Include="src\TAGE\World\Objects\Prefab.cpp" />

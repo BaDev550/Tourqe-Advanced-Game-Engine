@@ -11,5 +11,11 @@ namespace TAGE {
 			static std::string SaveFile(const char* filter);
 		};
 
+		class DateTime
+		{
+		public:
+			static uint64_t GetCurrentDateTimeU64();
+			static std::string GetCurrentDateTimeString();
+		};
 	}
 }

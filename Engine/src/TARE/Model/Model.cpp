@@ -130,9 +130,7 @@ namespace TARE
 		case TextureType::DIFFUSE:            return aiTextureType_DIFFUSE;
 		case TextureType::SPECULAR:           return aiTextureType_SPECULAR;
 		case TextureType::NORMAL:             return aiTextureType_NORMALS;
-		case TextureType::EMISSIVE:           return aiTextureType_EMISSIVE;
-		case TextureType::HEIGHT:             return aiTextureType_HEIGHT;
-		case TextureType::ROUGHNESS:          return aiTextureType_UNKNOWN;
+		case TextureType::ROUGHNESS:          return aiTextureType_DIFFUSE_ROUGHNESS;
 		case TextureType::METALLIC:           return aiTextureType_METALNESS;
 		case TextureType::AMBIENT_OCCLUSION:  return aiTextureType_LIGHTMAP;
 		default:                              return aiTextureType_NONE;
@@ -166,11 +164,6 @@ namespace TARE
 		}
 	}
 
-	inline int8 QuantizeSigned(float value) { return static_cast<int8>(std::roundf(glm::clamp(value, -1.0f, 1.0f) * 127.0f)); }
-	inline int16 QuantizePosition(float value) { return static_cast<int16>(value * 10000.0f); }
-	inline uint16 QuantizeUV(float value) { return static_cast<uint16>(glm::clamp(value, 0.0f, 1.0f) * 65535.0f); }
-	inline uint8 QuantizeWeight(float value) { return static_cast<uint8>(glm::clamp(value, 0.0f, 1.0f) * 255.0f); }
-
 	TAGE::MEM::Scope<Mesh> Model::ProcessMesh(aiMesh* mesh, const aiScene* scene)
 	{
 		std::vector<VertexData> vertices;
@@ -179,7 +172,6 @@ namespace TARE
 		{
 			VertexData qv;
 			
-#ifdef TAGE_ENABLE_GLM_VERTEX_DATA
 			qv.pos = glm::vec3(mesh->mVertices[i].x, mesh->mVertices[i].y, mesh->mVertices[i].z);
 			qv.uv = glm::vec2(mesh->mTextureCoords[0][i].x, mesh->mTextureCoords[0][i].y);
 
@@ -190,32 +182,6 @@ namespace TARE
 				qv.tangent = glm::vec3(mesh->mTangents[i].x, mesh->mTangents[i].y, mesh->mTangents[i].z);
 				qv.bitangent = glm::vec3(mesh->mBitangents[i].x, mesh->mBitangents[i].y, mesh->mBitangents[i].z);
 			}
-#else
-			qv.pos[0] = QuantizePosition(mesh->mVertices[i].x * SCALE_FACTOR);
-			qv.pos[1] = QuantizePosition(mesh->mVertices[i].y * SCALE_FACTOR);
-			qv.pos[2] = QuantizePosition(mesh->mVertices[i].z * SCALE_FACTOR);
-
-			if (mesh->HasNormals()) {
-				qv.normal[0] = QuantizeSigned(mesh->mNormals[i].x);
-				qv.normal[1] = QuantizeSigned(mesh->mNormals[i].y);
-				qv.normal[2] = QuantizeSigned(mesh->mNormals[i].z);
-			}
-
-			if (mesh->mTextureCoords[0]) {
-				qv.uv[0] = QuantizeUV(mesh->mTextureCoords[0][i].x);
-				qv.uv[1] = QuantizeUV(mesh->mTextureCoords[0][i].y);
-			}
-
-			if (mesh->HasTangentsAndBitangents()) {
-				qv.tangent[0] = QuantizeSigned(mesh->mTangents[i].x);
-				qv.tangent[1] = QuantizeSigned(mesh->mTangents[i].y);
-				qv.tangent[2] = QuantizeSigned(mesh->mTangents[i].z);
-
-				qv.bitangent[0] = QuantizeSigned(mesh->mBitangents[i].x);
-				qv.bitangent[1] = QuantizeSigned(mesh->mBitangents[i].y);
-				qv.bitangent[2] = QuantizeSigned(mesh->mBitangents[i].z);
-			}
-#endif
 			vertices.push_back(qv);
 		}
 		for (uint i = 0; i < mesh->mNumFaces; ++i)
@@ -236,7 +202,6 @@ namespace TARE
 			LoadTextureToMaterial(TextureType::DIFFUSE, mat, material);
 			LoadTextureToMaterial(TextureType::SPECULAR, mat, material);
 			LoadTextureToMaterial(TextureType::NORMAL, mat, material);
-			LoadTextureToMaterial(TextureType::HEIGHT, mat, material);
 			LoadTextureToMaterial(TextureType::ROUGHNESS, mat, material);
 			LoadTextureToMaterial(TextureType::METALLIC, mat, material);
 			LoadTextureToMaterial(TextureType::AMBIENT_OCCLUSION, mat, material);

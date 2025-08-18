@@ -5,7 +5,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Sandbox", "Sandbox.csproj",
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "TAGE", "TAGE", "{2D29CC5D-19E1-0DAB-82E8-E6066EBFA89B}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ScriptCore", "..\..\..\..\ScriptCore\ScriptCore.csproj", "{43DDC966-2F95-0BB4-989C-E40F8473A6A4}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ScriptCore", "..\..\ScriptCore\ScriptCore.csproj", "{43DDC966-2F95-0BB4-989C-E40F8473A6A4}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

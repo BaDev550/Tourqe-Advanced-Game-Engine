@@ -442,6 +442,10 @@ namespace TAGE::Editor {
 				{
 					component.Handle->SetFarClip(farClip);
 				}
+
+				if (ImGui::CollapsingHeader("Post Process")) {
+					ImGui::DragFloat("Exposure", &component.Handle->GetPostProcess()->GetSettings().Exposure, 0.1f, 0.1f, 10.0f);
+				}
 			});
 
 		DrawComponent<SkyboxComponent>("Skybox", entity, [](SkyboxComponent& component)

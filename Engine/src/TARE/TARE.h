@@ -62,7 +62,7 @@ namespace TARE {
 			std::vector<Light> Lights;
 
 			bool UseSSGI = false;
-			bool UseSSReflections = true;
+			bool UseSSReflections = false;
 		} _Data;
 	public:
 		TARE(int width, int height);

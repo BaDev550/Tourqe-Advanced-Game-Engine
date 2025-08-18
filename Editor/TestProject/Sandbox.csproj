@@ -21,8 +21,7 @@
     <OutputPath>Binaries\</OutputPath>
     <BaseIntermediateOutputPath>Intermediates\Debug\</BaseIntermediateOutputPath>
     <IntermediateOutputPath>$(BaseIntermediateOutputPath)</IntermediateOutputPath>
-    <DefineConstants>
-    </DefineConstants>
+    <DefineConstants></DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
@@ -34,8 +33,7 @@
     <OutputPath>Binaries\</OutputPath>
     <BaseIntermediateOutputPath>Intermediates\Release\</BaseIntermediateOutputPath>
     <IntermediateOutputPath>$(BaseIntermediateOutputPath)</IntermediateOutputPath>
-    <DefineConstants>
-    </DefineConstants>
+    <DefineConstants></DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
@@ -44,11 +42,11 @@
   <ItemGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|x64' ">
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="src\CameraController.cs" />
-    <Compile Include="src\Player.cs" />
+    <Compile Include="Scripts\src\CameraController.cs" />
+    <Compile Include="Scripts\src\Player.cs" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\..\..\..\ScriptCore\ScriptCore.csproj">
+    <ProjectReference Include="..\..\ScriptCore\ScriptCore.csproj">
       <Project>{43DDC966-2F95-0BB4-989C-E40F8473A6A4}</Project>
       <Name>ScriptCore</Name>
     </ProjectReference>

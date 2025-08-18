@@ -1,6 +1,7 @@
 #include "tagepch.h"
 #include "Project.h"
 #include "ProjectSerializer.h"
+#include "TAGE/Scripting/ScriptEngine.h"
 
 namespace TAGE {
 	MEM::Ref<Project> Project::New()
@@ -20,6 +21,9 @@ namespace TAGE {
 			MEM::Ref<AssetManagerEditor> editorAssetManager = MEM::MakeRef<AssetManagerEditor>();
 			_ActiveProject->_AssetManager = editorAssetManager;
 			editorAssetManager->DeserializeAssetRegistry();
+			Logger::createFileLogger();
+			ScriptEngine::Init();
+
 			return _ActiveProject;
 		}
 		 

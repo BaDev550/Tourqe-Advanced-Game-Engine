@@ -1,0 +1,34 @@
+AssetRegistry:
+  - Handle: 1470139228051823571
+    FilePath: models/mario_2/glove.jpg
+    Type: Texture
+  - Handle: 10478945775650605341
+    FilePath: models/mario_2/body.jpg
+    Type: Texture
+  - Handle: 10793076796984025574
+    FilePath: models/mario_2/eye1.jpg
+    Type: Texture
+  - Handle: 11218478136228008669
+    FilePath: models/SciFiHelmet/SciFiHelmet_BaseColor.png
+    Type: Texture
+  - Handle: 12764941228758197583
+    FilePath: models/mario_2/hat.jpg
+    Type: Texture
+  - Handle: 13682437598930561517
+    FilePath: models/mario_2/pupil.jpg
+    Type: Texture
+  - Handle: 14964118139852759063
+    FilePath: models/SciFiHelmet/SciFiHelmet_AmbientOcclusion.png
+    Type: Texture
+  - Handle: 15310571436904699942
+    FilePath: models/mario_2/face.jpg
+    Type: Texture
+  - Handle: 16262163576453459698
+    FilePath: models/SciFiHelmet/SciFiHelmet_MetallicRoughness.png
+    Type: Texture
+  - Handle: 17496555588481139333
+    FilePath: models/SciFiHelmet/SciFiHelmet_Normal.png
+    Type: Texture
+  - Handle: 18147935210517777203
+    FilePath: models/mario_2/hair.jpg
+    Type: Texture
