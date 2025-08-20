@@ -1,34 +1,43 @@
 AssetRegistry:
-  - Handle: 1470139228051823571
-    FilePath: models/mario_2/glove.jpg
+  - Handle: 4724061962271990898
+    FilePath: textures/skyboxes/skybox_1.png
     Type: Texture
-  - Handle: 10478945775650605341
-    FilePath: models/mario_2/body.jpg
-    Type: Texture
-  - Handle: 10793076796984025574
-    FilePath: models/mario_2/eye1.jpg
-    Type: Texture
-  - Handle: 11218478136228008669
-    FilePath: models/SciFiHelmet/SciFiHelmet_BaseColor.png
-    Type: Texture
-  - Handle: 12764941228758197583
-    FilePath: models/mario_2/hat.jpg
-    Type: Texture
-  - Handle: 13682437598930561517
-    FilePath: models/mario_2/pupil.jpg
-    Type: Texture
-  - Handle: 14964118139852759063
+  - Handle: 4859819085416089012
     FilePath: models/SciFiHelmet/SciFiHelmet_AmbientOcclusion.png
     Type: Texture
-  - Handle: 15310571436904699942
-    FilePath: models/mario_2/face.jpg
+  - Handle: 4964789565818232391
+    FilePath: models/mario_2/glove.jpg
     Type: Texture
-  - Handle: 16262163576453459698
-    FilePath: models/SciFiHelmet/SciFiHelmet_MetallicRoughness.png
+  - Handle: 6199156916269842542
+    FilePath: scenes/start.scene
+    Type: Scene
+  - Handle: 6304480648647063026
+    FilePath: models/mario_2/hat.jpg
     Type: Texture
-  - Handle: 17496555588481139333
+  - Handle: 6432480066886207427
+    FilePath: scenes/playground.scene
+    Type: Scene
+  - Handle: 8556438490372027569
+    FilePath: models/SciFiHelmet/SciFiHelmet_BaseColor.png
+    Type: Texture
+  - Handle: 9745496740293724281
     FilePath: models/SciFiHelmet/SciFiHelmet_Normal.png
     Type: Texture
-  - Handle: 18147935210517777203
+  - Handle: 10445416984265841276
+    FilePath: models/mario_2/body.jpg
+    Type: Texture
+  - Handle: 11509525558534327163
     FilePath: models/mario_2/hair.jpg
+    Type: Texture
+  - Handle: 11626709404202953731
+    FilePath: models/SciFiHelmet/SciFiHelmet_MetallicRoughness.png
+    Type: Texture
+  - Handle: 13790136835472802407
+    FilePath: models/mario_2/pupil.jpg
+    Type: Texture
+  - Handle: 16413263067005391572
+    FilePath: models/mario_2/face.jpg
+    Type: Texture
+  - Handle: 17369131218405590373
+    FilePath: models/mario_2/eye1.jpg
     Type: Texture

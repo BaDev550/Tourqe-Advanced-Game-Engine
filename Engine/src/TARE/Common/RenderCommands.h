@@ -45,6 +45,9 @@ namespace TARE {
 		inline static void ToggleStencilFunc(StencilMode mode) {
 			_API->ToggleStencilFunction(mode);
 		}
+		inline static void SetWireframe(bool enable) {
+			_API->SetWireframe(enable);
+		}
 
 	private:
 		static RenderAPI* _API;

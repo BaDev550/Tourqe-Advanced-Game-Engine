@@ -12,7 +12,6 @@ typedef unsigned char		uint8;
 typedef unsigned short		uint16;
 typedef unsigned long long	uint64;
 
-#define ASSET_CONTENT_PATH "imported/"
 #define ENGINE_VERSION_MAJOR 1
 #define ENGINE_VERSION_MINOR 2
 

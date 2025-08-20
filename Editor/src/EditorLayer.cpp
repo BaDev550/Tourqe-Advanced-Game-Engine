@@ -193,33 +193,29 @@ namespace TAGE::Editor {
 
 	void EditorLayer::OpenScene()
 	{
-		std::string filepath = Platform::FileDialog::OpenFile("TAGE Scene (*.scene)\0*.scene\0");
-		if (!filepath.empty()) {
-			OpenScene(filepath);
-		}
+
 	}
 
-	void EditorLayer::OpenScene(const std::filesystem::path& path)
+	void EditorLayer::OpenScene(AssetHandle handle)
 	{
-		if (_SceneState != SceneState::EDIT)
-			OnSceneStop();
-
-		if (path.extension().string() != ".scene")
-		{
-			LOG_WARN("Could not load {0} - not a scene file", path.filename().string());
+		if (handle == 0) {
+			LOG_ERROR("Invalid asset handle provided for scene opening.");
 			return;
 		}
+
+		if (_SceneState != SceneState::EDIT)
+			OnSceneStop();
 
 		if (_EditorScene) {
 			_EditorScene->Clear();
 			_EditorScene.reset();
 		}
+		MEM::Ref<Scene> readScene = AssetManager::GetAsset<Scene>(handle);
+		MEM::Ref<Scene> newScene = Scene::Copy(readScene);
 
-		MEM::Ref<Scene> newScene = MEM::MakeRef<Scene>(path.stem().string());
-		SceneSerializer serializer(newScene);
-		if (serializer.Deserialize(path.string()))
+		if (newScene)
 		{
-			_EditorSavePath = path;
+			_EditorSavePath = Project::GetActive()->GetEditorAssetManager()->GetFilePath(handle);
 			_EditorScene = newScene;
 			_EditorScene->OnResize((uint)_ViewportSize.x, (uint)_ViewportSize.y);
 			_SceneHierarchyPanel->SetContext(_EditorScene);
@@ -253,8 +249,8 @@ namespace TAGE::Editor {
 	void EditorLayer::OpenProject(const std::filesystem::path& path)
 	{
 		if (Project::Load(path)) {
-			auto startScenePath = Project::GetAssetFileSystemPath(Project::GetActive()->GetConfig().StartScene);
-			OpenScene(startScenePath);
+			AssetHandle startSceneHandle = Project::GetActive()->GetEditorAssetManager()->ImportAsset(Project::GetActive()->GetConfig().StartScene);
+			OpenScene(startSceneHandle);
 			_ContentBrowserPanel = MEM::MakeScope<ContentBrowserPanel>();
 			_ContentBrowserPanel->Init();
 		}
@@ -509,16 +505,8 @@ namespace TAGE::Editor {
 		{
 			if (const ImGuiPayload* payload = ImGui::AcceptDragDropPayload("CONTENT_BROWSER_ITEM"))
 			{
-				const char* path = (const char*)payload->Data;
-				std::filesystem::path filePath(path);
-				std::string ext = filePath.extension().string();
-				if (ext == ".scene")
-					OpenScene(path);
-				else if (ext == ".obj" || ext == ".gltf") {
-					Entity entity = _ActiveScene->CreateEntity(filePath.stem().string());
-					auto& mc = entity.AddComponent<MeshComponent>();
-					mc.LoadMesh(filePath.string());
-				}
+				AssetHandle handle = *(AssetHandle*)payload->Data;
+				OpenScene(handle);
 			}
 			ImGui::EndDragDropTarget();
 		}

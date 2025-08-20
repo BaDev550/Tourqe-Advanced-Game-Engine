@@ -13,7 +13,7 @@ Entities:
     LightComponent:
       Type: 1
       Color: [1, 1, 1]
-      Range: 10
+      Range: 2
       Intensity: 1
   - Entity: 13380087215399220622
     IdentityComponent:

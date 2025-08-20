@@ -2,11 +2,13 @@
 #include "AssetImporter.h"
 
 #include "Importers/TextureImporter.h"
+#include "Importers/SceneImporter.h"
 
 namespace TAGE {
 	using AssetImportFunction = std::function<MEM::Ref<Asset>(AssetHandle, const AssetMetadata&)>;
 	static std::map<AssetType, AssetImportFunction> s_AssetImportFunctions = {
-		{ AssetType::Texture, TextureImporter::ImportTexture2D }
+		{ AssetType::Texture, TextureImporter::ImportTexture2D },
+		{ AssetType::Scene,   SceneImporter::ImportScene },
 	};
 
 	MEM::Ref<Asset> AssetImporter::ImportAsset(AssetHandle handle, const AssetMetadata& metadata)

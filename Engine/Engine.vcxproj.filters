@@ -1666,6 +1666,8 @@
     <ClInclude Include="src\TAGE\Utilities\Buffer.h" />
     <ClInclude Include="src\TAGE\Utilities\Profiler.h" />
     <ClInclude Include="src\TAGE\Project\ProjectSettingsSerializer.h" />
+    <ClInclude Include="src\TARE\DebugRenderer\DebugLightRenderer.h" />
+    <ClInclude Include="src\TAGE\AssetManager\Importers\SceneImporter.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\Platform\OpenGL\OpenGL_Buffers.cpp">
@@ -1863,5 +1865,7 @@
     <ClCompile Include="src\TAGE\Utilities\Platform.cpp" />
     <ClCompile Include="src\TAGE\Utilities\Logger.cpp" />
     <ClCompile Include="src\TAGE\Project\ProjectSettingsSerializer.cpp" />
+    <ClCompile Include="src\TARE\DebugRenderer\DebugLightRenderer.cpp" />
+    <ClCompile Include="src\TAGE\AssetManager\Importers\SceneImporter.cpp" />
   </ItemGroup>
 </Project>

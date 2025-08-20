@@ -18,5 +18,6 @@ namespace TARE {
 		virtual void DrawFullScreenQuad() override;
 		virtual void SetCullingMode(CullMode mode) override;
 		virtual void ToggleStencilFunction(StencilMode mode) override;
+		virtual void SetWireframe(bool enable) override;
 	};
 }

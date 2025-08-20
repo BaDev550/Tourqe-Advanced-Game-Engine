@@ -7,7 +7,15 @@ namespace TAGE {
     static std::map<std::filesystem::path, AssetType> s_AssetExtensionMap = {
         { ".png", AssetType::Texture },
         { ".jpg", AssetType::Texture },
-        { ".tscene", AssetType::Scene}
+
+        { ".fbx", AssetType::MeshSource },
+        { ".obj", AssetType::MeshSource },
+        { ".gltf", AssetType::MeshSource },
+
+        { ".wav", AssetType::Audio },
+        { ".mp3", AssetType::Audio },
+
+        { ".scene", AssetType::Scene}
     };
 
     static AssetType GetAssetTypeFromExtension(const std::filesystem::path& e) {
@@ -43,6 +51,11 @@ namespace TAGE {
             return s_NullMetadata;
 
         return it->second;
+    }
+
+    const std::filesystem::path& AssetManagerEditor::GetFilePath(AssetHandle handle) const
+    {
+		return GetMetadata(handle).FilePath;
     }
 
     MEM::Ref<Asset> AssetManagerEditor::GetAsset(AssetHandle handle)
@@ -94,8 +107,8 @@ namespace TAGE {
         metadata.FilePath = path;
         metadata.Type = GetAssetTypeFromExtension(path.extension());
         MEM::Ref<Asset> asset = AssetImporter::ImportAsset(handle, metadata);
-        asset->_handle = handle;
         if (asset) {
+            asset->_handle = handle;
             _LoadedAssets[handle] = asset;
             _AssetRegistry[handle] = metadata;
             SerializeAssetRegistry();

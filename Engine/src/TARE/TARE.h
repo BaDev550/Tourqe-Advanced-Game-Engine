@@ -12,6 +12,7 @@
 #include "Deferred/DeferredRendering.h"
 #include "Shadow/ShadowMap.h"
 #include "Skybox/Skybox.h"
+#include "DebugRenderer/DebugLightRenderer.h"
 #include "Common/Light.h"
 
 namespace TARE {
@@ -79,12 +80,14 @@ namespace TARE {
 		SceneData& GetSceneData() { return _Data; }
 		DeferredRendering& GetDeferredRendering() { return *_DeferredRendering; }
 		ShadowMap& GetShadowMap() { return *_ShadowMap; }
+		Debug::DebugLightRenderer& GetDebugLightRenderer() { return *_DebugLightRenderer; }
 	private:
 		int _Width, _Height;
 	private:
 		TAGE::MEM::Scope<EndlessGrid> _Grid;
 		TAGE::MEM::Ref<DeferredRendering> _DeferredRendering;
 		TAGE::MEM::Ref<ShadowMap> _ShadowMap;
+		TAGE::MEM::Ref<Debug::DebugLightRenderer> _DebugLightRenderer; // to-do implement
 	};
 }
 

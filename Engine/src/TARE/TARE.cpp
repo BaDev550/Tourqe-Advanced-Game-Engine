@@ -14,6 +14,9 @@ namespace TARE {
 		_DeferredRendering->GetLightShader()->CreateUBO("CameraUBO", sizeof(_Data.CameraData), 0);
 		_DeferredRendering->GetLightShader()->CreateSSBO(1, sizeof(Light) * MAX_LIGHTS + sizeof(int));
 		_DeferredRendering->GetLightShader()->CreateUBO("ScreenSpaceUBO", sizeof(_Data.ScreenSpaceData),  2);
+
+		ShaderLibrary::Add("DebugShader", "shaders/Debugger/debug_vertex", "shaders/Debugger/debug_fragment");
+		_DebugLightRenderer = TAGE::MEM::MakeRef<Debug::DebugLightRenderer>();
 	}
 
 	void TARE::BeginFrame(const TAGE::MEM::Ref<Camera>& cam, const TAGE::MEM::Ref<Skybox>& skybox)

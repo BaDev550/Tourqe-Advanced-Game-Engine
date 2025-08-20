@@ -1,2 +1,2 @@
 ProjectDefaults:
-  StartupScene: Scenes/start.scene
+  StartupScene: scenes/start.scene

@@ -315,7 +315,7 @@ namespace TAGE {
 		out << YAML::EndMap;
 	}
 
-	void SceneSerializer::Serialize(const std::string& filepath)
+	void SceneSerializer::Serialize(const std::filesystem::path& filepath)
 	{
 		YAML::Emitter out;
 		out << YAML::BeginMap;
@@ -336,11 +336,7 @@ namespace TAGE {
 		file << out.c_str();
 	}
 
-	void SceneSerializer::SerializeBinary(const std::string& filepath)
-	{
-	}
-
-	bool SceneSerializer::Deserialize(const std::string& filepath)
+	bool SceneSerializer::Deserialize(const std::filesystem::path& filepath)
 	{
 		std::ifstream stream(filepath);
 		std::stringstream strStream;
@@ -496,10 +492,5 @@ namespace TAGE {
 			}
 		}
 		return true;
-	}
-
-	bool SceneSerializer::DeserializeBinary(const std::string& filepath)
-	{
-		return false;
 	}
 }

@@ -12,7 +12,7 @@ namespace TAGE::Editor {
 		ImGui::SetWindowSize(ImVec2(700, 600));
 
         ImGui::BeginChild("##LeftNav", ImVec2(150, 0), true);
-        if (ImGui::Selectable("Screen Space", _CurrentSetting == Settings::Graphics))
+        if (ImGui::Selectable("Render", _CurrentSetting == Settings::Graphics))
             _CurrentSetting = Settings::Graphics;
         if (ImGui::Selectable("Startup Scene", _CurrentSetting == Settings::StartupScene))
             _CurrentSetting = Settings::StartupScene;

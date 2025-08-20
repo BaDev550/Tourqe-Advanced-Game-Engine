@@ -101,6 +101,8 @@
     </Lib>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClInclude Include="src\TAGE\AssetManager\Importers\SceneImporter.h" />
+    <ClInclude Include="src\TARE\DebugRenderer\DebugLightRenderer.h" />
     <ClInclude Include="src\TAGE\Project\ProjectSettingsSerializer.h" />
     <ClInclude Include="src\TAGE\AssetManager\AssetImporter.h" />
     <ClInclude Include="src\TAGE\AssetManager\Asset.h" />
@@ -621,6 +623,8 @@
     <ClInclude Include="vendor\stb\stb_image_write.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="src\TAGE\AssetManager\Importers\SceneImporter.cpp" />
+    <ClCompile Include="src\TARE\DebugRenderer\DebugLightRenderer.cpp" />
     <ClCompile Include="src\TAGE\Project\ProjectSettingsSerializer.cpp" />
     <ClCompile Include="src\TAGE\AssetManager\AssetImporter.cpp" />
     <ClCompile Include="src\TAGE\AssetManager\Asset.cpp" />

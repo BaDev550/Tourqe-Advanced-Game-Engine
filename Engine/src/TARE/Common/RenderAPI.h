@@ -18,6 +18,7 @@ namespace TARE {
 		virtual void DrawFullScreenQuad() = 0;
 		virtual void SetCullingMode(CullMode mode) = 0;
 		virtual void ToggleStencilFunction(StencilMode mode) = 0;
+		virtual void SetWireframe(bool enable) = 0;
 
 		static void SetShadingMode(ShadingMode mode) { s_Mode = mode; }
 		static void SetRenderMode(DebugRenderMode mode) { s_DebugRenderMode = mode; }

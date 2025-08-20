@@ -32,7 +32,7 @@ namespace TAGE::Editor {
 
 		void NewScene();
 		void OpenScene();
-		void OpenScene(const std::filesystem::path& path);
+		void OpenScene(AssetHandle handle);
 		void SaveSceneAs();
 		void SaveScene();
 

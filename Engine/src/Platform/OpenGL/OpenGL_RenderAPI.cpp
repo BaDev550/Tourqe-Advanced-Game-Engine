@@ -117,4 +117,13 @@ namespace TARE {
 			break;
 		}
 	}
+	void OpenGL_RenderAPI::SetWireframe(bool enable)
+	{
+		if (enable) {
+			glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
+		}
+		else {
+			glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
+		}
+	}
 }

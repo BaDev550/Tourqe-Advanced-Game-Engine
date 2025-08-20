@@ -5,8 +5,11 @@ namespace TAGE {
 	enum class AssetType {
 		None = 0,
 		Scene,
-		Mesh,
+		MeshSource,
+		StaticMesh,
+		SkeletalMesh,
 		Texture,
+		Audio,
 		Material
 	};
 

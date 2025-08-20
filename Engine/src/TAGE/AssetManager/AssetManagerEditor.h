@@ -24,6 +24,7 @@ namespace TAGE {
 
 		const AssetMetadata& GetMetadata(AssetHandle handle) const;
 		const AssetRegistry& GetAssetRegistry() const { return _AssetRegistry; }
+		const std::filesystem::path& GetFilePath(AssetHandle handle) const;
 
 		void SerializeAssetRegistry();
 		bool DeserializeAssetRegistry();

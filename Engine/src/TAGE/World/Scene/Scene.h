@@ -66,7 +66,7 @@ namespace TAGE {
 		auto GetEntitiesWith() { return _Registry.view<Components...>(); }
 
 		static AssetType GetStaticType() { return AssetType::Scene; }
-		AssetType GetType() const override { return GetStaticType(); }
+		virtual AssetType GetType() const override { return GetStaticType(); }
 	private:
 		template<typename TComponent>
 		void CopyComponentIfExists(entt::entity dst, entt::registry& dstRegistry, entt::entity src)

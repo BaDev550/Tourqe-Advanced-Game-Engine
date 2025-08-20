@@ -52,8 +52,13 @@ namespace TAGE {
 		_Renderer->EndShadowPass();
 
 		_Renderer->BeginFrame(cam, skybox);
-		if (!runtime)
+		if (!runtime) {
 			_Renderer->DrawGrid();
+			//for (auto& light : lights) { 
+			//	_Renderer->GetDebugLightRenderer().SetType(light.type);
+			//	_Renderer->GetDebugLightRenderer().Render(cam->GetViewProjectionMatrix(), light.position, light.range, 16, light.color); 
+			//}
+		}
 		RenderObjects();
 		_Renderer->EndFrame();
 	}
