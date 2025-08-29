@@ -12,6 +12,7 @@ namespace TARE {
 		case ShaderDataType::VEC2:         return GL_FLOAT;
 		case ShaderDataType::VEC3:         return GL_FLOAT;
 		case ShaderDataType::VEC4:         return GL_FLOAT;
+		case ShaderDataType::IVEC4:        return GL_INT;
 		case ShaderDataType::MAT3:         return GL_FLOAT;
 		case ShaderDataType::MAT4:         return GL_FLOAT;
 		case ShaderDataType::SHORT3:       return GL_SHORT;
@@ -37,15 +38,29 @@ namespace TARE {
 		uint index = 0;
 
 		for (const auto& element : layout) {
+			GLenum glType = to_OpenGLType(element.Type);
+			bool isInteger = (element.Type == ShaderDataType::INT || element.Type == ShaderDataType::IVEC4);
+
 			glEnableVertexAttribArray(index);
-			glVertexAttribPointer(
-				index,
-				element.GetComponentCount(),
-				to_OpenGLType(element.Type),
-				element.Normalized ? GL_TRUE : GL_FALSE,
-				layout.GetStride(),
-				(const void*)element.Offset
-			);
+			if (isInteger) {
+				glVertexAttribIPointer(
+					index,
+					element.GetComponentCount(),
+					glType,
+					layout.GetStride(),
+					(const void*)element.Offset
+				);
+			}
+			else {
+				glVertexAttribPointer(
+					index,
+					element.GetComponentCount(),
+					glType,
+					element.Normalized ? GL_TRUE : GL_FALSE,
+					layout.GetStride(),
+					(const void*)element.Offset
+				);
+			}
 			index++;
 		}
 		_VertexBuffers.push_back(vertexBuffer);

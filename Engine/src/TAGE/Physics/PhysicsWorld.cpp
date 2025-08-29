@@ -64,13 +64,13 @@ namespace TAGE::Physics {
 
             uint indexOffset = 0;
             auto& mc = entity.GetComponent<MeshComponent>();
-            uint meshCount = mc.Handle->GetMeshCount();
+            uint meshCount = mc.Handle->GetMeshes().size();
 
             for (uint i = 0; i < meshCount; i++)
             {
-                auto mesh = mc.Handle->GetMesh(i);
-                const auto& vertices = mesh.GetVertices();
-                const auto& indices = mesh.GetIndices();
+                auto mesh = mc.Handle->GetMeshes()[i];
+                const auto& vertices = mesh->GetVertices();
+                const auto& indices = mesh->GetIndices();
 
                 for (const auto& vertex : vertices) {
                     allVertices.push_back(vertex.pos);

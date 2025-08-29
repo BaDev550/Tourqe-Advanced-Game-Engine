@@ -63,10 +63,10 @@ namespace TAGE::Editor {
 			_ThumbnailShader->SetUniform("u_View", _ThumbnailCamera.GetViewMatrix());
 			_ThumbnailShader->SetUniform("u_Projection", _ThumbnailCamera.GetProjectionMatrix());
 
-			if (preview.LoadedModel) {
-				preview.LoadedModel->SetTransform(glm::mat4(1.0f));
-				preview.LoadedModel->Draw(_ThumbnailShader);
-			}
+			//if (preview.LoadedModel) {
+			//	preview.LoadedModel->SetTransform(glm::mat4(1.0f));
+			//	preview.LoadedModel->Draw(_ThumbnailShader, glm::mat4(1.0f));
+			//}
 
 			preview.Framebuffer->Unbind();
 			preview.IsRendered = true;
@@ -75,26 +75,26 @@ namespace TAGE::Editor {
 
 	void ThumbnailRenderer::ComputeCameraForModel(TARE::Model& model)
 	{
-		auto bounds = model.GetBoundingBox();
-		glm::vec3 center = (bounds.Min + bounds.Max) * 0.5f;
-		glm::vec3 extents = bounds.Max - bounds.Min;
+		//auto bounds = model.GetBoundingBox();
+		//glm::vec3 center = (bounds.Min + bounds.Max) * 0.5f;
+		//glm::vec3 extents = bounds.Max - bounds.Min;
 
-		float objectSize = glm::max(glm::max(extents.x, extents.y), extents.z);
-		if (objectSize < 0.01f)
-			objectSize = 0.5f;
+		//float objectSize = glm::max(glm::max(extents.x, extents.y), extents.z);
+		//if (objectSize < 0.01f)
+		//	objectSize = 0.5f;
 
-		float verticalFOV = glm::radians(_ThumbnailCamera.GetFOV());
+		//float verticalFOV = glm::radians(_ThumbnailCamera.GetFOV());
 
-		float cameraViewHeight = 2.0f * glm::tan(verticalFOV * 0.5f);
-		float cameraDistanceScalar = 1.0f;
+		//float cameraViewHeight = 2.0f * glm::tan(verticalFOV * 0.5f);
+		//float cameraDistanceScalar = 1.0f;
 
-		float distance = cameraDistanceScalar * objectSize / cameraViewHeight;
-		distance += 0.5f * objectSize;
+		//float distance = cameraDistanceScalar * objectSize / cameraViewHeight;
+		//distance += 0.5f * objectSize;
 
-		glm::vec3 cameraForward = glm::normalize(glm::vec3(1.0f, -0.3f, -0.7f));
-		glm::vec3 cameraPos = center - distance * cameraForward;
+		//glm::vec3 cameraForward = glm::normalize(glm::vec3(1.0f, -0.3f, -0.7f));
+		//glm::vec3 cameraPos = center - distance * cameraForward;
 
-		_ThumbnailCamera.SetPosition(cameraPos);
-		_ThumbnailCamera.LookAt(center);
+		//_ThumbnailCamera.SetPosition(cameraPos);
+		//_ThumbnailCamera.LookAt(center);
 	}
 }

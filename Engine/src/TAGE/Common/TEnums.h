@@ -9,6 +9,7 @@ enum class ShaderDataType : uint8 {
 	VEC2,
 	VEC3,
 	VEC4,
+	IVEC4,
 	MAT3,
 	MAT4,
 	SHORT3,

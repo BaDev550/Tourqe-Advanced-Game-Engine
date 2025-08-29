@@ -17,6 +17,7 @@ namespace TAGE {
 		if (!_Scene) return;
 		auto& primaryCameraEntity = _Scene->GetPrimaryCamera();
 		if (!primaryCameraEntity) return;
+		_DeltaTime = deltaTime;
 
 		MEM::Ref<TARE::Camera> camera = nullptr;
 		auto& cc = primaryCameraEntity.GetComponent<CameraComponent>();
@@ -33,6 +34,7 @@ namespace TAGE {
 	{
 		if (!_Scene) return;
 		if (!_EditorCamera) return;
+		_DeltaTime = deltaTime;
 
 		Render(_EditorCamera, deltaTime);
 	}
@@ -59,26 +61,45 @@ namespace TAGE {
 			//	_Renderer->GetDebugLightRenderer().Render(cam->GetViewProjectionMatrix(), light.position, light.range, 16, light.color); 
 			//}
 		}
-		RenderObjects();
+		RenderObjects(runtime);
 		_Renderer->EndFrame();
 	}
 
-	void System_Renderer::RenderObjects()
+	void System_Renderer::RenderObjects(bool runtime)
 	{
 		auto view = _Scene->GetEntitiesWith<MeshComponent>();
 		for (auto entity : view) {
+			auto& shaderRef = _Renderer->GetDeferredRendering().GetGBufferShader();
+			shaderRef->Use();
+
 			Entity& entityObj = _Scene->GetEntityByID(entity);
 			auto& mc = entityObj.GetComponent<MeshComponent>();
 
 			if (!mc.IsVisible) continue;
 			if (!mc.Handle) continue;
+			if (mc.IsSkinned) {
+				if (!entityObj.HasComponent<AnimatorComponent>()) {
+					goto drawmesh;
+				}
 
+				auto& animator = entityObj.GetComponent<AnimatorComponent>();
+				if (animator.Handle) {
+					animator.Handle->UpdateAnimation(_DeltaTime);
+					auto transforms = animator.Handle->GetFinalBoneMatrices();
+					for (int i = 0; i < transforms.size(); i++)
+						shaderRef->SetUniform(("u_FinalBoneMatrices[" + std::to_string(i) + "]").c_str(), transforms[i]);
+				}
+				else {
+					goto drawmesh;
+				}
+			}
+
+drawmesh:
 			auto& tc = entityObj.GetComponent<TransformComponent>();
 			glm::mat4 transform = _Scene->GetWorldSpaceTransformMatrix(entityObj);
-			mc.Handle->SetTransform(transform);
-			_Renderer->GetDeferredRendering().GetGBufferShader()->Use();
-			_Renderer->GetDeferredRendering().GetGBufferShader()->SetUniform("u_EntityID", (int)entity);
-			mc.Handle->Draw("GBufferShader");
+			shaderRef->SetUniform("u_EntityID", (int)entity);
+			shaderRef->SetUniform("u_UseSkinning", (mc.IsSkinned && entityObj.HasComponent<AnimatorComponent>()));
+			mc.Handle->Draw("GBufferShader", transform);
 		}
 
 	}
@@ -94,8 +115,7 @@ namespace TAGE {
 			if (!mc.CastShadows) continue;
 
 			glm::mat4 transform = _Scene->GetWorldSpaceTransformMatrix(entityObj);
-			mc.Handle->SetTransform(transform);
-			mc.Handle->Draw("ShadowDepth");
+			mc.Handle->Draw("ShadowDepth", transform);
 		}
 	}
 

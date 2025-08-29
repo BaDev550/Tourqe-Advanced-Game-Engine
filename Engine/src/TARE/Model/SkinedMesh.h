@@ -13,11 +13,10 @@ namespace TARE {
 		);
 		SkinedMesh() {}
 
-		virtual void Draw(TAGE::MEM::Ref<Shader>& shader) const override;
-		virtual void SetVertices(const std::vector<SkinedVertexData>& data) { _skinnerVertices = data; }
-		std::vector<SkinedVertexData> GetSkinnedVertices() { return _skinnerVertices; }
+		virtual void SetVertices(const std::vector<SkinedVertexData>& data) { _skinnedVertices = data; }
+		virtual void SetupMesh() override;
+		std::vector<SkinedVertexData> GetSkinnedVertices() { return _skinnedVertices; }
 	protected:
-		std::vector<SkinedVertexData> _skinnerVertices;
-		virtual void SetupMesh();
+		std::vector<SkinedVertexData> _skinnedVertices;
 	};
 }

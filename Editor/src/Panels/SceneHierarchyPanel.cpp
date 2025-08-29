@@ -292,6 +292,7 @@ namespace TAGE::Editor {
 			DisplayAddComponentEntry<SkyboxComponent>("Skybox");
 			DisplayAddComponentEntry<RigidBodyComponent>("Rigidbody");
 			DisplayAddComponentEntry<ColliderComponent>("Collider");
+			DisplayAddComponentEntry<AnimatorComponent>("Animator");
 
 			ImGui::EndPopup();
 		}
@@ -389,7 +390,7 @@ namespace TAGE::Editor {
 
 				if (ImGui::Button("Select Mesh"))
 				{
-					std::string selectedMesh = Platform::FileDialog::OpenFile("Mesh Files (*.obj;*.gltf)\0*.obj;*.gltf\0");
+					std::string selectedMesh = Platform::FileDialog::OpenFile("Mesh Files (*.dae;*.fbx;*.obj;*.gltf)\0*.dae;*.fbx;*.obj;*.gltf\0");
 					if (!selectedMesh.empty())
 					{
 						if (!component.Handle)
@@ -559,6 +560,27 @@ namespace TAGE::Editor {
 				else
 					component.ResponseType = CollisionResponseType::BLOCK;
 
+			});
+
+		DrawComponent<AnimatorComponent>("Animator", entity, [](AnimatorComponent& component)
+			{
+				if (component.Handle)
+				{
+					ImGui::Text("Animator");
+				}
+				else
+				{
+					ImGui::Text("Animator not loaded.");
+				}
+
+				if (ImGui::Button("Select Animator"))
+				{
+					std::string selectedAnimator = Platform::FileDialog::OpenFile("Animator Files (*.dae;*.fbx)\0*.dae;*.fbx\0");
+					if (!selectedAnimator.empty())
+					{
+						component.SetAnimation(selectedAnimator);
+					}
+				}
 			});
 	}
 

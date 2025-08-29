@@ -3,36 +3,29 @@
 #include "TARE/Common/RenderCommands.h"
 
 namespace TARE {
-	void SkinedMesh::Draw(TAGE::MEM::Ref<Shader>& shader) const
+	SkinedMesh::SkinedMesh(std::vector<SkinedVertexData> vertices, std::vector<uint> indices, TAGE::MEM::Ref<Material> material)
 	{
-		if (_material)
-			_material->Use(shader);
-		RenderCommand::DrawIndexed(_VAO);
+		_vertices.clear();
+		_skinnedVertices = std::move(vertices);
+		_indices = std::move(indices);
+		_material = std::move(material);
+		SetupMesh();
 	}
 
 	void SkinedMesh::SetupMesh()
 	{
 		TAGE::MEM::Ref<VertexBufferObject> _VBO;
-		_VBO = VertexBufferObject::Create(_vertices.data(), _vertices.size() * sizeof(SkinedVertexData));
-#ifdef TAGE_ENABLE_GLM_VERTEX_DATA
+		_VBO = VertexBufferObject::Create(_skinnedVertices.data(), _skinnedVertices.size() * sizeof(SkinedVertexData));
 		BufferLayout layout = {
 			{ ShaderDataType::VEC3,  "aPos" },
-			{ ShaderDataType::VEC3,  "aNormal",    true },
-			{ ShaderDataType::VEC2,  "aTexCoord",  true },
-			{ ShaderDataType::VEC3,  "aTangent",   true },
-			{ ShaderDataType::VEC3,  "aBitangent", true },
-			{ ShaderDataType::INT,   "aBoneIDs",     true },
-			{ ShaderDataType::FLOAT, "aBoneWeights", true }
+			{ ShaderDataType::VEC3,  "aNormal",      true },
+			{ ShaderDataType::VEC2,  "aTexCoord",    true },
+			{ ShaderDataType::VEC3,  "aTangent",     true },
+			{ ShaderDataType::VEC3,  "aBitangent",   true },
+			{ ShaderDataType::IVEC4, "aBoneIDs"     },
+			{ ShaderDataType::VEC4,  "aBoneWeights" }
 		};
-#else
-		BufferLayout layout = {
-			{ ShaderDataType::SHORT3,      "aPos" },
-			{ ShaderDataType::BYTE3_NORM,  "aNormal",    true },
-			{ ShaderDataType::USHORT2,     "aTexCoord",  true },
-			{ ShaderDataType::BYTE3_NORM,  "aTangent",   true },
-			{ ShaderDataType::BYTE3_NORM,  "aBitangent", true }
-		};
-#endif
+
 		_VAO = VertexArrayObject::Create();
 		_VBO->SetLayout(layout);
 		_VAO->AddVertexBuffer(_VBO);

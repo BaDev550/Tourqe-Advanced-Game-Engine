@@ -1,9 +1,36 @@
 AssetRegistry:
+  - Handle: 557571104353682253
+    FilePath: models/FlightHelmet/glTF/FlightHelmet_Materials_MetalPartsMat_OcclusionRoughMetal.png
+    Type: Texture
+  - Handle: 872380780171101602
+    FilePath: models/DamagedHelmet/glTF/Default_albedo.jpg
+    Type: Texture
+  - Handle: 1197129751441667048
+    FilePath: models/FlightHelmet/glTF/FlightHelmet_Materials_LeatherPartsMat_OcclusionRoughMetal.png
+    Type: Texture
+  - Handle: 1330945161875454340
+    FilePath: models/FlightHelmet/glTF/FlightHelmet_Materials_LensesMat_Normal.png
+    Type: Texture
+  - Handle: 1689089877814808566
+    FilePath: scenes/test.scene
+    Type: Scene
+  - Handle: 1783977886112599972
+    FilePath: scenes/anim.scene
+    Type: Scene
+  - Handle: 2529939116631006945
+    FilePath: models/FlightHelmet/glTF/FlightHelmet_Materials_GlassPlasticMat_OcclusionRoughMetal.png
+    Type: Texture
+  - Handle: 4474201022812207529
+    FilePath: models/DamagedHelmet/glTF/Default_AO.jpg
+    Type: Texture
   - Handle: 4724061962271990898
     FilePath: textures/skyboxes/skybox_1.png
     Type: Texture
   - Handle: 4859819085416089012
     FilePath: models/SciFiHelmet/SciFiHelmet_AmbientOcclusion.png
+    Type: Texture
+  - Handle: 4923875236970055486
+    FilePath: models/FlightHelmet/glTF/FlightHelmet_Materials_LensesMat_OcclusionRoughMetal.png
     Type: Texture
   - Handle: 4964789565818232391
     FilePath: models/mario_2/glove.jpg
@@ -17,14 +44,32 @@ AssetRegistry:
   - Handle: 6432480066886207427
     FilePath: scenes/playground.scene
     Type: Scene
+  - Handle: 7211447049872675517
+    FilePath: models/FlightHelmet/glTF/FlightHelmet_Materials_GlassPlasticMat_BaseColor.png
+    Type: Texture
+  - Handle: 7878372029728589833
+    FilePath: models/FlightHelmet/glTF/FlightHelmet_Materials_RubberWoodMat_Normal.png
+    Type: Texture
+  - Handle: 7914659644146613772
+    FilePath: models/DamagedHelmet/glTF/Default_metalRoughness.jpg
+    Type: Texture
   - Handle: 8556438490372027569
     FilePath: models/SciFiHelmet/SciFiHelmet_BaseColor.png
+    Type: Texture
+  - Handle: 9406767706277295464
+    FilePath: models/FlightHelmet/glTF/FlightHelmet_Materials_MetalPartsMat_BaseColor.png
     Type: Texture
   - Handle: 9745496740293724281
     FilePath: models/SciFiHelmet/SciFiHelmet_Normal.png
     Type: Texture
+  - Handle: 10134881634934817707
+    FilePath: models/FlightHelmet/glTF/FlightHelmet_Materials_LensesMat_BaseColor.png
+    Type: Texture
   - Handle: 10445416984265841276
     FilePath: models/mario_2/body.jpg
+    Type: Texture
+  - Handle: 11341749985723065316
+    FilePath: models/FlightHelmet/glTF/FlightHelmet_Materials_RubberWoodMat_BaseColor.png
     Type: Texture
   - Handle: 11509525558534327163
     FilePath: models/mario_2/hair.jpg
@@ -32,12 +77,30 @@ AssetRegistry:
   - Handle: 11626709404202953731
     FilePath: models/SciFiHelmet/SciFiHelmet_MetallicRoughness.png
     Type: Texture
+  - Handle: 12968999364935029414
+    FilePath: models/DamagedHelmet/glTF/Default_normal.jpg
+    Type: Texture
+  - Handle: 13029176125592456469
+    FilePath: models/FlightHelmet/glTF/FlightHelmet_Materials_LeatherPartsMat_BaseColor.png
+    Type: Texture
   - Handle: 13790136835472802407
     FilePath: models/mario_2/pupil.jpg
+    Type: Texture
+  - Handle: 15041937715155709641
+    FilePath: models/FlightHelmet/glTF/FlightHelmet_Materials_RubberWoodMat_OcclusionRoughMetal.png
+    Type: Texture
+  - Handle: 15489042094241215621
+    FilePath: models/FlightHelmet/glTF/FlightHelmet_Materials_MetalPartsMat_Normal.png
     Type: Texture
   - Handle: 16413263067005391572
     FilePath: models/mario_2/face.jpg
     Type: Texture
   - Handle: 17369131218405590373
     FilePath: models/mario_2/eye1.jpg
+    Type: Texture
+  - Handle: 17728917482512247656
+    FilePath: models/FlightHelmet/glTF/FlightHelmet_Materials_LeatherPartsMat_Normal.png
+    Type: Texture
+  - Handle: 18386629736444575418
+    FilePath: models/FlightHelmet/glTF/FlightHelmet_Materials_GlassPlasticMat_Normal.png
     Type: Texture

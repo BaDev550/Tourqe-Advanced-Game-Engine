@@ -4,6 +4,8 @@
 #include "TARE/Shader/ShaderLibrary.h"
 #include "TAGE/Project/Project.h"
 #include "meshoptimizer.h"
+#include "TAGE/Common/TDefines.h"
+#include "TAGE/Common/TMath.h"
 #include "TAGE/AssetManager/AssetManager.h"
 #include "TAGE/AssetManager/Importers/TextureImporter.h"
 #include "TAGE/AssetManager/Asset.h"
@@ -28,22 +30,26 @@ namespace TARE
 			aiProcess_GenNormals |
 			aiProcess_JoinIdenticalVertices |
 			aiProcess_SortByPType |
-			aiProcess_OptimizeMeshes |
 			aiProcess_ImproveCacheLocality |
 			aiProcess_FindDegenerates |
 			aiProcess_FindInvalidData |
-			aiProcess_ValidateDataStructure |
-			aiProcess_OptimizeGraph 
+			aiProcess_ValidateDataStructure 
 		);
-		if (!_scene || !_scene->mRootNode)
-		{
+		if (!_scene || !_scene->mRootNode) {
 			LOG_ERROR("Failed to load model: {}. Error: {}", filePath, importer.GetErrorString());
 			return false;
 		}
-		if (_scene->HasSkeletons())
-			_Type = ModelType::SKINNED_MODEL;
+		bool hasBones = false;
+		for (unsigned int i = 0; i < _scene->mNumMeshes; ++i) {
+			if (_scene->mMeshes[i]->HasBones()) {
+				hasBones = true;
+				break;
+			}
+		}
 
+		_Type = hasBones ? ModelType::SKINNED_MODEL : ModelType::MODEL;
 		_FilePath = filePath;
+
 		ProcessNode(_scene->mRootNode, _scene);
 		return true;
 	}
@@ -64,52 +70,15 @@ namespace TARE
 			}).detach();
 	}
 
-	void Model::Draw(TAGE::MEM::Ref<Shader>& shader) const
-	{
-		shader->Use();
-		shader->SetUniform("u_Model", _transform);
-		for (const auto& mesh : _meshes)
-			mesh->Draw(shader);
-	}
-
-	void Model::Draw(const std::string& shader) const
+	void Model::Draw(const std::string& shader, const glm::mat4& transform) const
 	{
 		if (_meshes.empty()) return;
 
 		TAGE::MEM::Ref<Shader> shaderRef = ShaderLibrary::Get(shader);
 		shaderRef->Use();
-		shaderRef->SetUniform("u_Model", _transform);
+		shaderRef->SetUniform("u_Model", transform);
 		for (const auto& mesh : _meshes)
 			mesh->Draw(shaderRef);
-	}
-
-	void Model::DrawOutlined(const std::string& shader, const glm::mat4& viewProj)
-	{
-		TAGE::MEM::Ref<Shader> shaderRef = ShaderLibrary::Get(shader);
-		shaderRef->Use();
-		shaderRef->SetUniform("u_ViewProj", viewProj);
-		shaderRef->SetUniform("u_Model", _transform);
-		for (const auto& mesh : _meshes)
-			mesh->Draw(shaderRef);
-	}
-
-	BoundingBox Model::GetBoundingBox() const
-	{
-		glm::vec3 min = glm::vec3(FLT_MAX);
-		glm::vec3 max = glm::vec3(-FLT_MAX);
-
-		for (auto& mesh : _meshes) {
-			for (auto& vertex : mesh->GetVertices()) {
-				min = glm::min(min, vertex.pos);
-				max = glm::max(max, vertex.pos);
-			}
-		}
-		return { min, max };
-	}
-
-	void Model::SetTransform(const glm::mat4& transform)
-	{
-		_transform = transform;
 	}
 
 	void Model::ProcessNode(aiNode* node, const aiScene* scene)
@@ -117,11 +86,62 @@ namespace TARE
 		for (uint i = 0; i < node->mNumMeshes; ++i)
 		{
 			aiMesh* mesh = scene->mMeshes[node->mMeshes[i]];
-			_meshes.push_back(ProcessMesh(mesh, scene));
+			_meshes.push_back(_Type == ModelType::SKINNED_MODEL ? ProcessSkinnedMesh(mesh, scene) : ProcessMesh(mesh, scene));
 		}
 		for (uint i = 0; i < node->mNumChildren; ++i)
 		{
 			ProcessNode(node->mChildren[i], scene);
+		}
+	}
+
+	void Model::SetVertexBoneDataToDefault(SkinedVertexData& vertex)
+	{
+		for (uint i = 0; i < MAX_BONE_INFLUENCES; ++i)
+		{
+			vertex.BoneIDs[i] = -1;
+			vertex.BoneWeights[i] = 0.0f;
+		}
+	}
+
+	void Model::SetVertexBoneData(SkinedVertexData& vertex, int boneID, float weight)
+	{
+		for(int i = 0; i < MAX_BONE_INFLUENCES; ++i)
+		{
+			if (vertex.BoneIDs[i] < 0.0f) {
+				vertex.BoneWeights[i] = weight;
+				vertex.BoneIDs[i] = boneID;
+				break;
+			}
+		}
+	}
+
+	void Model::ExtractBoneWeightForVertex(std::vector<SkinedVertexData>& vertices, aiMesh* mesh, const aiScene* scene)
+	{
+		auto& boneInfoMap = _boneInfoMap;
+		int& boneCount = _BoneCounter;
+		for (int boneIndex = 0; boneIndex < mesh->mNumBones; boneIndex++) {
+			int boneID = -1;
+			std::string boneName = mesh->mBones[boneIndex]->mName.C_Str();
+			if (boneInfoMap.find(boneName) == boneInfoMap.end()) {
+				BoneInfo newBoneInfo;
+				newBoneInfo.Id = boneCount;
+				newBoneInfo.Offset = TAGE::Math::ConvertMatrixToGLMFormat(mesh->mBones[boneIndex]->mOffsetMatrix);
+				boneInfoMap[boneName] = newBoneInfo;
+				boneID = boneCount;
+				boneCount++;
+			}
+			else {
+				boneID = boneInfoMap[boneName].Id;
+			}
+			ASSERT_NOMSG(boneID != -1);
+			auto weights = mesh->mBones[boneIndex]->mWeights;
+			int numWeights = mesh->mBones[boneIndex]->mNumWeights;
+
+			for (int i = 0; i < numWeights; ++i) {
+				int vertexID = weights[i].mVertexId;
+				float weight = weights[i].mWeight;
+				SetVertexBoneData(vertices[vertexID], boneID, weight);
+			}
 		}
 	}
 
@@ -174,7 +194,7 @@ namespace TARE
 			
 			qv.pos = glm::vec3(mesh->mVertices[i].x, mesh->mVertices[i].y, mesh->mVertices[i].z);
 			qv.uv = glm::vec2(mesh->mTextureCoords[0][i].x, mesh->mTextureCoords[0][i].y);
-
+			
 			if (mesh->HasNormals()) {
 				qv.normal = glm::vec3(mesh->mNormals[i].x, mesh->mNormals[i].y, mesh->mNormals[i].z);
 			}
@@ -192,20 +212,6 @@ namespace TARE
 				indices.push_back(face.mIndices[j]);
 			}
 		}
-		std::string meshName = mesh->mName.C_Str();
-		if (meshName.empty()) meshName = "UnnamedMesh";
-
-		TAGE::MEM::Ref<Material> material = TAGE::MEM::MakeRef<Material>(meshName.c_str());
-		if (mesh->mMaterialIndex >= 0)
-		{
-			aiMaterial* mat = scene->mMaterials[mesh->mMaterialIndex];
-			LoadTextureToMaterial(TextureType::DIFFUSE, mat, material);
-			LoadTextureToMaterial(TextureType::SPECULAR, mat, material);
-			LoadTextureToMaterial(TextureType::NORMAL, mat, material);
-			LoadTextureToMaterial(TextureType::ROUGHNESS, mat, material);
-			LoadTextureToMaterial(TextureType::METALLIC, mat, material);
-			LoadTextureToMaterial(TextureType::AMBIENT_OCCLUSION, mat, material);
-		}
 
         std::vector<uint> remap(vertices.size());  
         size_t unique_vertex_count = meshopt_generateVertexRemap(remap.data(), indices.data(), indices.size(), vertices.data(), vertices.size(), sizeof(VertexData));
@@ -220,7 +226,80 @@ namespace TARE
 
 		vertices.clear();
 		indices.clear();
-		return TAGE::MEM::MakeScope<Mesh>(std::move(optimized_vertices), std::move(optimized_indices), std::move(material));
+		return TAGE::MEM::MakeScope<Mesh>(std::move(optimized_vertices), std::move(optimized_indices), std::move(LoadMaterials(mesh, scene)));
+	}
+
+	TAGE::MEM::Scope<Mesh> Model::ProcessSkinnedMesh(aiMesh* mesh, const aiScene* scene)
+	{
+		std::vector<SkinedVertexData> vertices;
+		std::vector<uint> indices;
+		for (uint i = 0; i < mesh->mNumVertices; ++i)
+		{
+			SkinedVertexData qv;
+			SetVertexBoneDataToDefault(qv);
+			qv.pos = glm::vec3(mesh->mVertices[i].x, mesh->mVertices[i].y, mesh->mVertices[i].z);
+			qv.uv = glm::vec2(mesh->mTextureCoords[0][i].x, mesh->mTextureCoords[0][i].y);
+			
+			if (mesh->HasNormals()) {
+				qv.normal = glm::vec3(mesh->mNormals[i].x, mesh->mNormals[i].y, mesh->mNormals[i].z);
+			}
+			if (mesh->HasTangentsAndBitangents()) {
+				qv.tangent = glm::vec3(mesh->mTangents[i].x, mesh->mTangents[i].y, mesh->mTangents[i].z);
+				qv.bitangent = glm::vec3(mesh->mBitangents[i].x, mesh->mBitangents[i].y, mesh->mBitangents[i].z);
+			}
+			vertices.push_back(qv);
+		}
+		for (uint i = 0; i < mesh->mNumFaces; ++i)
+		{
+			const aiFace& face = mesh->mFaces[i];
+			for (uint j = 0; j < face.mNumIndices; ++j)
+			{
+				indices.push_back(face.mIndices[j]);
+			}
+		}
+
+		std::vector<uint> remap(vertices.size());
+		size_t unique_vertex_count = meshopt_generateVertexRemap(remap.data(), indices.data(), indices.size(), vertices.data(), vertices.size(), sizeof(SkinedVertexData));
+		std::vector<uint> optimized_indices(indices.size());
+		std::vector<SkinedVertexData> optimized_vertices(unique_vertex_count);
+
+		meshopt_remapIndexBuffer(optimized_indices.data(), indices.data(), indices.size(), &remap[0]);
+		meshopt_remapVertexBuffer(optimized_vertices.data(), vertices.data(), vertices.size(), sizeof(SkinedVertexData), &remap[0]);
+		meshopt_optimizeVertexCache(optimized_indices.data(), optimized_indices.data(), optimized_indices.size(), unique_vertex_count);
+		meshopt_optimizeOverdraw(optimized_indices.data(), optimized_indices.data(), optimized_indices.size(), &optimized_vertices[0].pos.x, unique_vertex_count, sizeof(SkinedVertexData), 1.05f);
+		meshopt_optimizeVertexFetch(optimized_vertices.data(), optimized_indices.data(), optimized_indices.size(), optimized_vertices.data(), unique_vertex_count, sizeof(SkinedVertexData));
+		ExtractBoneWeightForVertex(optimized_vertices, mesh, scene);
+
+		return TAGE::MEM::MakeScope<SkinedMesh>(std::move(optimized_vertices), std::move(optimized_indices), std::move(LoadMaterials(mesh, scene)));
+	}
+
+	TAGE::MEM::Ref<Material> Model::LoadMaterials(aiMesh* mesh, const aiScene* scene)
+	{
+		std::string meshName = mesh->mName.C_Str();
+		if (meshName.empty()) meshName = "UnnamedMesh";
+		TAGE::MEM::Ref<Material> material = TAGE::MEM::MakeRef<Material>(meshName.c_str());
+
+		if (mesh->mMaterialIndex >= 0)
+		{
+			aiMaterial* mat = scene->mMaterials[mesh->mMaterialIndex];
+			LoadTextureToMaterial(TextureType::DIFFUSE, mat, material);
+			LoadTextureToMaterial(TextureType::SPECULAR, mat, material);
+			LoadTextureToMaterial(TextureType::NORMAL, mat, material);
+			LoadTextureToMaterial(TextureType::ROUGHNESS, mat, material);
+			LoadTextureToMaterial(TextureType::METALLIC, mat, material);
+			LoadTextureToMaterial(TextureType::AMBIENT_OCCLUSION, mat, material);
+			mat->Clear();
+		}
+		return std::move(material);
+	}
+
+	std::vector<Mesh*> Model::GetMeshes() const
+	{
+		std::vector<Mesh*> meshes;
+		meshes.reserve(_meshes.size());
+		for (const auto& mesh : _meshes)
+			meshes.push_back(mesh.get());
+		return meshes;
 	}
 
 	bool Model::LoadCPU(const std::string& path)
@@ -246,6 +325,7 @@ namespace TARE
 		}
 
 		_FilePath = path;
+		_Type = _scene->HasSkeletons() ? ModelType::SKINNED_MODEL : ModelType::MODEL;
 		ProcessNode(_scene->mRootNode, _scene);
 		return true;
 	}

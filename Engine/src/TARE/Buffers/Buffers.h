@@ -12,6 +12,7 @@ namespace TARE {
 		case ShaderDataType::VEC2:        return 4*2;
 		case ShaderDataType::VEC3:        return 4*3;
 		case ShaderDataType::VEC4:        return 4*4;
+		case ShaderDataType::IVEC4:       return 4*4;
 		case ShaderDataType::MAT3:        return 4*3*3;
 		case ShaderDataType::MAT4:        return 4*4*4;
 		case ShaderDataType::SHORT3:      return 2*3;
@@ -42,6 +43,7 @@ namespace TARE {
 			case ShaderDataType::VEC2:          return 2;
 			case ShaderDataType::VEC3:          return 3;
 			case ShaderDataType::VEC4:          return 4;
+			case ShaderDataType::IVEC4:		    return 4;
 			case ShaderDataType::MAT3:          return 3*3;
 			case ShaderDataType::MAT4:          return 4*4;
 			case ShaderDataType::SHORT3:        return 3;

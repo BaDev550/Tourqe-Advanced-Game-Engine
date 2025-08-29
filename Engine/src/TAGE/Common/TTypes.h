@@ -10,8 +10,6 @@
 #define TAGE_ENABLE_GLM_VERTEX_DATA
 #include <glm/gtx/quaternion.hpp>
 
-#ifdef TAGE_ENABLE_GLM_VERTEX_DATA
-#pragma pack(push, 1)
 struct VertexData {
 	glm::vec3 pos;
 	glm::vec3 normal;
@@ -19,35 +17,20 @@ struct VertexData {
 	glm::vec3 tangent;
 	glm::vec3 bitangent;
 };
-#pragma pack(pop)
-#else
-#pragma pack(push, 1)
-struct VertexData {
-	int16 pos[3];
-	int8 normal[3];
-	uint16 uv[2];
-	int8 tangent[3];
-	int8 bitangent[3];
+
+struct SkinedVertexData : public VertexData {
+	int BoneIDs[MAX_BONE_INFLUENCES];
+	float BoneWeights[MAX_BONE_INFLUENCES];
 };
-#pragma pack(pop)
-#endif
 
 struct DebugVertexData {
 	glm::vec3 Position;
 	glm::vec3 Color;
 };
 
-struct SkinedVertexData {
-	VertexData Vertex;
-	uint BoneIDs[MAX_BONE_INFLUENCES];
-	float BoneWeights[MAX_BONE_INFLUENCES];
-
-	SkinedVertexData() {
-		for (int i = 0; i < MAX_BONE_INFLUENCES; ++i) {
-			BoneIDs[i] = 0;
-			BoneWeights[i] = 0.0f;
-		}
-	}
+struct BoneInfo {
+	int Id;
+	glm::mat4 Offset;
 };
 
 struct BoundingBox {
@@ -71,11 +54,45 @@ struct Keyframe {
 	glm::vec3 Scale;
 };
 
+struct AssimpNodeData
+{
+	glm::mat4 transformation;
+	std::string name;
+	int childrenCount;
+	std::vector<AssimpNodeData> children;
+};
+
 struct BoneAnimation {
 	std::string BoneName;
 	std::vector<Keyframe> PositionKeys;
 	std::vector<Keyframe> RotationKeys;
 	std::vector<Keyframe> ScaleKeys;
+	int NumPosition = 0;
+	int NumRotation = 0;
+	int NumScale = 0;
+	int ID = -1;
+	glm::mat4 LocalTransform = glm::mat4(1.0f);
+
+	inline glm::mat4 Interpolate(float time) const {
+		glm::vec3 pos = InterpolateVec3(time, PositionKeys, false);
+		glm::quat rot = InterpolateRot(time, RotationKeys);
+		glm::vec3 scale = InterpolateVec3(time, ScaleKeys, true);
+
+		glm::mat4 translation = glm::translate(glm::mat4(1.0f), pos);
+		glm::mat4 rotation = glm::toMat4(rot);
+		glm::mat4 scaling = glm::scale(glm::mat4(1.0f), scale);
+
+		return translation * rotation * scaling;
+	}
+private:
+	float GetScaleFactor(float lastTimeStamp, float nextTimeStamp, float animationTime) const
+	{
+		float scaleFactor = 0.0f;
+		float midWayLength = animationTime - lastTimeStamp;
+		float framesDiff = nextTimeStamp - lastTimeStamp;
+		scaleFactor = midWayLength / framesDiff;
+		return scaleFactor;
+	}
 
 	inline int FindKeyIndex(float time, const std::vector<Keyframe>& keys) const {
 		for (size_t i = 0; i < keys.size() - 1; ++i) {
@@ -89,8 +106,7 @@ struct BoneAnimation {
 		if (keys.size() == 1) return isScale ? keys[0].Scale : keys[0].Position;
 
 		int i = FindKeyIndex(time, keys);
-		float t = (time - keys[i].Time) / (keys[i + 1].Time - keys[i].Time);
-
+		float t = GetScaleFactor(keys[i].Time, keys[i + 1].Time, time);
 		return isScale
 			? glm::mix(keys[i].Scale, keys[i + 1].Scale, t)
 			: glm::mix(keys[i].Position, keys[i + 1].Position, t);
@@ -101,20 +117,8 @@ struct BoneAnimation {
 		if (keys.size() == 1) return keys[0].Rotation;
 
 		int i = FindKeyIndex(time, keys);
-		float t = (time - keys[i].Time) / (keys[i + 1].Time - keys[i].Time);
-		return glm::slerp(keys[i].Rotation, keys[i + 1].Rotation, t);
-	}
-
-	inline glm::mat4 Interpolate(float time) const {
-		glm::vec3 pos = InterpolateVec3(time, PositionKeys, false);
-		glm::quat rot = InterpolateRot(time, RotationKeys);
-		glm::vec3 scale = InterpolateVec3(time, ScaleKeys, true);
-
-		glm::mat4 translation = glm::translate(glm::mat4(1.0f), pos);
-		glm::mat4 rotation = glm::toMat4(rot);
-		glm::mat4 scaling = glm::scale(glm::mat4(1.0f), scale);
-
-		return translation * rotation * scaling;
+		float t = GetScaleFactor(keys[i].Time, keys[i + 1].Time, time);
+		return glm::normalize(glm::slerp(keys[i].Rotation, keys[i + 1].Rotation, t));
 	}
 };
 

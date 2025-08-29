@@ -136,7 +136,7 @@ vec3 CalculatePBRLight(
 
     vec3 diffuse = (kD * pow(albedo, vec3(2.2))) / PI;
     
-    return (diffuse + specular) * radiance * NdotL;
+    return (diffuse) * radiance * NdotL;
 }
 
 

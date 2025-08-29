@@ -423,4 +423,12 @@ template<typename T>
 	void Scene::OnComponentAdded<RelationshipComponent>(Entity entity, RelationshipComponent& component)
 	{
 	}
+
+	template<>
+	void Scene::OnComponentAdded<AnimatorComponent>(Entity entity, AnimatorComponent& component)
+	{
+		if (entity.HasComponent<MeshComponent>()) {
+			component._ModelHandle = entity.GetComponent<MeshComponent>().Handle.get();
+		}
+	}
 }

@@ -38,7 +38,10 @@ namespace TAGE::Editor {
 			OpenProject(projectFilePath);
 		}
 		else {
-			NewProject();
+			std::string projectPath = Platform::FileDialog::OpenFile("TAGE Project (*.tproj)\0*.tproj\0");
+			if (!projectPath.empty()) {
+				OpenProject(projectPath);
+			}
 		}
 
 		ImGui::GetIO().IniFilename = "editor_layout.ini";
