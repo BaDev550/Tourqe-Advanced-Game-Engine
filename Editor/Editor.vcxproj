@@ -58,7 +58,7 @@
     <ClCompile>
       <PrecompiledHeader>NotUsing</PrecompiledHeader>
       <WarningLevel>Level3</WarningLevel>
-      <AdditionalIncludeDirectories>src;..\Engine\vendor\spdlog;..\Engine\src;..\Engine\vendor\GLFW\include;..\Engine\vendor\GLAD\include;..\Engine\vendor\imgui;..\Engine\vendor\ImGuizmo;..\Engine\vendor\assimp\include;..\Engine\vendor\glm;..\Engine\vendor\entt\include;..\Engine\vendor\yaml-cpp\include;..\Engine\vendor\bullet-physics\src;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>src;..\Engine\vendor\spdlog;..\Engine\src;..\Engine\vendor\GLFW\include;..\Engine\vendor\GLAD\include;..\Engine\vendor\imgui;..\Engine\vendor\ImGuizmo;..\Engine\vendor\assimp\include;..\Engine\vendor\glm;..\Engine\vendor\entt\include;..\Engine\vendor\yaml-cpp\include;..\Engine\vendor\bullet-physics\src;..\Engine\vendor\imgui-node-editor;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <DebugInformationFormat>EditAndContinue</DebugInformationFormat>
       <Optimization>Disabled</Optimization>
       <RuntimeLibrary>MultiThreadedDebugDLL</RuntimeLibrary>
@@ -75,7 +75,7 @@
     <ClCompile>
       <PrecompiledHeader>NotUsing</PrecompiledHeader>
       <WarningLevel>Level3</WarningLevel>
-      <AdditionalIncludeDirectories>src;..\Engine\vendor\spdlog;..\Engine\src;..\Engine\vendor\GLFW\include;..\Engine\vendor\GLAD\include;..\Engine\vendor\imgui;..\Engine\vendor\ImGuizmo;..\Engine\vendor\assimp\include;..\Engine\vendor\glm;..\Engine\vendor\entt\include;..\Engine\vendor\yaml-cpp\include;..\Engine\vendor\bullet-physics\src;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>src;..\Engine\vendor\spdlog;..\Engine\src;..\Engine\vendor\GLFW\include;..\Engine\vendor\GLAD\include;..\Engine\vendor\imgui;..\Engine\vendor\ImGuizmo;..\Engine\vendor\assimp\include;..\Engine\vendor\glm;..\Engine\vendor\entt\include;..\Engine\vendor\yaml-cpp\include;..\Engine\vendor\bullet-physics\src;..\Engine\vendor\imgui-node-editor;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <Optimization>Full</Optimization>
       <FunctionLevelLinking>true</FunctionLevelLinking>
       <IntrinsicFunctions>true</IntrinsicFunctions>
@@ -93,21 +93,25 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClInclude Include="src\Panels\ProjectSettingsPanel.h" />
-    <ClInclude Include="src\Panels\AssetManagerPanel.h" />
+    <ClInclude Include="src\Modals\ModelEditor.h" />
+    <ClInclude Include="src\Modals\MaterialEditor.h" />
     <ClInclude Include="src\EditorLayer.h" />
     <ClInclude Include="src\Gamelayer\GameLayer.h" />
+    <ClInclude Include="src\Panels\AssetManagerPanel.h" />
     <ClInclude Include="src\Panels\ContentBrowserPanel.h" />
     <ClInclude Include="src\Panels\OutputPanel.h" />
+    <ClInclude Include="src\Panels\ProjectSettingsPanel.h" />
     <ClInclude Include="src\Panels\SceneHierarchyPanel.h" />
     <ClInclude Include="src\Panels\ThumbnailRenderer.h" />
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="src\Panels\ProjectSettingsPanel.cpp" />
-    <ClCompile Include="src\Panels\AssetManagerPanel.cpp" />
+    <ClCompile Include="src\Modals\ModelEditor.cpp" />
+    <ClCompile Include="src\Modals\MaterialEditor.cpp" />
     <ClCompile Include="src\EditorLayer.cpp" />
     <ClCompile Include="src\Gamelayer\GameLayer.cpp" />
+    <ClCompile Include="src\Panels\AssetManagerPanel.cpp" />
     <ClCompile Include="src\Panels\ContentBrowserPanel.cpp" />
+    <ClCompile Include="src\Panels\ProjectSettingsPanel.cpp" />
     <ClCompile Include="src\Panels\SceneHierarchyPanel.cpp" />
     <ClCompile Include="src\Panels\ThumbnailRenderer.cpp" />
     <ClCompile Include="src\TourqeEditor.cpp" />

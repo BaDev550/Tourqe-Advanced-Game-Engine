@@ -34,7 +34,7 @@ namespace TAGE::Editor {
 		ModelPreview& preview = _Cache[modelPath];
 		static bool ModelLoaded = false;
 		preview.LoadedModel = MEM::MakeRef<TARE::Model>();
-		preview.LoadedModel->LoadFromFile(modelPath.string());
+		//preview.LoadedModel->LoadFromFile(modelPath.string());
 		//preview.LoadedModel->LoadModelAsync(modelPath.string(),
 		//	[this, &preview](MEM::Ref<TARE::Model> model)
 		//	{

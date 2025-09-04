@@ -6,5 +6,6 @@ namespace TAGE {
 	{
 	public:
 		static MEM::Ref<Asset> ImportAsset(AssetHandle handle, const AssetMetadata& metadata);
+		static void SaveAsset(MEM::Ref<Asset>& asset, const AssetMetadata& metadata);
 	};
 }

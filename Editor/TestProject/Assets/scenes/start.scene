@@ -1,70 +1,26 @@
-Scene: playground
+Scene: COPIEDSCENE
 Entities:
-  - Entity: 11981483881754977232
-    IdentityComponent:
-      Name: Sun
-    Parent: 0
-    Children:
-      []
-    TransformComponent:
-      Position: [0, 0, 0]
-      Rotation: [25, 24.7000008, 0]
-      Scale: [1, 1, 1]
-    LightComponent:
-      Type: 1
-      Color: [1, 1, 1]
-      Range: 2
-      Intensity: 1
-  - Entity: 13380087215399220622
-    IdentityComponent:
-      Name: Empty Entity
-    Parent: 0
-    Children:
-      []
-    TransformComponent:
-      Position: [0, -1.28729999, 0]
-      Rotation: [0, 0, 0]
-      Scale: [6.86982775, 1, 9.82027817]
-    MeshComponent:
-      MeshPath: E:\TAGE\Editor\TestProject\Assets\models\Cube\cube.obj
-  - Entity: 615740887179158687
-    IdentityComponent:
-      Name: Mario
-    Parent: 0
-    Children:
-      []
-    TransformComponent:
-      Position: [0, 1.34105158, 0]
-      Rotation: [0, 0, 0]
-      Scale: [1, 1, 1]
-    MeshComponent:
-      MeshPath: E:\TAGE\Editor\TestProject\Assets\models\mario_2\mario_2.obj
-  - Entity: 17498813774572800101
+  - Entity: 16632893400082679708
     IdentityComponent:
       Name: Helmet
     Parent: 0
     Children:
       []
     TransformComponent:
-      Position: [-2.34290147, 1.48414922, -3.3556273]
+      Position: [-1.77865946, 0, -2.84361076]
       Rotation: [0, 0, 0]
       Scale: [1, 1, 1]
     MeshComponent:
-      MeshPath: E:\TAGE\Editor\TestProject\Assets\models\SciFiHelmet\SciFiHelmet.gltf
-  - Entity: 470247041551332446
+      MeshHandle: 12167130877828668612
+  - Entity: 8546311865479462574
     IdentityComponent:
-      Name: Camera
+      Name: Empty Entity
     Parent: 0
     Children:
       []
     TransformComponent:
-      Position: [-2.34757543, 1.59483325, 2.09224677]
+      Position: [0, 0, 0]
       Rotation: [0, 0, 0]
       Scale: [1, 1, 1]
-    CameraComponent:
-      Camera:
-        AspectRatio: 2.36902809
-        FOV: 65
-        NearClip: 0.0500000007
-        FarClip: 250
-      IsActive: true
+    MeshComponent:
+      MeshHandle: 7339349741094058164

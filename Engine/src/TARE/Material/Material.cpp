@@ -5,8 +5,7 @@
 #include "TAGE/Project/Project.h"
 
 namespace TARE {
-	Material::Material(const char* name)
-		: _Name(name)
+	Material::Material()
 	{
 	}
 

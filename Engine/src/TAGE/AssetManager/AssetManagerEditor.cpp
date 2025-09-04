@@ -12,6 +12,10 @@ namespace TAGE {
         { ".obj", AssetType::MeshSource },
         { ".gltf", AssetType::MeshSource },
 
+        { ".tmesh", AssetType::StaticMesh },
+        { ".smesh", AssetType::SkeletalMesh },
+		{ ".tmat",  AssetType::Material },
+
         { ".wav", AssetType::Audio },
         { ".mp3", AssetType::Audio },
 
@@ -115,6 +119,18 @@ namespace TAGE {
             return _LoadedAssets[handle]->_handle;
         }
         return 0;
+    }
+
+    void AssetManagerEditor::SaveAsset(AssetHandle handle)
+    {
+        if (!IsAssetHandleValid(handle))
+            return;
+
+        if (!IsAssetLoaded(handle))
+            return;
+
+        auto asset = _LoadedAssets.at(handle);
+		AssetImporter::SaveAsset(asset, GetMetadata(handle));
     }
 
     void AssetManagerEditor::SerializeAssetRegistry()

@@ -34,7 +34,8 @@ project "Engine"
         "%{IncludeDir.BulletPhysics}",
         "%{IncludeDir.mono}",
         "%{IncludeDir.Vulkan}",
-        "%{IncludeDir.meshoptimizer}"
+        "%{IncludeDir.meshoptimizer}",
+        "%{IncludeDir.ImGuiNodeEditor}"
    }
 
    defines 
@@ -49,6 +50,7 @@ project "Engine"
         "assimp",
         "ImGui",
         "ImGuiGizmo",
+        "ImGui-Node-Editor",
         "BulletDynamics",
         "BulletCollision",
         "LinearMath",

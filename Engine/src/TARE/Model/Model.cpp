@@ -13,61 +13,7 @@
 namespace TARE
 {
 	Model::~Model() {
-		for (auto& mesh : _meshes) {
-			if (mesh)
-				mesh.reset();
-		}
 		_meshes.clear();
-	}
-
-	bool Model::LoadFromFile(const std::string& filePath)
-	{
-		Assimp::Importer importer;
-		_scene = importer.ReadFile(filePath, 
-			aiProcess_Triangulate |
-			aiProcess_FlipUVs |
-			aiProcess_CalcTangentSpace |
-			aiProcess_GenNormals |
-			aiProcess_JoinIdenticalVertices |
-			aiProcess_SortByPType |
-			aiProcess_ImproveCacheLocality |
-			aiProcess_FindDegenerates |
-			aiProcess_FindInvalidData |
-			aiProcess_ValidateDataStructure 
-		);
-		if (!_scene || !_scene->mRootNode) {
-			LOG_ERROR("Failed to load model: {}. Error: {}", filePath, importer.GetErrorString());
-			return false;
-		}
-		bool hasBones = false;
-		for (unsigned int i = 0; i < _scene->mNumMeshes; ++i) {
-			if (_scene->mMeshes[i]->HasBones()) {
-				hasBones = true;
-				break;
-			}
-		}
-
-		_Type = hasBones ? ModelType::SKINNED_MODEL : ModelType::MODEL;
-		_FilePath = filePath;
-
-		ProcessNode(_scene->mRootNode, _scene);
-		return true;
-	}
-
-	void Model::LoadModelAsync(const std::string& path, std::function<void(TAGE::MEM::Ref<Model>)> callback)
-	{
-		std::thread([path, callback]() {
-			auto model = TAGE::MEM::MakeRef<Model>();
-			if (model->LoadCPU(path)) {
-				TAGE::GrapichDispatcher::Get()->Enqueue([model, callback]() {
-					model->UploadToGPU();
-					callback(model);
-					});
-			}
-			else {
-				callback(nullptr);
-			}
-			}).detach();
 	}
 
 	void Model::Draw(const std::string& shader, const glm::mat4& transform) const
@@ -77,23 +23,12 @@ namespace TARE
 		TAGE::MEM::Ref<Shader> shaderRef = ShaderLibrary::Get(shader);
 		shaderRef->Use();
 		shaderRef->SetUniform("u_Model", transform);
-		for (const auto& mesh : _meshes)
+		for (const auto& mesh : _meshes) {
 			mesh->Draw(shaderRef);
-	}
-
-	void Model::ProcessNode(aiNode* node, const aiScene* scene)
-	{
-		for (uint i = 0; i < node->mNumMeshes; ++i)
-		{
-			aiMesh* mesh = scene->mMeshes[node->mMeshes[i]];
-			_meshes.push_back(_Type == ModelType::SKINNED_MODEL ? ProcessSkinnedMesh(mesh, scene) : ProcessMesh(mesh, scene));
-		}
-		for (uint i = 0; i < node->mNumChildren; ++i)
-		{
-			ProcessNode(node->mChildren[i], scene);
 		}
 	}
 
+#if 0
 	void Model::SetVertexBoneDataToDefault(SkinedVertexData& vertex)
 	{
 		for (uint i = 0; i < MAX_BONE_INFLUENCES; ++i)
@@ -292,6 +227,7 @@ namespace TARE
 		}
 		return std::move(material);
 	}
+#endif
 
 	std::vector<Mesh*> Model::GetMeshes() const
 	{
@@ -300,40 +236,5 @@ namespace TARE
 		for (const auto& mesh : _meshes)
 			meshes.push_back(mesh.get());
 		return meshes;
-	}
-
-	bool Model::LoadCPU(const std::string& path)
-	{
-		Assimp::Importer importer;
-		_scene = importer.ReadFile(path, 
-			aiProcess_Triangulate |
-			aiProcess_FlipUVs |
-			aiProcess_CalcTangentSpace |
-			aiProcess_GenNormals |
-			aiProcess_JoinIdenticalVertices |
-			aiProcess_SortByPType |
-			aiProcess_OptimizeMeshes |
-			aiProcess_ImproveCacheLocality |
-			aiProcess_FindDegenerates |
-			aiProcess_FindInvalidData |
-			aiProcess_ValidateDataStructure |
-			aiProcess_OptimizeGraph
-		);
-		if (!_scene || !_scene->mRootNode) {
-			LOG_ERROR("Failed to load model {}", path);
-			return false;
-		}
-
-		_FilePath = path;
-		_Type = _scene->HasSkeletons() ? ModelType::SKINNED_MODEL : ModelType::MODEL;
-		ProcessNode(_scene->mRootNode, _scene);
-		return true;
-	}
-
-	void Model::UploadToGPU()
-	{
-		for (auto& mesh : _meshes) {
-			mesh->SetupMesh();
-		}
 	}
 }

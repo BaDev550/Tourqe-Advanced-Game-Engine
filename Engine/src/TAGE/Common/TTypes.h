@@ -73,7 +73,7 @@ struct BoneAnimation {
 	int ID = -1;
 	glm::mat4 LocalTransform = glm::mat4(1.0f);
 
-	inline glm::mat4 Interpolate(float time) const {
+	glm::mat4 Interpolate(float time) const {
 		glm::vec3 pos = InterpolateVec3(time, PositionKeys, false);
 		glm::quat rot = InterpolateRot(time, RotationKeys);
 		glm::vec3 scale = InterpolateVec3(time, ScaleKeys, true);
@@ -84,14 +84,12 @@ struct BoneAnimation {
 
 		return translation * rotation * scaling;
 	}
+
 private:
-	float GetScaleFactor(float lastTimeStamp, float nextTimeStamp, float animationTime) const
-	{
-		float scaleFactor = 0.0f;
+	float GetScaleFactor(float lastTimeStamp, float nextTimeStamp, float animationTime) const {
 		float midWayLength = animationTime - lastTimeStamp;
 		float framesDiff = nextTimeStamp - lastTimeStamp;
-		scaleFactor = midWayLength / framesDiff;
-		return scaleFactor;
+		return framesDiff != 0.0f ? (midWayLength / framesDiff) : 0.0f;
 	}
 
 	inline int FindKeyIndex(float time, const std::vector<Keyframe>& keys) const {
@@ -107,14 +105,18 @@ private:
 
 		int i = FindKeyIndex(time, keys);
 		float t = GetScaleFactor(keys[i].Time, keys[i + 1].Time, time);
-		return isScale
-			? glm::mix(keys[i].Scale, keys[i + 1].Scale, t)
-			: glm::mix(keys[i].Position, keys[i + 1].Position, t);
+
+		if (isScale) {
+			return glm::mix(keys[i].Scale, keys[i + 1].Scale, t);
+		}
+		else {
+			return glm::mix(keys[i].Position, keys[i + 1].Position, t);
+		}
 	}
 
 	inline glm::quat InterpolateRot(float time, const std::vector<Keyframe>& keys) const {
 		if (keys.empty()) return glm::quat(1.0f, 0.0f, 0.0f, 0.0f);
-		if (keys.size() == 1) return keys[0].Rotation;
+		if (keys.size() == 1) return glm::normalize(keys[0].Rotation);
 
 		int i = FindKeyIndex(time, keys);
 		float t = GetScaleFactor(keys[i].Time, keys[i + 1].Time, time);

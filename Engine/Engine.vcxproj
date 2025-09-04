@@ -58,7 +58,7 @@
       <PrecompiledHeaderFile>tagepch.h</PrecompiledHeaderFile>
       <WarningLevel>Level3</WarningLevel>
       <PreprocessorDefinitions>_CRT_SECURE_NO_WARNINGS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <AdditionalIncludeDirectories>src;vendor;vendor\spdlog;vendor\GLFW\include;vendor\GLAD\include;vendor\assimp\include;vendor\imgui;vendor\ImGuizmo;vendor\glm;vendor\entt\include;vendor\yaml-cpp\include;vendor\bullet-physics\src;vendor\mono\include;C:\VulkanSDK\1.4.313.2\Include;vendor\meshoptimizer;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>src;vendor;vendor\spdlog;vendor\GLFW\include;vendor\GLAD\include;vendor\assimp\include;vendor\imgui;vendor\ImGuizmo;vendor\glm;vendor\entt\include;vendor\yaml-cpp\include;vendor\bullet-physics\src;vendor\mono\include;C:\VulkanSDK\1.4.313.2\Include;vendor\meshoptimizer;vendor\imgui-node-editor;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <DebugInformationFormat>EditAndContinue</DebugInformationFormat>
       <Optimization>Disabled</Optimization>
       <RuntimeLibrary>MultiThreadedDebugDLL</RuntimeLibrary>
@@ -80,7 +80,7 @@
       <PrecompiledHeaderFile>tagepch.h</PrecompiledHeaderFile>
       <WarningLevel>Level3</WarningLevel>
       <PreprocessorDefinitions>_CRT_SECURE_NO_WARNINGS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <AdditionalIncludeDirectories>src;vendor;vendor\spdlog;vendor\GLFW\include;vendor\GLAD\include;vendor\assimp\include;vendor\imgui;vendor\ImGuizmo;vendor\glm;vendor\entt\include;vendor\yaml-cpp\include;vendor\bullet-physics\src;vendor\mono\include;C:\VulkanSDK\1.4.313.2\Include;vendor\meshoptimizer;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>src;vendor;vendor\spdlog;vendor\GLFW\include;vendor\GLAD\include;vendor\assimp\include;vendor\imgui;vendor\ImGuizmo;vendor\glm;vendor\entt\include;vendor\yaml-cpp\include;vendor\bullet-physics\src;vendor\mono\include;C:\VulkanSDK\1.4.313.2\Include;vendor\meshoptimizer;vendor\imgui-node-editor;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <Optimization>Full</Optimization>
       <FunctionLevelLinking>true</FunctionLevelLinking>
       <IntrinsicFunctions>true</IntrinsicFunctions>
@@ -101,21 +101,9 @@
     </Lib>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClInclude Include="src\TARE\Animation\Animation.h" />
-    <ClInclude Include="src\TARE\Animation\Bone.h" />
-    <ClInclude Include="src\TARE\Animation\Animator.h" />
-    <ClInclude Include="src\TAGE\AssetManager\Importers\SceneImporter.h" />
-    <ClInclude Include="src\TARE\DebugRenderer\DebugLightRenderer.h" />
-    <ClInclude Include="src\TAGE\Project\ProjectSettingsSerializer.h" />
-    <ClInclude Include="src\TAGE\AssetManager\AssetImporter.h" />
-    <ClInclude Include="src\TAGE\AssetManager\Asset.h" />
-    <ClInclude Include="src\TAGE\AssetManager\AssetManager.h" />
-    <ClInclude Include="src\TAGE\AssetManager\AssetManagerBase.h" />
-    <ClInclude Include="src\TAGE\AssetManager\AssetManagerEditor.h" />
-    <ClInclude Include="src\TAGE\AssetManager\AssetManagerRuntime.h" />
-    <ClInclude Include="src\TAGE\AssetManager\AssetMetadata.h" />
-    <ClInclude Include="src\TAGE\Project\ProjectSerializer.h" />
-    <ClInclude Include="src\TAGE\Project\Project.h" />
+    <ClInclude Include="src\TAGE\AssetManager\Importers\MaterialImporter.h" />
+    <ClInclude Include="src\TAGE\AssetManager\AssetSerializer.h" />
+    <ClInclude Include="src\TAGE\AssetManager\Importers\MeshImporter.h" />
     <ClInclude Include="src\Platform\OpenGL\OpenGL_Buffers.h" />
     <ClInclude Include="src\Platform\OpenGL\OpenGL_Framebuffer.h" />
     <ClInclude Include="src\Platform\OpenGL\OpenGL_RenderAPI.h" />
@@ -128,6 +116,15 @@
     <ClInclude Include="src\Platform\Vulkan\Vulkan_ShaderCompiler.h" />
     <ClInclude Include="src\TAGE\Application\Application.h" />
     <ClInclude Include="src\TAGE\Application\EntryPoint.h" />
+    <ClInclude Include="src\TAGE\AssetManager\Asset.h" />
+    <ClInclude Include="src\TAGE\AssetManager\AssetImporter.h" />
+    <ClInclude Include="src\TAGE\AssetManager\AssetManager.h" />
+    <ClInclude Include="src\TAGE\AssetManager\AssetManagerBase.h" />
+    <ClInclude Include="src\TAGE\AssetManager\AssetManagerEditor.h" />
+    <ClInclude Include="src\TAGE\AssetManager\AssetManagerRuntime.h" />
+    <ClInclude Include="src\TAGE\AssetManager\AssetMetadata.h" />
+    <ClInclude Include="src\TAGE\AssetManager\Importers\SceneImporter.h" />
+    <ClInclude Include="src\TAGE\AssetManager\Importers\TextureImporter.h" />
     <ClInclude Include="src\TAGE\Common\TDefines.h" />
     <ClInclude Include="src\TAGE\Common\TEnums.h" />
     <ClInclude Include="src\TAGE\Common\TMath.h" />
@@ -147,6 +144,9 @@
     <ClInclude Include="src\TAGE\Physics\PhysicsDebugRenderer.h" />
     <ClInclude Include="src\TAGE\Physics\PhysicsWorld.h" />
     <ClInclude Include="src\TAGE\Physics\Raycaster.h" />
+    <ClInclude Include="src\TAGE\Project\Project.h" />
+    <ClInclude Include="src\TAGE\Project\ProjectSerializer.h" />
+    <ClInclude Include="src\TAGE\Project\ProjectSettingsSerializer.h" />
     <ClInclude Include="src\TAGE\Scripting\ScriptEngine.h" />
     <ClInclude Include="src\TAGE\Scripting\ScriptGlue.h" />
     <ClInclude Include="src\TAGE\TAGE.h" />
@@ -175,6 +175,9 @@
     <ClInclude Include="src\TAGE\World\Systems\System_Base.h" />
     <ClInclude Include="src\TAGE\World\Systems\System_Physics.h" />
     <ClInclude Include="src\TAGE\World\Systems\System_Renderer.h" />
+    <ClInclude Include="src\TARE\Animation\Animation.h" />
+    <ClInclude Include="src\TARE\Animation\Animator.h" />
+    <ClInclude Include="src\TARE\Animation\Bone.h" />
     <ClInclude Include="src\TARE\Buffers\Buffers.h" />
     <ClInclude Include="src\TARE\Buffers\Framebuffer.h" />
     <ClInclude Include="src\TARE\Buffers\VertexArrayBuffer.h" />
@@ -186,6 +189,7 @@
     <ClInclude Include="src\TARE\Common\RenderAPI.h" />
     <ClInclude Include="src\TARE\Common\RenderCommands.h" />
     <ClInclude Include="src\TARE\Common\RenderContext.h" />
+    <ClInclude Include="src\TARE\DebugRenderer\DebugLightRenderer.h" />
     <ClInclude Include="src\TARE\DebugRenderer\DebugRenderer.h" />
     <ClInclude Include="src\TARE\Deferred\DeferredRendering.h" />
     <ClInclude Include="src\TARE\Material\Material.h" />
@@ -203,7 +207,6 @@
     <ClInclude Include="src\TARE\Texture\Texture.h" />
     <ClInclude Include="src\TARE\Window\Window.h" />
     <ClInclude Include="src\tagepch.h" />
-    <ClInclude Include="src\TAGE\AssetManager\Importers\TextureImporter.h" />
     <ClInclude Include="vendor\glm\glm\common.hpp" />
     <ClInclude Include="vendor\glm\glm\detail\_features.hpp" />
     <ClInclude Include="vendor\glm\glm\detail\_fixes.hpp" />
@@ -626,19 +629,9 @@
     <ClInclude Include="vendor\stb\stb_image_write.h" />
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="src\TARE\Animation\Bone.cpp" />
-    <ClCompile Include="src\TARE\Animation\Animator.cpp" />
-    <ClCompile Include="src\TAGE\AssetManager\Importers\SceneImporter.cpp" />
-    <ClCompile Include="src\TARE\DebugRenderer\DebugLightRenderer.cpp" />
-    <ClCompile Include="src\TAGE\Project\ProjectSettingsSerializer.cpp" />
-    <ClCompile Include="src\TAGE\AssetManager\AssetImporter.cpp" />
-    <ClCompile Include="src\TAGE\AssetManager\Asset.cpp" />
-    <ClCompile Include="src\TAGE\AssetManager\AssetManager.cpp" />
-    <ClCompile Include="src\TAGE\AssetManager\AssetManagerBase.cpp" />
-    <ClCompile Include="src\TAGE\AssetManager\AssetManagerEditor.cpp" />
-    <ClCompile Include="src\TAGE\AssetManager\AssetManagerRuntime.cpp" />
-    <ClCompile Include="src\TAGE\Project\ProjectSerializer.cpp" />
-    <ClCompile Include="src\TAGE\Project\Project.cpp" />
+    <ClCompile Include="src\TAGE\AssetManager\Importers\MaterialImporter.cpp" />
+    <ClCompile Include="src\TAGE\AssetManager\AssetSerializer.cpp" />
+    <ClCompile Include="src\TAGE\AssetManager\Importers\MeshImporter.cpp" />
     <ClCompile Include="src\Platform\OpenGL\OpenGL_Buffers.cpp" />
     <ClCompile Include="src\Platform\OpenGL\OpenGL_CubemapTexture.cpp" />
     <ClCompile Include="src\Platform\OpenGL\OpenGL_Framebuffer.cpp" />
@@ -652,6 +645,17 @@
     <ClCompile Include="src\Platform\Vulkan\Vulkan_ShaderCompiler.cpp" />
     <ClCompile Include="src\Platform\Windows\WindowsPlatformUtils.cpp" />
     <ClCompile Include="src\TAGE\Application\Application.cpp" />
+    <ClCompile Include="src\TAGE\AssetManager\Asset.cpp" />
+    <ClCompile Include="src\TAGE\AssetManager\AssetImporter.cpp" />
+    <ClCompile Include="src\TAGE\AssetManager\AssetManager.cpp" />
+    <ClCompile Include="src\TAGE\AssetManager\AssetManagerBase.cpp" />
+    <ClCompile Include="src\TAGE\AssetManager\AssetManagerEditor.cpp" />
+    <ClCompile Include="src\TAGE\AssetManager\AssetManagerRuntime.cpp" />
+    <ClCompile Include="src\TAGE\AssetManager\Importers\SceneImporter.cpp" />
+    <ClCompile Include="src\TAGE\AssetManager\Importers\StaticMeshImporter.cpp" />
+    <ClCompile Include="src\TAGE\AssetManager\Importers\TextureImporter.cpp" />
+    <ClCompile Include="src\TAGE\AssetManager\Serializers\MaterialSerializer.cpp" />
+    <ClCompile Include="src\TAGE\AssetManager\Serializers\MeshSerializer.cpp" />
     <ClCompile Include="src\TAGE\Common\TMath.cpp" />
     <ClCompile Include="src\TAGE\Input\Input.cpp" />
     <ClCompile Include="src\TAGE\Layers\ImGuiBuild.cpp" />
@@ -662,12 +666,15 @@
     <ClCompile Include="src\TAGE\Physics\PhysicsDebugRenderer.cpp" />
     <ClCompile Include="src\TAGE\Physics\PhysicsWorld.cpp" />
     <ClCompile Include="src\TAGE\Physics\Raycaster.cpp" />
+    <ClCompile Include="src\TAGE\Project\Project.cpp" />
+    <ClCompile Include="src\TAGE\Project\ProjectSerializer.cpp" />
+    <ClCompile Include="src\TAGE\Project\ProjectSettingsSerializer.cpp" />
     <ClCompile Include="src\TAGE\Scripting\ScriptEngine.cpp" />
     <ClCompile Include="src\TAGE\Scripting\ScriptGlue.cpp" />
     <ClCompile Include="src\TAGE\Utilities\Logger.cpp" />
     <ClCompile Include="src\TAGE\Utilities\Platform.cpp" />
-    <ClCompile Include="src\TAGE\Utilities\UUID.cpp" />
     <ClCompile Include="src\TAGE\Utilities\Timer.cpp" />
+    <ClCompile Include="src\TAGE\Utilities\UUID.cpp" />
     <ClCompile Include="src\TAGE\Window\Window.cpp" />
     <ClCompile Include="src\TAGE\World\Objects\Entity.cpp" />
     <ClCompile Include="src\TAGE\World\Objects\Prefab.cpp" />
@@ -675,6 +682,8 @@
     <ClCompile Include="src\TAGE\World\Scene\SceneSerializer.cpp" />
     <ClCompile Include="src\TAGE\World\Systems\System_Physics.cpp" />
     <ClCompile Include="src\TAGE\World\Systems\System_Renderer.cpp" />
+    <ClCompile Include="src\TARE\Animation\Animator.cpp" />
+    <ClCompile Include="src\TARE\Animation\Bone.cpp" />
     <ClCompile Include="src\TARE\Buffers\Buffers.cpp" />
     <ClCompile Include="src\TARE\Buffers\Framebuffer.cpp" />
     <ClCompile Include="src\TARE\Buffers\VertexArrayBuffer.cpp" />
@@ -684,6 +693,7 @@
     <ClCompile Include="src\TARE\Common\RenderAPI.cpp" />
     <ClCompile Include="src\TARE\Common\RenderCommands.cpp" />
     <ClCompile Include="src\TARE\Common\RenderContext.cpp" />
+    <ClCompile Include="src\TARE\DebugRenderer\DebugLightRenderer.cpp" />
     <ClCompile Include="src\TARE\DebugRenderer\DebugRenderer.cpp" />
     <ClCompile Include="src\TARE\Deferred\DeferredRendering.cpp" />
     <ClCompile Include="src\TARE\Material\Material.cpp" />
@@ -705,7 +715,6 @@
     <ClCompile Include="src\tagepch.cpp">
       <PrecompiledHeader>Create</PrecompiledHeader>
     </ClCompile>
-    <ClCompile Include="src\TAGE\AssetManager\Importers\TextureImporter.cpp" />
     <ClCompile Include="vendor\stb\stb_image.cpp" />
   </ItemGroup>
   <ItemGroup>
@@ -723,6 +732,9 @@
     </ProjectReference>
     <ProjectReference Include="vendor\ImGuizmo\ImGuiGizmo.vcxproj">
       <Project>{C64C7BA4-B204-BDF1-1B0C-964D07E357E2}</Project>
+    </ProjectReference>
+    <ProjectReference Include="vendor\imgui-node-editor\ImGui-Node-Editor.vcxproj">
+      <Project>{C7159159-332C-8FEF-7CA3-1A11E8F85F77}</Project>
     </ProjectReference>
     <ProjectReference Include="vendor\bullet-physics\BulletDynamics.vcxproj">
       <Project>{45122E0F-31E0-2115-1A74-923B06E1FD79}</Project>

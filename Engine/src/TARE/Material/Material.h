@@ -11,10 +11,23 @@
 
 namespace TARE
 {
+	struct TextureMaps {
+		TAGE::AssetHandle Diffuse = 0;
+		TAGE::AssetHandle Specular = 0;
+		TAGE::AssetHandle Normal = 0;
+		TAGE::AssetHandle Roughness = 0;
+		TAGE::AssetHandle Metallic = 0;
+		TAGE::AssetHandle AmbientOcclusion = 0;
+	};
+
+	struct Colors {
+		glm::vec4 Diffuse = glm::vec4(1.0f, 1.0f, 1.0f, 1.0f);
+	};
+
 	class Material : public TAGE::Asset
 	{
 	public:
-		Material(const char* name);
+		Material();
 
 		void Use(TAGE::MEM::Ref<Shader>& shader);
 
@@ -23,23 +36,14 @@ namespace TARE
 
 		void SetColor(TextureType slot, const glm::vec4& color);
 		glm::vec4 GetColor(TextureType slot) const;
-		std::string GetName() const { return _Name; }
 
 		static TAGE::AssetType GetStaticType() { return TAGE::AssetType::Material; }
 		virtual TAGE::AssetType GetType() const { return GetStaticType(); };
 	private:
-		std::string _Name;
-		struct TextureMaps {
-			TAGE::AssetHandle Diffuse = 0;
-			TAGE::AssetHandle Specular = 0;
-			TAGE::AssetHandle Normal = 0;
-			TAGE::AssetHandle Roughness = 0;
-			TAGE::AssetHandle Metallic = 0;
-			TAGE::AssetHandle AmbientOcclusion = 0;
-		} _TextureMaps;
-
-		struct Colors {
-			glm::vec4 Diffuse = glm::vec4(1.0f, 1.0f, 1.0f, 1.0f);
-		} _Colors;
+		TextureMaps _TextureMaps;
+		Colors _Colors;
+	public:
+		void SetTextureMaps(const TextureMaps& maps) { _TextureMaps = maps; }
+		TextureMaps GetTextureMaps() const { return _TextureMaps; }
 	};
 }

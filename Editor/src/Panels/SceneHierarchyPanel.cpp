@@ -381,7 +381,7 @@ namespace TAGE::Editor {
 			{
 				if (component.Handle)
 				{
-					ImGui::Text("Mesh Path: %s", component.Handle->GetFilePath().c_str());
+					//ImGui::Text("Mesh Path: %s", component.Handle->GetFilePath().c_str());
 				}
 				else
 				{
@@ -390,7 +390,7 @@ namespace TAGE::Editor {
 
 				if (ImGui::Button("Select Mesh"))
 				{
-					std::string selectedMesh = Platform::FileDialog::OpenFile("Mesh Files (*.dae;*.fbx;*.obj;*.gltf)\0*.dae;*.fbx;*.obj;*.gltf\0");
+					std::string selectedMesh = Platform::FileDialog::OpenFile("Mesh Files (*.tmesh;)\0*.tmesh;\0");
 					if (!selectedMesh.empty())
 					{
 						if (!component.Handle)
@@ -407,7 +407,7 @@ namespace TAGE::Editor {
 						const char* path = static_cast<const char*>(payload->Data);
 						std::filesystem::path fPath(path);
 
-						if (fPath.extension() == L".obj" || fPath.extension() == L".fbx") {
+						if (fPath.extension() == L".tmesh") {
 							if (!component.Handle)
 								component.Handle = MEM::MakeRef<TARE::Model>();
 

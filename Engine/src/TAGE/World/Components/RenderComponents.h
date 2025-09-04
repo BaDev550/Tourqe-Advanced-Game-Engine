@@ -7,6 +7,8 @@
 #include "TARE/Animation/Animator.h"
 #include "TARE/Animation/Animation.h"
 #include "TARE/Common/Light.h"
+#include "TAGE/Project/Project.h"
+#include "TAGE/AssetManager/AssetManager.h"
 
 namespace TAGE {
 	struct MeshComponent {
@@ -19,28 +21,19 @@ namespace TAGE {
 		MeshComponent() = default;
 		MeshComponent(const MeshComponent&) = default;
 		MeshComponent(const std::string& modelpath) {
-			Handle = MEM::MakeRef<TARE::Model>();
-			Handle->LoadFromFile(modelpath);
-			IsSkinned = Handle->GetType() == ModelType::SKINNED_MODEL;
-
-			//Handle->LoadModelAsync(modelpath, [&](TAGE::MEM::Ref<TARE::Model> model) {
-			//	if (model) { Handle = std::move(model); }
-			//	else { LOG_ERROR("Failed to load async model"); }
-			//	});
+			LoadMesh(modelpath);
+		}
+		MeshComponent(AssetHandle handle) {
+			Handle = AssetManager::GetAsset<TARE::Model>(handle);
 		}
 		~MeshComponent() {
 			Handle.reset();
 		}
 
 		void LoadMesh(const std::string& meshPath) {
-			Handle.reset(new TARE::Model());
-			Handle->LoadFromFile(meshPath);
-			IsSkinned = Handle->GetType() == ModelType::SKINNED_MODEL;
-
-			//Handle->LoadModelAsync(meshPath, [&](TAGE::MEM::Ref<TARE::Model> model) {
-			//	if (model) { Handle = std::move(model); }
-			//	else { LOG_ERROR("Failed to load async model"); }
-			//	});
+			std::filesystem::path path = std::filesystem::relative(meshPath, Project::GetAssetDirectory());
+			AssetHandle asset = Project::GetActive()->GetEditorAssetManager()->ImportAsset(path);
+			Handle = AssetManager::GetAsset<TARE::Model>(asset);
 		}
 	};
 

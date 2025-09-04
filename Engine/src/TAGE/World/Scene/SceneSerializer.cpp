@@ -197,7 +197,7 @@ namespace TAGE {
 			out << YAML::Key << "MeshComponent";
 			out << YAML::BeginMap;
 			auto& mesh = entity.GetComponent<MeshComponent>();
-			out << YAML::Key << "MeshPath" << YAML::Value << mesh.Handle->GetFilePath();
+			out << YAML::Key << "MeshHandle" << YAML::Value << (uint64)mesh.Handle->_handle;
 			out << YAML::EndMap;
 		}
 
@@ -388,8 +388,8 @@ namespace TAGE {
 
 				auto meshComponent = entity["MeshComponent"];
 				if (meshComponent) {
-					auto& meshPath = meshComponent["MeshPath"].as<std::string>();
-					auto& mesh = deserializedEntity.AddOrReplaceComponent<MeshComponent>(meshPath);
+					uint64 meshHandle = meshComponent["MeshHandle"].as<uint64>();
+					auto& mesh = deserializedEntity.AddOrReplaceComponent<MeshComponent>(meshHandle);
 				}
 
 				auto cameraComponent = entity["CameraComponent"];

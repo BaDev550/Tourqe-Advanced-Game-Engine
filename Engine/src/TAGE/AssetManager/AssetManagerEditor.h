@@ -21,6 +21,7 @@ namespace TAGE {
 		AssetHandle TryToGetLoadedAssetFromPath(const std::filesystem::path& path) const;
 
 		AssetHandle ImportAsset(const std::filesystem::path& path);
+		void SaveAsset(AssetHandle handle);
 
 		const AssetMetadata& GetMetadata(AssetHandle handle) const;
 		const AssetRegistry& GetAssetRegistry() const { return _AssetRegistry; }

@@ -13,10 +13,16 @@
     <ClInclude Include="src\Gamelayer\GameLayer.h">
       <Filter>Gamelayer</Filter>
     </ClInclude>
+    <ClInclude Include="src\Panels\AssetManagerPanel.h">
+      <Filter>Panels</Filter>
+    </ClInclude>
     <ClInclude Include="src\Panels\ContentBrowserPanel.h">
       <Filter>Panels</Filter>
     </ClInclude>
     <ClInclude Include="src\Panels\OutputPanel.h">
+      <Filter>Panels</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Panels\ProjectSettingsPanel.h">
       <Filter>Panels</Filter>
     </ClInclude>
     <ClInclude Include="src\Panels\SceneHierarchyPanel.h">
@@ -25,15 +31,21 @@
     <ClInclude Include="src\Panels\ThumbnailRenderer.h">
       <Filter>Panels</Filter>
     </ClInclude>
-    <ClInclude Include="src\Panels\AssetManagerPanel.h" />
-    <ClInclude Include="src\Panels\ProjectSettingsPanel.h" />
+    <ClInclude Include="src\Modals\MaterialEditor.h" />
+    <ClInclude Include="src\Modals\ModelEditor.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\EditorLayer.cpp" />
     <ClCompile Include="src\Gamelayer\GameLayer.cpp">
       <Filter>Gamelayer</Filter>
     </ClCompile>
+    <ClCompile Include="src\Panels\AssetManagerPanel.cpp">
+      <Filter>Panels</Filter>
+    </ClCompile>
     <ClCompile Include="src\Panels\ContentBrowserPanel.cpp">
+      <Filter>Panels</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Panels\ProjectSettingsPanel.cpp">
       <Filter>Panels</Filter>
     </ClCompile>
     <ClCompile Include="src\Panels\SceneHierarchyPanel.cpp">
@@ -43,7 +55,7 @@
       <Filter>Panels</Filter>
     </ClCompile>
     <ClCompile Include="src\TourqeEditor.cpp" />
-    <ClCompile Include="src\Panels\AssetManagerPanel.cpp" />
-    <ClCompile Include="src\Panels\ProjectSettingsPanel.cpp" />
+    <ClCompile Include="src\Modals\MaterialEditor.cpp" />
+    <ClCompile Include="src\Modals\ModelEditor.cpp" />
   </ItemGroup>
 </Project>

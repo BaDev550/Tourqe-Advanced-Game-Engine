@@ -24,6 +24,7 @@ workspace "TAGE"
     IncludeDir["yaml"] =          "%{wks.location}/Engine/vendor/yaml-cpp/include"
     IncludeDir["mono"] =          "%{wks.location}/Engine/vendor/mono/include"
     IncludeDir["meshoptimizer"] = "%{wks.location}/Engine/vendor/meshoptimizer/"
+    IncludeDir["ImGuiNodeEditor"] = "%{wks.location}/Engine/vendor/imgui-node-editor"
     IncludeDir["Vulkan"] = "%{VULKAN_SDK}/Include"
 
     LibaryDir = {}
@@ -47,6 +48,7 @@ workspace "TAGE"
     
     group "Dependencies"
         include "Engine/vendor/imgui"
+        include "Engine/vendor/imgui-node-editor"
         include "Engine/vendor/ImGuizmo"
         include "Engine/vendor/GLAD"
         include "Engine/vendor/GLFW"

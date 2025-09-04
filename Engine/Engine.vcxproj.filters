@@ -25,8 +25,8 @@
     <Filter Include="src\TAGE\AssetManager">
       <UniqueIdentifier>{67AC7A24-D318-361F-9C0C-CE7C08385887}</UniqueIdentifier>
     </Filter>
-    <Filter Include="src\TAGE\AssetManager\AssetSerializers">
-      <UniqueIdentifier>{43C6D7E0-2F18-AFD0-1837-ECE00428C8B9}</UniqueIdentifier>
+    <Filter Include="src\TAGE\AssetManager\Importers">
+      <UniqueIdentifier>{BB8F3ABD-2773-49FD-3076-77399CD80F4E}</UniqueIdentifier>
     </Filter>
     <Filter Include="src\TAGE\Common">
       <UniqueIdentifier>{5513F18E-C19E-5E53-CAAF-E14736BABA53}</UniqueIdentifier>
@@ -45,6 +45,9 @@
     </Filter>
     <Filter Include="src\TAGE\Physics">
       <UniqueIdentifier>{2FCD5046-1BC6-6F98-44F8-541D30504FA4}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="src\TAGE\Project">
+      <UniqueIdentifier>{036EEA5C-EF66-09AF-1899-EE3304F1E8BA}</UniqueIdentifier>
     </Filter>
     <Filter Include="src\TAGE\Scripting">
       <UniqueIdentifier>{FFA141AC-EB85-0202-54E6-FC5440E9EC83}</UniqueIdentifier>
@@ -75,6 +78,9 @@
     </Filter>
     <Filter Include="src\TARE">
       <UniqueIdentifier>{285E25CF-142B-80DA-3D44-6E822970B568}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="src\TARE\Animation">
+      <UniqueIdentifier>{17E94310-03CD-0466-6C2D-FFB85830EFE7}</UniqueIdentifier>
     </Filter>
     <Filter Include="src\TARE\Buffers">
       <UniqueIdentifier>{A4C5095A-90BE-28AC-B9F0-0D31A54808B8}</UniqueIdentifier>
@@ -174,6 +180,33 @@
     <ClInclude Include="src\TAGE\Application\EntryPoint.h">
       <Filter>src\TAGE\Application</Filter>
     </ClInclude>
+    <ClInclude Include="src\TAGE\AssetManager\Asset.h">
+      <Filter>src\TAGE\AssetManager</Filter>
+    </ClInclude>
+    <ClInclude Include="src\TAGE\AssetManager\AssetImporter.h">
+      <Filter>src\TAGE\AssetManager</Filter>
+    </ClInclude>
+    <ClInclude Include="src\TAGE\AssetManager\AssetManager.h">
+      <Filter>src\TAGE\AssetManager</Filter>
+    </ClInclude>
+    <ClInclude Include="src\TAGE\AssetManager\AssetManagerBase.h">
+      <Filter>src\TAGE\AssetManager</Filter>
+    </ClInclude>
+    <ClInclude Include="src\TAGE\AssetManager\AssetManagerEditor.h">
+      <Filter>src\TAGE\AssetManager</Filter>
+    </ClInclude>
+    <ClInclude Include="src\TAGE\AssetManager\AssetManagerRuntime.h">
+      <Filter>src\TAGE\AssetManager</Filter>
+    </ClInclude>
+    <ClInclude Include="src\TAGE\AssetManager\AssetMetadata.h">
+      <Filter>src\TAGE\AssetManager</Filter>
+    </ClInclude>
+    <ClInclude Include="src\TAGE\AssetManager\Importers\SceneImporter.h">
+      <Filter>src\TAGE\AssetManager\Importers</Filter>
+    </ClInclude>
+    <ClInclude Include="src\TAGE\AssetManager\Importers\TextureImporter.h">
+      <Filter>src\TAGE\AssetManager\Importers</Filter>
+    </ClInclude>
     <ClInclude Include="src\TAGE\Common\TDefines.h">
       <Filter>src\TAGE\Common</Filter>
     </ClInclude>
@@ -231,6 +264,15 @@
     <ClInclude Include="src\TAGE\Physics\Raycaster.h">
       <Filter>src\TAGE\Physics</Filter>
     </ClInclude>
+    <ClInclude Include="src\TAGE\Project\Project.h">
+      <Filter>src\TAGE\Project</Filter>
+    </ClInclude>
+    <ClInclude Include="src\TAGE\Project\ProjectSerializer.h">
+      <Filter>src\TAGE\Project</Filter>
+    </ClInclude>
+    <ClInclude Include="src\TAGE\Project\ProjectSettingsSerializer.h">
+      <Filter>src\TAGE\Project</Filter>
+    </ClInclude>
     <ClInclude Include="src\TAGE\Scripting\ScriptEngine.h">
       <Filter>src\TAGE\Scripting</Filter>
     </ClInclude>
@@ -243,6 +285,9 @@
     <ClInclude Include="src\TAGE\Thread\ThreadWarpper.h">
       <Filter>src\TAGE\Thread</Filter>
     </ClInclude>
+    <ClInclude Include="src\TAGE\Utilities\Buffer.h">
+      <Filter>src\TAGE\Utilities</Filter>
+    </ClInclude>
     <ClInclude Include="src\TAGE\Utilities\LogSink.h">
       <Filter>src\TAGE\Utilities</Filter>
     </ClInclude>
@@ -253,6 +298,9 @@
       <Filter>src\TAGE\Utilities</Filter>
     </ClInclude>
     <ClInclude Include="src\TAGE\Utilities\Platform.h">
+      <Filter>src\TAGE\Utilities</Filter>
+    </ClInclude>
+    <ClInclude Include="src\TAGE\Utilities\Profiler.h">
       <Filter>src\TAGE\Utilities</Filter>
     </ClInclude>
     <ClInclude Include="src\TAGE\Utilities\TimeStep.h">
@@ -309,6 +357,15 @@
     <ClInclude Include="src\TAGE\World\Systems\System_Renderer.h">
       <Filter>src\TAGE\World\Systems</Filter>
     </ClInclude>
+    <ClInclude Include="src\TARE\Animation\Animation.h">
+      <Filter>src\TARE\Animation</Filter>
+    </ClInclude>
+    <ClInclude Include="src\TARE\Animation\Animator.h">
+      <Filter>src\TARE\Animation</Filter>
+    </ClInclude>
+    <ClInclude Include="src\TARE\Animation\Bone.h">
+      <Filter>src\TARE\Animation</Filter>
+    </ClInclude>
     <ClInclude Include="src\TARE\Buffers\Buffers.h">
       <Filter>src\TARE\Buffers</Filter>
     </ClInclude>
@@ -341,6 +398,9 @@
     </ClInclude>
     <ClInclude Include="src\TARE\Common\RenderContext.h">
       <Filter>src\TARE\Common</Filter>
+    </ClInclude>
+    <ClInclude Include="src\TARE\DebugRenderer\DebugLightRenderer.h">
+      <Filter>src\TARE\DebugRenderer</Filter>
     </ClInclude>
     <ClInclude Include="src\TARE\DebugRenderer\DebugRenderer.h">
       <Filter>src\TARE\DebugRenderer</Filter>
@@ -1653,24 +1713,9 @@
     <ClInclude Include="vendor\stb\stb_image_write.h">
       <Filter>vendor\stb</Filter>
     </ClInclude>
-    <ClInclude Include="src\TAGE\Project\Project.h" />
-    <ClInclude Include="src\TAGE\Project\ProjectSerializer.h" />
-    <ClInclude Include="src\TAGE\AssetManager\AssetManager.h" />
-    <ClInclude Include="src\TAGE\AssetManager\AssetManagerBase.h" />
-    <ClInclude Include="src\TAGE\AssetManager\AssetManagerEditor.h" />
-    <ClInclude Include="src\TAGE\AssetManager\AssetManagerRuntime.h" />
-    <ClInclude Include="src\TAGE\AssetManager\Asset.h" />
-    <ClInclude Include="src\TAGE\AssetManager\AssetMetadata.h" />
-    <ClInclude Include="src\TAGE\AssetManager\AssetImporter.h" />
-    <ClInclude Include="src\TAGE\AssetManager\Importers\TextureImporter.h" />
-    <ClInclude Include="src\TAGE\Utilities\Buffer.h" />
-    <ClInclude Include="src\TAGE\Utilities\Profiler.h" />
-    <ClInclude Include="src\TAGE\Project\ProjectSettingsSerializer.h" />
-    <ClInclude Include="src\TARE\DebugRenderer\DebugLightRenderer.h" />
-    <ClInclude Include="src\TAGE\AssetManager\Importers\SceneImporter.h" />
-    <ClInclude Include="src\TARE\Animation\Animator.h" />
-    <ClInclude Include="src\TARE\Animation\Bone.h" />
-    <ClInclude Include="src\TARE\Animation\Animation.h" />
+    <ClInclude Include="src\TAGE\AssetManager\Importers\MeshImporter.h" />
+    <ClInclude Include="src\TAGE\AssetManager\AssetSerializer.h" />
+    <ClInclude Include="src\TAGE\AssetManager\Importers\MaterialImporter.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\Platform\OpenGL\OpenGL_Buffers.cpp">
@@ -1712,6 +1757,30 @@
     <ClCompile Include="src\TAGE\Application\Application.cpp">
       <Filter>src\TAGE\Application</Filter>
     </ClCompile>
+    <ClCompile Include="src\TAGE\AssetManager\Asset.cpp">
+      <Filter>src\TAGE\AssetManager</Filter>
+    </ClCompile>
+    <ClCompile Include="src\TAGE\AssetManager\AssetImporter.cpp">
+      <Filter>src\TAGE\AssetManager</Filter>
+    </ClCompile>
+    <ClCompile Include="src\TAGE\AssetManager\AssetManager.cpp">
+      <Filter>src\TAGE\AssetManager</Filter>
+    </ClCompile>
+    <ClCompile Include="src\TAGE\AssetManager\AssetManagerBase.cpp">
+      <Filter>src\TAGE\AssetManager</Filter>
+    </ClCompile>
+    <ClCompile Include="src\TAGE\AssetManager\AssetManagerEditor.cpp">
+      <Filter>src\TAGE\AssetManager</Filter>
+    </ClCompile>
+    <ClCompile Include="src\TAGE\AssetManager\AssetManagerRuntime.cpp">
+      <Filter>src\TAGE\AssetManager</Filter>
+    </ClCompile>
+    <ClCompile Include="src\TAGE\AssetManager\Importers\SceneImporter.cpp">
+      <Filter>src\TAGE\AssetManager\Importers</Filter>
+    </ClCompile>
+    <ClCompile Include="src\TAGE\AssetManager\Importers\TextureImporter.cpp">
+      <Filter>src\TAGE\AssetManager\Importers</Filter>
+    </ClCompile>
     <ClCompile Include="src\TAGE\Common\TMath.cpp">
       <Filter>src\TAGE\Common</Filter>
     </ClCompile>
@@ -1742,16 +1811,31 @@
     <ClCompile Include="src\TAGE\Physics\Raycaster.cpp">
       <Filter>src\TAGE\Physics</Filter>
     </ClCompile>
+    <ClCompile Include="src\TAGE\Project\Project.cpp">
+      <Filter>src\TAGE\Project</Filter>
+    </ClCompile>
+    <ClCompile Include="src\TAGE\Project\ProjectSerializer.cpp">
+      <Filter>src\TAGE\Project</Filter>
+    </ClCompile>
+    <ClCompile Include="src\TAGE\Project\ProjectSettingsSerializer.cpp">
+      <Filter>src\TAGE\Project</Filter>
+    </ClCompile>
     <ClCompile Include="src\TAGE\Scripting\ScriptEngine.cpp">
       <Filter>src\TAGE\Scripting</Filter>
     </ClCompile>
     <ClCompile Include="src\TAGE\Scripting\ScriptGlue.cpp">
       <Filter>src\TAGE\Scripting</Filter>
     </ClCompile>
-    <ClCompile Include="src\TAGE\Utilities\UUID.cpp">
+    <ClCompile Include="src\TAGE\Utilities\Logger.cpp">
+      <Filter>src\TAGE\Utilities</Filter>
+    </ClCompile>
+    <ClCompile Include="src\TAGE\Utilities\Platform.cpp">
       <Filter>src\TAGE\Utilities</Filter>
     </ClCompile>
     <ClCompile Include="src\TAGE\Utilities\Timer.cpp">
+      <Filter>src\TAGE\Utilities</Filter>
+    </ClCompile>
+    <ClCompile Include="src\TAGE\Utilities\UUID.cpp">
       <Filter>src\TAGE\Utilities</Filter>
     </ClCompile>
     <ClCompile Include="src\TAGE\Window\Window.cpp">
@@ -1774,6 +1858,12 @@
     </ClCompile>
     <ClCompile Include="src\TAGE\World\Systems\System_Renderer.cpp">
       <Filter>src\TAGE\World\Systems</Filter>
+    </ClCompile>
+    <ClCompile Include="src\TARE\Animation\Animator.cpp">
+      <Filter>src\TARE\Animation</Filter>
+    </ClCompile>
+    <ClCompile Include="src\TARE\Animation\Bone.cpp">
+      <Filter>src\TARE\Animation</Filter>
     </ClCompile>
     <ClCompile Include="src\TARE\Buffers\Buffers.cpp">
       <Filter>src\TARE\Buffers</Filter>
@@ -1801,6 +1891,9 @@
     </ClCompile>
     <ClCompile Include="src\TARE\Common\RenderContext.cpp">
       <Filter>src\TARE\Common</Filter>
+    </ClCompile>
+    <ClCompile Include="src\TARE\DebugRenderer\DebugLightRenderer.cpp">
+      <Filter>src\TARE\DebugRenderer</Filter>
     </ClCompile>
     <ClCompile Include="src\TARE\DebugRenderer\DebugRenderer.cpp">
       <Filter>src\TARE\DebugRenderer</Filter>
@@ -1856,21 +1949,11 @@
     <ClCompile Include="vendor\stb\stb_image.cpp">
       <Filter>vendor\stb</Filter>
     </ClCompile>
-    <ClCompile Include="src\TAGE\Project\Project.cpp" />
-    <ClCompile Include="src\TAGE\Project\ProjectSerializer.cpp" />
-    <ClCompile Include="src\TAGE\AssetManager\AssetManager.cpp" />
-    <ClCompile Include="src\TAGE\AssetManager\AssetManagerBase.cpp" />
-    <ClCompile Include="src\TAGE\AssetManager\AssetManagerEditor.cpp" />
-    <ClCompile Include="src\TAGE\AssetManager\AssetManagerRuntime.cpp" />
-    <ClCompile Include="src\TAGE\AssetManager\Asset.cpp" />
-    <ClCompile Include="src\TAGE\AssetManager\AssetImporter.cpp" />
-    <ClCompile Include="src\TAGE\AssetManager\Importers\TextureImporter.cpp" />
-    <ClCompile Include="src\TAGE\Utilities\Platform.cpp" />
-    <ClCompile Include="src\TAGE\Utilities\Logger.cpp" />
-    <ClCompile Include="src\TAGE\Project\ProjectSettingsSerializer.cpp" />
-    <ClCompile Include="src\TARE\DebugRenderer\DebugLightRenderer.cpp" />
-    <ClCompile Include="src\TAGE\AssetManager\Importers\SceneImporter.cpp" />
-    <ClCompile Include="src\TARE\Animation\Animator.cpp" />
-    <ClCompile Include="src\TARE\Animation\Bone.cpp" />
+    <ClCompile Include="src\TAGE\AssetManager\Importers\MeshImporter.cpp" />
+    <ClCompile Include="src\TAGE\AssetManager\Serializers\MeshSerializer.cpp" />
+    <ClCompile Include="src\TAGE\AssetManager\AssetSerializer.cpp" />
+    <ClCompile Include="src\TAGE\AssetManager\Serializers\MaterialSerializer.cpp" />
+    <ClCompile Include="src\TAGE\AssetManager\Importers\StaticMeshImporter.cpp" />
+    <ClCompile Include="src\TAGE\AssetManager\Importers\MaterialImporter.cpp" />
   </ItemGroup>
 </Project>

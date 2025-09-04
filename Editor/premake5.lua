@@ -23,7 +23,8 @@ project "Editor"
         "%{IncludeDir.glm}",
         "%{IncludeDir.entt}",
         "%{IncludeDir.yaml}",
-        "%{IncludeDir.BulletPhysics}"
+        "%{IncludeDir.BulletPhysics}",
+        "%{IncludeDir.ImGuiNodeEditor}"
     }
 
     links {

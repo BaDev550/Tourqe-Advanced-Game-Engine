@@ -4,6 +4,8 @@
 #include "TAGE/Project/Project.h"
 #include "TAGE/AssetManager/Importers/TextureImporter.h"
 
+#include "Modals/MaterialEditor.h"
+
 namespace TAGE::Editor {
 	ContentBrowserPanel::ContentBrowserPanel()
 	{
@@ -65,12 +67,21 @@ namespace TAGE::Editor {
 
 			for (const auto& [item, index] : node->Children) {
 				bool isDirectory = std::filesystem::is_directory(Project::GetAssetDirectory() / item);
+				MEM::Ref<TARE::Texture2D> icon = isDirectory ? _DirectoryIcon : _FileIcon;
 				std::string itemStr = item.generic_string();
 
 				ImGui::PushID(item.c_str());
-				MEM::Ref<TARE::Texture2D> icon = isDirectory ? _DirectoryIcon : _FileIcon;
 				ImGui::PushStyleColor(ImGuiCol_Button, ImVec4(0, 0, 0, 0));
-				ImGui::ImageButton("#ICON", (ImTextureID)(void*)icon->GetID(), { _ThumbnailSize, _ThumbnailSize }, { 1, 0 }, { 0, 1 });
+
+				if (ImGui::ImageButton("##ITEM", (ImTextureID)(void*)icon->GetID(), { _ThumbnailSize, _ThumbnailSize }, { 1, 0 }, { 0, 1 })) {
+					if (isDirectory) {
+						_CurrentDirectory /= item.filename();
+					}
+					else if (item.extension() == ".tmat") {
+						auto material = AssetManager::GetAsset<TARE::Material>(_TreeNodes[index].Handle);
+						MaterialEditor::OpenModal(_TreeNodes[index].Handle);
+					}
+				}
 
 				if (ImGui::BeginPopupContextItem()) {
 					if (ImGui::MenuItem("Delete")) {
@@ -139,6 +150,8 @@ namespace TAGE::Editor {
 		ImGui::Columns(1);
 
 		ImGui::End();
+
+		MaterialEditor::Render();
 	}
 
 	void ContentBrowserPanel::RefreshAssetTree()

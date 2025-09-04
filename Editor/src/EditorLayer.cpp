@@ -32,6 +32,8 @@ namespace TAGE::Editor {
 		_IconRotate =    TAGE::TextureImporter::LoadTexture2D("assets/textures/Icons/gizmo_rotate.png");
 		_IconScale =     TAGE::TextureImporter::LoadTexture2D("assets/textures/Icons/gizmo_scale.png");
 
+		ImGui::GetIO().IniFilename = "editor_layout.ini";
+
 		auto commandLineArgs = Application::Get()->GetSpecification().CommandLineArgs;
 		if (commandLineArgs.Count > 1) {
 			auto projectFilePath = commandLineArgs[1];
@@ -43,8 +45,6 @@ namespace TAGE::Editor {
 				OpenProject(projectPath);
 			}
 		}
-
-		ImGui::GetIO().IniFilename = "editor_layout.ini";
 	}
 
 	void EditorLayer::OnDetach()
@@ -470,6 +470,7 @@ namespace TAGE::Editor {
 		ImGui::EndChild();
 		ImGui::PopStyleColor();
 		ImGui::PopStyleVar(2);
+		
 	}
 
 	void EditorLayer::UI_DrawViewport()
