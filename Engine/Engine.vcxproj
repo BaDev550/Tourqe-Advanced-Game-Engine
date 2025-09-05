@@ -101,9 +101,6 @@
     </Lib>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClInclude Include="src\TAGE\AssetManager\Importers\MaterialImporter.h" />
-    <ClInclude Include="src\TAGE\AssetManager\AssetSerializer.h" />
-    <ClInclude Include="src\TAGE\AssetManager\Importers\MeshImporter.h" />
     <ClInclude Include="src\Platform\OpenGL\OpenGL_Buffers.h" />
     <ClInclude Include="src\Platform\OpenGL\OpenGL_Framebuffer.h" />
     <ClInclude Include="src\Platform\OpenGL\OpenGL_RenderAPI.h" />
@@ -123,6 +120,9 @@
     <ClInclude Include="src\TAGE\AssetManager\AssetManagerEditor.h" />
     <ClInclude Include="src\TAGE\AssetManager\AssetManagerRuntime.h" />
     <ClInclude Include="src\TAGE\AssetManager\AssetMetadata.h" />
+    <ClInclude Include="src\TAGE\AssetManager\AssetSerializer.h" />
+    <ClInclude Include="src\TAGE\AssetManager\Importers\MaterialImporter.h" />
+    <ClInclude Include="src\TAGE\AssetManager\Importers\MeshImporter.h" />
     <ClInclude Include="src\TAGE\AssetManager\Importers\SceneImporter.h" />
     <ClInclude Include="src\TAGE\AssetManager\Importers\TextureImporter.h" />
     <ClInclude Include="src\TAGE\Common\TDefines.h" />
@@ -629,9 +629,6 @@
     <ClInclude Include="vendor\stb\stb_image_write.h" />
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="src\TAGE\AssetManager\Importers\MaterialImporter.cpp" />
-    <ClCompile Include="src\TAGE\AssetManager\AssetSerializer.cpp" />
-    <ClCompile Include="src\TAGE\AssetManager\Importers\MeshImporter.cpp" />
     <ClCompile Include="src\Platform\OpenGL\OpenGL_Buffers.cpp" />
     <ClCompile Include="src\Platform\OpenGL\OpenGL_CubemapTexture.cpp" />
     <ClCompile Include="src\Platform\OpenGL\OpenGL_Framebuffer.cpp" />
@@ -651,6 +648,9 @@
     <ClCompile Include="src\TAGE\AssetManager\AssetManagerBase.cpp" />
     <ClCompile Include="src\TAGE\AssetManager\AssetManagerEditor.cpp" />
     <ClCompile Include="src\TAGE\AssetManager\AssetManagerRuntime.cpp" />
+    <ClCompile Include="src\TAGE\AssetManager\AssetSerializer.cpp" />
+    <ClCompile Include="src\TAGE\AssetManager\Importers\MaterialImporter.cpp" />
+    <ClCompile Include="src\TAGE\AssetManager\Importers\MeshImporter.cpp" />
     <ClCompile Include="src\TAGE\AssetManager\Importers\SceneImporter.cpp" />
     <ClCompile Include="src\TAGE\AssetManager\Importers\StaticMeshImporter.cpp" />
     <ClCompile Include="src\TAGE\AssetManager\Importers\TextureImporter.cpp" />

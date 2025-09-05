@@ -17,12 +17,14 @@ namespace TAGE {
 		LOG_INFO("TAGE Version - {}.{}", ENGINE_VERSION_MAJOR, ENGINE_VERSION_MINOR);
 
 		ASSERT(s_Instance, "Application already exists");
-		int width = 1920;
-		int height = 1080;
+		_AppSpecifics.windowSettings.Title = spec.AppName.c_str();
+		int width = _AppSpecifics.windowSettings.Width;
+		int height = _AppSpecifics.windowSettings.Height;
+		_Window = MEM::MakeScope<Window>(_AppSpecifics.windowSettings, WindowMode::WINDOWED);
 
-		const SWindow WINDOW = SWindow(_AppSpecifics.AppName.c_str(), width, height);
-		_Window = MEM::MakeScope<Window>(WINDOW, WindowMode::WINDOWED);
-		_Renderer = MEM::MakeScope<TARE::TARE>(width, height);
+		if (spec.UseTARE)
+			_Renderer = MEM::MakeScope<TARE::TARE>(width, height);
+
 		_Window->SetEventCallback(BIND_EVENT_FN(Application::OnEvent));
 		_Window->ToggleCursor(true);
 		Input::Init(_Window->GetGLFWWindow());
@@ -31,16 +33,24 @@ namespace TAGE {
 		PushOverlay(_ImGuiLayer.get());
 	}
 
+	void Application::Shutdown() {
+		_ApplicationState = ApplicationState::STOPPED;
+		_Window->ForceClose();
+	}
+
 	Application::~Application()
 	{
 		for (Layer* layer : _LayerStack)
 			layer->OnDetach();
 		_LayerStack.Clear();
-		ScriptEngine::Shutdown();
 
 		LOG_WARN("Application terminated!");
 		LOG_WARN("Exiting...");
-		SAVE_LOG_TO_CACHE();
+
+		if (ScriptEngine::IsInitialized()) {
+			ScriptEngine::Shutdown();
+			SAVE_LOG_TO_CACHE();
+		}
 	}
 
 	void Application::Run()

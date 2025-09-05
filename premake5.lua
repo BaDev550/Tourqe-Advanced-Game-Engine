@@ -65,4 +65,5 @@ workspace "TAGE"
 
     group "Editor"
         include "Editor/"
+        include "Launcher/"
     group ""

@@ -36,6 +36,8 @@ namespace TAGE {
 		std::string AppName = "TAGE";
 		std::string WorkingDirectory;
 		ApplicationCommandLineArgs CommandLineArgs;
+		SWindow windowSettings;
+		bool UseTARE = true;
 	};
 
     class Application
@@ -43,6 +45,7 @@ namespace TAGE {
     public:
         Application(const ApplicationSpecifics& spec);
         virtual ~Application();
+		void Shutdown();
         void Run();
 
         static Application* Get() { return s_Instance; }
@@ -54,8 +57,7 @@ namespace TAGE {
         void PushOverlay(Layer* layer) { _LayerStack.PushOverlay(layer); }
 
 		void Close() {
-			_ApplicationState = ApplicationState::STOPPED;
-			_Window->ForceClose();
+            Shutdown();
 		}
 
     public:

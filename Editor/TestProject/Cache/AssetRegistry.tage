@@ -1,88 +1,409 @@
 AssetRegistry:
+  - Handle: 109444413039500592
+    FilePath: models/Sponza/3455394979645218238.jpg
+    Type: Texture
+  - Handle: 117193596094786349
+    FilePath: models/TestModel/mat_0-pupil.tmat
+    Type: Material
   - Handle: 265316493485258515
     FilePath: models/mario_2/hair.jpg
+    Type: Texture
+  - Handle: 296959627063677239
+    FilePath: models/Player/Textures/pupil.jpg
+    Type: Texture
+  - Handle: 360697231450115207
+    FilePath: models/Sponza/Sponza.tmesh
+    Type: StaticMesh
+  - Handle: 680108510632714758
+    FilePath: models/Sponza/4675343432951571524.jpg
+    Type: Texture
+  - Handle: 914432660454741630
+    FilePath: models/TestModel/mat_1-glove.tmat
+    Type: Material
+  - Handle: 918748838717013676
+    FilePath: models/Sponza/6772804448157695701.jpg
     Type: Texture
   - Handle: 1000396160921735912
     FilePath: models/mario_2/mat_2-face.tmat
     Type: Material
+  - Handle: 1069042981358727059
+    FilePath: models/Sponza/5061699253647017043.png
+    Type: Texture
+  - Handle: 1153467298534454660
+    FilePath: models/Sponza/14118779221266351425.jpg
+    Type: Texture
+  - Handle: 1327908110894454314
+    FilePath: models/Player/Materials/mat_4-eye1.tmat
+    Type: Material
   - Handle: 1754644085962112135
     FilePath: models/mario_2/mat_0-pupil.tmat
     Type: Material
+  - Handle: 2006647187492754083
+    FilePath: models/Sponza/4975155472559461469.jpg
+    Type: Texture
+  - Handle: 2021588516723186543
+    FilePath: models/Sponza/7441062115984513793.jpg
+    Type: Texture
+  - Handle: 2196606717255110471
+    FilePath: models/TestModel/mario_2.obj
+    Type: MeshSource
+  - Handle: 2321144217581688693
+    FilePath: models/teeeeet/mat_4-eye1.tmat
+    Type: Material
+  - Handle: 2531103460922114625
+    FilePath: models/Sponza/8783994986360286082.jpg
+    Type: Texture
+  - Handle: 2892265325714399144
+    FilePath: models/Player/Materials/mat_1-glove.tmat
+    Type: Material
+  - Handle: 2913198616948306842
+    FilePath: models/Test/mario_2.tmesh
+    Type: StaticMesh
   - Handle: 2930981890251908235
     FilePath: textures/cube/container2_specular.png
+    Type: Texture
+  - Handle: 2950463825999832640
+    FilePath: models/Sponza/4910669866631290573.jpg
+    Type: Texture
+  - Handle: 3007630003562872858
+    FilePath: models/Sponza/755318871556304029.jpg
+    Type: Texture
+  - Handle: 3092470848654773166
+    FilePath: models/Sponza/10381718147657362067.jpg
+    Type: Texture
+  - Handle: 3132645827974025023
+    FilePath: models/Sponza/8006627369776289000.png
     Type: Texture
   - Handle: 3233025364013487784
     FilePath: models/SciFiHelmet/SciFiHelmet.gltf
     Type: MeshSource
+  - Handle: 3365274609874612029
+    FilePath: models/Sponza/7645212358685992005.jpg
+    Type: Texture
+  - Handle: 3470068410744575604
+    FilePath: models/Sponza/16299174074766089871.jpg
+    Type: Texture
+  - Handle: 3557612360184825735
+    FilePath: models/Sponza/4871783166746854860.jpg
+    Type: Texture
   - Handle: 3583074849329468474
     FilePath: models/SciFiHelmet/SciFiHelmet.tmat
     Type: Material
   - Handle: 3743894029363735331
     FilePath: models/Cube/Material.tmat
     Type: Material
+  - Handle: 3842342898950288359
+    FilePath: models/Sponza/5823059166183034438.jpg
+    Type: Texture
+  - Handle: 4027673535589072915
+    FilePath: models/Sponza/17876391417123941155.jpg
+    Type: Texture
+  - Handle: 4199597785230162587
+    FilePath: models/Sponza/9916269861720640319.jpg
+    Type: Texture
+  - Handle: 4273533308121398893
+    FilePath: models/teeeeet/mat_0-pupil.tmat
+    Type: Material
+  - Handle: 4419177784288843732
+    FilePath: models/Sponza/13982482287905699490.jpg
+    Type: Texture
+  - Handle: 4600766593679861013
+    FilePath: models/Sponza/8481240838833932244.jpg
+    Type: Texture
+  - Handle: 4618982858759519732
+    FilePath: models/Sponza/15722799267630235092.jpg
+    Type: Texture
+  - Handle: 4676992557258937642
+    FilePath: models/teeeeet/mario_2.tmesh
+    Type: StaticMesh
   - Handle: 4749324274016400823
     FilePath: models/SciFiHelmet/SciFiHelmet_Normal.png
     Type: Texture
   - Handle: 4761930808751046723
     FilePath: textures/cube/container2.png
     Type: Texture
+  - Handle: 4767265952542117274
+    FilePath: models/Sponza/14267839433702832875.jpg
+    Type: Texture
+  - Handle: 4987820044770055487
+    FilePath: models/Sponza/6667038893015345571.jpg
+    Type: Texture
   - Handle: 5274997705480829037
     FilePath: models/SciFiHelmet/SciFiHelmet.tmesh
     Type: StaticMesh
+  - Handle: 5287404532660594198
+    FilePath: models/Sponza/2051777328469649772.jpg
+    Type: Texture
+  - Handle: 5342299352556106076
+    FilePath: models/Sponza/16275776544635328252.png
+    Type: Texture
   - Handle: 5370041088868083097
     FilePath: models/mario_2/hat.jpg
     Type: Texture
   - Handle: 5477491668499770430
     FilePath: models/mario_2/mat_5-body.tmat
     Type: Material
+  - Handle: 5721237441916583698
+    FilePath: models/Sponza/7815564343179553343.jpg
+    Type: Texture
+  - Handle: 5824008967869129781
+    FilePath: models/Sponza/3371964815757888145.jpg
+    Type: Texture
+  - Handle: 5915929303764588664
+    FilePath: models/Sponza/10388182081421875623.jpg
+    Type: Texture
   - Handle: 6314807670578087490
     FilePath: models/mario_2/pupil.jpg
     Type: Texture
   - Handle: 6429863297896724129
     FilePath: models/SciFiHelmet/SciFiHelmet_BaseColor.png
     Type: Texture
+  - Handle: 6799184212684463194
+    FilePath: models/Sponza/6047387724914829168.jpg
+    Type: Texture
   - Handle: 7011329818231644695
     FilePath: models/Cube/cube.tmesh
     Type: StaticMesh
+  - Handle: 7089142393433587385
+    FilePath: models/Sponza/2299742237651021498.jpg
+    Type: Texture
+  - Handle: 7311640921129379639
+    FilePath: models/Test/mario_2.obj
+    Type: MeshSource
+  - Handle: 7330346880791477040
+    FilePath: models/Sponza/7056944414013900257.jpg
+    Type: Texture
+  - Handle: 7454106574999084511
+    FilePath: models/Sponza/8114461559286000061.jpg
+    Type: Texture
+  - Handle: 7487712167842338903
+    FilePath: models/Sponza/13824894030729245199.jpg
+    Type: Texture
+  - Handle: 7508417824166106424
+    FilePath: models/Sponza/1219024358953944284.jpg
+    Type: Texture
   - Handle: 7596207635561139813
     FilePath: models/mario_2/glove.jpg
     Type: Texture
+  - Handle: 7751881723822183522
+    FilePath: TestProject/Assets/models/kann/mario_2.obj
+    Type: MeshSource
+  - Handle: 7966231215248652229
+    FilePath: models/teeeeet/mat_1-glove.tmat
+    Type: Material
+  - Handle: 8314798539215457297
+    FilePath: models/teeeeet/mario_2.obj
+    Type: MeshSource
   - Handle: 8380434274993560140
     FilePath: models/mario_2/eye1.jpg
     Type: Texture
   - Handle: 8393681041174052139
     FilePath: models/mario_2/body.jpg
     Type: Texture
-  - Handle: 10108590557731322183
-    FilePath: models/mario_2/mario_2.obj
+  - Handle: 8522434999939960548
+    FilePath: models/TestModel/mario_2.tmesh
+    Type: StaticMesh
+  - Handle: 8536508391322086838
+    FilePath: models/Sponza/14650633544276105767.jpg
+    Type: Texture
+  - Handle: 8679261486886323320
+    FilePath: models/Sponza/Sponza.gltf
     Type: MeshSource
+  - Handle: 8870828071314596966
+    FilePath: models/Sponza/7268504077753552595.jpg
+    Type: Texture
+  - Handle: 9157733271426285623
+    FilePath: models/teeeeet/mat_2-face.tmat
+    Type: Material
+  - Handle: 9204833120248137941
+    FilePath: models/Sponza/16885566240357350108.jpg
+    Type: Texture
+  - Handle: 9365378236650776465
+    FilePath: models/teeeeet/mat_5-body.tmat
+    Type: Material
+  - Handle: 9387411883333138146
+    FilePath: models/teeeeet/mat_3-hat.tmat
+    Type: Material
+  - Handle: 9600433701236209135
+    FilePath: models/teeeeet/mat_6-hair.tmat
+    Type: Material
+  - Handle: 9729885872749148556
+    FilePath: models/Player/Materials/mat_3-hat.tmat
+    Type: Material
+  - Handle: 9816115216393444365
+    FilePath: models/Sponza/2775690330959970771.jpg
+    Type: Texture
+  - Handle: 9921227270675192827
+    FilePath: models/Sponza/2185409758123873465.jpg
+    Type: Texture
+  - Handle: 10228628086648596704
+    FilePath: models/TestModel/mat_5-body.tmat
+    Type: Material
+  - Handle: 10235181323383274472
+    FilePath: models/Sponza/759203620573749278.jpg
+    Type: Texture
   - Handle: 10251529381802880311
     FilePath: models/SciFiHelmet/SciFiHelmet_MetallicRoughness.png
+    Type: Texture
+  - Handle: 10259361329895329123
+    FilePath: models/TestModel/mat_3-hat.tmat
+    Type: Material
+  - Handle: 10286250425653032795
+    FilePath: models/Sponza/11474523244911310074.jpg
     Type: Texture
   - Handle: 10303872077855147889
     FilePath: scenes/start.scene
     Type: Scene
+  - Handle: 10338609019626543433
+    FilePath: models/Sponza/3628158980083700836.jpg
+    Type: Texture
+  - Handle: 10507107149024696857
+    FilePath: models/TestModel/mat_4-eye1.tmat
+    Type: Material
+  - Handle: 10616050747320795335
+    FilePath: models/Test/mat_2-face.tmat
+    Type: Material
+  - Handle: 10985177040494093992
+    FilePath: models/Sponza/5792855332885324923.jpg
+    Type: Texture
+  - Handle: 11211142313755614205
+    FilePath: models/Player/Materials/mat_5-body.tmat
+    Type: Material
+  - Handle: 11285880697698695826
+    FilePath: models/Player/mario_2.tmesh
+    Type: StaticMesh
+  - Handle: 11356845566471321952
+    FilePath: models/Sponza/2411100444841994089.jpg
+    Type: Texture
+  - Handle: 11413592575864463996
+    FilePath: models/Sponza/715093869573992647.jpg
+    Type: Texture
+  - Handle: 11443916341842875436
+    FilePath: models/Sponza/8750083169368950601.jpg
+    Type: Texture
+  - Handle: 11478765120404358055
+    FilePath: models/Sponza/2374361008830720677.jpg
+    Type: Texture
   - Handle: 11578502251494135670
     FilePath: models/mario_2/face.jpg
     Type: Texture
   - Handle: 11600828368088147219
     FilePath: models/mario_2/mario_2.tmesh
     Type: StaticMesh
+  - Handle: 12250597553718469309
+    FilePath: models/TestModel/mat_6-hair.tmat
+    Type: Material
+  - Handle: 12329979333708349635
+    FilePath: models/Sponza/15295713303328085182.jpg
+    Type: Texture
   - Handle: 12549245712314734149
     FilePath: models/mario_2/mat_3-hat.tmat
     Type: Material
+  - Handle: 12610647056117843696
+    FilePath: models/Sponza/4477655471536070370.jpg
+    Type: Texture
   - Handle: 12937094107414668939
     FilePath: models/mario_2/mat_1-glove.tmat
+    Type: Material
+  - Handle: 13009780197651832015
+    FilePath: models/Sponza/8773302468495022225.jpg
+    Type: Texture
+  - Handle: 13056517822310387259
+    FilePath: models/Sponza/11872827283454512094.jpg
+    Type: Texture
+  - Handle: 13068028334794855700
+    FilePath: models/Sponza/6151467286084645207.jpg
+    Type: Texture
+  - Handle: 13367007293705678666
+    FilePath: models/Test/mat_6-hair.tmat
     Type: Material
   - Handle: 13445524704467903497
     FilePath: models/mario_2/mat_4-eye1.tmat
     Type: Material
+  - Handle: 13472770717597048824
+    FilePath: models/Sponza/14170708867020035030.jpg
+    Type: Texture
+  - Handle: 13763907933747033710
+    FilePath: models/Test/mat_0-pupil.tmat
+    Type: Material
+  - Handle: 13899194162045145449
+    FilePath: models/Sponza/11968150294050148237.jpg
+    Type: Texture
+  - Handle: 14423994284594700242
+    FilePath: models/Test/mat_3-hat.tmat
+    Type: Material
+  - Handle: 14872132941492731328
+    FilePath: models/Sponza/332936164838540657.jpg
+    Type: Texture
+  - Handle: 14884529468861345668
+    FilePath: models/Sponza/17556969131407844942.jpg
+    Type: Texture
+  - Handle: 14913778342331342082
+    FilePath: models/Sponza/2969916736137545357.jpg
+    Type: Texture
   - Handle: 15266390894153647092
     FilePath: models/Cube/cube.obj
     Type: MeshSource
+  - Handle: 15279384247987391942
+    FilePath: models/Sponza/12501374198249454378.jpg
+    Type: Texture
+  - Handle: 15395132816112981125
+    FilePath: models/Sponza/3827035219084910048.jpg
+    Type: Texture
+  - Handle: 15491889595663611255
+    FilePath: models/Sponza/9288698199695299068.jpg
+    Type: Texture
+  - Handle: 15692577407390519699
+    FilePath: models/Test/mat_4-eye1.tmat
+    Type: Material
+  - Handle: 15784829042967373810
+    FilePath: models/Test/mat_1-glove.tmat
+    Type: Material
+  - Handle: 16146745742922412579
+    FilePath: models/Sponza/6593109234861095314.jpg
+    Type: Texture
+  - Handle: 16237774237846236180
+    FilePath: models/Player/Materials/mat_0-pupil.tmat
+    Type: Material
+  - Handle: 16402828164806610952
+    FilePath: models/Sponza/4601176305987539675.jpg
+    Type: Texture
+  - Handle: 16502684206511447137
+    FilePath: models/Sponza/13196865903111448057.jpg
+    Type: Texture
+  - Handle: 16521023210840505762
+    FilePath: models/Sponza/white.png
+    Type: Texture
+  - Handle: 16661397962632095050
+    FilePath: models/Sponza/11490520546946913238.jpg
+    Type: Texture
+  - Handle: 16693434467720434771
+    FilePath: models/Sponza/8051790464816141987.jpg
+    Type: Texture
+  - Handle: 16773105778194566219
+    FilePath: models/Player/Materials/mat_2-face.tmat
+    Type: Material
+  - Handle: 17096614871282133470
+    FilePath: models/Test/mat_5-body.tmat
+    Type: Material
   - Handle: 17398759754967172203
     FilePath: models/mario_2/mat_6-hair.tmat
+    Type: Material
+  - Handle: 17453422787501088409
+    FilePath: models/Sponza/8747919177698443163.jpg
+    Type: Texture
+  - Handle: 17548253676658843639
+    FilePath: models/Sponza/466164707995436622.jpg
+    Type: Texture
+  - Handle: 17789678674933914447
+    FilePath: models/Sponza/8503262930880235456.jpg
+    Type: Texture
+  - Handle: 17885986212698876126
+    FilePath: models/Player/Materials/mat_6-hair.tmat
     Type: Material
   - Handle: 18041430396312330568
     FilePath: models/SciFiHelmet/SciFiHelmet_AmbientOcclusion.png
     Type: Texture
+  - Handle: 18198108642486309444
+    FilePath: models/TestModel/mat_2-face.tmat
+    Type: Material

@@ -91,12 +91,15 @@
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
       <OptimizeReferences>true</OptimizeReferences>
     </Link>
+    <PostBuildEvent>
+      <Command>IF EXIST "$(SolutionDir)\bin\Release-windows-x86_64\$(ProjectName)\$(ProjectName).exe"\ (xcopy /Q /E /Y /I "$(SolutionDir)\bin\Release-windows-x86_64\$(ProjectName)\$(ProjectName).exe" "$(SolutionDir)\Editor\" &gt; nul) ELSE (xcopy /Q /Y /I "$(SolutionDir)\bin\Release-windows-x86_64\$(ProjectName)\$(ProjectName).exe" "$(SolutionDir)\Editor\" &gt; nul)</Command>
+    </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClInclude Include="src\Modals\ModelEditor.h" />
-    <ClInclude Include="src\Modals\MaterialEditor.h" />
     <ClInclude Include="src\EditorLayer.h" />
     <ClInclude Include="src\Gamelayer\GameLayer.h" />
+    <ClInclude Include="src\Modals\MaterialEditor.h" />
+    <ClInclude Include="src\Modals\ModelEditor.h" />
     <ClInclude Include="src\Panels\AssetManagerPanel.h" />
     <ClInclude Include="src\Panels\ContentBrowserPanel.h" />
     <ClInclude Include="src\Panels\OutputPanel.h" />
@@ -105,10 +108,10 @@
     <ClInclude Include="src\Panels\ThumbnailRenderer.h" />
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="src\Modals\ModelEditor.cpp" />
-    <ClCompile Include="src\Modals\MaterialEditor.cpp" />
     <ClCompile Include="src\EditorLayer.cpp" />
     <ClCompile Include="src\Gamelayer\GameLayer.cpp" />
+    <ClCompile Include="src\Modals\MaterialEditor.cpp" />
+    <ClCompile Include="src\Modals\ModelEditor.cpp" />
     <ClCompile Include="src\Panels\AssetManagerPanel.cpp" />
     <ClCompile Include="src\Panels\ContentBrowserPanel.cpp" />
     <ClCompile Include="src\Panels\ProjectSettingsPanel.cpp" />

@@ -1,5 +1,17 @@
 Scene: COPIEDSCENE
 Entities:
+  - Entity: 16814043620410331442
+    IdentityComponent:
+      Name: Empty Entity
+    Parent: 0
+    Children:
+      []
+    TransformComponent:
+      Position: [-2.41589808, -1.64765513, 0.0470902324]
+      Rotation: [0, 0, 0]
+      Scale: [5.79289007, 0.0886197612, 5.96153021]
+    MeshComponent:
+      MeshHandle: 7011329818231644695
   - Entity: 16632893400082679708
     IdentityComponent:
       Name: Helmet
@@ -11,7 +23,7 @@ Entities:
       Rotation: [0, 0, 0]
       Scale: [1, 1, 1]
     MeshComponent:
-      MeshHandle: 12167130877828668612
+      MeshHandle: 5274997705480829037
   - Entity: 8546311865479462574
     IdentityComponent:
       Name: Empty Entity
@@ -23,4 +35,4 @@ Entities:
       Rotation: [0, 0, 0]
       Scale: [1, 1, 1]
     MeshComponent:
-      MeshHandle: 7339349741094058164
+      MeshHandle: 7011329818231644695

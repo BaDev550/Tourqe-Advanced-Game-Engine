@@ -57,6 +57,28 @@ namespace TAGE {
         return it->second;
     }
 
+    AssetMap AssetManagerEditor::GetAssetsWithType(AssetType type) const
+    {
+        AssetMap assetsOfType;
+        for (const auto& [handle, asset] : _LoadedAssets) {
+            if (GetAssetType(handle) == type) {
+                assetsOfType[handle] = asset;
+            }
+        }
+        return assetsOfType;
+    }
+
+    std::vector<AssetHandle> AssetManagerEditor::GetHandlesWithType(AssetType type) const
+    {
+        std::vector<AssetHandle> handles;
+        for (const auto& [handle, asset] : _LoadedAssets) {
+            if (GetAssetType(handle) == type) {
+                handles.push_back(handle);
+            }
+        }
+        return handles;
+    }
+
     const std::filesystem::path& AssetManagerEditor::GetFilePath(AssetHandle handle) const
     {
 		return GetMetadata(handle).FilePath;
@@ -109,7 +131,30 @@ namespace TAGE {
         AssetHandle handle;
         AssetMetadata metadata;
         metadata.FilePath = path;
+		LOG_INFO("Importing asset: {}", path.string());
         metadata.Type = GetAssetTypeFromExtension(path.extension());
+        MEM::Ref<Asset> asset = AssetImporter::ImportAsset(handle, metadata);
+        if (asset) {
+            asset->_handle = handle;
+            _LoadedAssets[handle] = asset;
+            _AssetRegistry[handle] = metadata;
+            SerializeAssetRegistry();
+            return _LoadedAssets[handle]->_handle;
+        }
+        return 0;
+    }
+
+    AssetHandle AssetManagerEditor::ImportAsset(const std::filesystem::path& where, const std::filesystem::path& to)
+    {
+        if (TryToGetLoadedAssetFromPath(to) != 0)
+            return TryToGetLoadedAssetFromPath(to);
+
+        AssetHandle handle;
+        AssetMetadata metadata;
+		metadata.InputPath = where;
+        metadata.FilePath = to;
+        LOG_INFO("Importing asset: {}", where.string());
+        metadata.Type = GetAssetTypeFromExtension(where.extension());
         MEM::Ref<Asset> asset = AssetImporter::ImportAsset(handle, metadata);
         if (asset) {
             asset->_handle = handle;

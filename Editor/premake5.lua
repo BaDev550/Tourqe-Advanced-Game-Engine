@@ -42,3 +42,7 @@ project "Editor"
     filter "configurations:Release"
         runtime "Release"
         optimize "on"
+
+        postbuildcommands {
+            '{COPY} "%{wks.location}/bin/' .. outputdir .. '/%{prj.name}/%{prj.name}.exe" "%{wks.location}/Editor/"'
+        }

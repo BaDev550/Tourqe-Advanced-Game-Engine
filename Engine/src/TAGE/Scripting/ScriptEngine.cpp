@@ -173,6 +173,7 @@ namespace TAGE {
 		ScriptGlue::RegisterFunctions();
 
 		s_Data->EntityClass = ScriptClass("TAGE", "Entity", true);
+		s_Initialized = true;
 	}
 
 	void ScriptEngine::Shutdown()

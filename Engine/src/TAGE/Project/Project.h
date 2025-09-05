@@ -18,6 +18,14 @@ namespace TAGE {
 		std::filesystem::path ConfigDirectory;
 		std::filesystem::path AssetRegistryPath;
 		std::filesystem::path ScriptPath;
+
+		ProjectConfig()
+			: AssetDirectory("Assets")
+			, CacheDirectory("Cache")
+			, ConfigDirectory("Config")
+			, AssetRegistryPath("AssetRegistry.tage")
+		{
+		}
 	};
 
 	class Project

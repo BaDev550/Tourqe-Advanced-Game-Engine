@@ -3,6 +3,7 @@
 #include "TAGE/Application/Application.h"
 
 #include <commdlg.h>
+#include <shlobj.h>
 #include <GLFW/glfw3.h>
 #define GLFW_EXPOSE_NATIVE_WIN32
 #define NOMINMAX
@@ -13,13 +14,13 @@ namespace TAGE {
 		std::string FileDialog::OpenFile(const char* filter)
 		{
             OPENFILENAMEA ofn;
-            CHAR szFile[260] = { 0 };
+            std::vector<char> szFile(4096, 0);
 
-            ZeroMemory(&ofn, sizeof(OPENFILENAME));
+            ZeroMemory(&ofn, sizeof(ofn));
             ofn.lStructSize = sizeof(OPENFILENAME);
             ofn.hwndOwner = glfwGetWin32Window(Application::Get()->GetWindow()->GetGLFWWindow());
-            ofn.lpstrFile = szFile;
-            ofn.nMaxFile = sizeof(szFile);
+            ofn.lpstrFile = szFile.data();
+            ofn.nMaxFile = static_cast<DWORD>(szFile.size());
             ofn.lpstrFilter = filter;
             ofn.nFilterIndex = 1;
             ofn.Flags = OFN_PATHMUSTEXIST | OFN_FILEMUSTEXIST | OFN_NOCHANGEDIR;
@@ -27,6 +28,7 @@ namespace TAGE {
             if (GetOpenFileNameA(&ofn) == TRUE)
                 return std::string(ofn.lpstrFile);
 
+            LOG_WARN("File dialog canceled or failed.");
             return std::string();
 		}
 		std::string FileDialog::SaveFile(const char* filter)
@@ -49,5 +51,25 @@ namespace TAGE {
 
             return std::string();
 		}
+        std::string FileDialog::OpenDirectory()
+        {
+            BROWSEINFO bi = { 0 };
+            bi.lpszTitle = LPCWCHAR("Select a folder");
+            bi.ulFlags = BIF_RETURNONLYFSDIRS | BIF_NEWDIALOGSTYLE;
+
+            PIDLIST_ABSOLUTE pidl = SHBrowseForFolder(&bi);
+            if (pidl != nullptr)
+            {
+                CHAR path[MAX_PATH];
+                if (SHGetPathFromIDListA(pidl, path))
+                {
+                    CoTaskMemFree(pidl);
+                    return std::string(path);
+                }
+                CoTaskMemFree(pidl);
+            }
+
+            return std::string();
+        }
 	}
 }

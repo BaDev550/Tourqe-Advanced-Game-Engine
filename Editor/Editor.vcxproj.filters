@@ -4,6 +4,9 @@
     <Filter Include="Gamelayer">
       <UniqueIdentifier>{3C08907F-A872-44F6-F1B0-F59B5D5A224B}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Modals">
+      <UniqueIdentifier>{055E8DC3-F1FF-B799-DABA-CBEDC6FB3EEA}</UniqueIdentifier>
+    </Filter>
     <Filter Include="Panels">
       <UniqueIdentifier>{A80D95C9-94AF-BF9F-7D6A-D3F369AB46F0}</UniqueIdentifier>
     </Filter>
@@ -12,6 +15,12 @@
     <ClInclude Include="src\EditorLayer.h" />
     <ClInclude Include="src\Gamelayer\GameLayer.h">
       <Filter>Gamelayer</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Modals\MaterialEditor.h">
+      <Filter>Modals</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Modals\ModelEditor.h">
+      <Filter>Modals</Filter>
     </ClInclude>
     <ClInclude Include="src\Panels\AssetManagerPanel.h">
       <Filter>Panels</Filter>
@@ -31,13 +40,17 @@
     <ClInclude Include="src\Panels\ThumbnailRenderer.h">
       <Filter>Panels</Filter>
     </ClInclude>
-    <ClInclude Include="src\Modals\MaterialEditor.h" />
-    <ClInclude Include="src\Modals\ModelEditor.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\EditorLayer.cpp" />
     <ClCompile Include="src\Gamelayer\GameLayer.cpp">
       <Filter>Gamelayer</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Modals\MaterialEditor.cpp">
+      <Filter>Modals</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Modals\ModelEditor.cpp">
+      <Filter>Modals</Filter>
     </ClCompile>
     <ClCompile Include="src\Panels\AssetManagerPanel.cpp">
       <Filter>Panels</Filter>
@@ -55,7 +68,5 @@
       <Filter>Panels</Filter>
     </ClCompile>
     <ClCompile Include="src\TourqeEditor.cpp" />
-    <ClCompile Include="src\Modals\MaterialEditor.cpp" />
-    <ClCompile Include="src\Modals\ModelEditor.cpp" />
   </ItemGroup>
 </Project>

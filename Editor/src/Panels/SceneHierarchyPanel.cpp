@@ -379,43 +379,49 @@ namespace TAGE::Editor {
 
 		DrawComponent<MeshComponent>("Mesh", entity, [](MeshComponent& component)
 			{
-				if (component.Handle)
-				{
-					//ImGui::Text("Mesh Path: %s", component.Handle->GetFilePath().c_str());
-				}
-				else
+				if (!component.Handle)
 				{
 					ImGui::Text("Mesh not loaded.");
 				}
+				auto& assetManager = *Project::GetActive()->GetEditorAssetManager();
 
-				if (ImGui::Button("Select Mesh"))
 				{
-					std::string selectedMesh = Platform::FileDialog::OpenFile("Mesh Files (*.tmesh;)\0*.tmesh;\0");
-					if (!selectedMesh.empty())
-					{
-						if (!component.Handle)
-							component.Handle = MEM::MakeRef<TARE::Model>();
+					auto meshHandles = assetManager.GetHandlesWithType(AssetType::StaticMesh);
 
-						component.LoadMesh(selectedMesh);
-					}
-				}
+					std::vector<AssetHandle> handles;
+					std::vector<std::string> names;
 
-				if (ImGui::BeginDragDropTarget())
-				{
-					if (const ImGuiPayload* payload = ImGui::AcceptDragDropPayload("CONTENT_BROWSER_ITEM"))
-					{
-						const char* path = static_cast<const char*>(payload->Data);
-						std::filesystem::path fPath(path);
-
-						if (fPath.extension() == L".tmesh") {
-							if (!component.Handle)
-								component.Handle = MEM::MakeRef<TARE::Model>();
-
-							component.LoadMesh(fPath.string());
-							LOG_INFO("Path: {}", fPath.string());
+					for (const auto& h : meshHandles) {
+						if (AssetManager::IsAssetHandleValid(h)) {
+							handles.push_back(h);
+							names.push_back(assetManager.GetMetadata(h).FilePath.stem().string());
 						}
 					}
-					ImGui::EndDragDropTarget();
+
+					int currentIndex = -1;
+					if (component.Handle) {
+						for (size_t i = 0; i < handles.size(); ++i) {
+							if (handles[i] == component.Handle->_handle) {
+								currentIndex = static_cast<int>(i);
+								break;
+							}
+						}
+					}
+
+					if (ImGui::BeginCombo("Mesh", currentIndex >= 0 ? names[currentIndex].c_str() : "Select...")) {
+						for (int i = 0; i < static_cast<int>(names.size()); ++i) {
+							bool selected = (i == currentIndex);
+							if (ImGui::Selectable(names[i].c_str(), selected)) {
+								currentIndex = i;
+
+								if (!component.Handle)
+									component.Handle = MEM::MakeRef<TARE::Model>();
+								component.LoadMesh(handles[i]);
+							}
+							if (selected) ImGui::SetItemDefaultFocus();
+						}
+						ImGui::EndCombo();
+					}
 				}
 
 				ImGui::Checkbox("Visible", &component.IsVisible);

@@ -10,8 +10,8 @@ namespace TAGE {
 		static MEM::Ref<TARE::Model> ImportStaticMesh(AssetHandle handle, const AssetMetadata& metadata);
 
 	private:
-		static MEM::Ref<TARE::Model> SerializeModel(std::filesystem::path& filepath);
-		static MEM::Ref<TARE::Model> DeserializeModel(std::filesystem::path& filepath);
+		static MEM::Ref<TARE::Model> SerializeModel(std::filesystem::path& filepath, std::filesystem::path& to);
+		static MEM::Ref<TARE::Model> DeserializeModel(AssetHandle handle, std::filesystem::path& filepath);
 	};
 
 	class StaticMeshImporter {

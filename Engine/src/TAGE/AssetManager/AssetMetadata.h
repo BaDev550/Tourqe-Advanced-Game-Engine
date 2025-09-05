@@ -6,6 +6,7 @@ namespace TAGE {
 	struct AssetMetadata
 	{
 		AssetType Type = AssetType::None;
+		std::filesystem::path InputPath;
 		std::filesystem::path FilePath;
 
 		operator bool() const { return Type != AssetType::None; }

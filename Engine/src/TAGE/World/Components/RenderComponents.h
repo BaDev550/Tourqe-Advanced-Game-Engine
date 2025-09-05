@@ -24,7 +24,7 @@ namespace TAGE {
 			LoadMesh(modelpath);
 		}
 		MeshComponent(AssetHandle handle) {
-			Handle = AssetManager::GetAsset<TARE::Model>(handle);
+			LoadMesh(handle);
 		}
 		~MeshComponent() {
 			Handle.reset();
@@ -34,6 +34,9 @@ namespace TAGE {
 			std::filesystem::path path = std::filesystem::relative(meshPath, Project::GetAssetDirectory());
 			AssetHandle asset = Project::GetActive()->GetEditorAssetManager()->ImportAsset(path);
 			Handle = AssetManager::GetAsset<TARE::Model>(asset);
+		}
+		void LoadMesh(AssetHandle handle) {
+			Handle = AssetManager::GetAsset<TARE::Model>(handle);
 		}
 	};
 

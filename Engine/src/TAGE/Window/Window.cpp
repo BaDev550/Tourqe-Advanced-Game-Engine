@@ -20,13 +20,14 @@ namespace TAGE
 		glfwWindowHint(GLFW_OPENGL_DEBUG_CONTEXT, true);
 		glfwWindowHint(GLFW_SAMPLES, 8);
 		glfwWindowHint(GLFW_FOCUSED, GLFW_TRUE);
+		glfwWindowHint(GLFW_RESIZABLE, properties.Resizable);
 #ifdef __APPLE__
 		glfwWindowHint(GLFW_OPENGL_FORWARD_COMPAT, GL_TRUE);
 #endif
 		_Monitor = glfwGetPrimaryMonitor();
 		ASSERT(_Monitor, "Failed to get primary monitor");
 		_VideoMode = glfwGetVideoMode(_Monitor);
-
+		
 		glfwWindowHint(GLFW_RED_BITS, _VideoMode->redBits);
 		glfwWindowHint(GLFW_GREEN_BITS, _VideoMode->greenBits);
 		glfwWindowHint(GLFW_BLUE_BITS, _VideoMode->blueBits);
@@ -50,7 +51,6 @@ namespace TAGE
 		ASSERT(_Window, "Failed to create GLFW window");
 		glfwMakeContextCurrent(_Window);
 		glfwSetWindowUserPointer(_Window, &_Properties);
-		glfwMaximizeWindow(_Window);
 		SetVSync(properties.VSync);
 
 		glfwSetWindowSizeCallback(_Window, [](GLFWwindow* window, int width, int height) {

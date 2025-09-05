@@ -3,6 +3,7 @@
 #include "TAGE/World/Scene/SceneSerializer.h"
 #include "TAGE/Project/Project.h"
 #include "TAGE/AssetManager/Importers/TextureImporter.h"
+#include "TAGE/Utilities/Platform.h"
 
 #include "Modals/MaterialEditor.h"
 
@@ -39,6 +40,48 @@ namespace TAGE::Editor {
 				_CurrentDirectory = _CurrentDirectory.parent_path();
 			}
 		}
+
+		ImGui::SameLine();
+
+		if (ImGui::Button("Import Asset")) {
+			std::filesystem::path filepath = Platform::FileDialog::OpenFile("All Files (*.*)\0*.*\0");
+			if (!filepath.empty()) {
+				std::filesystem::path absFile = std::filesystem::absolute(filepath);
+				std::filesystem::path targetPath = Project::GetAssetDirectory() / std::filesystem::relative(_CurrentDirectory, Project::GetAssetDirectory()) / filepath.filename();
+
+				LOG_INFO("Importing from: {}", filepath.string());
+				LOG_INFO("Target path: {}", targetPath.string());
+
+				Project::GetActive()->GetEditorAssetManager()->ImportAsset(filepath, targetPath);
+				RefreshAssetTree();
+			}
+		}
+
+		ImGui::SameLine();
+
+		if (ImGui::Button("New Folder")) {
+			static char folderName[128] = "NewFolder";
+			ImGui::OpenPopup("Create New Folder");
+		}
+
+		if (ImGui::BeginPopup("Create New Folder")) {
+			static char folderName[128] = "NewFolder";
+			ImGui::InputText("Folder Name", folderName, sizeof(folderName));
+			if (ImGui::Button("Create")) {
+				std::filesystem::path newFolder = _CurrentDirectory / folderName;
+				if (!std::filesystem::exists(newFolder)) {
+					std::filesystem::create_directory(newFolder);
+					RefreshAssetTree();
+				}
+				ImGui::CloseCurrentPopup();
+			}
+			ImGui::SameLine();
+			if (ImGui::Button("Cancel"))
+				ImGui::CloseCurrentPopup();
+			ImGui::EndPopup();
+		}
+
+
 		float cellSize = _ThumbnailSize + _Padding;
 
 		float panelWidth = ImGui::GetContentRegionAvail().x;
@@ -84,9 +127,37 @@ namespace TAGE::Editor {
 				}
 
 				if (ImGui::BeginPopupContextItem()) {
-					if (ImGui::MenuItem("Delete")) {
-
+					if (ImGui::MenuItem("Rename")) {
+						static char renameBuffer[128];
+						strcpy(renameBuffer, item.filename().string().c_str());
+						ImGui::OpenPopup("Rename Item");
 					}
+
+					if (ImGui::MenuItem("Delete")) {
+						std::filesystem::path target = _CurrentDirectory / item.filename();
+						if (std::filesystem::exists(target)) {
+							std::filesystem::remove_all(target);
+							RefreshAssetTree();
+						}
+					}
+					ImGui::EndPopup();
+				}
+
+				if (ImGui::BeginPopup("Rename Item")) {
+					static char renameBuffer[128];
+					ImGui::InputText("New Name", renameBuffer, sizeof(renameBuffer));
+					if (ImGui::Button("Rename")) {
+						std::filesystem::path oldPath = _CurrentDirectory / item.filename();
+						std::filesystem::path newPath = _CurrentDirectory / renameBuffer;
+						if (std::filesystem::exists(oldPath) && !std::filesystem::exists(newPath)) {
+							std::filesystem::rename(oldPath, newPath);
+							RefreshAssetTree();
+						}
+						ImGui::CloseCurrentPopup();
+					}
+					ImGui::SameLine();
+					if (ImGui::Button("Cancel"))
+						ImGui::CloseCurrentPopup();
 					ImGui::EndPopup();
 				}
 
@@ -124,10 +195,15 @@ namespace TAGE::Editor {
 				ImGui::ImageButton("#ICON", (ImTextureID)(void*)icon->GetID(), { _ThumbnailSize, _ThumbnailSize }, { 1, 0 }, { 0, 1 });
 
 				if (ImGui::BeginPopupContextItem()) {
-					if (ImGui::MenuItem("Import")) {
-						auto relativePath = std::filesystem::relative(path, Project::GetActive()->GetAssetDirectory());
-						Project::GetActive()->GetEditorAssetManager()->ImportAsset(relativePath);
-						RefreshAssetTree();
+					if (!directoryEntry.is_directory()) {
+						if (ImGui::MenuItem("Import")) {
+							auto relativePath = std::filesystem::relative(path, Project::GetActive()->GetAssetDirectory());
+							Project::GetActive()->GetEditorAssetManager()->ImportAsset(relativePath);
+							RefreshAssetTree();
+						}
+					}
+					else {
+
 					}
 					ImGui::EndPopup();
 				}

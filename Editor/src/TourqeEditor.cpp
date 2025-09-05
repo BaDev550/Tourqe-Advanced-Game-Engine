@@ -22,6 +22,8 @@ namespace TAGE {
 	{
 		ApplicationSpecifics spec;
 		spec.AppName = "Tourqe Advanced Game Engine";
+		spec.windowSettings.Width = 1280;
+		spec.windowSettings.Height = 720;
 		spec.CommandLineArgs = args;
 
 		return new TAGE::Editor::TourqeEditor(spec);

@@ -28,6 +28,9 @@
     <Filter Include="src\TAGE\AssetManager\Importers">
       <UniqueIdentifier>{BB8F3ABD-2773-49FD-3076-77399CD80F4E}</UniqueIdentifier>
     </Filter>
+    <Filter Include="src\TAGE\AssetManager\Serializers">
+      <UniqueIdentifier>{8325DB3B-EF93-30BB-387D-EBBAA42A2657}</UniqueIdentifier>
+    </Filter>
     <Filter Include="src\TAGE\Common">
       <UniqueIdentifier>{5513F18E-C19E-5E53-CAAF-E14736BABA53}</UniqueIdentifier>
     </Filter>
@@ -200,6 +203,15 @@
     </ClInclude>
     <ClInclude Include="src\TAGE\AssetManager\AssetMetadata.h">
       <Filter>src\TAGE\AssetManager</Filter>
+    </ClInclude>
+    <ClInclude Include="src\TAGE\AssetManager\AssetSerializer.h">
+      <Filter>src\TAGE\AssetManager</Filter>
+    </ClInclude>
+    <ClInclude Include="src\TAGE\AssetManager\Importers\MaterialImporter.h">
+      <Filter>src\TAGE\AssetManager\Importers</Filter>
+    </ClInclude>
+    <ClInclude Include="src\TAGE\AssetManager\Importers\MeshImporter.h">
+      <Filter>src\TAGE\AssetManager\Importers</Filter>
     </ClInclude>
     <ClInclude Include="src\TAGE\AssetManager\Importers\SceneImporter.h">
       <Filter>src\TAGE\AssetManager\Importers</Filter>
@@ -1713,9 +1725,6 @@
     <ClInclude Include="vendor\stb\stb_image_write.h">
       <Filter>vendor\stb</Filter>
     </ClInclude>
-    <ClInclude Include="src\TAGE\AssetManager\Importers\MeshImporter.h" />
-    <ClInclude Include="src\TAGE\AssetManager\AssetSerializer.h" />
-    <ClInclude Include="src\TAGE\AssetManager\Importers\MaterialImporter.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\Platform\OpenGL\OpenGL_Buffers.cpp">
@@ -1775,11 +1784,29 @@
     <ClCompile Include="src\TAGE\AssetManager\AssetManagerRuntime.cpp">
       <Filter>src\TAGE\AssetManager</Filter>
     </ClCompile>
+    <ClCompile Include="src\TAGE\AssetManager\AssetSerializer.cpp">
+      <Filter>src\TAGE\AssetManager</Filter>
+    </ClCompile>
+    <ClCompile Include="src\TAGE\AssetManager\Importers\MaterialImporter.cpp">
+      <Filter>src\TAGE\AssetManager\Importers</Filter>
+    </ClCompile>
+    <ClCompile Include="src\TAGE\AssetManager\Importers\MeshImporter.cpp">
+      <Filter>src\TAGE\AssetManager\Importers</Filter>
+    </ClCompile>
     <ClCompile Include="src\TAGE\AssetManager\Importers\SceneImporter.cpp">
+      <Filter>src\TAGE\AssetManager\Importers</Filter>
+    </ClCompile>
+    <ClCompile Include="src\TAGE\AssetManager\Importers\StaticMeshImporter.cpp">
       <Filter>src\TAGE\AssetManager\Importers</Filter>
     </ClCompile>
     <ClCompile Include="src\TAGE\AssetManager\Importers\TextureImporter.cpp">
       <Filter>src\TAGE\AssetManager\Importers</Filter>
+    </ClCompile>
+    <ClCompile Include="src\TAGE\AssetManager\Serializers\MaterialSerializer.cpp">
+      <Filter>src\TAGE\AssetManager\Serializers</Filter>
+    </ClCompile>
+    <ClCompile Include="src\TAGE\AssetManager\Serializers\MeshSerializer.cpp">
+      <Filter>src\TAGE\AssetManager\Serializers</Filter>
     </ClCompile>
     <ClCompile Include="src\TAGE\Common\TMath.cpp">
       <Filter>src\TAGE\Common</Filter>
@@ -1949,11 +1976,5 @@
     <ClCompile Include="vendor\stb\stb_image.cpp">
       <Filter>vendor\stb</Filter>
     </ClCompile>
-    <ClCompile Include="src\TAGE\AssetManager\Importers\MeshImporter.cpp" />
-    <ClCompile Include="src\TAGE\AssetManager\Serializers\MeshSerializer.cpp" />
-    <ClCompile Include="src\TAGE\AssetManager\AssetSerializer.cpp" />
-    <ClCompile Include="src\TAGE\AssetManager\Serializers\MaterialSerializer.cpp" />
-    <ClCompile Include="src\TAGE\AssetManager\Importers\StaticMeshImporter.cpp" />
-    <ClCompile Include="src\TAGE\AssetManager\Importers\MaterialImporter.cpp" />
   </ItemGroup>
 </Project>

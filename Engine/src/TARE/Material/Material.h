@@ -44,6 +44,8 @@ namespace TARE
 		Colors _Colors;
 	public:
 		void SetTextureMaps(const TextureMaps& maps) { _TextureMaps = maps; }
+		void SetColors(const Colors& colors) { _Colors = colors; }
 		TextureMaps GetTextureMaps() const { return _TextureMaps; }
+		Colors GetColors() const { return _Colors; }
 	};
 }

@@ -126,6 +126,7 @@ namespace TAGE {
 	class ScriptEngine
 	{
 	public:
+		static bool IsInitialized() { return s_Initialized; }
 		static void Init();
 		static void Shutdown();
 
@@ -154,6 +155,8 @@ namespace TAGE {
 
 		friend class ScriptClass;
 		friend class ScriptGlue;
+
+		static inline bool s_Initialized = false;
 	};
 
 	namespace Utils {
