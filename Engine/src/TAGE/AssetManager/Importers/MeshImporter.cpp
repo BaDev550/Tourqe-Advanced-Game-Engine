@@ -56,8 +56,10 @@ namespace TAGE {
 		type = hasBones ? ModelType::SKINNED_MODEL : ModelType::MODEL;
 
 		if (type == ModelType::MODEL) {
-			sm_importer.ProcessNode(to, model, scene->mRootNode, scene);
+			sm_importer.ProcessNode(filepath, to, model, scene->mRootNode, scene);
 			StaticMeshSerializer::Serialize(model, to.replace_extension(".tmesh"));
+			std::filesystem::path relativePath = std::filesystem::relative(to.replace_extension(".tmesh"), Project::GetAssetDirectory());
+			Project::GetActive()->GetEditorAssetManager()->ImportAsset(relativePath);
 		}
 
 		return model;

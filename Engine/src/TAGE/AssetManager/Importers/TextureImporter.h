@@ -8,5 +8,6 @@ namespace TAGE {
 	public:
 		static MEM::Ref<TARE::Texture2D> ImportTexture2D(AssetHandle handle, const AssetMetadata& metadata);
 		static MEM::Ref<TARE::Texture2D> LoadTexture2D(const std::filesystem::path& filepath);
+		static bool WriteTextureTo(const std::filesystem::path& filepath, const std::filesystem::path& to = "");
 	};
 }

@@ -25,24 +25,52 @@ namespace TAGE::Editor {
                     auto showTexture = [=](TAGE::AssetHandle handle, const char* label, TextureType type) {
                         auto texture = AssetManager::GetAsset<TARE::Texture2D>(handle);
                         if (texture) {
-                            if (ImGui::ImageButton(("IMAGE##" + std::string(label)).c_str(), (ImTextureID)(void*)texture->GetID(), { 64, 64 }, { 1, 0 }, { 0, 1 })) {
-								SelectTexture(type);
-								Project::GetActive()->GetEditorAssetManager()->SaveAsset(s_CurrentMaterialHandle);
+                            ImGui::Image((ImTextureID)(void*)texture->GetID(), { 64, 64 }, { 1, 0 }, { 0, 1 });
+                            ImGui::SameLine();
+                        }
+
+                        {
+                            auto& assetManager = *Project::GetActive()->GetEditorAssetManager();
+                            auto textureHandles = assetManager.GetHandlesWithType(AssetType::Texture);
+
+                            std::vector<AssetHandle> handles;
+                            std::vector<std::string> names;
+
+                            for (const auto& h : textureHandles) {
+                                if (AssetManager::IsAssetHandleValid(h)) {
+                                    handles.push_back(h);
+                                    names.push_back(assetManager.GetMetadata(h).FilePath.stem().string());
+                                }
                             }
-							ImGui::SameLine();
-                            if (ImGui::Button(("Remove##" + std::string(label)).c_str())) {
-								s_CurrentMaterial->SetTexture(type, 0);
+
+                            int currentIndex = -1;
+                            if (handle) {
+                                for (size_t i = 0; i < handles.size(); ++i) {
+                                    if (handles[i] == handle) {
+                                        currentIndex = static_cast<int>(i);
+                                        break;
+                                    }
+                                }
+                            }
+
+                            if (ImGui::BeginCombo(("Texture " + std::string(label)).c_str(), currentIndex >= 0 ? names[currentIndex].c_str() : "Select...")) {
+                                for (int i = 0; i < static_cast<int>(names.size()); ++i) {
+                                    bool selected = (i == currentIndex);
+                                    if (ImGui::Selectable(names[i].c_str(), selected)) {
+                                        currentIndex = i;
+
+                                        auto& s_CurrentMaterial = AssetManager::GetAsset<TARE::Material>(s_CurrentMaterialHandle);
+                                        s_CurrentMaterial->SetTexture(type, handles[i]);
+                                        Project::GetActive()->GetEditorAssetManager()->SaveAsset(s_CurrentMaterialHandle);
+                                    }
+                                    if (selected) ImGui::SetItemDefaultFocus();
+                                }
+                                ImGui::EndCombo();
                             }
                         }
-                        else {
-                            if (ImGui::Button(("Select Texture" + std::string(label)).c_str())) {
-                                SelectTexture(type);
-                                Project::GetActive()->GetEditorAssetManager()->SaveAsset(s_CurrentMaterialHandle);
-                            }
-                        }
-                        if (ImGui::CollapsingHeader(("Debug Info ##" + std::string(label)).c_str())) {
-                            ImGui::Text("%s", label);
-                            ImGui::Text("%s Handle: %llu", label, handle);
+						ImGui::SameLine();
+                        if (ImGui::Button(("Remove##" + std::string(label)).c_str())) {
+                            s_CurrentMaterial->SetTexture(type, 0);
                         }
                         };
 

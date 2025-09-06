@@ -16,12 +16,13 @@ namespace TAGE {
 
 	class StaticMeshImporter {
 	public:
-		void ProcessNode(const std::filesystem::path& filepath, MEM::Ref<TARE::Model>& model, aiNode* node, const aiScene* scene);
+		void ProcessNode(const std::filesystem::path& base, const std::filesystem::path& filepath, MEM::Ref<TARE::Model>& model, aiNode* node, const aiScene* scene);
 	private:
 		MEM::Ref<TARE::Mesh> ProcessMesh(MEM::Ref<TARE::Model>& model, aiMesh* mesh, const aiScene* scene);
 		MEM::Ref<TARE::Material> LoadMaterials(aiMesh* mesh, const aiScene* scene);
 		void LoadTextureToMaterial(TextureType type, aiMaterial* material, MEM::Ref<TARE::Material>& outMaterial);
 
-		std::filesystem::path _FilePath;
+		std::filesystem::path _SourcePath;
+		std::filesystem::path _TargetPath;
 	};
 }

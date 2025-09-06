@@ -2,6 +2,7 @@
 #include "TAGE/World/Components/Components.h"
 #include "TAGE/Scripting/ScriptEngine.h"
 #include "TAGE/Utilities/Platform.h"
+#include "Modals/MaterialEditor.h"
 
 #include <imgui.h>
 #include <imgui_internal.h>
@@ -379,12 +380,7 @@ namespace TAGE::Editor {
 
 		DrawComponent<MeshComponent>("Mesh", entity, [](MeshComponent& component)
 			{
-				if (!component.Handle)
-				{
-					ImGui::Text("Mesh not loaded.");
-				}
 				auto& assetManager = *Project::GetActive()->GetEditorAssetManager();
-
 				{
 					auto meshHandles = assetManager.GetHandlesWithType(AssetType::StaticMesh);
 
@@ -424,8 +420,32 @@ namespace TAGE::Editor {
 					}
 				}
 
-				ImGui::Checkbox("Visible", &component.IsVisible);
-				ImGui::Checkbox("Cast Shadows", &component.CastShadows);
+				if (!component.Handle)
+				{
+					ImGui::Text("Mesh not loaded.");
+				}
+				else {
+					auto meshes = component.Handle->GetMeshes();
+					for (auto& mesh : meshes)
+					{
+						auto& material = mesh->GetMaterial();
+						ImGui::PushID(material->_handle);
+
+						if (material)
+						{
+							ImGui::Text("Material: %s", assetManager.GetMetadata(material->_handle).FilePath.stem().string().c_str());
+							ImGui::SameLine();
+						}
+						if (ImGui::Button("Edit##Material"))
+						{
+							MaterialEditor::OpenModal(material->_handle);
+						}
+						ImGui::PopID();
+					}
+
+					ImGui::Checkbox("Visible", &component.IsVisible);
+					ImGui::Checkbox("Cast Shadows", &component.CastShadows);
+				}
 			});
 
 		DrawComponent<CameraComponent>("Camera", entity, [](CameraComponent& component)

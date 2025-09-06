@@ -50,8 +50,7 @@ namespace TAGE {
 			std::filesystem::create_directories(projectDir / config.CacheDirectory / "Logs");
 			std::filesystem::create_directories(projectDir / config.ConfigDirectory);
 			std::filesystem::create_directories(projectDir / config.AssetDirectory);
-			std::filesystem::create_directories(projectDir / "Scripts" / "src");
-			
+
 			std::ofstream(projectDir / config.CacheDirectory / config.AssetRegistryPath);
 			scene_serializer.Serialize(projectDir / config.AssetDirectory / (startupScene + ".scene"));
 			std::ofstream(configDir / "project-render.pconfig");
@@ -165,7 +164,7 @@ namespace TAGE {
 		premake << "    targetdir (\"Binaries\")\n";
 		premake << "    objdir (\"Intermediates\")\n";
 		premake << "    links { \"ScriptCore\" }\n";
-		premake << "    files { \"Scripts/src/**.cs\", \"Scripts/properties/**.cs\" }\n";
+		premake << "    files { \"Assets/**.cs\" }\n";
 		premake << "\n";
 		premake << "    filter \"configurations:Debug\"\n";
 		premake << "        runtime \"Debug\"\n";

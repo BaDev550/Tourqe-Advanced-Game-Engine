@@ -154,7 +154,6 @@ namespace TAGE::Launcher {
 
 		for (const auto& proj : LauncherSave::GetProjects()) {
 			ImGui::BeginChild(proj.Name.c_str(), ImVec2(cardWidth, cardHeight), true, ImGuiWindowFlags_NoScrollbar);
-			ImGui::Text("[Thumbnail]");
 			ImGui::TextWrapped(proj.Name.c_str());
 			ImGui::TextWrapped(proj.Path.string().c_str());
 

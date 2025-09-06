@@ -4,6 +4,7 @@
 #include "TAGE/Project/Project.h"
 
 #define STB_DXT_IMPLEMENTATION
+#define STB_IMAGE_WRITE_IMPLEMENTATION
 #include <stb/stb_dxt.h>
 
 #include <stb/stb_image.h>
@@ -15,6 +16,31 @@ namespace TAGE {
 		PROFILE_FUNCTION();
 
 		return LoadTexture2D(Project::GetAssetDirectory() / metadata.FilePath);
+	}
+
+	bool TextureImporter::WriteTextureTo(const std::filesystem::path& filepath, const std::filesystem::path& to)
+	{
+		PROFILE_FUNCTION();
+
+		int width = 0, height = 0, channels = 0;
+		Buffer data;
+		if (!to.empty()) {
+			data.Data = stbi_load(filepath.string().c_str(), &width, &height, &channels, 0);
+			if (channels == 4) {
+				stbi_write_png(to.string().c_str(), width, height, channels, data.Data, width * channels);
+			}
+			else if (channels == 3) {
+				stbi_write_jpg(to.string().c_str(), width, height, channels, data.Data, width * channels);
+			}
+		}
+
+		if (data.Data != nullptr) {
+			data.Release();
+			return true;
+		}
+		else {
+			LOG_ERROR("Failed to write texture to: ", to.string());
+		}
 	}
 
 	MEM::Ref<TARE::Texture2D> TextureImporter::LoadTexture2D(const std::filesystem::path& filepath)
