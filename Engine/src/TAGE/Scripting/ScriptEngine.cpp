@@ -107,7 +107,7 @@ namespace TAGE {
 				LOG_ERROR("Unknown field type: {}", typeName);
 				return ScriptFieldType::None;
 			}
-
+			
 			return it->second;
 		}
 
@@ -151,6 +151,9 @@ namespace TAGE {
 		MonoAssembly* AppAssembly = nullptr;
 		MonoImage* AppAssemblyImage = nullptr;
 
+		std::filesystem::path CoreAssemblyFilepath;
+		std::filesystem::path AppAssemblyFilepath;
+
 		ScriptClass EntityClass;
 		std::unordered_map<std::string, MEM::Ref<ScriptClass>> EntityClasses;
 		std::unordered_map<UUID, MEM::Ref<ScriptInstance>> EntityInstances;
@@ -165,12 +168,13 @@ namespace TAGE {
 	{
 		s_Data = new ScriptEngineData();
 		InitMono();
+		ScriptGlue::RegisterFunctions();
+
 		LoadAssembly("Resources/Scripts/ScriptCore.dll");
 		LoadAppAssembly(Project::GetActive()->GetScriptPath());
 		LoadAssemblyClasses();
 		
 		ScriptGlue::RegisterComponents();
-		ScriptGlue::RegisterFunctions();
 
 		s_Data->EntityClass = ScriptClass("TAGE", "Entity", true);
 		s_Initialized = true;
@@ -183,17 +187,33 @@ namespace TAGE {
 		LOG_INFO("Script Engine Destroyed");
 	}
 
+	void ScriptEngine::ReloadAssembly()
+	{
+		mono_domain_set(mono_get_root_domain(), false);
+
+		mono_domain_unload(s_Data->AppDomain);
+
+		LoadAssembly(s_Data->CoreAssemblyFilepath);
+		LoadAppAssembly(s_Data->AppAssemblyFilepath);
+		LoadAssemblyClasses();
+		s_Data->EntityClass = ScriptClass("TAGE", "Entity", true);
+
+		ScriptGlue::RegisterComponents();
+	}
+
 	void ScriptEngine::LoadAssembly(const std::filesystem::path& filePath)
 	{
 		s_Data->AppDomain = mono_domain_create_appdomain("TAGEScriptRuntime", nullptr);
 		mono_domain_set(s_Data->AppDomain, true);
 
+		s_Data->CoreAssemblyFilepath = filePath;
 		s_Data->CoreAssembly = Utils::LoadMonoAssembly(filePath);
 		s_Data->CoreAssemblyImage = mono_assembly_get_image(s_Data->CoreAssembly);
 	}
 
 	void ScriptEngine::LoadAppAssembly(const std::filesystem::path& filePath)
 	{
+		s_Data->AppAssemblyFilepath = filePath;
 		s_Data->AppAssembly = Utils::LoadMonoAssembly(filePath);
 		s_Data->AppAssemblyImage = mono_assembly_get_image(s_Data->AppAssembly);
 	}
@@ -284,6 +304,12 @@ namespace TAGE {
 		return it->second;
 	}
 
+	MonoObject* ScriptEngine::GetManagedInstance(UUID uuid)
+	{
+		ASSERT_NOMSG(s_Data->EntityInstances.find(uuid) != s_Data->EntityInstances.end());
+		return s_Data->EntityInstances.at(uuid)->GetManagedObject();
+	}
+
 	void ScriptEngine::InitMono()
 	{
 		mono_set_assemblies_path("mono/lib");
@@ -293,13 +319,13 @@ namespace TAGE {
 		s_Data->RootDomain = rootDomain;
 	}
 
-
 	void ScriptEngine::DestroyMono()
 	{
-		//mono_domain_unload(s_Data->AppDomain);
+		mono_domain_set(mono_get_root_domain(), false);
+		mono_domain_unload(s_Data->AppDomain);
 		s_Data->AppDomain = nullptr;
 
-		//mono_jit_cleanup(s_Data->RootDomain);
+		mono_jit_cleanup(s_Data->RootDomain);
 		s_Data->RootDomain = nullptr;
 	}
 	
@@ -352,7 +378,7 @@ namespace TAGE {
 					MonoType* type = mono_field_get_type(field);
 					ScriptFieldType fieldType = Utils::MonoTypeToScriptFieldType(type);
 					LOG_WARN("   {} - ({})", fieldName, Utils::FieldTypeToString(fieldType));
-
+					
 					scriptClass->_Fields[fieldName] = { fieldName, fieldType, field };
 				}
 			}

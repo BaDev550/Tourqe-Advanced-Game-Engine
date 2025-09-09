@@ -1,6 +1,6 @@
 #pragma once
 
-namespace TAGE::Editor {
+namespace TAGE::GUI {
 	class ProjectSettingsPanel
 	{
 	public:

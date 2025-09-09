@@ -7,15 +7,15 @@
 namespace TAGE {
 	MEM::Ref<TARE::Model> MeshImporter::ImportSourceModel(AssetHandle handle, const AssetMetadata& metadata)
 	{
-		return SerializeModel(Project::GetAssetDirectory() / metadata.InputPath, Project::GetAssetDirectory() / metadata.FilePath);
+		return SerializeModel(metadata.FilePath);
 	}
 
 	MEM::Ref<TARE::Model> MeshImporter::ImportStaticMesh(AssetHandle handle, const AssetMetadata& metadata)
 	{
-		return DeserializeModel(handle, Project::GetAssetDirectory() / metadata.FilePath);
+		return DeserializeModel(handle, metadata.FilePath);
 	}
 
-	MEM::Ref<TARE::Model> MeshImporter::DeserializeModel(AssetHandle handle, std::filesystem::path& filepath)
+	MEM::Ref<TARE::Model> MeshImporter::DeserializeModel(AssetHandle handle, const std::filesystem::path& filepath)
 	{
 		MEM::Ref<TARE::Model> model = std::dynamic_pointer_cast<TARE::Model>(StaticMeshSerializer::Deserialize(filepath));
 		model->_handle = handle;
@@ -23,7 +23,7 @@ namespace TAGE {
 		return model;
 	}
 
-	MEM::Ref<TARE::Model> MeshImporter::SerializeModel(std::filesystem::path& filepath, std::filesystem::path& to)
+	MEM::Ref<TARE::Model> MeshImporter::SerializeModel(const std::filesystem::path& filepath)
 	{
 		StaticMeshImporter sm_importer;
 
@@ -56,10 +56,10 @@ namespace TAGE {
 		type = hasBones ? ModelType::SKINNED_MODEL : ModelType::MODEL;
 
 		if (type == ModelType::MODEL) {
-			sm_importer.ProcessNode(filepath, to, model, scene->mRootNode, scene);
-			StaticMeshSerializer::Serialize(model, to.replace_extension(".tmesh"));
-			std::filesystem::path relativePath = std::filesystem::relative(to.replace_extension(".tmesh"), Project::GetAssetDirectory());
-			Project::GetActive()->GetEditorAssetManager()->ImportAsset(relativePath);
+			sm_importer.ProcessNode(filepath, model, scene->mRootNode, scene);
+			std::filesystem::path serializedPath = filepath;
+			StaticMeshSerializer::Serialize(model, serializedPath.replace_extension(".tmesh"));
+			Project::GetActive()->GetEditorAssetManager()->ImportAsset(serializedPath.replace_extension(".tmesh"));
 		}
 
 		return model;

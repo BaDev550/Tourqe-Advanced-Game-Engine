@@ -26,6 +26,7 @@ namespace TAGE {
         const uint version = 1;
         out.write(reinterpret_cast<const char*>(&magic), sizeof(magic));
         out.write(reinterpret_cast<const char*>(&version), sizeof(version));
+        out.write(reinterpret_cast<const char*>(&staticMesh->_handle), sizeof(AssetHandle));
 
         const auto& meshes = staticMesh->GetMeshes();
         uint meshCount = (uint)meshes.size();
@@ -59,8 +60,10 @@ namespace TAGE {
         }
         uint magic;
         uint version;
+		AssetHandle handle = 0;
         in.read(reinterpret_cast<char*>(&magic), sizeof(magic));
         in.read(reinterpret_cast<char*>(&version), sizeof(version));
+        in.read(reinterpret_cast<char*>(&handle), sizeof(AssetHandle));
 
         if (magic != 0x4D4F444C) { // "MODL"
             LOG_ERROR("Invalid StaticMesh file format: {}", path.string());
@@ -72,6 +75,7 @@ namespace TAGE {
         uint meshCount;
         in.read(reinterpret_cast<char*>(&meshCount), sizeof(meshCount));
         staticMesh->GetMeshes().reserve(meshCount);
+		staticMesh->_handle = handle;
 
         for (uint i = 0; i < meshCount; ++i)
         {

@@ -7,7 +7,7 @@
 namespace TAGE {
 	MEM::Ref<TARE::Material> MaterialImporter::ImportMaterial(AssetHandle handle, const AssetMetadata& metadata)
 	{
-		return LoadMaterial(Project::GetAssetDirectory() / metadata.FilePath);
+		return LoadMaterial(metadata.FilePath);
 	}
 
 	MEM::Ref<TARE::Material> MaterialImporter::LoadMaterial(const std::filesystem::path& filepath)

@@ -27,5 +27,11 @@
 #include "TAGE/World/Systems/System_Renderer.h"
 
 #include "TAGE/Project/Project.h"
+#include "TAGE/AssetManager/AssetManager.h"
+#include "TAGE/AssetManager/Asset.h"
+#include "TAGE/AssetManager/AssetMetadata.h"
+
+#include "TAGE/GUI/GUIFramework.h"
 
 #include "TARE/Camera/EditorCamera.h"
+#include "TARE/TARE.h"

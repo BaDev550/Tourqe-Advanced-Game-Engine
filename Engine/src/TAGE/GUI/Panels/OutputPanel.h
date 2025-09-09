@@ -2,7 +2,7 @@
 #include "imgui.h"
 #include "TAGE/TAGE.h"
 
-namespace TAGE {
+namespace TAGE::GUI {
     class OutputPanel {
     public:
         void OnImGuiRender() {

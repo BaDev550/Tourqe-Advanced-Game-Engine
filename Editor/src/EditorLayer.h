@@ -1,10 +1,10 @@
 #pragma once
 
 #include "TAGE/TAGE.h"
-#include "Panels/SceneHierarchyPanel.h"
-#include "Panels/ContentBrowserPanel.h"
-#include "Panels/ProjectSettingsPanel.h"
-#include "Panels/OutputPanel.h"
+#include "TAGE/GUI/Panels/SceneHierarchyPanel.h"
+#include "TAGE/GUI/Panels/ContentBrowserPanel.h"
+#include "TAGE/GUI/Panels/ProjectSettingsPanel.h"
+#include "TAGE/GUI/Panels/OutputPanel.h"
 
 namespace TAGE::Editor {
 	enum class SceneState
@@ -71,10 +71,10 @@ namespace TAGE::Editor {
 		bool _HoveringGizmo = false;
 		SceneState _SceneState = SceneState::EDIT;
 
-		MEM::Scope<SceneHierarchyPanel> _SceneHierarchyPanel;
-		MEM::Scope<ContentBrowserPanel> _ContentBrowserPanel;
-		MEM::Scope<OutputPanel> _OutputPanel;
-		ProjectSettingsPanel _ProjectSettingsPanel;
+		MEM::Scope<GUI::SceneHierarchyPanel> _SceneHierarchyPanel;
+		MEM::Scope<GUI::ContentBrowserPanel> _ContentBrowserPanel;
+		MEM::Scope<GUI::OutputPanel> _OutputPanel;
+		GUI::ProjectSettingsPanel _ProjectSettingsPanel;
 
 		MEM::Ref<TARE::Texture2D> _PlayIcon;
 		MEM::Ref<TARE::Texture2D> _StopIcon;

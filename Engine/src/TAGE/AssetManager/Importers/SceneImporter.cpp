@@ -9,7 +9,7 @@ namespace TAGE {
 	{
 		PROFILE_FUNCTION();
 
-		return LoadScene(Project::GetAssetDirectory() / metadata.FilePath);
+		return LoadScene(metadata.FilePath);
 	}
 
 	MEM::Ref<Scene> SceneImporter::LoadScene(const std::filesystem::path& filepath)

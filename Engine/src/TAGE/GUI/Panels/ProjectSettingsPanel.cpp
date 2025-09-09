@@ -1,9 +1,10 @@
+#include "tagepch.h"
 #include "ProjectSettingsPanel.h"
 #include "TAGE/Application/Application.h"
 #include "TARE/TARE.h"
 #include "imgui.h"
 
-namespace TAGE::Editor {
+namespace TAGE::GUI {
     void ProjectSettingsPanel::OnImGuiRender()
     {
         if (!_IsOpen) return;
@@ -84,7 +85,7 @@ namespace TAGE::Editor {
 
         if (ImGui::InputText("Scene Path", scenePath, IM_ARRAYSIZE(scenePath)))
         {
-            project->GetConfig().StartScene = scenePath;
+            //project->_Config.StartScene = scenePath;
         }
     }
 }

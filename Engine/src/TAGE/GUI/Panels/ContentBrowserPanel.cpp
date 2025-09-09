@@ -1,18 +1,20 @@
+#include "tagepch.h"
 #include "ContentBrowserPanel.h"
 #include "imgui.h"
+#include "imgui_internal.h"
 #include "TAGE/World/Scene/SceneSerializer.h"
 #include "TAGE/Project/Project.h"
 #include "TAGE/AssetManager/Importers/TextureImporter.h"
 #include "TAGE/Utilities/Platform.h"
 
-#include "Modals/MaterialEditor.h"
+#include "TAGE/GUI/Modals/MaterialEditor.h"
 
 #include "TAGE/AssetManager/AssetManager.h"
 #include "TAGE/AssetManager/AssetSerializer.h"
 
 #include <fstream>
 
-namespace TAGE::Editor {
+namespace TAGE::GUI {
 	ContentBrowserPanel::ContentBrowserPanel()
 	{
 		_DirectoryIcon = TAGE::TextureImporter::LoadTexture2D("Assets/textures/Icons/Folder.png");
@@ -46,13 +48,7 @@ namespace TAGE::Editor {
 		if (ImGui::Button("Import Asset")) {
 			std::filesystem::path filepath = Platform::FileDialog::OpenFile("All Files (*.*)\0*.*\0");
 			if (!filepath.empty()) {
-				std::filesystem::path absFile = std::filesystem::absolute(filepath);
-				std::filesystem::path targetPath = Project::GetAssetDirectory() / std::filesystem::relative(_CurrentDirectory, Project::GetAssetDirectory()) / filepath.filename();
-
-				LOG_INFO("Importing from: {}", filepath.string());
-				LOG_INFO("Target path: {}", targetPath.string());
-
-				Project::GetActive()->GetEditorAssetManager()->ImportAsset(filepath, targetPath);
+				Project::GetActive()->GetEditorAssetManager()->ImportAsset(filepath);
 				RefreshAssetTree();
 			}
 		}
@@ -73,19 +69,27 @@ namespace TAGE::Editor {
 		ImGui::Columns(columnCount, 0, false);
 
 		for (auto& entry : _DirectoryEntries) {
+			if (!std::filesystem::exists(entry.Path))
+				continue;
+
 			MEM::Ref<TARE::Texture2D> icon = entry.IsDirectory ? _DirectoryIcon : _FileIcon;
 			std::string item = entry.Path.filename().string();
 
 			ImGui::PushID(item.c_str());
 			ImGui::PushStyleColor(ImGuiCol_Button, ImVec4(0, 0, 0, 0));
 
-			if (ImGui::ImageButton("##ITEM", (ImTextureID)(void*)icon->GetID(), { _ThumbnailSize, _ThumbnailSize }, { 1, 0 }, { 0, 1 })) {
+			if (ImGui::ImageButton("CBIMAGE", (ImTextureID)icon->GetID(), {_ThumbnailSize, _ThumbnailSize}, {1, 0}, {0, 1})) {
 				if (entry.Path.extension() == ".tmat") {
 					MaterialEditor::OpenModal(entry.Handle);
 				}
 			}
 
 			if (ImGui::BeginPopupContextItem()) {
+				if (ImGui::MenuItem("Import")) {
+					AssetHandle handle = Project::GetActive()->GetEditorAssetManager()->ImportAsset(entry.Path);
+					RefreshAssetTree();
+				}
+
 				if (ImGui::MenuItem("Rename")) {
 					static char renameBuffer[128];
 					strcpy(renameBuffer, entry.Path.filename().string().c_str());
@@ -158,15 +162,10 @@ namespace TAGE::Editor {
 			}
 
 			if (ImGui::MenuItem("Create Material")) {
-				std::filesystem::path matPath = _CurrentDirectory / "NewMaterial.tmat";
-				if (!std::filesystem::exists(matPath)) {
-					MEM::Ref<TARE::Material> newMat = MEM::MakeRef<TARE::Material>();
-					MaterialSerializer serializer;
-					serializer.Serialize(newMat, matPath);
-					std::filesystem::path relativePath = std::filesystem::relative(matPath, Project::GetAssetDirectory());
-					Project::GetActive()->GetEditorAssetManager()->ImportAsset(relativePath);
-					RefreshAssetTree();
-				}
+				std::filesystem::path matName = "NewMaterial.tmat";
+				auto filepath = (Project::GetAssetDirectory() / _CurrentDirectory / matName);
+				Project::GetActive()->GetEditorAssetManager()->CreateNewAsset<TARE::Material>(filepath.filename().string(), filepath.parent_path().string());
+				RefreshAssetTree();
 			}
 
 			if (ImGui::MenuItem("Create Folder")) {
@@ -211,19 +210,11 @@ namespace TAGE::Editor {
 
 			if (!dirEntry.IsDirectory)
 			{
-				auto handle = Project::GetActive()->GetEditorAssetManager()->TryToGetLoadedAssetFromPath(
-					std::filesystem::relative(dirEntry.Path, Project::GetAssetDirectory()));
+				auto handle = Project::GetActive()->GetEditorAssetManager()->GetMetadata(dirEntry.Path).Handle;
 				dirEntry.Handle = handle;
 			}
 
 			_DirectoryEntries.push_back(dirEntry);
 		}
-
-		std::sort(_DirectoryEntries.begin(), _DirectoryEntries.end(),
-			[](const DirectoryEntry& a, const DirectoryEntry& b) {
-				if (a.IsDirectory != b.IsDirectory)
-					return a.IsDirectory > b.IsDirectory;
-				return a.Path.filename().string() < b.Path.filename().string();
-			});
 	}
 }

@@ -1,4 +1,5 @@
 ﻿#include "EditorLayer.h"
+
 #include "imgui.h"
 #include "ImGuizmo.h"
 #include "imgui_internal.h"
@@ -10,6 +11,7 @@
 #include "TAGE/Utilities/Platform.h"
 #include "TAGE/AssetManager/Importers/TextureImporter.h"
 #include "TAGE/Common/TMath.h"
+#include "TAGE/Scripting/ScriptEngine.h"
 
 namespace TAGE::Editor {
 	EditorLayer::EditorLayer()
@@ -22,8 +24,8 @@ namespace TAGE::Editor {
 		_EditorScene = MEM::MakeRef<Scene>("Editor Scene - 1");
 		_ActiveScene = _EditorScene;
 		_EditorCamera = MEM::MakeRef<TARE::EditorCamera>(_ActiveScene->GetWidth(), _ActiveScene->GetHeight());
-		_SceneHierarchyPanel = MEM::MakeScope<SceneHierarchyPanel>(_ActiveScene);
-		_OutputPanel = MEM::MakeScope<OutputPanel>();
+		_SceneHierarchyPanel = MEM::MakeScope<GUI::SceneHierarchyPanel>(_ActiveScene);
+		_OutputPanel = MEM::MakeScope<GUI::OutputPanel>();
 
 		_PlayIcon =      TAGE::TextureImporter::LoadTexture2D("Assets/textures/Icons/Play.png");
 		_StopIcon =      TAGE::TextureImporter::LoadTexture2D("Assets/textures/Icons/Stop.png");
@@ -218,7 +220,7 @@ namespace TAGE::Editor {
 
 		if (newScene)
 		{
-			_EditorSavePath = Project::GetActive()->GetEditorAssetManager()->GetFilePath(handle);
+			_EditorSavePath = Project::GetAssetDirectory() / Project::GetActive()->GetEditorAssetManager()->GetFilePath(handle);
 			_EditorScene = newScene;
 			_EditorScene->OnResize((uint)_ViewportSize.x, (uint)_ViewportSize.y);
 			_SceneHierarchyPanel->SetContext(_EditorScene);
@@ -233,6 +235,8 @@ namespace TAGE::Editor {
 		if (!filepath.empty()) {
 			SceneSerializer serializer(_ActiveScene);
 			serializer.Serialize(filepath);
+			std::filesystem::path relativePath = std::filesystem::relative(filepath, Project::GetAssetDirectory());
+			Project::GetActive()->GetEditorAssetManager()->ImportAsset(relativePath);
 		}
 	}
 
@@ -254,7 +258,7 @@ namespace TAGE::Editor {
 		if (Project::Load(path)) {
 			AssetHandle startSceneHandle = Project::GetActive()->GetEditorAssetManager()->ImportAsset(Project::GetActive()->GetConfig().StartScene);
 			OpenScene(startSceneHandle);
-			_ContentBrowserPanel = MEM::MakeScope<ContentBrowserPanel>();
+			_ContentBrowserPanel = MEM::MakeScope<GUI::ContentBrowserPanel>();
 			_ContentBrowserPanel->Init();
 		}
 	}
@@ -333,9 +337,11 @@ namespace TAGE::Editor {
 		ImGui::SetNextWindowPos(viewport->WorkPos);
 		ImGui::SetNextWindowSize(viewport->WorkSize);
 		ImGui::SetNextWindowViewport(viewport->ID);
+
 		ImGui::PushStyleVar(ImGuiStyleVar_WindowRounding, 0.0f);
 		ImGui::PushStyleVar(ImGuiStyleVar_WindowBorderSize, 0.0f);
-		window_flags |= ImGuiWindowFlags_NoTitleBar | ImGuiWindowFlags_NoCollapse | ImGuiWindowFlags_NoResize | ImGuiWindowFlags_NoMove;
+		window_flags |= ImGuiWindowFlags_NoTitleBar | ImGuiWindowFlags_NoCollapse |
+			ImGuiWindowFlags_NoResize | ImGuiWindowFlags_NoMove;
 		window_flags |= ImGuiWindowFlags_NoBringToFrontOnFocus | ImGuiWindowFlags_NoNavFocus;
 
 		ImGui::PushStyleVar(ImGuiStyleVar_WindowPadding, ImVec2(0.0f, 0.0f));
@@ -343,6 +349,7 @@ namespace TAGE::Editor {
 		ImGui::PopStyleVar(3);
 
 		UI_DrawMainMenuBar();
+
 		ImGui::PushStyleVar(ImGuiStyleVar_ItemSpacing, { ImGui::GetStyle().ItemSpacing.x, 0.0f });
 		UI_DrawToolbar();
 		ImGui::PopStyleVar();
@@ -414,6 +421,14 @@ namespace TAGE::Editor {
 				ImGui::EndMenu();
 			}
 
+			if (ImGui::BeginMenu("Tools"))
+			{	
+				if (ImGui::MenuItem("Reload Assembly")) {
+					ScriptEngine::ReloadAssembly();
+				}
+				ImGui::EndMenu();
+			}
+
 			if (ImGui::BeginMenu("Viewport"))
 			{
 				if (ImGui::MenuItem("Save Layout")) SaveLayout();
@@ -445,7 +460,7 @@ namespace TAGE::Editor {
 		ImGui::PushStyleColor(ImGuiCol_ButtonActive, ImVec4(0.4f, 0.4f, 0.45f, 0.1f));
 
 		MEM::Ref<TARE::Texture2D> playIcon = (_SceneState == SceneState::EDIT || _SceneState == SceneState::SIMULATE) ? _PlayIcon : _StopIcon;
-		if (ImGui::ImageButton("PlayStop", (ImTextureID)playIcon->GetID(), buttonSize))
+		if (ImGui::ImageButton("PLAY", (ImTextureID)(void*)playIcon->GetID(), buttonSize))
 		{
 			if (_SceneState == SceneState::EDIT || _SceneState == SceneState::SIMULATE)
 				OnScenePlay();
@@ -457,7 +472,7 @@ namespace TAGE::Editor {
 		ImGui::SameLine();
 
 		MEM::Ref<TARE::Texture2D> simulateIcon = (_SceneState == SceneState::EDIT || _SceneState == SceneState::PLAY) ? _SimulateIcon : _StopIcon;
-		if (ImGui::ImageButton("SimulateStop", (ImTextureID)simulateIcon->GetID(), buttonSize))
+		if (ImGui::ImageButton("SIMULATE", (ImTextureID)simulateIcon->GetID(), buttonSize))
 		{
 			if (_SceneState == SceneState::EDIT || _SceneState == SceneState::PLAY)
 				OnSimulateStart();
@@ -536,21 +551,21 @@ namespace TAGE::Editor {
 		ImVec4 inactiveColor = { 0.0f, 0.0f, 0.0f, 0.0f };
 
 		ImGui::PushStyleColor(ImGuiCol_Button, _GizmoType == ImGuizmo::TRANSLATE ? activeColor : inactiveColor);
-		if (ImGui::ImageButton("TranslateGizmo", (ImTextureID)(uintptr_t)_IconTranslate->GetID(), { buttonSize, buttonSize }, { 0, 1 }, { 1, 0 }))
+		if (ImGui::ImageButton("TRANSLATE", (ImTextureID)(uintptr_t)_IconTranslate->GetID(), { buttonSize, buttonSize }, { 0, 1 }, { 1, 0 }))
 			_GizmoType = ImGuizmo::TRANSLATE;
 		ImGui::PopStyleColor();
 
 		ImGui::SameLine();
 
 		ImGui::PushStyleColor(ImGuiCol_Button, _GizmoType == ImGuizmo::ROTATE ? activeColor : inactiveColor);
-		if (ImGui::ImageButton("RotateGizmo", (ImTextureID)(uintptr_t)_IconRotate->GetID(), { buttonSize, buttonSize }, { 0, 1 }, { 1, 0 }))
+		if (ImGui::ImageButton("ROTATE", (ImTextureID)(uintptr_t)_IconRotate->GetID(), { buttonSize, buttonSize }, { 0, 1 }, { 1, 0 }))
 			_GizmoType = ImGuizmo::ROTATE;
 		ImGui::PopStyleColor();
 
 		ImGui::SameLine();
 
 		ImGui::PushStyleColor(ImGuiCol_Button, _GizmoType == ImGuizmo::SCALE ? activeColor : inactiveColor);
-		if (ImGui::ImageButton("ScaleGizmo", (ImTextureID)(uintptr_t)_IconScale->GetID(), { buttonSize, buttonSize }, { 0, 1 }, { 1, 0 }))
+		if (ImGui::ImageButton("SCALE", (ImTextureID)(uintptr_t)_IconScale->GetID(), { buttonSize, buttonSize }, { 0, 1 }, { 1, 0 }))
 			_GizmoType = ImGuizmo::SCALE;
 		ImGui::PopStyleColor();
 

@@ -54,7 +54,8 @@ namespace TAGE {
         std::string FileDialog::OpenDirectory()
         {
             BROWSEINFO bi = { 0 };
-            bi.lpszTitle = LPCWCHAR("Select a folder");
+            const wchar_t* title = L"Select a folder";
+            bi.lpszTitle = title;
             bi.ulFlags = BIF_RETURNONLYFSDIRS | BIF_NEWDIALOGSTYLE;
 
             PIDLIST_ABSOLUTE pidl = SHBrowseForFolder(&bi);

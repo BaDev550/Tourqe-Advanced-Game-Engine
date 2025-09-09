@@ -27,18 +27,17 @@ namespace TAGE
 		_Monitor = glfwGetPrimaryMonitor();
 		ASSERT(_Monitor, "Failed to get primary monitor");
 		_VideoMode = glfwGetVideoMode(_Monitor);
-		
-		glfwWindowHint(GLFW_RED_BITS, _VideoMode->redBits);
-		glfwWindowHint(GLFW_GREEN_BITS, _VideoMode->greenBits);
-		glfwWindowHint(GLFW_BLUE_BITS, _VideoMode->blueBits);
-		glfwWindowHint(GLFW_REFRESH_RATE, _VideoMode->refreshRate);
-
+	
 		if (properties.Mode == WindowMode::FULLSCREEN)
 		{
 			_Properties.Width = _VideoMode->width;
 			_Properties.Height = _VideoMode->height;
 			glfwWindowHint(GLFW_DECORATED, GLFW_FALSE);
 			glfwWindowHint(GLFW_MAXIMIZED, GLFW_TRUE);
+			glfwWindowHint(GLFW_RED_BITS, _VideoMode->redBits);
+			glfwWindowHint(GLFW_GREEN_BITS, _VideoMode->greenBits);
+			glfwWindowHint(GLFW_BLUE_BITS, _VideoMode->blueBits);
+			glfwWindowHint(GLFW_REFRESH_RATE, _VideoMode->refreshRate);
 			_Window = glfwCreateWindow(_Properties.Width, _Properties.Height, _Properties.Title, _Monitor, nullptr);
 		}
 		else {

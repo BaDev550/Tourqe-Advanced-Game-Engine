@@ -116,7 +116,7 @@ namespace TAGE {
 
 	bool ProjectSerializer::Deserialize(const std::filesystem::path& path)
 	{
-		auto& config = _Project->GetConfig();
+		auto& config = _Project->_Config;
 		YAML::Node data;
 		try {
 			data = YAML::LoadFile(path.string());
@@ -128,6 +128,9 @@ namespace TAGE {
 		auto projectNode = data["Project"];
 		if (!projectNode)
 			return false;
+
+		std::filesystem::path projectPath = path;
+		config.ProjectDirectory = projectPath.parent_path().string();
 
 		config.Name = projectNode["Name"].as<std::string>();
 		config.CacheDirectory = projectNode["CacheDirectory"].as<std::string>();

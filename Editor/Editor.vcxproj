@@ -98,25 +98,10 @@
   <ItemGroup>
     <ClInclude Include="src\EditorLayer.h" />
     <ClInclude Include="src\Gamelayer\GameLayer.h" />
-    <ClInclude Include="src\Modals\MaterialEditor.h" />
-    <ClInclude Include="src\Modals\ModelEditor.h" />
-    <ClInclude Include="src\Panels\AssetManagerPanel.h" />
-    <ClInclude Include="src\Panels\ContentBrowserPanel.h" />
-    <ClInclude Include="src\Panels\OutputPanel.h" />
-    <ClInclude Include="src\Panels\ProjectSettingsPanel.h" />
-    <ClInclude Include="src\Panels\SceneHierarchyPanel.h" />
-    <ClInclude Include="src\Panels\ThumbnailRenderer.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\EditorLayer.cpp" />
     <ClCompile Include="src\Gamelayer\GameLayer.cpp" />
-    <ClCompile Include="src\Modals\MaterialEditor.cpp" />
-    <ClCompile Include="src\Modals\ModelEditor.cpp" />
-    <ClCompile Include="src\Panels\AssetManagerPanel.cpp" />
-    <ClCompile Include="src\Panels\ContentBrowserPanel.cpp" />
-    <ClCompile Include="src\Panels\ProjectSettingsPanel.cpp" />
-    <ClCompile Include="src\Panels\SceneHierarchyPanel.cpp" />
-    <ClCompile Include="src\Panels\ThumbnailRenderer.cpp" />
     <ClCompile Include="src\TourqeEditor.cpp" />
   </ItemGroup>
   <ItemGroup>

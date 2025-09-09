@@ -1,0 +1,83 @@
+Scene: COPIEDSCENE
+Entities:
+  - Entity: 2519846168928343580
+    IdentityComponent:
+      Name: Sun
+    Parent: 0
+    Children:
+      []
+    TransformComponent:
+      Position: [0, 0, 0]
+      Rotation: [25, 25, 0]
+      Scale: [1, 1, 1]
+    LightComponent:
+      Type: 1
+      Color: [1, 1, 1]
+      Range: 1
+      Intensity: 10
+  - Entity: 13923728039091906840
+    IdentityComponent:
+      Name: Player
+    Parent: 0
+    Children:
+      []
+    TransformComponent:
+      Position: [0, 0, 0]
+      Rotation: [0, 0, 0]
+      Scale: [1, 1, 1]
+    MeshComponent:
+      MeshHandle: 15471597938605099692
+    RigidBodyComponent:
+      BodyType: 1
+      LinearFactor: [1, 1, 1]
+      AngularFactor: [0, 0, 0]
+    ColliderComponent:
+      Shape: 2
+      Size: [1, 1.29999995, 1]
+      ResponseType: 2
+    ScriptComponent:
+      Class: Sandbox.Player
+      ScriptFields:
+        - Name: springSpeed
+          Type: Float
+          Data: 1200
+        - Name: walkingSpeed
+          Type: Float
+          Data: 200
+  - Entity: 7595173064698992682
+    IdentityComponent:
+      Name: Cube
+    Parent: 0
+    Children:
+      []
+    TransformComponent:
+      Position: [0, -2.63840628, 0]
+      Rotation: [0, 0, 0]
+      Scale: [5.63390303, 0.154356703, 5.24206257]
+    MeshComponent:
+      MeshHandle: 13034088382026917234
+    RigidBodyComponent:
+      BodyType: 0
+      LinearFactor: [1, 1, 1]
+      AngularFactor: [1, 1, 1]
+    ColliderComponent:
+      Shape: 0
+      Size: [15, 1, 15]
+      ResponseType: 2
+  - Entity: 15734909404559421498
+    IdentityComponent:
+      Name: Cam
+    Parent: 0
+    Children:
+      []
+    TransformComponent:
+      Position: [-4.70846176, 0, 0]
+      Rotation: [0, 1.39999998, 0]
+      Scale: [1, 1, 1]
+    CameraComponent:
+      Camera:
+        AspectRatio: 2.28285718
+        FOV: 45
+        NearClip: 0.0500000007
+        FarClip: 250
+      IsActive: true

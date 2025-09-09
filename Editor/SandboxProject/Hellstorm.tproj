@@ -1,0 +1,7 @@
+Project:
+  Name: Hellstorm
+  CacheDirectory: Cache
+  ConfigDirectory: Config
+  AssetDirectory: Assets
+  AssetRegistryPath: AssetRegistry.tage
+  ScriptModulePath: Binaries/Hellstorm.dll

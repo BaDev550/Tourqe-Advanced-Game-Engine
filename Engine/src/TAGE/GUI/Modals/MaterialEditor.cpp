@@ -1,10 +1,13 @@
+#include "tagepch.h"
 #include "MaterialEditor.h"
 #include "imgui.h"
 
 #include "TAGE/AssetManager/AssetManager.h"
 #include "TAGE/Utilities/Platform.h"
 
-namespace TAGE::Editor {
+#include "TAGE/GUI/GUIFramework.h"
+
+namespace TAGE::GUI {
     static bool s_OpenMaterialModal = false;
     static AssetHandle s_CurrentMaterialHandle = 0;
 
@@ -53,20 +56,12 @@ namespace TAGE::Editor {
                                 }
                             }
 
-                            if (ImGui::BeginCombo(("Texture " + std::string(label)).c_str(), currentIndex >= 0 ? names[currentIndex].c_str() : "Select...")) {
-                                for (int i = 0; i < static_cast<int>(names.size()); ++i) {
-                                    bool selected = (i == currentIndex);
-                                    if (ImGui::Selectable(names[i].c_str(), selected)) {
-                                        currentIndex = i;
-
-                                        auto& s_CurrentMaterial = AssetManager::GetAsset<TARE::Material>(s_CurrentMaterialHandle);
-                                        s_CurrentMaterial->SetTexture(type, handles[i]);
-                                        Project::GetActive()->GetEditorAssetManager()->SaveAsset(s_CurrentMaterialHandle);
-                                    }
-                                    if (selected) ImGui::SetItemDefaultFocus();
+                            if (GUI::GUIFramework::ComboBox(label, currentIndex, names, "Select...")) {
+                                if (currentIndex >= 0 && currentIndex < static_cast<int>(handles.size())) {
+                                    s_CurrentMaterial->SetTexture(type, handles[currentIndex]);
+                                    Project::GetActive()->GetEditorAssetManager()->SaveAsset(s_CurrentMaterialHandle);
                                 }
-                                ImGui::EndCombo();
-                            }
+							}
                         }
 						ImGui::SameLine();
                         if (ImGui::Button(("Remove##" + std::string(label)).c_str())) {
@@ -93,35 +88,6 @@ namespace TAGE::Editor {
 
                 ImGui::End();
             }
-        }
-    }
-
-    void MaterialEditor::SelectTexture(TextureType type)
-    {
-        auto path = Platform::FileDialog::OpenFile(
-            "Image Files (*.png;*.jpg;*.jpeg;*.bmp)\0*.png;*.jpg;*.jpeg;*.bmp\0"
-        );
-
-        if (!path.empty() && std::filesystem::exists(path))
-        {
-            std::filesystem::path sourcePath = std::filesystem::absolute(path);
-            std::filesystem::path targetPath = Project::GetActive()->GetAssetDirectory() / sourcePath.filename();
-
-            try
-            {
-                auto newTextureHandle = Project::GetActive()->GetEditorAssetManager()->ImportAsset(sourcePath, targetPath);
-
-                auto& s_CurrentMaterial = AssetManager::GetAsset<TARE::Material>(s_CurrentMaterialHandle);
-                s_CurrentMaterial->SetTexture(type, newTextureHandle);
-            }
-            catch (const std::exception& e)
-            {
-                LOG_ERROR("Failed to import asset '{}': {}", sourcePath.string(), e.what());
-            }
-        }
-        else
-        {
-            LOG_WARN("File path invalid or does not exist: '{}'", path);
         }
     }
 }

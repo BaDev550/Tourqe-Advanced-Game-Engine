@@ -15,7 +15,7 @@ namespace TAGE {
 	{
 		PROFILE_FUNCTION();
 
-		return LoadTexture2D(Project::GetAssetDirectory() / metadata.FilePath);
+		return LoadTexture2D(metadata.FilePath);
 	}
 
 	bool TextureImporter::WriteTextureTo(const std::filesystem::path& filepath, const std::filesystem::path& to)
@@ -67,6 +67,8 @@ namespace TAGE {
 		}
 		else {
 			LOG_ERROR("Failed to load texture from: ", filepath.string());
+			data.Release();
+			return nullptr;
 		}
 	}
 }

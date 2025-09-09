@@ -18,6 +18,7 @@ namespace TAGE {
 		std::filesystem::path ConfigDirectory;
 		std::filesystem::path AssetRegistryPath;
 		std::filesystem::path ScriptPath;
+		std::filesystem::path ProjectDirectory;
 
 		ProjectConfig()
 			: AssetDirectory("Assets")
@@ -43,7 +44,7 @@ namespace TAGE {
 		}
 		static std::filesystem::path GetAssetDirectory() {
 			ASSERT_NOMSG(_ActiveProject);
-			return GetProjectDirectory() / _ActiveProject->_Config.AssetDirectory;
+			return _ActiveProject->GetFullAssetDirectory();
 		}
 		static std::filesystem::path GetAssetRegistryPath() {
 			ASSERT_NOMSG(_ActiveProject);
@@ -62,11 +63,15 @@ namespace TAGE {
 			return GetProjectDirectory() / _ActiveProject->_Config.ConfigDirectory;
 		}
 
-		ProjectConfig& GetConfig() { return _Config; }
+		const ProjectConfig& GetConfig() const { return _Config; }
 		static MEM::Ref<Project> GetActive() { return _ActiveProject; }
 		MEM::Ref<AssetManagerBase>    GetAssetManager() { return _AssetManager; }
 		MEM::Ref<AssetManagerRuntime> GetRuntimeAssetManager() { return std::static_pointer_cast<AssetManagerRuntime>(_AssetManager); }
 		MEM::Ref<AssetManagerEditor>  GetEditorAssetManager() {  return std::static_pointer_cast<AssetManagerEditor>(_AssetManager); }
+
+		std::filesystem::path GetFullAssetDirectory() const { 
+			return std::filesystem::path(GetConfig().ProjectDirectory) / GetConfig().AssetDirectory;
+		}
 
 		static MEM::Ref<Project> New();
 		static MEM::Ref<Project> Load(const std::filesystem::path& path);
@@ -79,5 +84,9 @@ namespace TAGE {
 		MEM::Ref<AssetManagerBase> _AssetManager;
 
 		inline static MEM::Ref<Project> _ActiveProject;
+
+		friend class ProjectSerializer;
+		friend class ProjectSettingsSerializer;
+		friend class ProjectSettingsPanel;
 	};
 }

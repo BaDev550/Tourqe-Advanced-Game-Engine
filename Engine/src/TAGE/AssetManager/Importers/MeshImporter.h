@@ -10,19 +10,18 @@ namespace TAGE {
 		static MEM::Ref<TARE::Model> ImportStaticMesh(AssetHandle handle, const AssetMetadata& metadata);
 
 	private:
-		static MEM::Ref<TARE::Model> SerializeModel(std::filesystem::path& filepath, std::filesystem::path& to);
-		static MEM::Ref<TARE::Model> DeserializeModel(AssetHandle handle, std::filesystem::path& filepath);
+		static MEM::Ref<TARE::Model> SerializeModel(const std::filesystem::path& filepath);
+		static MEM::Ref<TARE::Model> DeserializeModel(AssetHandle handle, const std::filesystem::path& filepath);
 	};
 
 	class StaticMeshImporter {
 	public:
-		void ProcessNode(const std::filesystem::path& base, const std::filesystem::path& filepath, MEM::Ref<TARE::Model>& model, aiNode* node, const aiScene* scene);
+		void ProcessNode(const std::filesystem::path& filepath, MEM::Ref<TARE::Model>& model, aiNode* node, const aiScene* scene);
 	private:
 		MEM::Ref<TARE::Mesh> ProcessMesh(MEM::Ref<TARE::Model>& model, aiMesh* mesh, const aiScene* scene);
 		MEM::Ref<TARE::Material> LoadMaterials(aiMesh* mesh, const aiScene* scene);
 		void LoadTextureToMaterial(TextureType type, aiMaterial* material, MEM::Ref<TARE::Material>& outMaterial);
 
 		std::filesystem::path _SourcePath;
-		std::filesystem::path _TargetPath;
 	};
 }

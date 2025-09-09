@@ -103,7 +103,7 @@ namespace TAGE {
 	}
 	bool ProjectSettingsSerializer::DeserializeProjectDefaults(const std::filesystem::path& path)
 	{
-		auto& config = _Project->GetConfig();
+		auto& config = _Project->_Config;
 		YAML::Node data;
 		try {
 			data = YAML::LoadFile(path.string());

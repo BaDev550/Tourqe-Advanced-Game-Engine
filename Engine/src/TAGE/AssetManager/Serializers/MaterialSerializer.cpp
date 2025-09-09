@@ -41,6 +41,7 @@ namespace TAGE {
         const uint version = 1;
         out.write(reinterpret_cast<const char*>(&magic), sizeof(magic));
         out.write(reinterpret_cast<const char*>(&version), sizeof(version));
+        out.write(reinterpret_cast<const char*>(&material->_handle), sizeof(AssetHandle));
         out.write(reinterpret_cast<const char*>(&textures), sizeof(TARE::TextureMaps));
 		out.write(reinterpret_cast<const char*>(&colors), sizeof(TARE::Colors));
 		return true;
@@ -56,8 +57,10 @@ namespace TAGE {
 
         uint magic;
         uint version;
+		AssetHandle handle = 0;
         in.read(reinterpret_cast<char*>(&magic), sizeof(magic));
         in.read(reinterpret_cast<char*>(&version), sizeof(version));
+        in.read(reinterpret_cast<char*>(&handle), sizeof(AssetHandle));
 
         if (magic != 0x4D41544C) { // "MATL"
             LOG_ERROR("Invalid Material file format: {}", path.string());
@@ -70,6 +73,7 @@ namespace TAGE {
 		in.read(reinterpret_cast<char*>(&colors), sizeof(colors));
 
         auto material = MEM::MakeRef<TARE::Material>();
+		material->_handle = handle;
         material->SetTextureMaps(maps);
 		material->SetColors(colors);
 

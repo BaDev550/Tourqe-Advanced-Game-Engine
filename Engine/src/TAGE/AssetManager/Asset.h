@@ -22,6 +22,7 @@ namespace TAGE {
 	public:
 		AssetHandle _handle;
 
-		virtual AssetType GetType() const = 0;
+		static AssetType GetStaticType() { return AssetType::None; }
+		virtual AssetType GetType() const { return AssetType::None; }
 	};
 }

@@ -1,6 +1,5 @@
 #include "tagepch.h"
 #include "AssetManager.h"
-#include "AssetImporter.h"
 #include <yaml-cpp/yaml.h>
 
 namespace TAGE {
@@ -29,6 +28,41 @@ namespace TAGE {
         return s_AssetExtensionMap.at(e);
     }
 
+    static AssetType GetAssetTypeFromPath(const std::filesystem::path& path)
+    {
+        return GetAssetTypeFromExtension(path.extension().string());
+    }
+
+    std::filesystem::path AssetManagerEditor::GetRelativePath(const std::filesystem::path& filepath)
+    {
+        std::filesystem::path relativePath = filepath.lexically_normal();
+        std::string temp = filepath.string();
+        if (temp.find(Project::GetAssetDirectory().string()) != std::string::npos)
+        {
+            relativePath = std::filesystem::relative(filepath, Project::GetAssetDirectory());
+            if (relativePath.empty())
+            {
+                relativePath = filepath.lexically_normal();
+            }
+        }
+        return relativePath;
+    }
+
+    std::filesystem::path AssetManagerEditor::GetFileSystemPath(const AssetMetadata& metadata)
+    {
+        return Project::GetAssetDirectory() / metadata.FilePath;
+    }
+
+    std::filesystem::path AssetManagerEditor::GetFileSystemPath(AssetHandle handle)
+    {
+        return GetFileSystemPathString(GetMetadata(handle));
+    }
+
+    std::string AssetManagerEditor::GetFileSystemPathString(const AssetMetadata& metadata)
+    {
+        return GetFileSystemPath(metadata).string();
+    }
+
     YAML::Emitter& operator<<(YAML::Emitter& out, const std::string_view& v) {
         out << std::string(v.data(), v.size());
         return out;
@@ -55,6 +89,17 @@ namespace TAGE {
             return s_NullMetadata;
 
         return it->second;
+    }
+
+    const AssetMetadata& AssetManagerEditor::GetMetadata(const std::filesystem::path& filepath)
+    {
+        const auto relativePath = GetRelativePath(filepath);
+
+        for (auto& [handle, metadata] : _AssetRegistry) {
+            if (metadata.FilePath == relativePath)
+                return metadata;
+        }
+        return {};
     }
 
     AssetMap AssetManagerEditor::GetAssetsWithType(AssetType type) const
@@ -86,22 +131,35 @@ namespace TAGE {
 
     MEM::Ref<Asset> AssetManagerEditor::GetAsset(AssetHandle handle)
     {
-        if (!IsAssetHandleValid(handle))
-            return nullptr;
+        MEM::Ref<Asset> asset = LoadAsset(handle);
+        return asset ? asset : nullptr;
+    }
 
-        MEM::Ref<Asset> asset;
-        if (IsAssetLoaded(handle)) {
-            asset = _LoadedAssets.at(handle);
-            return asset;
-        }
-        else {
-            const AssetMetadata& metadata = GetMetadata(handle);
-            asset = AssetImporter::ImportAsset(handle, metadata);
-            if (!asset) {
-                LOG_ERROR("asset import failed");
+    MEM::Ref<Asset> AssetManagerEditor::LoadAsset(AssetHandle assetHandle)
+    {
+        MEM::Ref<Asset> asset = nullptr;
+        auto metadata = GetMetadata(assetHandle);
+        if (metadata.IsValid())
+        {
+            if (metadata.IsLoaded) {
+                asset = _LoadedAssets[assetHandle];
             }
-            _LoadedAssets[handle] = asset;
-            _AssetRegistry[handle] = metadata;
+            else
+            {
+                if (asset = AssetImporter::ImportAsset(assetHandle, metadata))
+                {
+                    auto metadataLoaded = metadata;
+                    metadataLoaded.IsLoaded = true;
+                    auto absolutePath = GetFileSystemPath(metadata);
+                    _LoadedAssets[assetHandle] = asset;
+                    SetMetadata(assetHandle, metadataLoaded);
+                }
+                else
+                {
+                    LOG_ERROR("AssetManager Failed to load asset {}", metadata.FilePath.string());
+                    return nullptr;
+                }
+            }
         }
         return asset;
     }
@@ -114,56 +172,28 @@ namespace TAGE {
         return _AssetRegistry.at(handle).Type;
     }
 
-    AssetHandle AssetManagerEditor::TryToGetLoadedAssetFromPath(const std::filesystem::path& path) const
-    {
-        for (const auto& [asset, metadata] : _AssetRegistry) {
-            if (metadata.FilePath == path)
-                return asset;
-        }
-        return 0;
-    }
-
     AssetHandle AssetManagerEditor::ImportAsset(const std::filesystem::path& path)
     {
-        if (TryToGetLoadedAssetFromPath(path) != 0)
-            return TryToGetLoadedAssetFromPath(path);
+        std::filesystem::path relativePath = GetRelativePath(path);
 
-        AssetHandle handle;
+        if (auto& metadata = GetMetadata(path); metadata.IsValid())
+            return metadata.Handle;
+
+        AssetType type = GetAssetTypeFromPath(path);
+        if (type == AssetType::None)
+            return 0;
+
         AssetMetadata metadata;
+        metadata.Handle = AssetHandle();
         metadata.FilePath = path;
-		LOG_INFO("Importing asset: {}", path.string());
-        metadata.Type = GetAssetTypeFromExtension(path.extension());
-        MEM::Ref<Asset> asset = AssetImporter::ImportAsset(handle, metadata);
-        if (asset) {
-            asset->_handle = handle;
-            _LoadedAssets[handle] = asset;
-            _AssetRegistry[handle] = metadata;
-            SerializeAssetRegistry();
-            return _LoadedAssets[handle]->_handle;
-        }
-        return 0;
+        metadata.Type = type;
+        SetMetadata(metadata.Handle, metadata);
+        return metadata.Handle;
     }
 
-    AssetHandle AssetManagerEditor::ImportAsset(const std::filesystem::path& where, const std::filesystem::path& to)
+    void AssetManagerEditor::SetMetadata(const AssetHandle& handle, AssetMetadata data)
     {
-        if (TryToGetLoadedAssetFromPath(to) != 0)
-            return TryToGetLoadedAssetFromPath(to);
-
-        AssetHandle handle;
-        AssetMetadata metadata;
-		metadata.InputPath = where;
-        metadata.FilePath = to;
-        LOG_INFO("Importing asset: {}", where.string());
-        metadata.Type = GetAssetTypeFromExtension(where.extension());
-        MEM::Ref<Asset> asset = AssetImporter::ImportAsset(handle, metadata);
-        if (asset) {
-            asset->_handle = handle;
-            _LoadedAssets[handle] = asset;
-            _AssetRegistry[handle] = metadata;
-            SerializeAssetRegistry();
-            return _LoadedAssets[handle]->_handle;
-        }
-        return 0;
+        _AssetRegistry[handle] = data;
     }
 
     void AssetManagerEditor::SaveAsset(AssetHandle handle)
@@ -221,11 +251,35 @@ namespace TAGE {
 
         for (const auto node : registryNode) {
             AssetHandle handle = node["Handle"].as<uint64>();
-            auto& assetMetadata = _AssetRegistry[handle];
-            assetMetadata.FilePath = node["FilePath"].as<std::string>();
-            assetMetadata.Type = StringToAssetType(node["Type"].as<std::string>());
+            AssetMetadata Metadata;
+            Metadata.Handle = node["Handle"].as<uint64>();
+            Metadata.FilePath = node["FilePath"].as<std::string>();
+            Metadata.Type = StringToAssetType(node["Type"].as<std::string>());
+            SetMetadata(handle, Metadata);
         }
 
         return true;
+    }
+
+    void AssetManagerEditor::OnAssetRenamed(AssetHandle assetHandle, const std::filesystem::path& newFilePath)
+    {
+        AssetMetadata metadata = GetMetadata(assetHandle);
+        if (!metadata.IsValid())
+            return;
+
+        metadata.FilePath = GetRelativePath(newFilePath);
+        SetMetadata(assetHandle, metadata);
+        SerializeAssetRegistry();
+    }
+
+    void AssetManagerEditor::RemoveAsset(AssetHandle handle)
+    {
+        if (_LoadedAssets.find(handle) == _LoadedAssets.end())
+            _LoadedAssets.erase(handle);
+
+        {
+            if (_AssetRegistry.find(handle) == _AssetRegistry.end())
+                _AssetRegistry.erase(handle);
+        }
     }
 }
