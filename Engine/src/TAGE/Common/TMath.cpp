@@ -1,6 +1,8 @@
 #include "tagepch.h"
 #include "TMath.h"
 
+#include <DirectXMath.h>
+
 glm::vec3 TAGE::Math::Scale(const glm::vec3& v, float desiredLength)
 {
 	float mag = glm::length(v);
@@ -87,4 +89,39 @@ glm::mat4 TAGE::Math::ConvertMatrixToGLMFormat(const aiMatrix4x4& from)
 	to[0][2] = from.c1; to[1][2] = from.c2; to[2][2] = from.c3; to[3][2] = from.c4;
 	to[0][3] = from.d1; to[1][3] = from.d2; to[2][3] = from.d3; to[3][3] = from.d4;
 	return to;
+}
+
+glm::vec2 TAGE::Math::DirectXToOpenGL(DirectX::XMFLOAT2 vec2) { return glm::vec2(vec2.x, vec2.y); }
+glm::vec3 TAGE::Math::DirectXToOpenGL(DirectX::XMFLOAT3 vec3) { return glm::vec3(vec3.x, vec3.y, vec3.z); }
+glm::vec4 TAGE::Math::DirectXToOpenGL(DirectX::XMFLOAT4 vec4) { return glm::vec4(vec4.x, vec4.y, vec4.z, vec4.w); }
+glm::mat3 TAGE::Math::DirectXToOpenGL(DirectX::XMFLOAT4X3 mat3) { return glm::make_mat3(&mat3._11); }
+glm::mat4 TAGE::Math::DirectXToOpenGL(DirectX::XMFLOAT4X4 mat4) { return glm::make_mat4(&mat4._11); }
+
+DirectX::XMFLOAT2 TAGE::Math::OpenGLToDirectX(glm::vec2 vec2)
+{
+	return DirectX::XMFLOAT2(vec2.x, vec2.x);
+}
+
+DirectX::XMFLOAT3 TAGE::Math::OpenGLToDirectX(glm::vec3 vec3)
+{
+	return DirectX::XMFLOAT3(vec3.x, vec3.y, vec3.z);
+}
+
+DirectX::XMFLOAT4 TAGE::Math::OpenGLToDirectX(glm::vec4 vec4)
+{
+	return DirectX::XMFLOAT4(vec4.x, vec4.y, vec4.z, vec4.w);
+}
+
+DirectX::XMFLOAT4X3 TAGE::Math::OpenGLToDirectX(glm::mat3 mat3)
+{
+	DirectX::XMFLOAT4X3 out;
+	memcpy(&out, glm::value_ptr(mat3), sizeof(float) * 12);
+	return out;
+}
+
+DirectX::XMFLOAT4X4 TAGE::Math::OpenGLToDirectX(glm::mat4 mat4)
+{
+	DirectX::XMFLOAT4X4 out;
+	memcpy(&out, glm::value_ptr(mat4), sizeof(float) * 16);
+	return out;
 }
