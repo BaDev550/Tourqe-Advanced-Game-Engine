@@ -5,9 +5,8 @@
 
 #include "TARE/Texture/Texture.h"
 #include "TAGE/Utilities/Memory.h"
-#include "ThumbnailRenderer.h"
 
-namespace TAGE::Editor {
+namespace TAGE {
 	class ContentBrowserPanel
 	{
 	public:

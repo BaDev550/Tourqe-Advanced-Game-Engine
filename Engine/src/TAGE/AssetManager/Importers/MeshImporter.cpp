@@ -2,12 +2,12 @@
 #include "MeshImporter.h"
 #include "TAGE/Project/Project.h"
 
-#include "TAGE/AssetManager/AssetSerializer.h"
+#include "TAGE/AssetManager/Serializers/AssetSerializer.h"
 
 namespace TAGE {
 	MEM::Ref<TARE::Model> MeshImporter::ImportSourceModel(AssetHandle handle, const AssetMetadata& metadata)
 	{
-		return SerializeModel(Project::GetAssetDirectory() / metadata.InputPath, Project::GetAssetDirectory() / metadata.FilePath);
+		return SerializeModel(Project::GetAssetDirectory() / metadata.FilePath);
 	}
 
 	MEM::Ref<TARE::Model> MeshImporter::ImportStaticMesh(AssetHandle handle, const AssetMetadata& metadata)
@@ -23,7 +23,7 @@ namespace TAGE {
 		return model;
 	}
 
-	MEM::Ref<TARE::Model> MeshImporter::SerializeModel(std::filesystem::path& filepath, std::filesystem::path& to)
+	MEM::Ref<TARE::Model> MeshImporter::SerializeModel(std::filesystem::path& filepath)
 	{
 		StaticMeshImporter sm_importer;
 
@@ -56,9 +56,9 @@ namespace TAGE {
 		type = hasBones ? ModelType::SKINNED_MODEL : ModelType::MODEL;
 
 		if (type == ModelType::MODEL) {
-			sm_importer.ProcessNode(filepath, to, model, scene->mRootNode, scene);
-			StaticMeshSerializer::Serialize(model, to.replace_extension(".tmesh"));
-			std::filesystem::path relativePath = std::filesystem::relative(to.replace_extension(".tmesh"), Project::GetAssetDirectory());
+			sm_importer.ProcessNode(filepath, model, scene->mRootNode, scene);
+			StaticMeshSerializer::Serialize(model, filepath.replace_extension(".tmesh"));
+			std::filesystem::path relativePath = std::filesystem::relative(filepath.replace_extension(".tmesh"), Project::GetAssetDirectory());
 			Project::GetActive()->GetEditorAssetManager()->ImportAsset(relativePath);
 		}
 

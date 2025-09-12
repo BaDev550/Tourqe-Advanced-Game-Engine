@@ -117,6 +117,19 @@ namespace TAGE {
 		ASSERT_NOMSG(s_HasComponentFuncs.find(managedType) != s_HasComponentFuncs.end());
 		return s_HasComponentFuncs.at(managedType)(entity);
 	}
+	static uint64 Entity_FindEntityByName(MonoString* name) {
+		char* cStr = mono_string_to_utf8(name);
+		Scene* scene = ScriptEngine::GetSceneContext();
+		Entity entity = scene->FindEntityByName(cStr);
+		mono_free(cStr);
+
+		if (!entity)
+			return 0;
+		return entity.GetUUID();
+	}
+	static MonoObject* GetScriptInstance(UUID entityID) {
+		return ScriptEngine::GetManagedInstance(entityID);
+	}
 #pragma endregion
 
 	template<typename... Component>
@@ -144,6 +157,7 @@ namespace TAGE {
 
 	void ScriptGlue::RegisterComponents()
 	{
+		s_HasComponentFuncs.clear();
 		RegisterComponent(AllComponents{});
 	}
 
@@ -165,5 +179,7 @@ namespace TAGE {
 		ADD_INTERNAL_CALL(Input_GetMouseDelta);
 
 		ADD_INTERNAL_CALL(Entity_HasComponent);
+		ADD_INTERNAL_CALL(Entity_FindEntityByName);
+		ADD_INTERNAL_CALL(GetScriptInstance);
 	}
 }

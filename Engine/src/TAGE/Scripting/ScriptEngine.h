@@ -106,6 +106,8 @@ namespace TAGE {
 
 			SetFieldValueInternal(name, &value);
 		}
+
+		MonoObject* GetManagedObject() { return _Instance; }
 	private:
 		bool GetFieldValueInternal(const std::string& name, void* buffer);
 		bool SetFieldValueInternal(const std::string& name, const void* value);
@@ -129,6 +131,7 @@ namespace TAGE {
 		static bool IsInitialized() { return s_Initialized; }
 		static void Init();
 		static void Shutdown();
+		static void ReloadAssembly();
 
 		static void LoadAssembly(const std::filesystem::path& filePath);
 		static void LoadAppAssembly(const std::filesystem::path& filePath);
@@ -146,6 +149,8 @@ namespace TAGE {
 		static MEM::Ref<ScriptClass> GetEntityClass(const std::string& name);
 		static ScriptFieldMap& GetScriptFieldMap(Entity entity);
 		static MEM::Ref<ScriptInstance> GetEntityScriptInstance(UUID uuid);
+
+		static MonoObject* GetManagedInstance(UUID uuid);
 	private:
 		static void InitMono();
 		static void DestroyMono();

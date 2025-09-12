@@ -3,14 +3,13 @@
 #include "meshoptimizer.h"
 #include "TAGE/Project/Project.h"
 
-#include "TAGE/AssetManager/AssetSerializer.h"
+#include "TAGE/AssetManager/Serializers/AssetSerializer.h"
 #include "TAGE/AssetManager/Importers/TextureImporter.h"
 
 namespace TAGE {
-	void StaticMeshImporter::ProcessNode(const std::filesystem::path& base, const std::filesystem::path& filepath, MEM::Ref<TARE::Model>& model, aiNode* node, const aiScene* scene)
+	void StaticMeshImporter::ProcessNode(const std::filesystem::path& filepath, MEM::Ref<TARE::Model>& model, aiNode* node, const aiScene* scene)
 	{
-		_SourcePath = base;
-		_TargetPath = filepath;
+		_SourcePath = filepath;
 
 		for (uint i = 0; i < node->mNumMeshes; ++i)
 		{
@@ -19,7 +18,7 @@ namespace TAGE {
 		}
 		for (uint i = 0; i < node->mNumChildren; ++i)
 		{
-			ProcessNode(base, filepath, model, node->mChildren[i], scene);
+			ProcessNode(filepath, model, node->mChildren[i], scene);
 		}
 	}
 
@@ -48,25 +47,15 @@ namespace TAGE {
 			std::filesystem::path sourceDir = _SourcePath.parent_path();
 			std::filesystem::path textureSource = std::filesystem::absolute(sourceDir / path.C_Str());
 
-			std::filesystem::path assetDir = std::filesystem::absolute(Project::GetAssetDirectory());
-			std::filesystem::path modelDestDir = _TargetPath.parent_path();
-			std::filesystem::create_directories(modelDestDir);
-
-			std::filesystem::path textureDest = modelDestDir / textureSource.filename();
-			std::filesystem::path relativePath = std::filesystem::relative(textureDest, assetDir);
-
 			bool loaded = false;
 			for (int attempt = 0; attempt < 2 && !loaded; ++attempt) {
-				if (std::filesystem::exists(textureDest)) {
+				if (std::filesystem::exists(textureSource)) {
 					const auto& assetMG = Project::GetActive()->GetEditorAssetManager();
-					AssetHandle TextureHandle = assetMG->ImportAsset(relativePath);
+					AssetHandle TextureHandle = assetMG->ImportAsset(textureSource);
 					if (TextureHandle != 0) {
 						outMaterial->SetTexture(type, TextureHandle);
 						loaded = true;
 					}
-				}
-				else {
-					TextureImporter::WriteTextureTo(textureSource, textureDest);
 				}
 			}
 		}
@@ -92,10 +81,10 @@ namespace TAGE {
 		}
 		std::filesystem::path cleanMaterialName = materialName;
 		cleanMaterialName.replace_extension(".tmat");
-		std::filesystem::path relativePath = std::filesystem::relative(_TargetPath.parent_path() / cleanMaterialName, Project::GetAssetDirectory());
+		std::filesystem::path materialPath = (_SourcePath.parent_path() / cleanMaterialName);
 
-		mat_serializer.Serialize(material, Project::GetAssetDirectory() / relativePath);
-		AssetHandle materialHandle = Project::GetActive()->GetEditorAssetManager()->ImportAsset(relativePath);
+		mat_serializer.Serialize(material, materialPath);
+		AssetHandle materialHandle = Project::GetActive()->GetEditorAssetManager()->ImportAsset(materialPath);
 		if (materialHandle != 0)
 			material->_handle = materialHandle;
 

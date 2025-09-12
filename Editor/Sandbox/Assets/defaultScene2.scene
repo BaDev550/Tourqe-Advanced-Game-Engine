@@ -1,0 +1,53 @@
+Scene: defaultScene
+Entities:
+  - Entity: 13641093996241592734
+    IdentityComponent:
+      Name: Mario 2
+    Parent: 0
+    Children:
+      []
+    TransformComponent:
+      Position: [-4.91303158, 0, -4.72381639]
+      Rotation: [0, 1.57045102, 0]
+      Scale: [1, 1, 1]
+    MeshComponent:
+      MeshHandle: 1228958257244157071
+  - Entity: 11920536671106491516
+    IdentityComponent:
+      Name: Sun
+    Parent: 0
+    Children:
+      []
+    TransformComponent:
+      Position: [0, 0, 0]
+      Rotation: [25, 30.7000008, 0]
+      Scale: [1, 1, 1]
+    LightComponent:
+      Type: 1
+      Color: [1, 1, 1]
+      Range: 10
+      Intensity: 1
+  - Entity: 8551450095498438749
+    IdentityComponent:
+      Name: Cube
+    Parent: 0
+    Children:
+      []
+    TransformComponent:
+      Position: [0, -1.56720066, 0]
+      Rotation: [0, 0, 0]
+      Scale: [8.15486622, 0.185139865, 9.1974926]
+    MeshComponent:
+      MeshHandle: 18089061764760192318
+  - Entity: 10139955655717038074
+    IdentityComponent:
+      Name: Mario
+    Parent: 0
+    Children:
+      []
+    TransformComponent:
+      Position: [0, 0, 0]
+      Rotation: [0, 0, 0]
+      Scale: [1, 1, 1]
+    MeshComponent:
+      MeshHandle: 1228958257244157071

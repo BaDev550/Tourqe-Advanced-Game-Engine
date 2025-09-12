@@ -79,5 +79,7 @@ namespace TAGE {
 		MEM::Ref<AssetManagerBase> _AssetManager;
 
 		inline static MEM::Ref<Project> _ActiveProject;
+
+		friend class ProjectSettingsPanel;
 	};
 }

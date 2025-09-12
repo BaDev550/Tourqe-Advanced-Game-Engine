@@ -2,7 +2,7 @@
 #include "MaterialImporter.h"
 #include "TAGE/Project/Project.h"
 
-#include "TAGE/AssetManager/AssetSerializer.h"
+#include "TAGE/AssetManager/Serializers/AssetSerializer.h"
 
 namespace TAGE {
 	MEM::Ref<TARE::Material> MaterialImporter::ImportMaterial(AssetHandle handle, const AssetMetadata& metadata)

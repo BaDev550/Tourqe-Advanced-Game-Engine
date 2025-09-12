@@ -1,7 +1,7 @@
 #include "tagepch.h"
 #include "TARE/Material/Material.h"
 #include "TAGE/Project/Project.h"
-#include "TAGE/AssetManager/AssetSerializer.h"
+#include "AssetSerializer.h"
 
 #include <yaml-cpp/yaml.h>
 

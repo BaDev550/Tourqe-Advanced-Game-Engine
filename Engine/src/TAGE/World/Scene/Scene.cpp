@@ -305,7 +305,7 @@ namespace TAGE {
 
 	MEM::Ref<Scene> Scene::Copy(MEM::Ref<Scene> other)
 	{
-		MEM::Ref<Scene> newScene = MEM::MakeRef<Scene>("COPIEDSCENE");
+		MEM::Ref<Scene> newScene = MEM::MakeRef<Scene>(other->GetName());
 		newScene->_Width = other->_Width;
 		newScene->_Height = other->_Height;
 

@@ -22,6 +22,13 @@ namespace TAGE
             Z = z;
         }
 
+        public Vector3(Vector2 v, float z)
+        {
+            X = v.X;
+            Y = v.Y;
+            Z = z;
+        }
+
         public Vector2 XY
         {
             get => new Vector2(X, Y);

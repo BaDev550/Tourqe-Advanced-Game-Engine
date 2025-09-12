@@ -1,9 +1,11 @@
+#include "tagepch.h"
 #include "ProjectSettingsPanel.h"
 #include "TAGE/Application/Application.h"
 #include "TARE/TARE.h"
+#include "TAGE/GUI/GUIUtils.h"
 #include "imgui.h"
 
-namespace TAGE::Editor {
+namespace TAGE {
     void ProjectSettingsPanel::OnImGuiRender()
     {
         if (!_IsOpen) return;
@@ -71,20 +73,11 @@ namespace TAGE::Editor {
     void ProjectSettingsPanel::DrawStartupSceneSettings()
     {
 		auto& project = Project::GetActive();
-        ImGui::Text("Startup Scene Settings:");
-        static char scenePath[128] = "";
-        static bool initialized = false;
-        if (!initialized)
-        {
-            std::string startSceneStr = project->GetConfig().StartScene.string();
-            strncpy(scenePath, startSceneStr.c_str(), sizeof(scenePath));
-            scenePath[sizeof(scenePath) - 1] = '\0';
-            initialized = true;
-        }
+        AssetMetadata startupProjectData = Project::GetActive()->GetEditorAssetManager()->GetMetadata(project->GetConfig().StartScene);
 
-        if (ImGui::InputText("Scene Path", scenePath, IM_ARRAYSIZE(scenePath)))
-        {
-            project->GetConfig().StartScene = scenePath;
+        AssetHandle currentIndex = 0;
+        if (GUI::ComboBox("Scene Asset", currentIndex, AssetType::Scene, startupProjectData.Handle)) {
+            project->_Config.StartScene = Project::GetActive()->GetEditorAssetManager()->GetMetadata(currentIndex).FilePath;
         }
     }
 }

@@ -5,10 +5,10 @@
 namespace TAGE {
 	struct AssetMetadata
 	{
+		AssetHandle Handle = 0;
 		AssetType Type = AssetType::None;
-		std::filesystem::path InputPath;
 		std::filesystem::path FilePath;
 
-		operator bool() const { return Type != AssetType::None; }
+		bool IsValid() const { return Type != AssetType::None; }
 	};
 }

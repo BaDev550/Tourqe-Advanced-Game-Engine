@@ -81,7 +81,7 @@ void main() {
     vec4 gNorm = texture(u_gNorm, TexCoords);
     vec3  N = normalize(gNorm.rgb);
     vec3  D = texture(u_gDepth, TexCoords).rgb;
-    float M = texture(u_gMetallic, TexCoords).r;
+    float M = texture(u_gNorm, TexCoords).r;
     float R = texture(u_gRoughness, TexCoords).r;
     float aoVal = texture(u_gAO, TexCoords).r;
     vec4 gAlb = texture(u_gAlb, TexCoords);

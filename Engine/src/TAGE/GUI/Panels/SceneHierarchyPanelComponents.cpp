@@ -1,223 +1,15 @@
+#include "tagepch.h"
 #include "SceneHierarchyPanel.h"
 #include "TAGE/World/Components/Components.h"
 #include "TAGE/Scripting/ScriptEngine.h"
 #include "TAGE/Utilities/Platform.h"
-#include "Modals/MaterialEditor.h"
+#include "TAGE/GUI/GUIUtils.h"
+#include "TAGE/GUI/Modals/MaterialEditor.h"
+#include "TAGE/AssetManager/AssetManager.h"
 
 #include <imgui.h>
-#include <imgui_internal.h>
 
-#include <glm/gtc/type_ptr.hpp>
-
-#include <cstring>
-
-#ifdef _MSVC_LANG
-  #define _CRT_SECURE_NO_WARNINGS
-#endif
-
-namespace TAGE::Editor {
-
-	SceneHierarchyPanel::SceneHierarchyPanel(const MEM::Ref<Scene>& context)
-	{
-		SetContext(context);
-	}
-
-	void SceneHierarchyPanel::SetContext(const MEM::Ref<Scene>& context)
-	{
-		m_Context = context;
-		m_SelectionContext = {};
-	}
-
-	void SceneHierarchyPanel::OnImGuiRender()
-	{
-		ImGui::Begin("Scene Hierarchy");
-
-		if (m_Context)
-		{
-			m_Context->GetRegistry().view<IdentityComponent, TransformComponent>().each(
-				[&](entt::entity entityID, IdentityComponent& id, TransformComponent& transform)
-				{
-					Entity entity = m_Context->GetEntityByUUID(id.UniqeId);
-					DrawEntityNode(entity);
-				});
-
-
-			if (ImGui::IsMouseDown(0) && ImGui::IsWindowHovered())
-				m_SelectionContext = {};
-
-			if (ImGui::BeginPopupContextWindow(0, 1))
-			{
-				if (ImGui::MenuItem("Create Empty Entity"))
-					m_Context->CreateEntity("Empty Entity");
-
-				ImGui::EndPopup();
-			}
-
-		}
-		ImGui::End();
-
-		ImGui::Begin("Properties");
-		if (m_SelectionContext)
-		{
-			DrawComponents(m_SelectionContext);
-		}
-
-		ImGui::End();
-	}
-
-	void SceneHierarchyPanel::SetSelectedEntity(Entity entity)
-	{
-		m_SelectionContext = entity;
-	}
-
-	void SceneHierarchyPanel::DrawEntityNode(Entity entity)
-	{
-		auto& tag = entity.GetComponent<IdentityComponent>().Name;
-		
-		ImGuiTreeNodeFlags flags = ((m_SelectionContext == entity) ? ImGuiTreeNodeFlags_Selected : 0) | ImGuiTreeNodeFlags_OpenOnArrow;
-		flags |= ImGuiTreeNodeFlags_SpanAvailWidth;
-		bool opened = ImGui::TreeNodeEx((void*)(uint64_t)(uint32_t)entity, flags, tag.c_str());
-		if (ImGui::IsItemClicked())
-		{
-			m_SelectionContext = entity;
-		}
-
-		if (ImGui::BeginDragDropTarget())
-		{
-			if (const ImGuiPayload* payload = ImGui::AcceptDragDropPayload("HIERARCHY_ENTITY"))
-			{
-				Entity childEntity = *(Entity*)payload->Data;
-				m_Context->ParentEntity(childEntity, entity);
-			}
-			ImGui::EndDragDropTarget();
-		}
-
-		if (ImGui::BeginDragDropSource())
-		{
-			ImGui::SetDragDropPayload("HIERARCHY_ENTITY", &entity, sizeof(Entity));
-			ImGui::Text("%s", tag.c_str());
-			ImGui::EndDragDropSource();
-		}
-
-		bool entityDeleted = false;
-		if (ImGui::BeginPopupContextItem())
-		{
-			if (ImGui::MenuItem("Delete Entity"))
-				entityDeleted = true;
-			if (ImGui::MenuItem("Unparent"))
-			{
-				m_Context->UnparentEntity(entity);
-			}
-
-			ImGui::EndPopup();
-		}
-		auto& rc = entity.GetComponent<RelationshipComponent>();
-
-		if (opened)
-		{
-			ImGuiTreeNodeFlags flags = ImGuiTreeNodeFlags_OpenOnArrow | ImGuiTreeNodeFlags_SpanAvailWidth;
-			bool opened = ImGui::TreeNodeEx((void*)9817239, flags, tag.c_str());
-			for (UUID childUUID : rc.Children)
-			{
-				Entity childEntity = m_Context->GetEntityByUUID(childUUID);
-				if (childEntity)
-				{
-					DrawEntityNode(childEntity);
-				}
-			}
-			ImGui::TreePop();
-		}
-
-		if (entityDeleted)
-		{
-			m_Context->DestroyEntity(entity);
-			if (m_SelectionContext == entity)
-				m_SelectionContext = {};
-		}
-	}
-
-	static bool DrawVec3Control(const std::string& label, glm::vec3& values, float resetValue = 0.0f, float columnWidth = 100.0f)
-	{
-		bool valueChanged = false;
-
-		ImGuiIO& io = ImGui::GetIO();
-		auto boldFont = io.Fonts->Fonts[0];
-
-		ImGui::PushID(label.c_str());
-
-		ImGui::Columns(2);
-		ImGui::SetColumnWidth(0, columnWidth);
-		ImGui::Text(label.c_str());
-		ImGui::NextColumn();
-
-		ImGui::PushMultiItemsWidths(3, ImGui::CalcItemWidth());
-		ImGui::PushStyleVar(ImGuiStyleVar_ItemSpacing, ImVec2{ 0, 0 });
-
-		float lineHeight = ImGui::GetFontSize() + ImGui::GetStyle().FramePadding.y * 2.0f;
-		ImVec2 buttonSize = { lineHeight + 3.0f, lineHeight };
-
-		ImGui::PushStyleColor(ImGuiCol_Button, ImVec4{ 0.8f, 0.1f, 0.15f, 1.0f });
-		ImGui::PushStyleColor(ImGuiCol_ButtonHovered, ImVec4{ 0.9f, 0.2f, 0.2f, 1.0f });
-		ImGui::PushStyleColor(ImGuiCol_ButtonActive, ImVec4{ 0.8f, 0.1f, 0.15f, 1.0f });
-		ImGui::PushFont(boldFont);
-		if (ImGui::Button("X", buttonSize)) {
-			values.x = resetValue;
-			valueChanged = true;
-		}
-		ImGui::PopFont();
-		ImGui::PopStyleColor(3);
-
-		ImGui::SameLine();
-		if (ImGui::DragFloat("##X", &values.x, 0.1f, 0.0f, 0.0f, "%.2f")) {
-			valueChanged = true;
-		}
-		ImGui::PopItemWidth();
-		ImGui::SameLine();
-
-		ImGui::PushStyleColor(ImGuiCol_Button, ImVec4{ 0.2f, 0.7f, 0.2f, 1.0f });
-		ImGui::PushStyleColor(ImGuiCol_ButtonHovered, ImVec4{ 0.3f, 0.8f, 0.3f, 1.0f });
-		ImGui::PushStyleColor(ImGuiCol_ButtonActive, ImVec4{ 0.2f, 0.7f, 0.2f, 1.0f });
-		ImGui::PushFont(boldFont);
-		if (ImGui::Button("Y", buttonSize)) {
-			values.y = resetValue;
-			valueChanged = true;
-		}
-		ImGui::PopFont();
-		ImGui::PopStyleColor(3);
-
-		ImGui::SameLine();
-		if (ImGui::DragFloat("##Y", &values.y, 0.1f, 0.0f, 0.0f, "%.2f")) {
-			valueChanged = true;
-		}
-		ImGui::PopItemWidth();
-		ImGui::SameLine();
-
-		ImGui::PushStyleColor(ImGuiCol_Button, ImVec4{ 0.1f, 0.25f, 0.8f, 1.0f });
-		ImGui::PushStyleColor(ImGuiCol_ButtonHovered, ImVec4{ 0.2f, 0.35f, 0.9f, 1.0f });
-		ImGui::PushStyleColor(ImGuiCol_ButtonActive, ImVec4{ 0.1f, 0.25f, 0.8f, 1.0f });
-		ImGui::PushFont(boldFont);
-		if (ImGui::Button("Z", buttonSize)) {
-			values.z = resetValue;
-			valueChanged = true;
-		}
-		ImGui::PopFont();
-		ImGui::PopStyleColor(3);
-
-		ImGui::SameLine();
-		if (ImGui::DragFloat("##Z", &values.z, 0.1f, 0.0f, 0.0f, "%.2f")){
-			valueChanged = true;
-		}
-		ImGui::PopItemWidth();
-
-		ImGui::PopStyleVar();
-
-		ImGui::Columns(1);
-
-		ImGui::PopID();
-
-		return valueChanged;
-	}
-	
+namespace TAGE {
 	template<typename T, typename UIFunction>
 	static void DrawComponent(const std::string& name, Entity entity, UIFunction uiFunction)
 	{
@@ -259,67 +51,22 @@ namespace TAGE::Editor {
 		}
 	}
 
-	void SceneHierarchyPanel::DrawComponents(Entity entity)
+	void SceneHierarchyPanel::DisplayComponentSettings(Entity entity)
 	{
-		if (entity.HasComponent<IdentityComponent>())
-		{
-			auto& tag = entity.GetComponent<IdentityComponent>().Name;
-
-			char buffer[256];
-			memset(buffer, 0, sizeof(buffer));
-			strncpy_s(buffer, sizeof(buffer), tag.c_str(), sizeof(buffer));
-			if (ImGui::InputText("##Tag", buffer, sizeof(buffer)))
-			{
-				tag = std::string(buffer);
-			}
-
-			if (ImGui::Button("Delete")) {
-				m_Context->DestroyEntity(entity);
-			}
-		}
-
-		ImGui::SameLine();
-		ImGui::PushItemWidth(-1);
-
-		if (ImGui::Button("Add Component"))
-			ImGui::OpenPopup("AddComponent");
-
-		if (ImGui::BeginPopup("AddComponent"))
-		{
-			DisplayAddComponentEntry<ScriptComponent>("Script");
-			DisplayAddComponentEntry<LightComponent>("Light");
-			DisplayAddComponentEntry<MeshComponent>("Mesh");
-			DisplayAddComponentEntry<CameraComponent>("Camera");
-			DisplayAddComponentEntry<SkyboxComponent>("Skybox");
-			DisplayAddComponentEntry<RigidBodyComponent>("Rigidbody");
-			DisplayAddComponentEntry<ColliderComponent>("Collider");
-			DisplayAddComponentEntry<AnimatorComponent>("Animator");
-
-			ImGui::EndPopup();
-		}
-
-		ImGui::Text("Uniqe ID: %s", std::to_string(entity.GetComponent<IdentityComponent>().UniqeId).c_str());
-
-		if (entity.GetParent()) {
-			if (ImGui::Button("Unparent")) {
-				m_Context->UnparentEntity(entity);
-			}
-		}
-
 		ImGui::PopItemWidth();
 		DrawComponent<TransformComponent>("Transform", entity, [](TransformComponent& component)
 			{
-				DrawVec3Control("Translation", component.Position);
+				GUI::DrawVector3Control("Translation", component.Position);
 				glm::vec3 eulerDegrees = component.GetRotationEuler();
-				if (DrawVec3Control("Rotation", eulerDegrees))
+				if (GUI::DrawVector3Control("Rotation", eulerDegrees))
 					component.SetRotationEuler(eulerDegrees);
-				DrawVec3Control("Scale", component.Scale, 1.0f);
+				GUI::DrawVector3Control("Scale", component.Scale, 1.0f);
 			});
 
 		DrawComponent<ScriptComponent>("Script", entity, [entity, this](ScriptComponent& component) mutable
 			{
 				bool scriptClassExist = ScriptEngine::EntityClassExists(component.Name);
-				
+
 				static char buffer[64];
 				strcpy(buffer, component.Name.c_str());
 
@@ -329,7 +76,7 @@ namespace TAGE::Editor {
 				if (ImGui::InputText("Class", buffer, sizeof(buffer)))
 					component.Name = buffer;
 
-				if (m_Context->IsRunning()) {
+				if (_Context->IsRunning()) {
 					MEM::Ref<ScriptInstance> scriptInstance = ScriptEngine::GetEntityScriptInstance(entity.GetUUID());
 					if (scriptInstance) {
 						const auto& fields = scriptInstance->GetScriptClass()->GetFields();
@@ -359,6 +106,29 @@ namespace TAGE::Editor {
 									if (ImGui::DragFloat(name.c_str(), &data))
 										scriptField.SetValue<float>(data);
 								}
+								//if (field.Type == ScriptFieldType::Entity) {
+								//	MonoObject* entityObject = scriptField.GetValue<MonoObject*>();
+								//	uint64 fieldEntityId = 0;
+
+								//	int selectedEntity = 0;
+								//	std::vector<std::string> entityNames;
+								//	std::vector<UUID> entities;
+
+								//	int i = 0;
+								//	_Context->GetRegistry().view<IdentityComponent, TransformComponent>().each(
+								//		[&](entt::entity entityID, IdentityComponent& id, TransformComponent& transform)
+								//		{
+								//			entityNames.push_back(id.Name);
+								//			entities.push_back((UUID)entityID);
+								//			if (fieldEntityId == (UUID)entityID)
+								//				selectedEntity = i;
+								//			i++;
+								//		});
+
+								//	if (GUI::ComboBox("Select Entity", selectedEntity, entityNames)) {
+								//		
+								//	}
+								//}
 							}
 							else {
 								if (field.Type == ScriptFieldType::Float) {
@@ -380,43 +150,12 @@ namespace TAGE::Editor {
 
 		DrawComponent<MeshComponent>("Mesh", entity, [](MeshComponent& component)
 			{
-				auto& assetManager = *Project::GetActive()->GetEditorAssetManager();
 				{
-					auto meshHandles = assetManager.GetHandlesWithType(AssetType::StaticMesh);
-
-					std::vector<AssetHandle> handles;
-					std::vector<std::string> names;
-
-					for (const auto& h : meshHandles) {
-						if (AssetManager::IsAssetHandleValid(h)) {
-							handles.push_back(h);
-							names.push_back(assetManager.GetMetadata(h).FilePath.stem().string());
-						}
-					}
-
-					int currentIndex = -1;
-					if (component.Handle) {
-						for (size_t i = 0; i < handles.size(); ++i) {
-							if (handles[i] == component.Handle->_handle) {
-								currentIndex = static_cast<int>(i);
-								break;
-							}
-						}
-					}
-
-					if (ImGui::BeginCombo("Mesh", currentIndex >= 0 ? names[currentIndex].c_str() : "Select...")) {
-						for (int i = 0; i < static_cast<int>(names.size()); ++i) {
-							bool selected = (i == currentIndex);
-							if (ImGui::Selectable(names[i].c_str(), selected)) {
-								currentIndex = i;
-
-								if (!component.Handle)
-									component.Handle = MEM::MakeRef<TARE::Model>();
-								component.LoadMesh(handles[i]);
-							}
-							if (selected) ImGui::SetItemDefaultFocus();
-						}
-						ImGui::EndCombo();
+					AssetHandle currentIndex = 0;
+					if (GUI::ComboBox("Mesh", currentIndex, AssetType::StaticMesh, component.Handle ? component.Handle->_handle : 0)) {
+						if (!component.Handle)
+							component.Handle = MEM::MakeRef<TARE::Model>();
+						component.LoadMesh(currentIndex);
 					}
 				}
 
@@ -426,21 +165,28 @@ namespace TAGE::Editor {
 				}
 				else {
 					auto meshes = component.Handle->GetMeshes();
+					int meshIndex = 0;
 					for (auto& mesh : meshes)
 					{
 						auto& material = mesh->GetMaterial();
-						ImGui::PushID(material->_handle);
+						ImGui::PushID(meshIndex);
 
-						if (material)
-						{
-							ImGui::Text("Material: %s", assetManager.GetMetadata(material->_handle).FilePath.stem().string().c_str());
-							ImGui::SameLine();
-						}
 						if (ImGui::Button("Edit##Material"))
 						{
 							MaterialEditor::OpenModal(material->_handle);
 						}
+
+						ImGui::SameLine();
+						{
+							AssetHandle currentIndex = 0;
+							if (GUI::ComboBox("Material", currentIndex, AssetType::Material, material->_handle)) {
+								auto& material = AssetManager::GetAsset<TARE::Material>(currentIndex);
+								mesh->SetMaterial(material);
+								Project::GetActive()->GetEditorAssetManager()->SaveAsset(component.Handle->_handle);
+							}
+						}
 						ImGui::PopID();
+						meshIndex++;
 					}
 
 					ImGui::Checkbox("Visible", &component.IsVisible);
@@ -498,7 +244,7 @@ namespace TAGE::Editor {
 
 		DrawComponent<LightComponent>("Light", entity, [](LightComponent& component)
 			{
-				DrawVec3Control("Color", component.Handle.color);
+				GUI::DrawColorControl("Color", component.Handle.color);
 				ImGui::Checkbox("Cast Shadow", &component.Handle.castShadow);
 				ImGui::DragFloat("Intensity", &component.Handle.intensity, 0.01f, 0.0f, 100.0f);
 				ImGui::DragFloat("Range", &component.Handle.range, 0.1f, 0.0f, 400.0f);
@@ -570,8 +316,8 @@ namespace TAGE::Editor {
 
 		DrawComponent<ColliderComponent>("Collider", entity, [](ColliderComponent& component)
 			{
-				DrawVec3Control("Offset", component.Offset);
-				DrawVec3Control("Size", component.Size);
+				GUI::DrawVector3Control("Offset", component.Offset);
+				GUI::DrawVector3Control("Size", component.Size);
 
 				const char* shapeStrings[] = { "Box", "Sphere", "Capsule", "Mesh" };
 				int currentShape = static_cast<int>(component.Shape);
@@ -609,17 +355,4 @@ namespace TAGE::Editor {
 				}
 			});
 	}
-
-	template<typename T>
-	void SceneHierarchyPanel::DisplayAddComponentEntry(const std::string& entryName) {
-		if (!m_SelectionContext.HasComponent<T>())
-		{
-			if (ImGui::MenuItem(entryName.c_str()))
-			{
-				m_SelectionContext.AddComponent<T>();
-				ImGui::CloseCurrentPopup();
-			}
-		}
-	}
-
 }

@@ -1,10 +1,10 @@
 #pragma once
 
 #include "TAGE/TAGE.h"
-#include "Panels/SceneHierarchyPanel.h"
-#include "Panels/ContentBrowserPanel.h"
-#include "Panels/ProjectSettingsPanel.h"
-#include "Panels/OutputPanel.h"
+#include "TAGE/GUI/Panels/SceneHierarchyPanel.h"
+#include "TAGE/GUI/Panels/ContentBrowserPanel.h"
+#include "TAGE/GUI/Panels/ProjectSettingsPanel.h"
+#include "TAGE/GUI/Panels/OutputPanel.h"
 
 namespace TAGE::Editor {
 	enum class SceneState

@@ -97,21 +97,10 @@ glm::vec4 TAGE::Math::DirectXToOpenGL(DirectX::XMFLOAT4 vec4) { return glm::vec4
 glm::mat3 TAGE::Math::DirectXToOpenGL(DirectX::XMFLOAT4X3 mat3) { return glm::make_mat3(&mat3._11); }
 glm::mat4 TAGE::Math::DirectXToOpenGL(DirectX::XMFLOAT4X4 mat4) { return glm::make_mat4(&mat4._11); }
 
-DirectX::XMFLOAT2 TAGE::Math::OpenGLToDirectX(glm::vec2 vec2)
-{
-	return DirectX::XMFLOAT2(vec2.x, vec2.x);
-}
-
-DirectX::XMFLOAT3 TAGE::Math::OpenGLToDirectX(glm::vec3 vec3)
-{
-	return DirectX::XMFLOAT3(vec3.x, vec3.y, vec3.z);
-}
-
-DirectX::XMFLOAT4 TAGE::Math::OpenGLToDirectX(glm::vec4 vec4)
-{
-	return DirectX::XMFLOAT4(vec4.x, vec4.y, vec4.z, vec4.w);
-}
-
+DirectX::XMFLOAT2 TAGE::Math::OpenGLToDirectX(glm::vec2 vec2) { return DirectX::XMFLOAT2(vec2.x, vec2.x); }
+DirectX::XMFLOAT3 TAGE::Math::OpenGLToDirectX(glm::vec3 vec3) { return DirectX::XMFLOAT3(vec3.x, vec3.y, vec3.z); }
+DirectX::XMFLOAT4 TAGE::Math::OpenGLToDirectX(glm::vec4 vec4) { return DirectX::XMFLOAT4(vec4.x, vec4.y, vec4.z, vec4.w); }
+ 
 DirectX::XMFLOAT4X3 TAGE::Math::OpenGLToDirectX(glm::mat3 mat3)
 {
 	DirectX::XMFLOAT4X3 out;

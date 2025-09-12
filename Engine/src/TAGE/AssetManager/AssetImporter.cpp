@@ -6,7 +6,7 @@
 #include "Importers/MeshImporter.h"
 #include "Importers/MaterialImporter.h"
 
-#include "AssetSerializer.h"
+#include "Serializers/AssetSerializer.h"
 
 namespace TAGE {
 	using AssetImportFunction = std::function<MEM::Ref<Asset>(AssetHandle, const AssetMetadata&)>;

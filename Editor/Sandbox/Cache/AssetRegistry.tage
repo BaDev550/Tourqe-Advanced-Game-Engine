@@ -1,0 +1,64 @@
+AssetRegistry:
+  - Handle: 1228958257244157071
+    FilePath: mario_2/mario_2.tmesh
+    Type: StaticMesh
+  - Handle: 1536048364474945224
+    FilePath: mario_2/pupil.jpg
+    Type: Texture
+  - Handle: 1744552920298468587
+    FilePath: mario_2/mat_5-body.tmat
+    Type: Material
+  - Handle: 1974470472815700082
+    FilePath: mario_2/mat_4-eye1.tmat
+    Type: Material
+  - Handle: 2005613231178667466
+    FilePath: mario_2/mat_6-hair.tmat
+    Type: Material
+  - Handle: 3952479760769533645
+    FilePath: defaultScene.scene
+    Type: Scene
+  - Handle: 4567924694006858554
+    FilePath: mario_2/mat_2-face.tmat
+    Type: Material
+  - Handle: 5590032241303338551
+    FilePath: mario_2/mat_0-pupil.tmat
+    Type: Material
+  - Handle: 6503154283605137995
+    FilePath: mario_2/mat_3-hat.tmat
+    Type: Material
+  - Handle: 8359143992553529410
+    FilePath: mario_2/hat.jpg
+    Type: Texture
+  - Handle: 9648940808165755336
+    FilePath: cube/cube.obj
+    Type: MeshSource
+  - Handle: 10706457865794771921
+    FilePath: mario_2/eye1.jpg
+    Type: Texture
+  - Handle: 12846934274324692586
+    FilePath: cube/Material.tmat
+    Type: Material
+  - Handle: 13309613527269403137
+    FilePath: mario_2/body.jpg
+    Type: Texture
+  - Handle: 13383609500451382817
+    FilePath: defaultScene2.scene
+    Type: Scene
+  - Handle: 13957092393317996201
+    FilePath: mario_2/mario_2.obj
+    Type: MeshSource
+  - Handle: 14167966296794441191
+    FilePath: mario_2/glove.jpg
+    Type: Texture
+  - Handle: 15214500667929198160
+    FilePath: mario_2/face.jpg
+    Type: Texture
+  - Handle: 16825739460061139026
+    FilePath: mario_2/mat_1-glove.tmat
+    Type: Material
+  - Handle: 17332467407309346838
+    FilePath: mario_2/hair.jpg
+    Type: Texture
+  - Handle: 18089061764760192318
+    FilePath: cube/cube.tmesh
+    Type: StaticMesh

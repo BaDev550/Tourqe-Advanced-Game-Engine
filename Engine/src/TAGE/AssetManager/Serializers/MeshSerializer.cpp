@@ -3,7 +3,7 @@
 #include "TAGE/Project/Project.h"
 
 #include "TAGE/AssetManager/AssetManager.h"
-#include "TAGE/AssetManager/AssetSerializer.h"
+#include "AssetSerializer.h"
 
 #include <yaml-cpp/yaml.h>
 
@@ -89,8 +89,10 @@ namespace TAGE {
             in.read(reinterpret_cast<char*>(&matHandle), sizeof(AssetHandle));
 
             MEM::Ref<TARE::Material> material = nullptr;
-            if (matHandle != 0)
+            if (matHandle != 0) {
                 material = AssetManager::GetAsset<TARE::Material>(matHandle);
+                material->_handle = matHandle;
+            }
 
             auto mesh = MEM::MakeRef<TARE::Mesh>(vertices, indices, material);
             staticMesh->AddMesh(mesh);
