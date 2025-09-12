@@ -2,7 +2,7 @@
 
 **TAGE** is a modular, lightweight, and efficient game engine developed in C++ for Windows platforms. Designed with simplicity and flexibility in mind, TAGE provides a solid foundation for developing 3D games.
 
-<img width="1911" height="1018" alt="Screenshot 2025-08-11 042508" src="https://github.com/user-attachments/assets/e3904e75-6016-46d2-9e92-269555222069" />
+<img width="1919" height="1031" alt="Screenshot 2025-09-12 194206" src="https://github.com/user-attachments/assets/40cd3f33-5434-4cdf-bcb3-f0227658bb9f" />
 
 ## Features
 
