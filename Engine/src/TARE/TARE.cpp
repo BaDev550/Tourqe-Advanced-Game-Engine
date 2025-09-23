@@ -40,7 +40,7 @@ namespace TARE {
 		_DeferredRendering->GetLightShader()->SetUniform("u_SceneData.UseSSR",  _Data.UseSSReflections);
 
 		_DeferredRendering->RenderGeometryPass(cam);
-
+		
 		if (cam->GetPostProcess()) { _Data.PostProcess = cam->GetPostProcess(); }
 		if (skybox) { skybox->Bind(cam->GetViewMatrix(), cam->GetProjectionMatrix()); }
 	}

@@ -110,6 +110,8 @@ vec3 CalculatePBRLight(
     vec3 lightDir;
     float attenuation;
     float intensity = light.intensity;
+
+    albedo = pow(albedo, vec3(2.2));
     GetLightProperties(light, fragPos, lightDir, attenuation, intensity);
 
     if (attenuation <= 0.0) {
@@ -134,7 +136,7 @@ vec3 CalculatePBRLight(
     vec3 kS = F;
     vec3 kD = (vec3(1.0) - kS) * (1.0 - metallic);
 
-    vec3 diffuse = (kD * pow(albedo, vec3(2.2))) / PI;
+    vec3 diffuse = (kD * albedo) / PI;
     
     return (diffuse) * radiance * NdotL;
 }

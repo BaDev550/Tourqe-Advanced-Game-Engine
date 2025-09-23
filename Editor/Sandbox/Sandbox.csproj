@@ -44,8 +44,7 @@
   <ItemGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|x64' ">
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Assets\player.cs" />
-    <Compile Include="Assets\test.cs" />
+    <Compile Include="Assets\Player.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\ScriptCore\ScriptCore.csproj">

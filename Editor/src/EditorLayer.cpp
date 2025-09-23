@@ -26,7 +26,7 @@ namespace TAGE::Editor {
 		_EditorCamera = MEM::MakeRef<TARE::EditorCamera>(_ActiveScene->GetWidth(), _ActiveScene->GetHeight());
 		_SceneHierarchyPanel = MEM::MakeScope<SceneHierarchyPanel>(_ActiveScene);
 		_OutputPanel = MEM::MakeScope<OutputPanel>();
-
+		
 		_PlayIcon =      TAGE::TextureImporter::LoadTexture2D("Assets/textures/Icons/Play.png");
 		_StopIcon =      TAGE::TextureImporter::LoadTexture2D("Assets/textures/Icons/Stop.png");
 		_SimulateIcon =  TAGE::TextureImporter::LoadTexture2D("Assets/textures/Icons/Simulate.png");

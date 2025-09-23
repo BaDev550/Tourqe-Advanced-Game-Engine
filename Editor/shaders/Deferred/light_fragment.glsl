@@ -94,7 +94,7 @@ void main() {
     vec3 F0 = vec3(0.04);
     F0 = mix(F0, A, M);
     vec3 F_reflect = fresnelSchlick(max(dot(N, Vdir), 0.0), F0);
-    vec3 F_ambient = fresnelSchlickRoughness(max(dot(N, Vdir), 0.0), F0, R);
+    vec3 F_ambient = fresnelSchlick(max(dot(N, Vdir), 0.0), F0);
     vec3 kS_ambient = F_ambient;
     vec3 kD_ambient = (1.0 - kS_ambient) * (1.0 - M);
 

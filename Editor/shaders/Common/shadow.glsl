@@ -53,7 +53,7 @@ float ShadowCalculation(mat4 view, vec3 fragPosWorldSpace, vec3 Normal, vec3 lig
             shadow += (currentDepth - bias) > pcfDepth ? 1.0 : 0.0;        
         }    
     }
-    shadow /= 9.0;
+    shadow /= 12.0;
         
     return shadow;
 }

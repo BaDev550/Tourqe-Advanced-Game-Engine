@@ -1,7 +1,8 @@
 #pragma once
-
-#include <vulkan/vulkan.h>
 #include "TARE/Common/RenderContext.h"
+
+#define VK_USE_PLATFORM_WIN32_KHR
+#include <vulkan/vulkan.h>
 
 struct GLFWwindow;
 struct Device {
@@ -14,7 +15,9 @@ namespace TARE {
 	namespace Utilities {
 		struct QueueFamilyIndices {
 			int graphicsFamily = -1;
-			bool isValid() { return graphicsFamily >= 0; }
+			int presentationFamily = -1;
+
+			bool isValid() { return graphicsFamily >= 0 && presentationFamily >= 0; }
 		};
 	}
 
@@ -34,13 +37,15 @@ namespace TARE {
 		}
 	private:
 		Device _MainDevice;
-		VkQueue graphicsQueue;
-
+		VkQueue _GraphicsQueue;
+		VkSurfaceKHR _Surface;
 		GLFWwindow* _Window;
 
 		VkInstance _Instance;
 		void createVKInstance();
 		void createVKLogicalDevice();
+		void createVKSurface();
+
 		bool checkInstanceExtensionSupport(std::vector<const char*>* checkExtensions);
 		bool checkDeviceSuitable(VkPhysicalDevice device);
 

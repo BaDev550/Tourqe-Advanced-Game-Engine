@@ -14,6 +14,12 @@ AssetRegistry:
   - Handle: 2005613231178667466
     FilePath: mario_2/mat_6-hair.tmat
     Type: Material
+  - Handle: 2130731969965806376
+    FilePath: test/SciFiHelmet_BaseColor.png
+    Type: Texture
+  - Handle: 3013926056029478977
+    FilePath: test/SciFiHelmet.gltf
+    Type: MeshSource
   - Handle: 3952479760769533645
     FilePath: defaultScene.scene
     Type: Scene
@@ -23,11 +29,23 @@ AssetRegistry:
   - Handle: 5590032241303338551
     FilePath: mario_2/mat_0-pupil.tmat
     Type: Material
+  - Handle: 6204305090828943589
+    FilePath: test/SciFiHelmet.tmat
+    Type: Material
   - Handle: 6503154283605137995
     FilePath: mario_2/mat_3-hat.tmat
     Type: Material
+  - Handle: 7401207886816872698
+    FilePath: test/SciFiHelmet_AmbientOcclusion.png
+    Type: Texture
+  - Handle: 7431565536590592966
+    FilePath: test/SciFiHelmet_MetallicRoughness.png
+    Type: Texture
   - Handle: 8359143992553529410
     FilePath: mario_2/hat.jpg
+    Type: Texture
+  - Handle: 8867001732334391341
+    FilePath: test/SciFiHelmet_Normal.png
     Type: Texture
   - Handle: 9648940808165755336
     FilePath: cube/cube.obj
@@ -35,6 +53,9 @@ AssetRegistry:
   - Handle: 10706457865794771921
     FilePath: mario_2/eye1.jpg
     Type: Texture
+  - Handle: 10900380475465243993
+    FilePath: test/SciFiHelmet.tmesh
+    Type: StaticMesh
   - Handle: 12846934274324692586
     FilePath: cube/Material.tmat
     Type: Material
