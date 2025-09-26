@@ -5,18 +5,12 @@
 
 struct Light {
     int type;
-    int castShadow;
+    bool castShadow;
     float intensity;
-
+    float range;
     vec3 position;
     vec3 direction;
-    vec3 color;
-
-    float range;
-    float innerCone;
-    float outerCone;
-
-    mat4 lightSpaceMatrix;
+    vec4 color;
 };
 
 #define LIGHT_TYPE_POINT       0

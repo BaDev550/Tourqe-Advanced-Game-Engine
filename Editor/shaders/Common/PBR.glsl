@@ -66,24 +66,7 @@ void GetLightProperties(Light light, vec3 fragPos, out vec3 lightDir, out float 
 
         lightDir = toLight / distance;
         attenuation = pow(clamp(1.0 - pow(distance / light.range, 4.0), 0.0, 1.0), 2.0);
-        if (light.type == LIGHT_TYPE_SPOT)
-        {
-            float theta      = dot(lightDir, normalize(-light.direction));
-            float outerCone  = cos(radians(light.outerCone));
-            float innerCone  = cos(radians(light.innerCone));
-            float falloff    = clamp((theta - outerCone) / (innerCone - outerCone), 0.0, 1.0);
-            attenuation     *= falloff;
-        }
     }
-}
-
-
-float ComputeSpotFalloff(Light light, vec3 lightDir)
-{
-    float theta = dot(lightDir, normalize(-light.direction));
-    float inner = cos(radians(light.innerCone));
-    float outer = cos(radians(light.outerCone));
-    return clamp((theta - outer) / (inner - outer), 0.0, 1.0);
 }
 
 vec3 ComputeCookTorranceSpecular(vec3 normal, vec3 viewDir, vec3 lightDir, vec3 F0, float roughness)
@@ -123,7 +106,7 @@ vec3 CalculatePBRLight(
     float NdotV = max(dot(normal, viewDir), 0.0);
     float HdotV = max(dot(H, viewDir), 0.0);
 
-    vec3 radiance = light.color * intensity * attenuation;
+    vec3 radiance = vec3(light.color.x, light.color.y, light.color.z) * intensity * attenuation;
 
     float NDF = DistributionGGX(normal, H, roughness);   
     float G   = GeometrySmith(normal, viewDir, lightDir, roughness);

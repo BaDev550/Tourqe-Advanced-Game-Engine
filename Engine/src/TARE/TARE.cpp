@@ -14,9 +14,9 @@ namespace TARE {
 		_DeferredRendering->GetLightShader()->CreateUBO("CameraUBO", sizeof(_Data.CameraData), 0);
 		_DeferredRendering->GetLightShader()->CreateSSBO(1, sizeof(Light) * MAX_LIGHTS + sizeof(int));
 		_DeferredRendering->GetLightShader()->CreateUBO("ScreenSpaceUBO", sizeof(_Data.ScreenSpaceData),  2);
+		_Data.LightData.Lights.resize(MAX_LIGHTS);
 
 		ShaderLibrary::Add("DebugShader", "shaders/Debugger/debug_vertex", "shaders/Debugger/debug_fragment");
-		_DebugLightRenderer = TAGE::MEM::MakeRef<Debug::DebugLightRenderer>();
 	}
 
 	void TARE::BeginFrame(const TAGE::MEM::Ref<Camera>& cam, const TAGE::MEM::Ref<Skybox>& skybox)
@@ -48,19 +48,19 @@ namespace TARE {
 	void TARE::EndFrame()
 	{
 		_DeferredRendering->UnbindGBuffer();
-		_DeferredRendering->RenderLightingPass(_Data.Lights, _Data.CameraData.CameraPosition);
+		_DeferredRendering->RenderLightingPass(_Data.LightData.Lights, _Data.CameraData.CameraPosition);
 
 		_Data.PostProcess->Render(_DeferredRendering->GetLightingBuffer());
 	}
 
 	void TARE::BeginShadowPass(const TAGE::MEM::Ref<Camera>& cam)
 	{
-		if (_Data.Lights.empty()) return;
+		if (_Data.LightData.Lights.empty()) return;
 		glm::vec3 lightDir;
 
-		for (size_t i = 0; i < _Data.Lights.size(); ++i) {
-			if (_Data.Lights[i].type == LightType::DIRECTIONAL) {
-				lightDir = _Data.Lights[i].direction;
+		for (size_t i = 0; i < _Data.LightData.Lights.size(); ++i) {
+			if (_Data.LightData.Lights[i].Type == LightType::DIRECTIONAL) {
+				lightDir = _Data.LightData.Lights[i].Direction;
 			}
 		}
 		_ShadowMap->BeginRender(cam, lightDir);
@@ -97,21 +97,9 @@ namespace TARE {
 		}
 	}
 
-	void TARE::SetLights(std::vector<Light>& lights)
+	void TARE::SetLights(const std::vector<Light>& Lights)
 	{
-		if (lights.empty()) return;
-		int index = 0;
-
-		for (auto it : lights) {
-			_Data.LightData.Lights[index] = it;
-			index++;
-		}
-		_Data.Lights = lights;
-		_Data.LightData.LightCount = index;
-		index = 0;
-
-		auto shader = _DeferredRendering->GetLightShader();
-		shader->Use();
-		_DeferredRendering->GetLightShader()->UpdateSSBO(1, lights.data(), sizeof(Light) * _Data.LightData.LightCount + sizeof(int));
+		_Data.LightData.Lights = Lights;
+		_DeferredRendering->GetLightShader()->UpdateSSBO(1, _Data.LightData.Lights.data(), sizeof(Light) * (int)_Data.LightData.Lights.size());
 	}
 }

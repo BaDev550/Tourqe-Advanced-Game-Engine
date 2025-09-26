@@ -222,14 +222,11 @@ namespace TAGE {
 			out << YAML::Key << "LightComponent";
 			out << YAML::BeginMap;
 			auto& light = entity.GetComponent<LightComponent>();
-			out << YAML::Key << "Type" << YAML::Value << (int)light.Handle.type;
-			out << YAML::Key << "Color" << YAML::Value << light.Handle.color;
-			out << YAML::Key << "Range" << YAML::Value << light.Handle.range;
-			out << YAML::Key << "Intensity" << YAML::Value << light.Handle.intensity;
-			if (light.Handle.type == LightType::SPOT) {
-				out << YAML::Key << "InnerCone" << YAML::Value << light.Handle.innerCone;
-				out << YAML::Key << "OuterCone" << YAML::Value << light.Handle.outerCone;
-			}
+			out << YAML::Key << "Type" << YAML::Value << (int)light.Handle.Type;
+			out << YAML::Key << "Color" << YAML::Value << light.Handle.Color;
+			out << YAML::Key << "Range" << YAML::Value << light.Handle.Range;
+			out << YAML::Key << "Intensity" << YAML::Value << light.Handle.Intensity;
+			out << YAML::Key << "CastShadow" << YAML::Value << light.Handle.CastShadow;
 
 			out << YAML::EndMap;
 		}
@@ -406,15 +403,12 @@ namespace TAGE {
 				auto lightComponent = entity["LightComponent"];
 				if (lightComponent) {
 					LightType type = (LightType)lightComponent["Type"].as<int>();
-					glm::vec3 color = lightComponent["Color"].as<glm::vec3>();
+					/*glm::vec4 color = lightComponent["Color"].as<glm::vec4>();*/
+					glm::vec4 color = glm::vec4(1.0f);
 					float range = lightComponent["Range"].as<float>();
 					float intensity = lightComponent["Intensity"].as<float>();
-					float innerCone = 0.0f, outerCone = 0.0f;
-					if (type == LightType::SPOT) {
-						innerCone = lightComponent["InnerCone"].as<float>();
-						outerCone = lightComponent["OuterCone"].as<float>();
-					}
-					auto& light = deserializedEntity.AddOrReplaceComponent<LightComponent>(Light(type, {}, {}, color, range, intensity, innerCone, outerCone));
+					bool castShadow = lightComponent["CastShadow"].as<bool>();
+					auto& light = deserializedEntity.AddOrReplaceComponent<LightComponent>(Light(type, castShadow, intensity, range, {}, {}, color));
 				}
 
 				auto skyboxComponent = entity["SkyboxComponent"];

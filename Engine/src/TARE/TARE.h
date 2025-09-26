@@ -35,8 +35,7 @@ namespace TARE {
 		};
 
 		struct LightsData {
-			Light Lights[MAX_LIGHTS];
-			int LightCount;
+			std::vector<Light> Lights;
 		};
 
 		struct ScreenSpaceData {
@@ -60,7 +59,6 @@ namespace TARE {
 			LightsData LightData;
 			ScreenSpaceData ScreenSpaceData;
 			TAGE::MEM::Ref<PostProcess> PostProcess;
-			std::vector<Light> Lights;
 
 			bool UseSSGI = false;
 			bool UseSSReflections = false;
@@ -76,18 +74,16 @@ namespace TARE {
 		void DrawGrid();
 		void Resize(int width, int height);
 
-		void SetLights(std::vector<Light>& lights);
+		void SetLights(const std::vector<Light>& Lights);
 		SceneData& GetSceneData() { return _Data; }
 		DeferredRendering& GetDeferredRendering() { return *_DeferredRendering; }
 		ShadowMap& GetShadowMap() { return *_ShadowMap; }
-		Debug::DebugLightRenderer& GetDebugLightRenderer() { return *_DebugLightRenderer; }
 	private:
 		int _Width, _Height;
 	private:
 		TAGE::MEM::Scope<EndlessGrid> _Grid;
 		TAGE::MEM::Ref<DeferredRendering> _DeferredRendering;
 		TAGE::MEM::Ref<ShadowMap> _ShadowMap;
-		TAGE::MEM::Ref<Debug::DebugLightRenderer> _DebugLightRenderer; // to-do implement
 	};
 }
 

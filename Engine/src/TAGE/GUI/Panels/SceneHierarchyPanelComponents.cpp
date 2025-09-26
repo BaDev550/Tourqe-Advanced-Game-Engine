@@ -244,13 +244,14 @@ namespace TAGE {
 
 		DrawComponent<LightComponent>("Light", entity, [](LightComponent& component)
 			{
-				GUI::DrawColorControl("Color", component.Handle.color);
-				ImGui::Checkbox("Cast Shadow", &component.Handle.castShadow);
-				ImGui::DragFloat("Intensity", &component.Handle.intensity, 0.01f, 0.0f, 100.0f);
-				ImGui::DragFloat("Range", &component.Handle.range, 0.1f, 0.0f, 400.0f);
-				ImGui::DragFloat("Inner Cone", &component.Handle.innerCone, 0.1f, 0.0f, glm::radians(90.0f));
-				ImGui::DragFloat("Outer Cone", &component.Handle.outerCone, 0.1f, 0.0f, glm::radians(90.0f));
-				ImGui::Combo("Type", (int*)&component.Handle.type, "Point\0Directional\0Spot\0");
+				bool castShadow = component.Handle.CastShadow;
+				GUI::DrawColorControl("Color", component.Handle.Color);
+				if (ImGui::Checkbox("Cast Shadow", &castShadow))
+					component.Handle.CastShadow = castShadow;
+
+				ImGui::DragFloat("Intensity", &component.Handle.Intensity, 0.01f, 0.0f, 100.0f);
+				ImGui::DragFloat("Range", &component.Handle.Range, 0.1f, 0.0f, 400.0f);
+				ImGui::Combo("Type", (int*)&component.Handle.Type, "Point\0Directional\0Spot\0");
 			});
 
 		DrawComponent<RigidBodyComponent>("Rigid Body", entity, [&](RigidBodyComponent& component)

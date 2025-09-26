@@ -37,7 +37,6 @@ layout(std140, set = 0, binding = 0) uniform CameraUBO
 layout(std430, set = 0, binding = 1) buffer LightsSSBO
 {
     Light u_Lights[MAX_LIGHTS];
-    int u_LightCount;
 };
 
 layout(std140, set = 0, binding = 2) uniform ScreenSpaceUBO

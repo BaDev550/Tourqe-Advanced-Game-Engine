@@ -1,5 +1,21 @@
 Scene: defaultScene
 Entities:
+  - Entity: 5172763963466616964
+    IdentityComponent:
+      Name: Empty Entity
+    Parent: 0
+    Children:
+      []
+    TransformComponent:
+      Position: [0, 0, 0]
+      Rotation: [23.9063244, 32.5800018, 12.6107922]
+      Scale: [1, 1, 1]
+    LightComponent:
+      Type: 1
+      Color: [1, 1, 1, 1]
+      Range: 100
+      Intensity: 11.1999998
+      CastShadow: true
   - Entity: 14679525554417596139
     IdentityComponent:
       Name: Empty Entity
@@ -12,26 +28,11 @@ Entities:
       Scale: [1, 1, 1]
     CameraComponent:
       Camera:
-        AspectRatio: 1.63994169
+        AspectRatio: 2.28102708
         FOV: 45
         NearClip: 0.0500000007
         FarClip: 250
       IsActive: true
-  - Entity: 11920536671106491516
-    IdentityComponent:
-      Name: Sun
-    Parent: 0
-    Children:
-      []
-    TransformComponent:
-      Position: [0, 0, 0]
-      Rotation: [25, 30.7000008, 0]
-      Scale: [1, 1, 1]
-    LightComponent:
-      Type: 1
-      Color: [1, 1, 1]
-      Range: 1
-      Intensity: 10
   - Entity: 8551450095498438749
     IdentityComponent:
       Name: Cube

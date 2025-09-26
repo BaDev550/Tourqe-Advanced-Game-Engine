@@ -56,10 +56,6 @@ namespace TAGE {
 		_Renderer->BeginFrame(cam, skybox);
 		if (!runtime) {
 			_Renderer->DrawGrid();
-			//for (auto& light : lights) { 
-			//	_Renderer->GetDebugLightRenderer().SetType(light.type);
-			//	_Renderer->GetDebugLightRenderer().Render(cam->GetViewProjectionMatrix(), light.position, light.range, 16, light.color); 
-			//}
 		}
 		RenderObjects(runtime);
 		_Renderer->EndFrame();
@@ -128,8 +124,8 @@ drawmesh:
 				Entity& lightEntity = _Scene->GetEntityByID(entity);
 				auto& lc = lightEntity.GetComponent<LightComponent>();
 				auto& transform = lightEntity.GetComponent<TransformComponent>();
-				lc.Handle.position = transform.Position;
-				lc.Handle.direction = transform.GetRotationEuler();
+				lc.Handle.Position = transform.Position;
+				lc.Handle.Direction = transform.GetRotationEuler();
 				lights.push_back(lc.Handle);
 			}
 		}

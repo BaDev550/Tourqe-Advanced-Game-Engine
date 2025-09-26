@@ -2,8 +2,8 @@
 #include "glm/glm.hpp"
 #include "TAGE/Common/TEnums.h"
 #include "TAGE/Utilities/Memory.h"
-#include "TARE/Shadow/ShadowMap.h"
 
+#ifdef OLD_LIGHT
 struct Light {
 	LightType type;
 	bool castShadow = false;
@@ -49,3 +49,19 @@ struct Light {
 	{
 	}
 };
+#else
+struct Light {
+	LightType Type;
+	int CastShadow;
+	float Intensity;
+	float Range;
+	glm::vec3 Position = glm::vec3();
+	float _pad1;
+	glm::vec3 Direction = glm::vec3();
+	float _pad2;
+	glm::vec4 Color = glm::vec4();
+
+	Light(LightType type = LightType::POINT, bool castshadow = true, float inten = 10.0f, float range = 100.0f, glm::vec3 pos = {}, glm::vec3 dir = {}, glm::vec4 color = {1, 1, 1, 1})
+		: Type(type), CastShadow(castshadow), Intensity(inten), Range(range), Position(pos), Direction(dir), Color(color) {}
+};
+#endif
