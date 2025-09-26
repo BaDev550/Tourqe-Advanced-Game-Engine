@@ -486,9 +486,6 @@
     <ClInclude Include="src\TARE\Texture\Texture.h">
       <Filter>src\TARE\Texture</Filter>
     </ClInclude>
-    <ClInclude Include="src\TARE\Window\Window.h">
-      <Filter>src\TARE\Window</Filter>
-    </ClInclude>
     <ClInclude Include="src\tagepch.h">
       <Filter>src</Filter>
     </ClInclude>
@@ -2018,9 +2015,6 @@
     </ClCompile>
     <ClCompile Include="src\TARE\Texture\Texture.cpp">
       <Filter>src\TARE\Texture</Filter>
-    </ClCompile>
-    <ClCompile Include="src\TARE\Window\Window.cpp">
-      <Filter>src\TARE\Window</Filter>
     </ClCompile>
     <ClCompile Include="src\tagepch.cpp">
       <Filter>src</Filter>

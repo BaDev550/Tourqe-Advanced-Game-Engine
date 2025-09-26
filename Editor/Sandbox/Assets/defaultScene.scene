@@ -7,14 +7,14 @@ Entities:
     Children:
       []
     TransformComponent:
-      Position: [0, 0, 0]
-      Rotation: [23.9063244, 32.5800018, 12.6107922]
+      Position: [0.360695332, 1.57297111, -1.73300934]
+      Rotation: [-4.5999999, 5.5, -0.100000001]
       Scale: [1, 1, 1]
     LightComponent:
       Type: 1
       Color: [1, 1, 1, 1]
-      Range: 100
-      Intensity: 11.1999998
+      Range: 1
+      Intensity: 12.9399996
       CastShadow: true
   - Entity: 14679525554417596139
     IdentityComponent:

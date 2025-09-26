@@ -212,7 +212,6 @@
     <ClInclude Include="src\TARE\TARE.h" />
     <ClInclude Include="src\TARE\Texture\Bitmap.h" />
     <ClInclude Include="src\TARE\Texture\Texture.h" />
-    <ClInclude Include="src\TARE\Window\Window.h" />
     <ClInclude Include="src\tagepch.h" />
     <ClInclude Include="vendor\glm\glm\common.hpp" />
     <ClInclude Include="vendor\glm\glm\detail\_features.hpp" />
@@ -724,9 +723,6 @@
     <ClCompile Include="src\TARE\TARE.cpp" />
     <ClCompile Include="src\TARE\Texture\FallbackTexture.cpp" />
     <ClCompile Include="src\TARE\Texture\Texture.cpp" />
-    <ClCompile Include="src\TARE\Window\Window.cpp">
-      <ObjectFileName>$(IntDir)\Window1.obj</ObjectFileName>
-    </ClCompile>
     <ClCompile Include="src\tagepch.cpp">
       <PrecompiledHeader>Create</PrecompiledHeader>
     </ClCompile>
