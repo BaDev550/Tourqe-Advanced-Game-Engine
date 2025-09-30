@@ -47,6 +47,11 @@
         DEBUG_BREAK; \
     }
 
+#define CHECKF(x, ...) \
+    if (!(x)) { \
+        LOG_ERROR(__VA_ARGS__); \
+    }
+
 #define GET_MESSAGES()   TAGE::Logger::GetSink()->GetMessages();
 #define CLEAR_MESSAGES() TAGE::Logger::GetSink()->Clear();
 #define CREATE_FILE_LOGGER() TAGE::Logger::createFileLogger();

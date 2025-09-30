@@ -53,7 +53,6 @@ namespace TAGE::Editor {
 		void UI_DrawMainMenuBar();
 		void UI_DrawToolbar();
 		void UI_DrawViewport();
-		void UI_DrawSettingsPanel();
 	private:
 		Entity* _SelectedObject;
 		MEM::Ref<TARE::EditorCamera> _EditorCamera;

@@ -1,40 +1,59 @@
 #include "tagepch.h"
 #include "OpenGL_Shader.h"
 #include "glm/gtc/type_ptr.hpp"
+
 #include <GLAD/glad.h>
 
-namespace TARE {
-	OpenGL_Shader::OpenGL_Shader(const char* vertexPath, const char* fragmentPath, const char* geometryPath)
+#include "OpenGL_ShaderCompiler.h"
+
+namespace TARE::OpenGL {
+	OpenGL_Shader::OpenGL_Shader(const std::string& shaderPath)
 	{
-		LoadShader(vertexPath, fragmentPath, geometryPath);
+		_ShaderPath = shaderPath;
+		OpenGL_ShaderCompiler compiler(_ShaderPath);
+		compiler.Compile();
+		_ID = compiler.GetProgram();
 	}
+
 	OpenGL_Shader::~OpenGL_Shader()
 	{
 		glDeleteProgram(_ID);
 	}
+
 	void OpenGL_Shader::Use() const
 	{
 		glUseProgram(_ID);
 	}
 
-	int OpenGL_Shader::GetUniformLocation(unsigned int program, const char* name) const
+	int GetUniformLocation(unsigned int program, std::string name)
 	{
-		int location = glGetUniformLocation(program, name);
+		int location = glGetUniformLocation(program, name.c_str());
 		return location;
 	}
 
-	void OpenGL_Shader::SetUniform(const char* name, bool value) const { glUniform1i(GetUniformLocation(_ID, name), static_cast<int>(value)); }
-	void OpenGL_Shader::SetUniform(const char* name, int value) const { glUniform1i(GetUniformLocation(_ID, name), value); }
-	void OpenGL_Shader::SetUniform(const char* name, float value) const { glUniform1f(GetUniformLocation(_ID, name), value); }
-	void OpenGL_Shader::SetUniform(const char* name, glm::vec2 value) const { glUniform2fv(GetUniformLocation(_ID, name), 1, glm::value_ptr(value)); }
-	void OpenGL_Shader::SetUniform(const char* name, glm::vec3 value) const { glUniform3fv(GetUniformLocation(_ID, name), 1, glm::value_ptr(value)); }
-	void OpenGL_Shader::SetUniform(const char* name, glm::vec4 value) const { glUniform4fv(GetUniformLocation(_ID, name), 1, glm::value_ptr(value)); }
-	void OpenGL_Shader::SetUniform(const char* name, glm::mat3 value) const { glUniformMatrix3fv(GetUniformLocation(_ID, name), 1, GL_FALSE, glm::value_ptr(value)); }
-	void OpenGL_Shader::SetUniform(const char* name, glm::mat4 value) const { glUniformMatrix4fv(GetUniformLocation(_ID, name), 1, GL_FALSE, glm::value_ptr(value)); }
+	void OpenGL_Shader::SetUniform(const std::string& name, bool value) const { glUniform1i(GetUniformLocation(_ID, name), static_cast<int>(value)); }
+	void OpenGL_Shader::SetUniform(const std::string& name, int value) const { glUniform1i(GetUniformLocation(_ID, name), value); }
+	void OpenGL_Shader::SetUniform(const std::string& name, float value) const { glUniform1f(GetUniformLocation(_ID, name), value); }
+	void OpenGL_Shader::SetUniform(const std::string& name, glm::vec2 value) const { glUniform2fv(GetUniformLocation(_ID, name), 1, glm::value_ptr(value)); }
+	void OpenGL_Shader::SetUniform(const std::string& name, glm::vec3 value) const { glUniform3fv(GetUniformLocation(_ID, name), 1, glm::value_ptr(value)); }
+	void OpenGL_Shader::SetUniform(const std::string& name, glm::vec4 value) const { glUniform4fv(GetUniformLocation(_ID, name), 1, glm::value_ptr(value)); }
+	void OpenGL_Shader::SetUniform(const std::string& name, glm::mat3 value) const { glUniformMatrix3fv(GetUniformLocation(_ID, name), 1, GL_FALSE, glm::value_ptr(value)); }
+	void OpenGL_Shader::SetUniform(const std::string& name, glm::mat4 value) const { glUniformMatrix4fv(GetUniformLocation(_ID, name), 1, GL_FALSE, glm::value_ptr(value)); }
 
-	void OpenGL_Shader::DestroyProgram() const
+	bool OpenGL_Shader::LinkUBOToBindingPoint(const char* blockName, unsigned int bindingPoint)
 	{
-		glDeleteProgram(_ID);
+		int blockIndex = glGetUniformBlockIndex(_ID, blockName);
+		if (blockIndex == GL_INVALID_INDEX) {
+			return false;
+		}
+		glUniformBlockBinding(_ID, blockIndex, bindingPoint);
+		return true;
+	}
+
+	void OpenGL_Shader::DeleteShader(uint shader)
+	{
+		if (shader != 0)
+			glDeleteShader(shader);
 	}
 
 	bool OpenGL_Shader::CreateUBO(const char* blockName, size_t size, unsigned int bindingPoint)
@@ -91,74 +110,8 @@ namespace TARE {
 		glBindBuffer(GL_SHADER_STORAGE_BUFFER, 0);
 	}
 
-	bool OpenGL_Shader::LinkUBOToBindingPoint(const char* blockName, unsigned int bindingPoint)
+	bool OpenGL_Shader::Reload()
 	{
-		int blockIndex = glGetUniformBlockIndex(_ID, blockName);
-		if (blockIndex == GL_INVALID_INDEX) {
-			return false;
-		}
-		glUniformBlockBinding(_ID, blockIndex, bindingPoint);
-		return true;
-	}
-
-	void OpenGL_Shader::CompileShader(uint& shader, const char* code, const char* type)
-	{
-		if (std::strcmp(type, "VERTEX") == 0)
-			shader = glCreateShader(GL_VERTEX_SHADER);
-		else if (std::strcmp(type, "FRAGMENT") == 0)
-			shader = glCreateShader(GL_FRAGMENT_SHADER);
-		else if (std::strcmp(type, "GEOMETRY") == 0)
-			shader = glCreateShader(GL_GEOMETRY_SHADER);
-		else {
-			LOG_ERROR("Unknown shader type: {}", type);
-			return;
-		}
-
-		//LOG_INFO("SHADER CODE:\n{}", code);
-		glShaderSource(shader, 1, &code, nullptr);
-		glCompileShader(shader);
-		CheckCompileErrors(shader, type);
-	}
-
-	void OpenGL_Shader::CompileProgram(uint vertex, uint fragment, uint* geometry)
-	{
-		_ID = glCreateProgram();
-		glAttachShader(_ID, vertex);
-		glAttachShader(_ID, fragment);
-		if (geometry)
-			glAttachShader(_ID, *geometry);
-
-		glLinkProgram(_ID);
-		CheckCompileErrors(_ID, "PROGRAM");
-	}
-
-	void OpenGL_Shader::DeleteShader(uint shader)
-	{
-		if (shader != 0)
-			glDeleteShader(shader);
-	}
-
-	void OpenGL_Shader::CheckCompileErrors(uint shader, const char* type) const
-	{
-		int success;
-		char infoLog[1024];
-		if (std::string(type) != "PROGRAM") {
-			glGetShaderiv(shader, GL_COMPILE_STATUS, &success);
-			if (!success) {
-				glGetShaderInfoLog(shader, 1024, nullptr, infoLog);
-				LOG_ERROR("Shader compilation error in {}: {}\n", type, infoLog);
-			}
-			else {
-			}
-		}
-		else {
-			glGetProgramiv(shader, GL_LINK_STATUS, &success);
-			if (!success) {
-				glGetProgramInfoLog(shader, 1024, nullptr, infoLog);
-				LOG_ERROR("Program linking error: {}\n", infoLog);
-			}
-			else {
-			}
-		}
+		return false;
 	}
 }

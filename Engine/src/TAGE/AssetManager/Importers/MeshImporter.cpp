@@ -28,7 +28,6 @@ namespace TAGE {
 		StaticMeshImporter sm_importer;
 
 		MEM::Ref<TARE::Model> model = MEM::MakeRef<TARE::Model>();
-		ModelType type = ModelType::MODEL;
 		Assimp::Importer importer;
 		const aiScene* scene = importer.ReadFile(filepath.string(),
 			aiProcess_Triangulate |
@@ -53,14 +52,11 @@ namespace TAGE {
 				break;
 			}
 		}
-		type = hasBones ? ModelType::SKINNED_MODEL : ModelType::MODEL;
 
-		if (type == ModelType::MODEL) {
-			sm_importer.ProcessNode(filepath, model, scene->mRootNode, scene);
-			StaticMeshSerializer::Serialize(model, filepath.replace_extension(".tmesh"));
-			std::filesystem::path relativePath = std::filesystem::relative(filepath.replace_extension(".tmesh"), Project::GetAssetDirectory());
-			Project::GetActive()->GetEditorAssetManager()->ImportAsset(relativePath);
-		}
+		sm_importer.ProcessNode(filepath, model, scene->mRootNode, scene);
+		StaticMeshSerializer::Serialize(model, filepath.replace_extension(".tmesh"));
+		std::filesystem::path relativePath = std::filesystem::relative(filepath.replace_extension(".tmesh"), Project::GetAssetDirectory());
+		Project::GetActive()->GetEditorAssetManager()->ImportAsset(relativePath);
 
 		return model;
 	}

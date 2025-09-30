@@ -1,6 +1,7 @@
 #pragma once
 #include "TAGE/AssetManager/AssetMetadata.h"
-#include "TARE/Texture/Texture.h"
+
+#include "TARE/Texture/Texture2D.h"
 
 namespace TAGE {
 	class TextureImporter

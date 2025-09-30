@@ -218,26 +218,26 @@ namespace TAGE {
 			out << YAML::EndMap;
 		}
 
-		if (entity.HasComponent<LightComponent>()) {
-			out << YAML::Key << "LightComponent";
-			out << YAML::BeginMap;
-			auto& light = entity.GetComponent<LightComponent>();
-			out << YAML::Key << "Type" << YAML::Value << (int)light.Handle.Type;
-			out << YAML::Key << "Color" << YAML::Value << light.Handle.Color;
-			out << YAML::Key << "Range" << YAML::Value << light.Handle.Range;
-			out << YAML::Key << "Intensity" << YAML::Value << light.Handle.Intensity;
-			out << YAML::Key << "CastShadow" << YAML::Value << light.Handle.CastShadow;
+		//if (entity.HasComponent<LightComponent>()) {
+		//	out << YAML::Key << "LightComponent";
+		//	out << YAML::BeginMap;
+		//	auto& light = entity.GetComponent<LightComponent>();
+		//	out << YAML::Key << "Type" << YAML::Value << (int)light.Handle.Type;
+		//	out << YAML::Key << "Color" << YAML::Value << light.Handle.Color;
+		//	out << YAML::Key << "Range" << YAML::Value << light.Handle.Range;
+		//	out << YAML::Key << "Intensity" << YAML::Value << light.Handle.Intensity;
+		//	out << YAML::Key << "CastShadow" << YAML::Value << light.Handle.CastShadow;
 
-			out << YAML::EndMap;
-		}
+		//	out << YAML::EndMap;
+		//}
 
-		if (entity.HasComponent<SkyboxComponent>()) {
-			out << YAML::Key << "SkyboxComponent";
-			out << YAML::BeginMap;
-			auto& skybox = entity.GetComponent<SkyboxComponent>();
-			out << YAML::Key << "TexturePath" << YAML::Value << skybox.Handle->GetTexture()->GetPath();
-			out << YAML::EndMap;
-		}
+		//if (entity.HasComponent<SkyboxComponent>()) {
+		//	out << YAML::Key << "SkyboxComponent";
+		//	out << YAML::BeginMap;
+		//	auto& skybox = entity.GetComponent<SkyboxComponent>();
+		//	out << YAML::Key << "TexturePath" << YAML::Value << skybox.Handle->GetTexture()->GetPath();
+		//	out << YAML::EndMap;
+		//}
 
 		if (entity.HasComponent<RigidBodyComponent>()) {
 			out << YAML::Key << "RigidBodyComponent";
@@ -402,19 +402,19 @@ namespace TAGE {
 
 				auto lightComponent = entity["LightComponent"];
 				if (lightComponent) {
-					LightType type = (LightType)lightComponent["Type"].as<int>();
+					//LightType type = (LightType)lightComponent["Type"].as<int>();
 					/*glm::vec4 color = lightComponent["Color"].as<glm::vec4>();*/
-					glm::vec4 color = glm::vec4(1.0f);
-					float range = lightComponent["Range"].as<float>();
-					float intensity = lightComponent["Intensity"].as<float>();
-					bool castShadow = lightComponent["CastShadow"].as<bool>();
-					auto& light = deserializedEntity.AddOrReplaceComponent<LightComponent>(Light(type, castShadow, intensity, range, {}, {}, color));
+					//glm::vec4 color = glm::vec4(1.0f);
+					//float range = lightComponent["Range"].as<float>();
+					//float intensity = lightComponent["Intensity"].as<float>();
+					//bool castShadow = lightComponent["CastShadow"].as<bool>();
+					//auto& light = deserializedEntity.AddOrReplaceComponent<LightComponent>(Light(type, castShadow, intensity, range, {}, {}, color));
 				}
 
 				auto skyboxComponent = entity["SkyboxComponent"];
 				if (skyboxComponent) {
-					auto& texturePath = skyboxComponent["TexturePath"].as<std::string>();
-					auto& skybox = deserializedEntity.AddOrReplaceComponent<SkyboxComponent>(texturePath);
+					//auto& texturePath = skyboxComponent["TexturePath"].as<std::string>();
+					//auto& skybox = deserializedEntity.AddOrReplaceComponent<SkyboxComponent>(texturePath);
 				}
 
 				auto colliderComponent = entity["ColliderComponent"];

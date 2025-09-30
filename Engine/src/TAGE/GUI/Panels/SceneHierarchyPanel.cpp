@@ -146,13 +146,10 @@ namespace TAGE {
 		if (ImGui::BeginPopup("AddComponent"))
 		{
 			DisplayAddComponentEntry<ScriptComponent>("Script");
-			DisplayAddComponentEntry<LightComponent>("Light");
 			DisplayAddComponentEntry<MeshComponent>("Mesh");
 			DisplayAddComponentEntry<CameraComponent>("Camera");
-			DisplayAddComponentEntry<SkyboxComponent>("Skybox");
 			DisplayAddComponentEntry<RigidBodyComponent>("Rigidbody");
 			DisplayAddComponentEntry<ColliderComponent>("Collider");
-			DisplayAddComponentEntry<AnimatorComponent>("Animator");
 
 			ImGui::EndPopup();
 		}

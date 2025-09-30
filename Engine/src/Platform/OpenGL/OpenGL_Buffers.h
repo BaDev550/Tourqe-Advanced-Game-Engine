@@ -1,7 +1,7 @@
 #pragma once
 #include "TARE/Buffers/Buffers.h"
 
-namespace TARE {
+namespace TARE::OpenGL {
 	class OpenGL_VertexBufferObject : public VertexBufferObject
 	{
 	public:

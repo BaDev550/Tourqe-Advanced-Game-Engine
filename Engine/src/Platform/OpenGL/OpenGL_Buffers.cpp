@@ -1,8 +1,9 @@
 #include "tagepch.h"
 #include "OpenGL_Buffers.h"
+
 #include <GLAD/glad.h>
 
-namespace TARE {
+namespace TARE::OpenGL {
 	OpenGL_VertexBufferObject::OpenGL_VertexBufferObject(void* data, size_t size)
 	{
 		if (data) {
@@ -18,12 +19,21 @@ namespace TARE {
 
 		_Size = size;
 	}
+
 	OpenGL_VertexBufferObject::~OpenGL_VertexBufferObject()
 	{
 		glDeleteBuffers(1, &_ID);
 	}
-	void OpenGL_VertexBufferObject::Bind() const { glBindBuffer(GL_ARRAY_BUFFER, _ID); }
-	void OpenGL_VertexBufferObject::Unbind() const { glBindBuffer(GL_ARRAY_BUFFER, 0); }
+
+	void OpenGL_VertexBufferObject::Bind() const
+	{
+		glBindBuffer(GL_ARRAY_BUFFER, _ID);
+	}
+
+	void OpenGL_VertexBufferObject::Unbind() const
+	{
+		glBindBuffer(GL_ARRAY_BUFFER, 0);
+	}
 
 	void OpenGL_VertexBufferObject::SetData(void* data, size_t size)
 	{
@@ -45,10 +55,19 @@ namespace TARE {
 		glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, _ID);
 		glBufferData(GL_ELEMENT_ARRAY_BUFFER, count * sizeof(uint), indices, GL_STATIC_DRAW);
 	}
+
 	OpenGL_ElementBufferObject::~OpenGL_ElementBufferObject()
 	{
 		glDeleteBuffers(1, &_ID);
 	}
-	void OpenGL_ElementBufferObject::Bind() const { glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, _ID); }
-	void OpenGL_ElementBufferObject::Unbind() const { glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0); }
+
+	void OpenGL_ElementBufferObject::Bind() const
+	{
+		glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, _ID);
+	}
+
+	void OpenGL_ElementBufferObject::Unbind() const
+	{
+		glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
+	}
 }

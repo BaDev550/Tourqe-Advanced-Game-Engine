@@ -22,11 +22,8 @@ namespace TAGE {
 		int height = _AppSpecifics.windowSettings.Height;
 		_Window = MEM::MakeScope<Window>(_AppSpecifics.windowSettings, WindowMode::WINDOWED);
 
-		if (spec.UseTARE)
-			_Renderer = MEM::MakeScope<TARE::TARE>(width, height);
-
 		_Window->SetEventCallback(BIND_EVENT_FN(Application::OnEvent));
-		_Window->ToggleCursor(true);
+		_Window->ToggleCursor(false);
 		Input::Init(_Window->GetGLFWWindow());
 
 		_ImGuiLayer = MEM::MakeScope<ImGuiLayer>();
@@ -69,6 +66,12 @@ namespace TAGE {
 			for (const auto& layer : _LayerStack)
 				layer->OnImGuiRender();
 			_ImGuiLayer->End();
+
+			static bool cursor = false;
+			if (Input::IsKeyJustPressed(Key::Tab)) {
+				_Window->ToggleCursor(cursor);
+				cursor = !cursor;
+			}
 
 			Input::Update();
 			GrapichDispatcher::Get()->ExecutePending();

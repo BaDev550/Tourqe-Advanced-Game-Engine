@@ -41,8 +41,6 @@ namespace TAGE::Physics::Raycast {
         if (draw == RayDrawType::FOR_DURATION) {
             btVector3 color = result.hit ? btVector3(0.0f, 1.0f, 0.0f) : btVector3(1.0f, 0.0f, 0.0f);
             btVector3 LineEnd = result.hit ? btVector3(result.point.x, result.point.y, result.point.z) : end;
-
-            _DebugRenderer->drawLineForSeconds(start, LineEnd, color, draw_time);
         }
         return result;
 	}

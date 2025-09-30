@@ -1,22 +1,15 @@
 #include "tagepch.h"
 #include "VertexArrayBuffer.h"
-#include "TARE/Common/RenderAPI.h"
 
 #include "Platform/OpenGL/OpenGL_VertexArrayBuffer.h"
 
 namespace TARE {
-	TAGE::MEM::Ref<VertexArrayObject> VertexArrayObject::Create()
-	{
-		switch (RenderAPI::GetRenderAPI())
+	TAGE::MEM::Ref<VertexArrayObject> VertexArrayObject::Create() {
+		switch (RenderAPI::GetGrapichAPI())
 		{
-		case RAPI::UNDEFINED:
-		case RAPI::OPENGL: return TAGE::MEM::MakeRef<OpenGL_VertexArrayObject>();
-		case RAPI::DIRECTX11:
-		case RAPI::VULKAN:
+		case GrapichAPI::OpenGL: return TAGE::MEM::MakeRef<OpenGL::OpenGL_VertexArrayObject>();
 		default:
-			ASSERT_NOMSG(false);
-			break;
+			return nullptr;
 		}
-		return nullptr;
 	}
 }

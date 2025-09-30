@@ -1,7 +1,25 @@
 #pragma once
-#include "TAGE/Common/TEnums.h"
+#include "TAGE/Common/TDefines.h"
 
 namespace TARE {
+	enum class ShaderDataType : uint8 {
+		NONE = 0,
+		FLOAT,
+		INT,
+		BOOL,
+		VEC2,
+		VEC3,
+		VEC4,
+		IVEC4,
+		MAT3,
+		MAT4,
+		SHORT3,
+		USHORT2,
+		BYTE3,
+		BYTE3_NORM,
+		UBYTE2_NORM
+	};
+
 	static uint ShaderDataTypeSize(ShaderDataType type) {
 		switch (type)
 		{
@@ -9,25 +27,25 @@ namespace TARE {
 		case ShaderDataType::FLOAT:       return 4;
 		case ShaderDataType::INT:         return 4;
 		case ShaderDataType::BOOL:        return 4;
-		case ShaderDataType::VEC2:        return 4*2;
-		case ShaderDataType::VEC3:        return 4*3;
-		case ShaderDataType::VEC4:        return 4*4;
-		case ShaderDataType::IVEC4:       return 4*4;
-		case ShaderDataType::MAT3:        return 4*3*3;
-		case ShaderDataType::MAT4:        return 4*4*4;
-		case ShaderDataType::SHORT3:      return 2*3;
-		case ShaderDataType::USHORT2:     return 2*2;
-		case ShaderDataType::BYTE3:       return 1*3;
-		case ShaderDataType::BYTE3_NORM:  return 1*3;
-		case ShaderDataType::UBYTE2_NORM: return 1*2;
+		case ShaderDataType::VEC2:        return 4 * 2;
+		case ShaderDataType::VEC3:        return 4 * 3;
+		case ShaderDataType::VEC4:        return 4 * 4;
+		case ShaderDataType::IVEC4:       return 4 * 4;
+		case ShaderDataType::MAT3:        return 4 * 3 * 3;
+		case ShaderDataType::MAT4:        return 4 * 4 * 4;
+		case ShaderDataType::SHORT3:      return 2 * 3;
+		case ShaderDataType::USHORT2:     return 2 * 2;
+		case ShaderDataType::BYTE3:       return 1 * 3;
+		case ShaderDataType::BYTE3_NORM:  return 1 * 3;
+		case ShaderDataType::UBYTE2_NORM: return 1 * 2;
 		default:
-			ASSERT_NOMSG(false);
+			ASSERT("INVALID SHADER DATA TYPE", false);
 			return 0;
 		}
 	}
 
 	struct BufferElement {
-		std::string Name;
+		std::string_view Name;
 		ShaderDataType Type;
 		uint Size;
 		uint Offset;
@@ -44,15 +62,15 @@ namespace TARE {
 			case ShaderDataType::VEC3:          return 3;
 			case ShaderDataType::VEC4:          return 4;
 			case ShaderDataType::IVEC4:		    return 4;
-			case ShaderDataType::MAT3:          return 3*3;
-			case ShaderDataType::MAT4:          return 4*4;
+			case ShaderDataType::MAT3:          return 3 * 3;
+			case ShaderDataType::MAT4:          return 4 * 4;
 			case ShaderDataType::SHORT3:        return 3;
 			case ShaderDataType::USHORT2:       return 2;
 			case ShaderDataType::BYTE3:         return 3;
 			case ShaderDataType::BYTE3_NORM:    return 3;
 			case ShaderDataType::UBYTE2_NORM:   return 2;
 			default:
-				ASSERT_NOMSG(false);
+				ASSERT("INVALID SHADER DATA TYPE INSIDE BUFFER ELEMENT", false);
 				break;
 			}
 		}
@@ -66,11 +84,7 @@ namespace TARE {
 	class BufferLayout {
 	public:
 		BufferLayout() {}
-		BufferLayout(const std::initializer_list<BufferElement>& elements) 
-			: _Elements(elements)
-		{
-			CalculateOffsetAndStride();
-		}
+		BufferLayout(const std::initializer_list<BufferElement>& elements) : _Elements(elements) { CalculateOffsetAndStride(); }
 		inline const std::vector<BufferElement>& GetElements() const { return _Elements; }
 		inline uint GetStride() const { return _Stride; }
 

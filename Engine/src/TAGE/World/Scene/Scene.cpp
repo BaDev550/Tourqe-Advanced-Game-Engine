@@ -26,12 +26,10 @@ namespace TAGE {
 	}
 
 	Scene::Scene(const std::string& name) : _Name(name) {
-		TARE::Debug::DebugRenderer::Get().Init();
-
 		_PhysicsSystem = MEM::MakeRef<System_Physics>(_PhysicsWorld);
 		_PhysicsSystem->SetActiveScene(this);
 
-		_RendererSystem = MEM::MakeRef<System_Renderer>(Application::Get()->GetRenderer());
+		_RendererSystem = MEM::MakeRef<System_Renderer>();
 		_RendererSystem->SetActiveScene(this);
 	}
 
@@ -309,7 +307,7 @@ namespace TAGE {
 		newScene->_Width = other->_Width;
 		newScene->_Height = other->_Height;
 
-		newScene->_RendererSystem = MEM::MakeRef<System_Renderer>(Application::Get()->GetRenderer());
+		newScene->_RendererSystem = MEM::MakeRef<System_Renderer>();
 		newScene->_PhysicsSystem = MEM::MakeRef<System_Physics>(other->_PhysicsWorld);
 
 		newScene->_RendererSystem->SetActiveScene(newScene.get());
@@ -340,8 +338,6 @@ namespace TAGE {
 
 		CopyComponentIfExists<TransformComponent>(newEntity, _Registry, entity);
 		CopyComponentIfExists<MeshComponent>(newEntity, _Registry, entity);
-		CopyComponentIfExists<LightComponent>(newEntity, _Registry, entity);
-		CopyComponentIfExists<SkyboxComponent>(newEntity, _Registry, entity);
 		CopyComponentIfExists<ScriptComponent>(newEntity, _Registry, entity);
 		CopyComponentIfExists<CameraComponent>(newEntity, _Registry, entity);
 		CopyComponentIfExists<RigidBodyComponent>(newEntity, _Registry, entity);
@@ -380,17 +376,7 @@ template<typename T>
 	}
 
 	template<>
-	void Scene::OnComponentAdded<LightComponent>(Entity entity, LightComponent& component)
-	{
-	}
-
-	template<>
 	void Scene::OnComponentAdded<MeshComponent>(Entity entity, MeshComponent& component)
-	{
-	}
-
-	template<>
-	void Scene::OnComponentAdded<SkyboxComponent>(Entity entity, SkyboxComponent& component)
 	{
 	}
 
@@ -422,13 +408,5 @@ template<typename T>
 	template<>
 	void Scene::OnComponentAdded<RelationshipComponent>(Entity entity, RelationshipComponent& component)
 	{
-	}
-
-	template<>
-	void Scene::OnComponentAdded<AnimatorComponent>(Entity entity, AnimatorComponent& component)
-	{
-		if (entity.HasComponent<MeshComponent>()) {
-			component._ModelHandle = entity.GetComponent<MeshComponent>().Handle.get();
-		}
 	}
 }

@@ -1,42 +1,29 @@
 #pragma once
-#include "TAGE/Common/TDefines.h"
-#include "TAGE/Common/TEnums.h"
-#include "TAGE/Common/TTypes.h"
-#include "TAGE/Utilities/Memory.h"
 
-#include "glm/glm.hpp"
-#include "glm/gtc/type_ptr.hpp"
+#include "VertexData.h"
+#include "Material.h"
 
-#include "TARE/Material/Material.h"
-#include "TARE/Buffers/Buffers.h"
 #include "TARE/Buffers/VertexArrayBuffer.h"
-#include "TARE/Shader/Shader.h"
-#include <vector>
 
 namespace TARE {
-	class Mesh {
+	class Mesh
+	{
 	public:
-		Mesh(
-			std::vector<VertexData> vertices,
-			std::vector<uint> indices,
-			TAGE::MEM::Ref<Material> material
-		);
+		Mesh(std::vector<VertexData> vertices, std::vector<uint> indices, TAGE::MEM::Ref<Material> material);
 		Mesh() {}
-		virtual ~Mesh();
-		void Draw(TAGE::MEM::Ref<Shader>& shader) const;
+		
+		void SetMaterial(const TAGE::MEM::Ref<Material>& mat) { _Material = mat; }
 
-		std::vector<VertexData> GetVertices() { return _vertices; }
-		std::vector<uint> GetIndices() { return _indices; }
-		TAGE::MEM::Ref<Material> GetMaterial() { return _material; }
-
-		void SetVertices(const std::vector<VertexData>& data) { _vertices = data; }
-		void SetIndices(const std::vector<uint>& data) { _indices = data; }
-		void SetMaterial(const TAGE::MEM::Ref<Material>& material) { _material = material; }
-		virtual void SetupMesh();
-	protected:
-		std::vector<VertexData> _vertices;
-		std::vector<uint> _indices;
+		const TAGE::MEM::Ref<VertexArrayObject>& GetVertexArrayObject() { return _VAO; }
+		const TAGE::MEM::Ref<Material>& GetMaterial() { return _Material; }
+		const std::vector<VertexData> GetVertices() const { return _Vertices; }
+		const std::vector<uint> GetIndices() const { return _Indices; }
+	private:
+		std::vector<VertexData> _Vertices;
+		std::vector<uint> _Indices;
 		TAGE::MEM::Ref<VertexArrayObject> _VAO;
-		TAGE::MEM::Ref<Material> _material;
+		TAGE::MEM::Ref<Material> _Material;
+	protected:
+		void CreateMesh();
 	};
 }

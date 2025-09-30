@@ -97,11 +97,9 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClInclude Include="src\EditorLayer.h" />
-    <ClInclude Include="src\Gamelayer\GameLayer.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\EditorLayer.cpp" />
-    <ClCompile Include="src\Gamelayer\GameLayer.cpp" />
     <ClCompile Include="src\TourqeEditor.cpp" />
   </ItemGroup>
   <ItemGroup>

@@ -1,6 +1,5 @@
 #include "tagepch.h"
 #include "PhysicsWorld.h"
-#include "TARE/DebugRenderer/DebugRenderer.h"
 #include "TAGE/World/Objects/Entity.h"
 #include "TAGE/World/Components/RenderComponents.h"
 
@@ -12,10 +11,8 @@ namespace TAGE::Physics {
         _Solver =          MEM::MakeScope<btSequentialImpulseConstraintSolver>();
         _Dispatcher =      MEM::MakeScope<btCollisionDispatcher>(_CollisionConfig.get());
         _DynamicsWorld =   MEM::MakeScope<btDiscreteDynamicsWorld>(_Dispatcher.get(), _Broadphase.get(), _Solver.get(), _CollisionConfig.get());
-        _DebugRenderer =   MEM::MakeScope<PhysicsDebugRenderer>();
 
         _DynamicsWorld->setGravity(btVector3(0, -9.81f, 0));
-        _DynamicsWorld->setDebugDrawer(_DebugRenderer.get());
     }
 
     PhysicsWorld::~PhysicsWorld() {
@@ -37,14 +34,6 @@ namespace TAGE::Physics {
 
     void PhysicsWorld::DrawDebug(float dt, const glm::mat4& viewProj)
     {
-        if (!_DynamicsWorld) return;
-
-        auto& renderer = TARE::Debug::DebugRenderer::Get();
-
-        renderer.BeginFrame();
-        _DynamicsWorld->debugDrawWorld();
-        renderer.EndFrame(dt);
-        renderer.Render(viewProj);
     }
 
     namespace Utils {
@@ -73,7 +62,7 @@ namespace TAGE::Physics {
                 const auto& indices = mesh->GetIndices();
 
                 for (const auto& vertex : vertices) {
-                    allVertices.push_back(vertex.pos);
+                    allVertices.push_back(vertex.position);
                 }
 
                 for (uint index : indices) {

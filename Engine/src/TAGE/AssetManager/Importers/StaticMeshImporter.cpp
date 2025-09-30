@@ -7,6 +7,8 @@
 #include "TAGE/AssetManager/Importers/TextureImporter.h"
 
 namespace TAGE {
+	using namespace TARE;
+
 	void StaticMeshImporter::ProcessNode(const std::filesystem::path& filepath, MEM::Ref<TARE::Model>& model, aiNode* node, const aiScene* scene)
 	{
 		_SourcePath = filepath;
@@ -22,14 +24,14 @@ namespace TAGE {
 		}
 	}
 
-	aiTextureType ToAiTextureType(TextureType type) {
+	aiTextureType ToAiTextureType(TARE::TextureType type) {
 		switch (type) {
-		case TextureType::DIFFUSE:            return aiTextureType_DIFFUSE;
-		case TextureType::SPECULAR:           return aiTextureType_SPECULAR;
-		case TextureType::NORMAL:             return aiTextureType_NORMALS;
-		case TextureType::ROUGHNESS:          return aiTextureType_DIFFUSE_ROUGHNESS;
-		case TextureType::METALLIC:           return aiTextureType_METALNESS;
-		case TextureType::AMBIENT_OCCLUSION:  return aiTextureType_LIGHTMAP;
+		case TextureType::Diffuse:            return aiTextureType_DIFFUSE;
+		case TextureType::Specular:           return aiTextureType_SPECULAR;
+		case TextureType::Normal:             return aiTextureType_NORMALS;
+		case TextureType::Roughness:          return aiTextureType_DIFFUSE_ROUGHNESS;
+		case TextureType::Metallic:           return aiTextureType_METALNESS;
+		case TextureType::AmbientOcclusion:   return aiTextureType_LIGHTMAP;
 		default:                              return aiTextureType_NONE;
 		}
 	}
@@ -38,7 +40,7 @@ namespace TAGE {
 	{
 		aiTextureType aiType = ToAiTextureType(type);
 
-		if (outMaterial->GetTexture(type) != 0)
+		if (outMaterial->HasTexture(type))
 			return;
 
 		aiString path;
@@ -65,18 +67,18 @@ namespace TAGE {
 	{
 		MaterialSerializer mat_serializer;
 		std::string materialName = "Material";
-		MEM::Ref<TARE::Material> material = MEM::MakeRef<TARE::Material>();
+		MEM::Ref<TARE::Material> material = Material::Create();
 
 		if (mesh->mMaterialIndex >= 0)
 		{
 			aiMaterial* mat = scene->mMaterials[mesh->mMaterialIndex];
 			materialName = mat->GetName().C_Str();
-			LoadTextureToMaterial(TextureType::DIFFUSE, mat, material);
-			LoadTextureToMaterial(TextureType::SPECULAR, mat, material);
-			LoadTextureToMaterial(TextureType::NORMAL, mat, material);
-			LoadTextureToMaterial(TextureType::ROUGHNESS, mat, material);
-			LoadTextureToMaterial(TextureType::METALLIC, mat, material);
-			LoadTextureToMaterial(TextureType::AMBIENT_OCCLUSION, mat, material);
+			LoadTextureToMaterial(TextureType::Diffuse, mat, material);
+			LoadTextureToMaterial(TextureType::Specular, mat, material);
+			LoadTextureToMaterial(TextureType::Normal, mat, material);
+			LoadTextureToMaterial(TextureType::Roughness, mat, material);
+			LoadTextureToMaterial(TextureType::Metallic, mat, material);
+			LoadTextureToMaterial(TextureType::AmbientOcclusion, mat, material);
 			mat->Clear();
 		}
 		std::filesystem::path cleanMaterialName = materialName;
@@ -99,7 +101,7 @@ namespace TAGE {
 		{
 			VertexData qv;
 
-			qv.pos = glm::vec3(mesh->mVertices[i].x, mesh->mVertices[i].y, mesh->mVertices[i].z);
+			qv.position = glm::vec3(mesh->mVertices[i].x, mesh->mVertices[i].y, mesh->mVertices[i].z);
 			qv.uv = glm::vec2(mesh->mTextureCoords[0][i].x, mesh->mTextureCoords[0][i].y);
 
 			if (mesh->HasNormals()) {
@@ -128,7 +130,7 @@ namespace TAGE {
 		meshopt_remapIndexBuffer(optimized_indices.data(), indices.data(), indices.size(), &remap[0]);
 		meshopt_remapVertexBuffer(optimized_vertices.data(), vertices.data(), vertices.size(), sizeof(VertexData), &remap[0]);
 		meshopt_optimizeVertexCache(optimized_indices.data(), optimized_indices.data(), optimized_indices.size(), unique_vertex_count);
-		meshopt_optimizeOverdraw(optimized_indices.data(), optimized_indices.data(), optimized_indices.size(), &optimized_vertices[0].pos.x, unique_vertex_count, sizeof(VertexData), 1.05f);
+		meshopt_optimizeOverdraw(optimized_indices.data(), optimized_indices.data(), optimized_indices.size(), &optimized_vertices[0].position.x, unique_vertex_count, sizeof(VertexData), 1.05f);
 		meshopt_optimizeVertexFetch(optimized_vertices.data(), optimized_indices.data(), optimized_indices.size(), optimized_vertices.data(), unique_vertex_count, sizeof(VertexData));
 
 		vertices.clear();

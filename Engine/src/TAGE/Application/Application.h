@@ -17,8 +17,6 @@
 #include "TAGE/World/Components/BaseComponents.h"
 #include "TAGE/MultiThread/MultiThread.h"
 
-#include "TARE/TARE.h"
-
 namespace TAGE {
     struct ApplicationCommandLineArgs {
         int Count = 0;
@@ -37,7 +35,6 @@ namespace TAGE {
 		std::string WorkingDirectory;
 		ApplicationCommandLineArgs CommandLineArgs;
 		SWindow windowSettings;
-		bool UseTARE = true;
 	};
 
     class Application
@@ -61,7 +58,6 @@ namespace TAGE {
 		}
 
     public:
-		TARE::TARE* GetRenderer() const { return _Renderer.get(); }
         Window* GetWindow() const { return _Window.get(); }
 		ImGuiLayer* GetImGuiLayer() const { return _ImGuiLayer.get(); }
         ThreadPool& GetThreadPool() { return _ThreadPool; }
@@ -74,7 +70,6 @@ namespace TAGE {
         ThreadPool _ThreadPool;
 
         MEM::Scope<Window> _Window;
-        MEM::Scope<TARE::TARE> _Renderer;
         MEM::Scope<ImGuiLayer> _ImGuiLayer;
         LayerStack _LayerStack;
 

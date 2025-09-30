@@ -26,8 +26,6 @@ namespace TAGE {
 
 		entity._Scene->CopyComponentIfExists<TransformComponent>(newEntity, entity._Scene->_Registry, entity);
 		entity._Scene->CopyComponentIfExists<MeshComponent>(newEntity,      entity._Scene->_Registry, entity);
-		entity._Scene->CopyComponentIfExists<LightComponent>(newEntity,     entity._Scene->_Registry, entity);
-		entity._Scene->CopyComponentIfExists<SkyboxComponent>(newEntity,    entity._Scene->_Registry, entity);
 		entity._Scene->CopyComponentIfExists<ScriptComponent>(newEntity,    entity._Scene->_Registry, entity);
 		entity._Scene->CopyComponentIfExists<CameraComponent>(newEntity,    entity._Scene->_Registry, entity);
 		entity._Scene->CopyComponentIfExists<RigidBodyComponent>(newEntity, entity._Scene->_Registry, entity);

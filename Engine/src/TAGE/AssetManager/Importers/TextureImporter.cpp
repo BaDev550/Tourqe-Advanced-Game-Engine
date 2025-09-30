@@ -6,7 +6,6 @@
 #define STB_DXT_IMPLEMENTATION
 #define STB_IMAGE_WRITE_IMPLEMENTATION
 #include <stb/stb_dxt.h>
-
 #include <stb/stb_image.h>
 #include <stb/stb_image_write.h>
 
@@ -14,7 +13,6 @@ namespace TAGE {
 	MEM::Ref<TARE::Texture2D> TextureImporter::ImportTexture2D(AssetHandle handle, const AssetMetadata& metadata)
 	{
 		PROFILE_FUNCTION();
-
 		return LoadTexture2D(Project::GetAssetDirectory() / metadata.FilePath);
 	}
 
@@ -26,6 +24,7 @@ namespace TAGE {
 		Buffer data;
 		if (!to.empty()) {
 			data.Data = stbi_load(filepath.string().c_str(), &width, &height, &channels, 0);
+			PROFILE_SCOPE("stbi_load - TextureImporter::WriteTextureTo");
 			if (channels == 4) {
 				stbi_write_png(to.string().c_str(), width, height, channels, data.Data, width * channels);
 			}
@@ -62,7 +61,6 @@ namespace TAGE {
 			data.Size = width * height * channels;
 
 			MEM::Ref<TARE::Texture2D> texture = TARE::Texture2D::Create(textureSpecs, data);
-			data.Release();
 			return texture;
 		}
 		else {

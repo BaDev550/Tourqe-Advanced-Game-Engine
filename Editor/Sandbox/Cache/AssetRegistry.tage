@@ -1,106 +1,52 @@
 AssetRegistry:
-  - Handle: 1228958257244157071
-    FilePath: mario_2/mario_2.tmesh
-    Type: StaticMesh
-  - Handle: 1536048364474945224
-    FilePath: mario_2/pupil.jpg
-    Type: Texture
-  - Handle: 1703753196487205011
-    FilePath: helmet/Default_normal.jpg
-    Type: Texture
-  - Handle: 1744552920298468587
-    FilePath: mario_2/mat_5-body.tmat
-    Type: Material
-  - Handle: 1974470472815700082
-    FilePath: mario_2/mat_4-eye1.tmat
-    Type: Material
-  - Handle: 2005613231178667466
-    FilePath: mario_2/mat_6-hair.tmat
-    Type: Material
-  - Handle: 2130731969965806376
-    FilePath: test/SciFiHelmet_BaseColor.png
-    Type: Texture
-  - Handle: 3013926056029478977
-    FilePath: test/SciFiHelmet.gltf
+  - Handle: 193429391912109802
+    FilePath: mario_2.obj
     Type: MeshSource
-  - Handle: 3239389713456027870
-    FilePath: helmet/DamagedHelmet.gltf
-    Type: MeshSource
-  - Handle: 3952479760769533645
+  - Handle: 1151823588935974509
+    FilePath: hair.jpg
+    Type: Texture
+  - Handle: 2389336678456586226
+    FilePath: eye1.jpg
+    Type: Texture
+  - Handle: 4788567584162122569
     FilePath: defaultScene.scene
     Type: Scene
-  - Handle: 4392829350545366551
-    FilePath: helmet/Default_AO.jpg
-    Type: Texture
-  - Handle: 4567924694006858554
-    FilePath: mario_2/mat_2-face.tmat
+  - Handle: 5562626955961339861
+    FilePath: mat_3-hat.tmat
     Type: Material
-  - Handle: 5590032241303338551
-    FilePath: mario_2/mat_0-pupil.tmat
+  - Handle: 10697569038813926612
+    FilePath: mat_0-pupil.tmat
     Type: Material
-  - Handle: 6204305090828943589
-    FilePath: test/SciFiHelmet.tmat
+  - Handle: 11112505009538077359
+    FilePath: mat_5-body.tmat
     Type: Material
-  - Handle: 6503154283605137995
-    FilePath: mario_2/mat_3-hat.tmat
+  - Handle: 11736764115714360220
+    FilePath: pupil.jpg
+    Type: Texture
+  - Handle: 13048286934168915248
+    FilePath: face.jpg
+    Type: Texture
+  - Handle: 14251658400130948010
+    FilePath: mat_4-eye1.tmat
     Type: Material
-  - Handle: 7401207886816872698
-    FilePath: test/SciFiHelmet_AmbientOcclusion.png
-    Type: Texture
-  - Handle: 7431565536590592966
-    FilePath: test/SciFiHelmet_MetallicRoughness.png
-    Type: Texture
-  - Handle: 8359143992553529410
-    FilePath: mario_2/hat.jpg
-    Type: Texture
-  - Handle: 8867001732334391341
-    FilePath: test/SciFiHelmet_Normal.png
-    Type: Texture
-  - Handle: 9559973897552104076
-    FilePath: helmet/Material_MR.tmat
+  - Handle: 15193404214728276290
+    FilePath: mat_6-hair.tmat
     Type: Material
-  - Handle: 9648940808165755336
-    FilePath: cube/cube.obj
-    Type: MeshSource
-  - Handle: 9756415568159665511
-    FilePath: helmet/DamagedHelmet.tmesh
+  - Handle: 16043937048310483247
+    FilePath: mat_2-face.tmat
+    Type: Material
+  - Handle: 16648943999108670197
+    FilePath: glove.jpg
+    Type: Texture
+  - Handle: 16760318513130142643
+    FilePath: mat_1-glove.tmat
+    Type: Material
+  - Handle: 17512761443826138909
+    FilePath: hat.jpg
+    Type: Texture
+  - Handle: 17573842862627198819
+    FilePath: mario_2.tmesh
     Type: StaticMesh
-  - Handle: 10706457865794771921
-    FilePath: mario_2/eye1.jpg
+  - Handle: 18137987321592696403
+    FilePath: body.jpg
     Type: Texture
-  - Handle: 10900380475465243993
-    FilePath: test/SciFiHelmet.tmesh
-    Type: StaticMesh
-  - Handle: 12846934274324692586
-    FilePath: cube/Material.tmat
-    Type: Material
-  - Handle: 13309613527269403137
-    FilePath: mario_2/body.jpg
-    Type: Texture
-  - Handle: 13383609500451382817
-    FilePath: defaultScene2.scene
-    Type: Scene
-  - Handle: 13957092393317996201
-    FilePath: mario_2/mario_2.obj
-    Type: MeshSource
-  - Handle: 14167966296794441191
-    FilePath: mario_2/glove.jpg
-    Type: Texture
-  - Handle: 15214500667929198160
-    FilePath: mario_2/face.jpg
-    Type: Texture
-  - Handle: 15467890867806432847
-    FilePath: helmet/Default_metalRoughness.jpg
-    Type: Texture
-  - Handle: 16825739460061139026
-    FilePath: mario_2/mat_1-glove.tmat
-    Type: Material
-  - Handle: 17315684077300012963
-    FilePath: helmet/Default_albedo.jpg
-    Type: Texture
-  - Handle: 17332467407309346838
-    FilePath: mario_2/hair.jpg
-    Type: Texture
-  - Handle: 18089061764760192318
-    FilePath: cube/cube.tmesh
-    Type: StaticMesh

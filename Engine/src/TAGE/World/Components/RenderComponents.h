@@ -3,10 +3,6 @@
 #include "TARE/Model/Model.h"
 #include "TARE/Camera/Camera.h"
 #include "TAGE/Common/TTypes.h"
-#include "TARE/Skybox/Skybox.h"
-#include "TARE/Animation/Animator.h"
-#include "TARE/Animation/Animation.h"
-#include "TARE/Common/Light.h"
 #include "TAGE/Project/Project.h"
 #include "TAGE/AssetManager/AssetManager.h"
 
@@ -40,21 +36,13 @@ namespace TAGE {
 		}
 	};
 
+#if 0
 	struct LightComponent {
 		Light Handle;
 
 		LightComponent(Light light) : Handle(light) {}
 		LightComponent(const LightComponent&) = default;
 		LightComponent() : Handle(Light()) {}
-	};
-
-	struct CameraComponent {
-		MEM::Ref<TARE::Camera> Handle;
-		bool IsActive = true;
-
-		CameraComponent() { Handle = MEM::MakeRef<TARE::Camera>(1280.0f, 720.0f); };
-		CameraComponent(const CameraComponent&) = default;
-		CameraComponent(const MEM::Ref<TARE::Camera>& camera) : Handle(camera) {}
 	};
 
 	struct SkyboxComponent {
@@ -90,5 +78,15 @@ namespace TAGE {
 		TARE::Model* _ModelHandle;
 
 		friend class Scene;
+	};
+#endif
+
+	struct CameraComponent {
+		MEM::Ref<TARE::Camera> Handle;
+		bool IsActive = true;
+
+		CameraComponent() { Handle = MEM::MakeRef<TARE::Camera>(1280.0f, 720.0f); };
+		CameraComponent(const CameraComponent&) = default;
+		CameraComponent(const MEM::Ref<TARE::Camera>& camera) : Handle(camera) {}
 	};
 }

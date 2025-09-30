@@ -17,6 +17,7 @@ namespace TAGE {
     }
 
     void MaterialEditor::Render() {
+#if 0
         if (s_OpenMaterialModal) {
             if (ImGui::Begin("Material Editor", &s_OpenMaterialModal, ImGuiWindowFlags_AlwaysAutoResize)) {
                 ImGui::Text("Material Editor");
@@ -89,5 +90,6 @@ namespace TAGE {
                 ImGui::End();
             }
         }
+#endif
     }
 }

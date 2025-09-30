@@ -4,7 +4,6 @@
 #include <glm/glm.hpp>
 #define GLM_ENABLE_EXPERIMENTAL
 #include <glm/gtx/quaternion.hpp>
-#include "TAGE/Physics/PhysicsDebugRenderer.h"
 
 namespace TAGE{
 	class Entity;
@@ -30,7 +29,6 @@ namespace TAGE::Physics {
         MEM::Scope<btCollisionDispatcher> _Dispatcher;
         MEM::Scope<btSequentialImpulseConstraintSolver> _Solver;
         MEM::Scope<btDiscreteDynamicsWorld> _DynamicsWorld;
-		MEM::Scope<PhysicsDebugRenderer> _DebugRenderer;
 	};
 
 	namespace Utils {

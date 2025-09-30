@@ -1,10 +1,8 @@
 #include "tagepch.h"
-#include "TARE/TARE.h"
 #include "Raycaster.h"
 #include "PhysicsDebugRenderer.h"
-#include "TARE/DebugRenderer/DebugRenderer.h"
-#include "Raycaster.h"
 
+#if 0
 namespace TAGE::Physics {
     void PhysicsDebugRenderer::drawLine(const btVector3& from, const btVector3& to, const btVector3& color)
     {
@@ -38,3 +36,4 @@ namespace TAGE::Physics {
         LOG_WARN("Bullet Debug: {0}", warningString);
     }
 }
+#endif

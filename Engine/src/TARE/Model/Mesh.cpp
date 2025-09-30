@@ -1,48 +1,30 @@
 #include "tagepch.h"
 #include "Mesh.h"
-#include "TARE/Common/RenderCommands.h"
 
-namespace TARE
-{
+namespace TARE {
 	Mesh::Mesh(std::vector<VertexData> vertices, std::vector<uint> indices, TAGE::MEM::Ref<Material> material)
-		: _vertices(std::move(vertices)), _indices(std::move(indices)), _material(std::move(material)) {
-		SetupMesh();
+		: _Vertices(vertices), _Indices(indices), _Material(material) {
+		CreateMesh();
 	}
 
-	void Mesh::Draw(TAGE::MEM::Ref<Shader>& shader) const
-	{
-		if (_material)
-			_material->Use(shader);
-		RenderCommand::DrawIndexed(_VAO);
-	}
-
-	Mesh::~Mesh() {
-		if (_VAO) {
-			_VAO->Destroy();
-			_VAO.reset();
-		}
-		_vertices.clear();
-		_indices.clear();
-	}
-
-	void Mesh::SetupMesh()
-	{
-		TAGE::MEM::Ref<VertexBufferObject> _VBO;
-		_VBO = VertexBufferObject::Create(_vertices.data(), _vertices.size() * sizeof(VertexData));
+	void Mesh::CreateMesh() {
+		TAGE::MEM::Ref<VertexBufferObject> VBO;
+		VBO = VertexBufferObject::Create(_Vertices.data(), _Vertices.size() * sizeof(VertexData));
 		BufferLayout layout = {
-			{ ShaderDataType::VEC3,  "aPos" },
-			{ ShaderDataType::VEC3,  "aNormal",      true },
-			{ ShaderDataType::VEC2,  "aTexCoord",    true },
-			{ ShaderDataType::VEC3,  "aTangent",     true },
-			{ ShaderDataType::VEC3,  "aBitangent",   true }
+			{ ShaderDataType::VEC3, "aPos" },
+			{ ShaderDataType::VEC3, "aNormal",   true},
+			{ ShaderDataType::VEC2, "aTexCoords",true},
+			{ ShaderDataType::VEC3, "aTangent",  true},
+			{ ShaderDataType::VEC3, "aBitangent",true}
 		};
+		VBO->SetLayout(layout);
+
 		_VAO = VertexArrayObject::Create();
-		_VBO->SetLayout(layout);
-		_VAO->AddVertexBuffer(_VBO);
+		_VAO->AddVertexBuffer(VBO);
 
-		TAGE::MEM::Ref<ElementBufferObject> _EBO;
-		_EBO = ElementBufferObject::Create(_indices.data(), _indices.size());
+		TAGE::MEM::Ref<ElementBufferObject> EBO;
+		EBO = ElementBufferObject::Create(_Indices.data(), _Indices.size());
 
-		_VAO->SetIndexBuffer(_EBO);
+		_VAO->SetIndexBuffer(EBO);
 	}
 }

@@ -1,7 +1,7 @@
 #pragma once
 
 #include "TAGE/AssetManager/AssetImporter.h"
-#include "TARE/Material/Material.h"
+#include "TARE/Model/Material.h"
 
 namespace TAGE {
 	class MaterialImporter

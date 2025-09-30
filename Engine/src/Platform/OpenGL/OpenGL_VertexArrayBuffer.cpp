@@ -1,8 +1,9 @@
 #include "tagepch.h"
 #include "OpenGL_VertexArrayBuffer.h"
+
 #include <GLAD/glad.h>
 
-namespace TARE {
+namespace TARE::OpenGL {
 	static GLenum to_OpenGLType(ShaderDataType type) {
 		switch (type)
 		{
@@ -33,7 +34,7 @@ namespace TARE {
 	{
 		glBindVertexArray(_ID);
 		vertexBuffer->Bind();
-
+		
 		const auto& layout = vertexBuffer->GetLayout();
 		uint index = 0;
 

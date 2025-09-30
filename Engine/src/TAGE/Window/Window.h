@@ -2,7 +2,7 @@
 #include "TAGE/Common/TDefines.h"
 
 #include <iostream>
-#include "TARE/Common/RenderContext.h"
+#include "TARE/API/RenderContext.h"
 #include "TAGE/Events/Event.h"
 #include "TAGE/Utilities/Memory.h"
 #include <GLFW/glfw3.h>

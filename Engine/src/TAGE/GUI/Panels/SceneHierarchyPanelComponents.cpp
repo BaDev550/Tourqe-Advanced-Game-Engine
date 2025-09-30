@@ -178,12 +178,14 @@ namespace TAGE {
 
 						ImGui::SameLine();
 						{
+#if 0
 							AssetHandle currentIndex = 0;
 							if (GUI::ComboBox("Material", currentIndex, AssetType::Material, material->_handle)) {
 								auto& material = AssetManager::GetAsset<TARE::Material>(currentIndex);
 								mesh->SetMaterial(material);
 								Project::GetActive()->GetEditorAssetManager()->SaveAsset(component.Handle->_handle);
 							}
+#endif
 						}
 						ImGui::PopID();
 						meshIndex++;
@@ -215,43 +217,6 @@ namespace TAGE {
 				{
 					component.Handle->SetFarClip(farClip);
 				}
-
-				if (ImGui::CollapsingHeader("Post Process")) {
-					ImGui::DragFloat("Exposure", &component.Handle->GetPostProcess()->GetSettings().Exposure, 0.1f, 0.1f, 10.0f);
-				}
-			});
-
-		DrawComponent<SkyboxComponent>("Skybox", entity, [](SkyboxComponent& component)
-			{
-				if (component.Handle)
-				{
-					ImGui::Text("Skybox Path: %s", component.Handle->GetTexture()->GetPath().c_str());
-				}
-				else
-				{
-					ImGui::Text("Skybox not loaded.");
-				}
-
-				if (ImGui::Button("Select Skybox"))
-				{
-					std::string selectedSkybox = Platform::FileDialog::OpenFile("Cubemap Files (*.hdr;*.png;*.exr)\0*.hdr;*.exr;*.png\0");
-					if (!selectedSkybox.empty())
-					{
-						component.Handle = MEM::MakeRef<TARE::Skybox>(selectedSkybox.c_str());
-					}
-				}
-			});
-
-		DrawComponent<LightComponent>("Light", entity, [](LightComponent& component)
-			{
-				bool castShadow = component.Handle.CastShadow;
-				GUI::DrawColorControl("Color", component.Handle.Color);
-				if (ImGui::Checkbox("Cast Shadow", &castShadow))
-					component.Handle.CastShadow = castShadow;
-
-				ImGui::DragFloat("Intensity", &component.Handle.Intensity, 0.01f, 0.0f, 100.0f);
-				ImGui::DragFloat("Range", &component.Handle.Range, 0.1f, 0.0f, 400.0f);
-				ImGui::Combo("Type", (int*)&component.Handle.Type, "Point\0Directional\0Spot\0");
 			});
 
 		DrawComponent<RigidBodyComponent>("Rigid Body", entity, [&](RigidBodyComponent& component)
@@ -333,27 +298,6 @@ namespace TAGE {
 				else
 					component.ResponseType = CollisionResponseType::BLOCK;
 
-			});
-
-		DrawComponent<AnimatorComponent>("Animator", entity, [](AnimatorComponent& component)
-			{
-				if (component.Handle)
-				{
-					ImGui::Text("Animator");
-				}
-				else
-				{
-					ImGui::Text("Animator not loaded.");
-				}
-
-				if (ImGui::Button("Select Animator"))
-				{
-					std::string selectedAnimator = Platform::FileDialog::OpenFile("Animator Files (*.dae;*.fbx)\0*.dae;*.fbx\0");
-					if (!selectedAnimator.empty())
-					{
-						component.SetAnimation(selectedAnimator);
-					}
-				}
 			});
 	}
 }

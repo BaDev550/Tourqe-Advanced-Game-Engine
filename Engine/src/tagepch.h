@@ -16,3 +16,7 @@
 #include "TAGE/Utilities/Memory.h"
 #include "TAGE/Utilities/UUID.h"
 #include "TAGE/Utilities/Profiler.h"
+
+#include "TARE/API/RenderAPI.h"
+#include "TARE/API/RenderCommand.h"
+#include "TARE/TARE3D.h"

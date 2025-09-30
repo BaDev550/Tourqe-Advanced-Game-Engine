@@ -3,7 +3,6 @@
 #include "glm/glm.hpp"
 #include "glm/gtc/matrix_transform.hpp"
 #include "glm/gtc/quaternion.hpp"
-#include "PostProcess.h"
 
 namespace TARE
 {
@@ -15,13 +14,6 @@ namespace TARE
             _fov = fov;
             _nearClip = nearClip;
             _farClip = farClip;
-
-            _projectionMatrix = glm::perspective(glm::radians(_fov), _aspectRatio, _nearClip, _farClip);
-
-			PostProcessSettings _postProcessSettings = PostProcessSettings(
-                1, 4.0f
-            );
-			_postProcess = TAGE::MEM::MakeScope<PostProcess>(static_cast<int>(win_Width), static_cast<int>(win_Height), _postProcessSettings);
         }
 
         virtual void OnUpdate(float dt) {};
@@ -43,9 +35,6 @@ namespace TARE
 		void SetNearClip(float nearClip) { _nearClip = nearClip; }
 		void SetFarClip(float farClip) { _farClip = farClip; }
         void LookAt(glm::vec3 target);
-		void SetPostProcessSettings(const PostProcessSettings& settings) { _postProcess->SetSettings(settings); }
-		PostProcessSettings& GetPostProcessSettings() const { return _postProcess->GetSettings(); }
-		TAGE::MEM::Ref<PostProcess> GetPostProcess() const { return _postProcess; }
         const glm::mat4& GetViewMatrix() const;
 		const glm::mat4& GetProjectionMatrix() const;
 		const glm::mat4& GetViewProjectionMatrix() const;
@@ -78,7 +67,6 @@ namespace TARE
         glm::vec3 _up = glm::vec3(0.0f, 1.0f, 0.0f);
         glm::vec3 _right = glm::vec3(1.0f, 0.0f, 0.0f);
         glm::quat _orientation = glm::quat(1.0f, 0.0f, 0.0f, 0.0f);
-		TAGE::MEM::Ref<PostProcess> _postProcess;
 
         float _minPitch = -1.5f;
         float _maxPitch = 1.5f;

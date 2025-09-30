@@ -1,81 +1,14 @@
 Scene: defaultScene
 Entities:
-  - Entity: 5172763963466616964
+  - Entity: 5488920663105717540
     IdentityComponent:
       Name: Empty Entity
     Parent: 0
     Children:
       []
     TransformComponent:
-      Position: [0.360695332, 1.57297111, -1.73300934]
-      Rotation: [-4.5999999, 5.5, -0.100000001]
-      Scale: [1, 1, 1]
-    LightComponent:
-      Type: 1
-      Color: [1, 1, 1, 1]
-      Range: 1
-      Intensity: 12.9399996
-      CastShadow: true
-  - Entity: 14679525554417596139
-    IdentityComponent:
-      Name: Empty Entity
-    Parent: 10139955655717038074
-    Children:
-      []
-    TransformComponent:
-      Position: [-4.94999981, 0.49341321, 3]
-      Rotation: [-0.140000001, 0.65840745, 6.59370301e-08]
-      Scale: [1, 1, 1]
-    CameraComponent:
-      Camera:
-        AspectRatio: 2.28102708
-        FOV: 45
-        NearClip: 0.0500000007
-        FarClip: 250
-      IsActive: true
-  - Entity: 8551450095498438749
-    IdentityComponent:
-      Name: Cube
-    Parent: 0
-    Children:
-      []
-    TransformComponent:
-      Position: [0, -1.56720066, 0]
-      Rotation: [0, 0, 0]
-      Scale: [8.15486622, 0.185139865, 9.1974926]
-    MeshComponent:
-      MeshHandle: 18089061764760192318
-    RigidBodyComponent:
-      BodyType: 0
-      LinearFactor: [1, 1, 1]
-      AngularFactor: [1, 1, 1]
-    ColliderComponent:
-      Shape: 0
-      Size: [15, 1, 15]
-      ResponseType: 2
-  - Entity: 10139955655717038074
-    IdentityComponent:
-      Name: Mario
-    Parent: 0
-    Children:
-      - Handle: 14679525554417596139
-    TransformComponent:
-      Position: [0, 2.50658679, 0]
+      Position: [0, 0, 0]
       Rotation: [0, 0, 0]
       Scale: [1, 1, 1]
     MeshComponent:
-      MeshHandle: 1228958257244157071
-    RigidBodyComponent:
-      BodyType: 1
-      LinearFactor: [1, 1, 1]
-      AngularFactor: [0, 0, 0]
-    ColliderComponent:
-      Shape: 2
-      Size: [1, 1, 1]
-      ResponseType: 2
-    ScriptComponent:
-      Class: Sandbox.Player
-      ScriptFields:
-        - Name: speed
-          Type: Float
-          Data: 500
+      MeshHandle: 11816440778213370278

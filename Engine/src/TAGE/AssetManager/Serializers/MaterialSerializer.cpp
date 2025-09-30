@@ -1,5 +1,5 @@
 #include "tagepch.h"
-#include "TARE/Material/Material.h"
+#include "TARE/Model/Material.h"
 #include "TAGE/Project/Project.h"
 #include "AssetSerializer.h"
 
@@ -28,8 +28,7 @@ namespace TAGE {
             LOG_ERROR("Asset: {} is not a Material", (uint64)asset->_handle);
             return false;
         }
-        const auto& textures = material->GetTextureMaps();
-		const auto& colors = material->GetColors();
+        const auto& textures = material->GetTextures();
 
         std::ofstream out(path, std::ios::binary | std::ios::trunc);
         if (!out.is_open()) {
@@ -42,7 +41,6 @@ namespace TAGE {
         out.write(reinterpret_cast<const char*>(&magic), sizeof(magic));
         out.write(reinterpret_cast<const char*>(&version), sizeof(version));
         out.write(reinterpret_cast<const char*>(&textures), sizeof(TARE::TextureMaps));
-		out.write(reinterpret_cast<const char*>(&colors), sizeof(TARE::Colors));
 		return true;
     }
 
@@ -53,7 +51,7 @@ namespace TAGE {
             LOG_ERROR("Failed to open Material: {}", path.string());
             return nullptr;
         }
-
+        
         uint magic;
         uint version;
         in.read(reinterpret_cast<char*>(&magic), sizeof(magic));
@@ -65,13 +63,10 @@ namespace TAGE {
         }
 
         TARE::TextureMaps maps{};
-		TARE::Colors colors{};
         in.read(reinterpret_cast<char*>(&maps), sizeof(maps));
-		in.read(reinterpret_cast<char*>(&colors), sizeof(colors));
 
-        auto material = MEM::MakeRef<TARE::Material>();
-        material->SetTextureMaps(maps);
-		material->SetColors(colors);
+        auto material = TARE::Material::Create();
+        material->SetTextures(maps);
 
         return material;
     }

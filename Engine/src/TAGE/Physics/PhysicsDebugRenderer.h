@@ -2,9 +2,9 @@
 
 #include <btBulletDynamicsCommon.h>
 #include "TAGE/Common/TTypes.h"
-#include "TARE/DebugRenderer/DebugRenderer.h"
 #include <glm/glm.hpp>
 
+#if 0
 namespace TAGE::Physics {
     class PhysicsDebugRenderer : public btIDebugDraw
     {
@@ -20,3 +20,4 @@ namespace TAGE::Physics {
         int m_DebugMode = DBG_DrawWireframe | DBG_DrawContactPoints | DBG_DrawAabb;
     };
 }
+#endif

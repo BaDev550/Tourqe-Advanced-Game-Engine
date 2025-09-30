@@ -7,15 +7,12 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\EditorLayer.h" />
-    <ClInclude Include="src\Gamelayer\GameLayer.h">
-      <Filter>Gamelayer</Filter>
-    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\EditorLayer.cpp" />
-    <ClCompile Include="src\Gamelayer\GameLayer.cpp">
-      <Filter>Gamelayer</Filter>
-    </ClCompile>
     <ClCompile Include="src\TourqeEditor.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <Text Include="Resources\Shaders\TAGE_DeferredBase.glsl" />
   </ItemGroup>
 </Project>

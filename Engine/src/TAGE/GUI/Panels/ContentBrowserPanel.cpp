@@ -69,6 +69,10 @@ namespace TAGE {
 		ImGui::Columns(columnCount, 0, false);
 
 		for (auto& entry : _DirectoryEntries) {
+			if (entry.Handle == 0) {
+				continue;
+			}
+
 			if (!std::filesystem::exists(entry.Path))
 				continue;
 

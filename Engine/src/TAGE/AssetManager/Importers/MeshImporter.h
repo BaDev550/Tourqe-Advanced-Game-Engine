@@ -1,6 +1,7 @@
 #pragma once
 #include "TAGE/AssetManager/AssetMetadata.h"
 #include "TARE/Model/Model.h"
+#include "TARE/Texture/Texture.h"
 
 namespace TAGE {
 	class MeshImporter
@@ -20,8 +21,8 @@ namespace TAGE {
 	private:
 		MEM::Ref<TARE::Mesh> ProcessMesh(MEM::Ref<TARE::Model>& model, aiMesh* mesh, const aiScene* scene);
 		MEM::Ref<TARE::Material> LoadMaterials(aiMesh* mesh, const aiScene* scene);
-		void LoadTextureToMaterial(TextureType type, aiMaterial* material, MEM::Ref<TARE::Material>& outMaterial);
-
+		void LoadTextureToMaterial(TARE::TextureType type, aiMaterial* material, MEM::Ref<TARE::Material>& outMaterial);
+		
 		std::filesystem::path _SourcePath;
 	};
 }

@@ -1,31 +1,17 @@
 #include "tagepch.h"
 #include "ShaderLibrary.h"
-#include "TARE/Common/RenderAPI.h"
 
 namespace TARE {
-
-	static const char* GetExtension() {
-		switch (RenderAPI::GetRenderAPI())
-		{
-		case RAPI::UNDEFINED:
-		case RAPI::OPENGL: return ".glsl";
-		case RAPI::DIRECTX11: return ".hlsl";
-		case RAPI::VULKAN:
-		default:
-			ASSERT_NOMSG(false);
-			break;
-		}
-		return nullptr;
+	void ShaderLibrary::LoadShader(const std::string_view& name, const std::string& shaderPath) {
+		_Shaders[name.data()] = Shader::Create(shaderPath);
 	}
 
-	TAGE::MEM::Ref<Shader> ShaderLibrary::Add(const std::string& name, const char* vertexPath, const char* fragmentPath, const char* geometryPath) {
-		std::string vertex = std::string(vertexPath) + GetExtension();
-		std::string fragment = std::string(fragmentPath) + GetExtension();
-		std::string geometry = std::string(geometryPath) + GetExtension();
-
-		TAGE::MEM::Ref<Shader> shader = Shader::Create(vertex.c_str(), fragment.c_str(), geometry.c_str());
-		_shaders[name] = shader;
-		return shader;
+	void ShaderLibrary::ReloadShader(const std::string_view& name) {
+		ASSERT("Coudnt find the wanted shader", _Shaders.find(name.data()) == _Shaders.end());
+		_Shaders[name.data()]->Reload();
 	}
 
+	const TAGE::MEM::Ref<Shader>& ShaderLibrary::GetShader(const std::string& name) {
+		return _Shaders[name];
+	}
 }
