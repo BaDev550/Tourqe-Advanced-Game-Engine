@@ -1,0 +1,20 @@
+#ifndef BUFFERS_GLSLH
+#define BUFFERS_GLSLH
+
+layout(std140, set = 0, binding = 5) uniform CameraData
+{
+    mat4 u_View;
+    mat4 u_Projection;
+    mat4 u_ViewProjection;
+    mat4 u_InverseProjection;
+    mat4 u_InverseView;
+
+    vec3 u_CameraPos;
+    vec3 u_CameraDir;
+    vec3 u_CameraUp;
+
+    float u_NearPlane;
+    float u_FarPlane;
+};
+
+#endif

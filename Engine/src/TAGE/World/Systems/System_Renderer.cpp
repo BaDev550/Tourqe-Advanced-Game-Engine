@@ -41,8 +41,11 @@ namespace TAGE {
 	void System_Renderer::Render(const MEM::Ref<TARE::Camera>& cam, float dt, bool runtime)
 	{
 		TARE::TARE3D::BeginForwardRender(cam);
-		RenderObjects(runtime);
 		TARE::TARE3D::EndForwardRender();
+
+		TARE::TARE3D::BeginDeferredRender(cam);
+		RenderObjects(runtime);
+		TARE::TARE3D::EndDeferredRender();
 	}
 
 	void System_Renderer::RenderObjects(bool runtime)
@@ -57,8 +60,7 @@ namespace TAGE {
 
 			auto& tc = entityObj.GetComponent<TransformComponent>();
 			glm::mat4 transform = _Scene->GetWorldSpaceTransformMatrix(entityObj);
-			//TARE::TARE3D::GetShaderLibrary().GetShader("TAGE_DeferredBase")->SetUniform("u_EntityID", (int)entity);
-			TARE::TARE3D::DrawStaticMesh(mc.Handle, transform);
+			TARE::TARE3D::DrawEntityStaticMesh(mc.Handle, transform, (int)entity);
 		}
 	}
 }

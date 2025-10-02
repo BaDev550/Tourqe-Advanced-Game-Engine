@@ -21,6 +21,7 @@ namespace TARE {
 		virtual void DrawIndexed(const TAGE::MEM::Ref<VertexArrayObject>& VAO) = 0;
 		virtual void DrawVertex(const TAGE::MEM::Ref<VertexArrayObject>& VAO) = 0;
 		virtual void DrawLine(const TAGE::MEM::Ref<VertexArrayObject>& VAO, uint vertexCount) = 0;
+		virtual void DrawFullScreenQuad() = 0;
 
 		static inline GrapichAPI GetGrapichAPI() { return s_API; }
 	private:

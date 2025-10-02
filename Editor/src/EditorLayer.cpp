@@ -68,30 +68,26 @@ namespace TAGE::Editor {
 		int mouseX = (int)mx;
 		int mouseY = (int)my;
 
-		//if (mouseX >= 0 && mouseY >= 0 && mouseX < (int)viewportSize.x && mouseY < (int)viewportSize.y) {
-		//	renderer->GetDeferredRendering().GetGBuffer()->Bind();
-		//	_HoveredEntityID = renderer->GetDeferredRendering().GetGBuffer()->Read(6, mouseX, mouseY);
-		//	renderer->GetDeferredRendering().GetGBuffer()->Unbind();
-		//	if (Input::IsMouseButtonJustPressed(Mouse::ButtonLeft) && !ImGuizmo::IsOver() && !_HoveringGizmo) {
-		//		auto hoveredEntity = _ActiveScene->GetEntityByID((entt::entity)_HoveredEntityID);
-		//		if (hoveredEntity) {
-		//			_SceneHierarchyPanel->SetSelectedEntity(hoveredEntity);
-		//		}
-		//		else {
-		//			_SceneHierarchyPanel->SetSelectedEntity({});
-		//		}
-		//	}
-		//}
+		if (mouseX >= 0 && mouseY >= 0 && mouseX < (int)viewportSize.x && mouseY < (int)viewportSize.y) {
+			TARE::TARE3D::GetGBuffer()->Bind();
+			_HoveredEntityID = TARE::TARE3D::GetGBuffer()->Read(4, mouseX, mouseY);
+			TARE::TARE3D::GetGBuffer()->Unbind();
+			if (Input::IsMouseButtonJustPressed(Mouse::ButtonLeft) && !ImGuizmo::IsOver() && !_HoveringGizmo) {
+				auto hoveredEntity = _ActiveScene->GetEntityByID((entt::entity)_HoveredEntityID);
+				if (hoveredEntity) { _SceneHierarchyPanel->SetSelectedEntity(hoveredEntity); }
+				else { _SceneHierarchyPanel->SetSelectedEntity({}); }
+			}
+		}
 
-		//auto spec = renderer->GetDeferredRendering().GetLightingBuffer()->GetSpecification();
-		//if (_ViewportSize.x > 0.0 && _ViewportSize.y > 0.0 
-		//	&& (spec.Width != _ViewportSize.x || spec.Height != _ViewportSize.y)) 
-		//{
-		//	renderer->Resize((uint)_ViewportSize.x, (uint)_ViewportSize.y);
-		//	_EditorCamera->OnResize(_ViewportSize.x, _ViewportSize.y);
-		//	_ActiveScene->OnResize((uint)_ViewportSize.x, (uint)_ViewportSize.y);
-		//	_LastViewportSize = _ViewportSize;
-		//}
+		auto spec = TARE::TARE3D::GetFinalBuffer()->GetSpecification();
+		if (_ViewportSize.x > 0.0 && _ViewportSize.y > 0.0 
+			&& (spec.Width != _ViewportSize.x || spec.Height != _ViewportSize.y)) 
+		{
+			TARE::TARE3D::Resize((uint)_ViewportSize.x, (uint)_ViewportSize.y);
+			_EditorCamera->OnResize(_ViewportSize.x, _ViewportSize.y);
+			_ActiveScene->OnResize((uint)_ViewportSize.x, (uint)_ViewportSize.y);
+			_LastViewportSize = _ViewportSize;
+		}
 
 		switch (_SceneState)
 		{
@@ -125,17 +121,17 @@ namespace TAGE::Editor {
 
 	void EditorLayer::OnImGuiRender()
 	{
-		//UI_BeginDockspace();
+		UI_BeginDockspace();
 
 		_SceneHierarchyPanel->OnImGuiRender();
 		_ContentBrowserPanel->OnImGuiRender();
 		_OutputPanel->OnImGuiRender();
-		//if (_ProjectSettingsPanel.IsOpen())
-		//	_ProjectSettingsPanel.OnImGuiRender();
+		if (_ProjectSettingsPanel.IsOpen())
+			_ProjectSettingsPanel.OnImGuiRender();
 
-		//UI_DrawViewport();
+		UI_DrawViewport();
 
-		//UI_EndDockspace();
+		UI_EndDockspace();
 	}
 
 	void EditorLayer::OnEvent(Event& event)
@@ -520,11 +516,8 @@ namespace TAGE::Editor {
 		ImVec2 viewportPanelSize = ImGui::GetContentRegionAvail();
 		_ViewportSize = { viewportPanelSize.x, viewportPanelSize.y };
 
-		//auto renderer = Application::Get()->GetRenderer();
-		//auto deferred = renderer->GetDeferredRendering();
-		//uint64_t textureID = renderer->GetSceneData().PostProcess->GetPostProcessTexture();
-
-		//ImGui::Image((void*)(uintptr_t)textureID, ImVec2(_ViewportSize.x, _ViewportSize.y), ImVec2{ 0, 1 }, ImVec2{ 1, 0 });
+		uint64_t textureID = TARE::TARE3D::GetFinalBuffer()->GetColorAttachment();
+		ImGui::Image((void*)(uintptr_t)textureID, ImVec2(_ViewportSize.x, _ViewportSize.y), ImVec2{ 0, 1 }, ImVec2{ 1, 0 });
 		if (ImGui::BeginDragDropTarget())
 		{
 			if (const ImGuiPayload* payload = ImGui::AcceptDragDropPayload("CONTENT_BROWSER_ITEM"))

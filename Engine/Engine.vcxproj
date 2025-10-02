@@ -101,6 +101,9 @@
     </Lib>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClInclude Include="src\Platform\OpenGL\OpenGL_Framebuffer.h" />
+    <ClInclude Include="src\TARE\Buffers\Framebuffer.h" />
+    <ClInclude Include="src\TARE\Model\Grid.h" />
     <ClInclude Include="src\Platform\OpenGL\OpenGL_Buffers.h" />
     <ClInclude Include="src\Platform\OpenGL\OpenGL_RenderAPI.h" />
     <ClInclude Include="src\Platform\OpenGL\OpenGL_RenderContext.h" />
@@ -618,6 +621,9 @@
     <ClInclude Include="vendor\stb\stb_image_write.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="src\Platform\OpenGL\OpenGL_Framebuffer.cpp" />
+    <ClCompile Include="src\TARE\Buffers\Framebuffer.cpp" />
+    <ClCompile Include="src\TARE\Model\Grid.cpp" />
     <ClCompile Include="src\Platform\OpenGL\OpenGL_Buffers.cpp" />
     <ClCompile Include="src\Platform\OpenGL\OpenGL_RenderAPI.cpp" />
     <ClCompile Include="src\Platform\OpenGL\OpenGL_RenderContext.cpp" />

@@ -1677,6 +1677,9 @@
     <ClInclude Include="vendor\stb\stb_image_write.h">
       <Filter>vendor\stb</Filter>
     </ClInclude>
+    <ClInclude Include="src\TARE\Model\Grid.h" />
+    <ClInclude Include="src\TARE\Buffers\Framebuffer.h" />
+    <ClInclude Include="src\Platform\OpenGL\OpenGL_Framebuffer.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\Platform\OpenGL\OpenGL_Buffers.cpp">
@@ -1898,5 +1901,8 @@
     <ClCompile Include="vendor\stb\stb_image.cpp">
       <Filter>vendor\stb</Filter>
     </ClCompile>
+    <ClCompile Include="src\TARE\Model\Grid.cpp" />
+    <ClCompile Include="src\TARE\Buffers\Framebuffer.cpp" />
+    <ClCompile Include="src\Platform\OpenGL\OpenGL_Framebuffer.cpp" />
   </ItemGroup>
 </Project>

@@ -1,0 +1,7 @@
+#ifndef COMMON_GLSLH
+#define COMMON_GLSLH
+
+const float PI = 3.14159265359;
+const float EPSILON = 0.0001;
+
+#endif

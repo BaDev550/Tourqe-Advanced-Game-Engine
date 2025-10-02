@@ -49,5 +49,7 @@ namespace TARE {
 	private:
 		TextureMaps _Maps;
 		TAGE::MEM::Ref<Shader> _Shader = nullptr;
+
+		void BindTexture(TextureType type, uint8 slot);
 	};
 }

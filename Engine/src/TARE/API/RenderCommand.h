@@ -34,6 +34,9 @@ namespace TARE {
 		inline static void DrawLine(const TAGE::MEM::Ref<VertexArrayObject>& VAO, uint vertexCount) {
 			_API->DrawLine(VAO, vertexCount);
 		}
+		inline static void DrawFullScreenQuad() {
+			_API->DrawFullScreenQuad();
+		}
 	private:
 		static inline RenderAPI* _API = nullptr;
 	};

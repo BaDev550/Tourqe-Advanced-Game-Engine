@@ -2,12 +2,12 @@
 	## Shaders [Completed]
 		1. Shader loading / Reloading
 		2. Shader library
-	## Buffers [Working-on]
+	## Buffers [Completed]
 		1. MultiAPI buffer layout (Buffer Element)
 		2. Vertex Buffer Object, Element Buffer Object
 		3. Vertex Array Object
 		4. Framebuffer
-	## Physically Based Rendering (PBR) [Not-Implemented]
+	## Physically Based Rendering (PBR) [Working-on]
 
 	## HDR (High Dynamic Range) [Not-Implemented]
 		1. Tonemapping (Reinhard, ACES)    [Not-Implemented]

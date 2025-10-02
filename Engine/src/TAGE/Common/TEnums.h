@@ -51,20 +51,6 @@ enum class SystemUpdateType : uint8 {
 	RENDER_ONLY,
 };
 
-enum class FramebufferTextureFormat : uint8 {
-	NONE = 0,
-	RGBA,
-	RGBA8,
-	RGBA16F,
-	R16F,
-	R8,
-	RED_INTEGER,
-	DEPTH24STENCIL8,
-	DEPTH32F,
-	DEPTH24,
-	DEPTH_ARRAY
-};
-
 enum class CullMode : uint8
 {
 	NONE = 0,

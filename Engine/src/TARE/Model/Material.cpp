@@ -4,32 +4,68 @@
 #include "TAGE/AssetManager/AssetManager.h"
 
 namespace TARE {
+	constexpr char* MATERIAL_DIFFUSE_MAP_NAME = "u_DiffuseMap";
+	constexpr char* MATERIAL_SPECULAR_MAP_NAME = "u_SpecularMap";
+	constexpr char* MATERIAL_NORMAL_MAP_NAME = "u_NormalMap";
+	constexpr char* MATERIAL_METALLIC_MAP_NAME = "u_MetallicMap";
+	constexpr char* MATERIAL_ROUGHNESS_MAP_NAME = "u_RoughnessMap";
+
 	Material::Material(const TAGE::MEM::Ref<Shader>& shader)
 		: _Shader(shader)
 	{
 	}
 
 	TAGE::MEM::Ref<Material> Material::Create() {
-		TAGE::MEM::Ref<Material> mat = TAGE::MEM::MakeRef<Material>(TARE3D::GetShaderLibrary().GetShader("TAGE_DeferredBase"));
+		TAGE::MEM::Ref<Material> mat = TAGE::MEM::MakeRef<Material>(TARE3D::GetShaderLibrary().GetShader("DeferredGBuffer"));
 		return std::move(mat);
+	}
+
+	void Material::BindTexture(TextureType type, uint8 slot)
+	{
+		if (HasTexture(type)) {
+			switch (type)
+			{
+			case TARE::TextureType::Diffuse: {
+				GetDiffuseTexture()->Bind(slot);
+				_Shader->SetUniform(MATERIAL_DIFFUSE_MAP_NAME, slot);
+				break;
+			}
+			case TARE::TextureType::Specular: {
+				GetSpecularTexture()->Bind(slot);
+				_Shader->SetUniform(MATERIAL_SPECULAR_MAP_NAME, slot);
+				break;
+			}
+			case TARE::TextureType::Roughness: {
+				GetRoughnessTexture()->Bind(slot);
+				_Shader->SetUniform(MATERIAL_ROUGHNESS_MAP_NAME, slot);
+				break;
+			}
+			case TARE::TextureType::Normal: {
+				GetNormalTexture()->Bind(slot);
+				_Shader->SetUniform(MATERIAL_NORMAL_MAP_NAME, slot);
+				break;
+			}
+			case TARE::TextureType::Metallic: {
+				GetMetalnessTexture()->Bind(slot);
+				_Shader->SetUniform(MATERIAL_METALLIC_MAP_NAME, slot);
+				break;
+			}
+			case TARE::TextureType::AmbientOcclusion: {
+				break;
+			}
+			}
+		}
 	}
 
 	void Material::Use()
 	{
 		_Shader->Use();
 
-		GetDiffuseTexture()->Bind(0);
-		_Shader->SetUniform("u_Material.DiffuseMap", 0);
-#if 0
-		GetNormalTexture()->Bind(1);
-		_Shader->SetUniform("u_Material.NormalMap", 1);
-
-		GetSpecularTexture()->Bind(2);
-		_Shader->SetUniform("u_Material.SpecularMap", 2);
-
-		GetMetalnessTexture()->Bind(3);
-		_Shader->SetUniform("u_Material.MetallicMap", 3);
-#endif
+		BindTexture(TextureType::Diffuse,   0);
+		BindTexture(TextureType::Normal,    1);
+		BindTexture(TextureType::Specular,  2);
+		BindTexture(TextureType::Metallic,  3);
+		BindTexture(TextureType::Roughness, 4);
 	}
 
 	void Material::SetTexture(TextureType type, TAGE::AssetHandle handle)
@@ -87,12 +123,13 @@ namespace TARE {
 		}
 		return false;
 	}
+
 	void Material::ResetAll()
 	{
-				_Maps.DiffuseMap != 0;
-				_Maps.SpecularMap != 0;
-				_Maps.RoughnessMap != 0;
-				_Maps.NormalMap != 0;
-				_Maps.MetalnessMap != 0;
+		_Maps.DiffuseMap != 0;
+		_Maps.SpecularMap != 0;
+		_Maps.RoughnessMap != 0;
+		_Maps.NormalMap != 0;
+		_Maps.MetalnessMap != 0;
 	}
 }

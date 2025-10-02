@@ -1,12 +1,27 @@
 AssetRegistry:
+  - Handle: 165940221320681385
+    FilePath: helmet/DamagedHelmet.tmesh
+    Type: StaticMesh
   - Handle: 193429391912109802
     FilePath: mario_2.obj
+    Type: MeshSource
+  - Handle: 980420389367139357
+    FilePath: helmet/DamagedHelmet.gltf
     Type: MeshSource
   - Handle: 1151823588935974509
     FilePath: hair.jpg
     Type: Texture
+  - Handle: 1173940223621108111
+    FilePath: helmet/Material_MR.tmat
+    Type: Material
   - Handle: 2389336678456586226
     FilePath: eye1.jpg
+    Type: Texture
+  - Handle: 2563204470750864214
+    FilePath: helmet/Default_metalRoughness.jpg
+    Type: Texture
+  - Handle: 4521034690773063589
+    FilePath: helmet/Default_normal.jpg
     Type: Texture
   - Handle: 4788567584162122569
     FilePath: defaultScene.scene
@@ -14,6 +29,9 @@ AssetRegistry:
   - Handle: 5562626955961339861
     FilePath: mat_3-hat.tmat
     Type: Material
+  - Handle: 9956781267956307193
+    FilePath: helmet/Default_AO.jpg
+    Type: Texture
   - Handle: 10697569038813926612
     FilePath: mat_0-pupil.tmat
     Type: Material
@@ -47,6 +65,9 @@ AssetRegistry:
   - Handle: 17573842862627198819
     FilePath: mario_2.tmesh
     Type: StaticMesh
+  - Handle: 18136746154302256514
+    FilePath: helmet/Default_albedo.jpg
+    Type: Texture
   - Handle: 18137987321592696403
     FilePath: body.jpg
     Type: Texture
