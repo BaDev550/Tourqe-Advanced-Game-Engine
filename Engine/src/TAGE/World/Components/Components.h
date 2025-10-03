@@ -14,5 +14,5 @@ namespace TAGE {
 		RelationshipComponent, TransformComponent, MeshComponent,
 		RigidBodyComponent, ColliderComponent,
 		CameraComponent,
-		ScriptComponent>;
+		ScriptComponent, PointLightComponent, SpotLightComponent, DirectionalLightComponent>;
 }

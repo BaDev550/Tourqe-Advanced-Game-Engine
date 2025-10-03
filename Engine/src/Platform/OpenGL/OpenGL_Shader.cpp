@@ -112,6 +112,9 @@ namespace TARE::OpenGL {
 
 	bool OpenGL_Shader::Reload()
 	{
-		return false;
+		OpenGL_ShaderCompiler compiler(_ShaderPath);
+		compiler.Compile();
+		_ID = compiler.GetProgram();
+		return true;
 	}
 }

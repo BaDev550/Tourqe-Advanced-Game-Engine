@@ -342,6 +342,9 @@ namespace TAGE {
 		CopyComponentIfExists<CameraComponent>(newEntity, _Registry, entity);
 		CopyComponentIfExists<RigidBodyComponent>(newEntity, _Registry, entity);
 		CopyComponentIfExists<ColliderComponent>(newEntity, _Registry, entity);
+		CopyComponentIfExists<PointLightComponent>(newEntity, _Registry, entity);
+		CopyComponentIfExists<SpotLightComponent>(newEntity, _Registry, entity);
+		CopyComponentIfExists<DirectionalLightComponent>(newEntity, _Registry, entity);
 	}
 
 	void Scene::OnResize(uint width, uint height)
@@ -407,6 +410,21 @@ template<typename T>
 
 	template<>
 	void Scene::OnComponentAdded<RelationshipComponent>(Entity entity, RelationshipComponent& component)
+	{
+	}
+
+	template<>
+	void Scene::OnComponentAdded<DirectionalLightComponent>(Entity entity, DirectionalLightComponent& component)
+	{
+	}
+
+	template<>
+	void Scene::OnComponentAdded<PointLightComponent>(Entity entity, PointLightComponent& component)
+	{
+	}
+
+	template<>
+	void Scene::OnComponentAdded<SpotLightComponent>(Entity entity, SpotLightComponent& component)
 	{
 	}
 }

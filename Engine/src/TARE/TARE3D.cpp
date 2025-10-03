@@ -7,13 +7,16 @@
 namespace TARE {
 	ShaderLibrary TARE3D::_ShaderLibrary;
 	SceneData TARE3D::_SceneData;
+	UniformBufferDirectionalLight TARE3D::_UBODirectionalLight;
+	UniformBufferPointLights TARE3D::_UBOPointLights;
+	UniformBufferSpotLights TARE3D::_UBOSpotLights;
 	TAGE::MEM::Ref<Framebuffer> TARE3D::_GBuffer;
 	TAGE::MEM::Ref<Framebuffer> TARE3D::_FinalBuffer;
 
 	void TARE3D::Init(){
 		uint width, height;
 		width = TAGE::Application::Get()->GetWindow()->GetWidth();
-		height = TAGE::Application::Get()->GetWindow()->GetWidth();
+		height = TAGE::Application::Get()->GetWindow()->GetHeight();
 
 		RenderCommand::Create();
 		RenderCommand::DepthTest(true);
@@ -24,8 +27,11 @@ namespace TARE {
 		GetShaderLibrary().LoadShader("ForwardBase", "Resources/Shaders/ForwardBase.glsl");
 		GetShaderLibrary().LoadShader("Grid", "Resources/Shaders/Grid.glsl");
 
-		GetShaderLibrary().GetShader("ForwardBase")->Use();
-		GetShaderLibrary().GetShader("ForwardBase")->CreateUBO("CameraData", sizeof(CameraUniformBufferData), 5);
+		GetShaderLibrary().GetShader("DeferredLightingPBR")->Use();
+		GetShaderLibrary().GetShader("DeferredLightingPBR")->CreateUBO("CameraData", sizeof(CameraUniformBufferData), 5);
+		GetShaderLibrary().GetShader("DeferredLightingPBR")->CreateUBO("DirectionalLightData", sizeof(UniformBufferDirectionalLight), 6);
+		GetShaderLibrary().GetShader("DeferredLightingPBR")->CreateUBO("PointLightData",       sizeof(UniformBufferPointLights), 7);
+		GetShaderLibrary().GetShader("DeferredLightingPBR")->CreateUBO("SpotLightData",        sizeof(UniformBufferSpotLights), 8);
 
 		_GBuffer = Framebuffer::Create({
 			{ 
@@ -51,7 +57,7 @@ namespace TARE {
 		_FinalBuffer->Resize(width, height);
 	}
 
-	void TARE3D::BeginForwardRender(const TAGE::MEM::Ref<Camera>& camera)
+	void TARE3D::BeginDeferredRender(const TAGE::MEM::Ref<Camera>& camera)
 	{
 		_SceneData.CameraData.ViewMatrix = camera->GetViewMatrix();
 		_SceneData.CameraData.ProjectionMatrix = camera->GetProjectionMatrix();
@@ -62,21 +68,6 @@ namespace TARE {
 		_SceneData.CameraData.CameraDirection = camera->GetEulerRotation();
 		_SceneData.CameraData.CameraUp = camera->GetUp();
 
-		RenderCommand::Clear(0x00004000 | 0x00000100); // Change this
-		RenderCommand::SetClearColor({ 1.0f, 1.0f, 1.0f, 1.0f });
-		auto& shader = GetShaderLibrary().GetShader("ForwardBase");
-		shader->Use();
-		shader->UpdateUBO(5, &_SceneData.CameraData, sizeof(CameraUniformBufferData));
-		Grid::Draw();
-	}
-
-	void TARE3D::EndForwardRender()
-	{
-
-	}
-
-	void TARE3D::BeginDeferredRender(const TAGE::MEM::Ref<Camera>& camera)
-	{
 		auto& gBufferShader = GetShaderLibrary().GetShader("DeferredGBuffer");
 		_GBuffer->Bind();
 		RenderCommand::BlendTest(false);
@@ -89,6 +80,13 @@ namespace TARE {
 	{
 		_GBuffer->Unbind();
 
+		UniformBufferPointLights& UBOPointLights = _UBOPointLights;
+		UniformBufferSpotLights& UBOSpotLights = _UBOSpotLights;
+		UBOPointLights.Count = (uint)_SceneData.LightEnviroment.PointLights.size();
+		std::memcpy(UBOPointLights.PointLights, _SceneData.LightEnviroment.PointLights.data(), sizeof(PointLight) * UBOPointLights.Count);
+		UBOSpotLights.Count = (uint)_SceneData.LightEnviroment.SpotLights.size();
+		std::memcpy(UBOSpotLights.SpotLights, _SceneData.LightEnviroment.SpotLights.data(), sizeof(SpotLight) * UBOSpotLights.Count); // Move this to another function or class to handle all scene rendering
+
 		auto& lightShader = GetShaderLibrary().GetShader("DeferredLightingPBR");
 		const char* attachments[4] = { 
 			"u_gPos",
@@ -98,6 +96,11 @@ namespace TARE {
 		};
 		_FinalBuffer->Bind();
 		lightShader->Use();
+		lightShader->UpdateUBO(5, &_SceneData.CameraData, sizeof(CameraUniformBufferData));
+		lightShader->UpdateUBO(6, &_SceneData.LightEnviroment.DirectionalLight,  sizeof(UniformBufferDirectionalLight));
+		lightShader->UpdateUBO(7, &UBOPointLights,  16ull + sizeof(PointLight) * UBOPointLights.Count);
+		lightShader->UpdateUBO(8, &UBOSpotLights,   16ull + sizeof(SpotLight)  *  UBOSpotLights.Count);
+
 		RenderCommand::BlendTest(true);
 		RenderCommand::Clear(0x00004000 | 0x00000100); // Change this
 		RenderCommand::SetClearColor({ 1.0f, 1.0f, 1.0f, 1.0f });

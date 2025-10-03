@@ -32,6 +32,14 @@ namespace TAGE {
 
 		if (_Context)
 		{
+			if (ImGui::BeginPopupContextWindow("HierarchyContextMenu", ImGuiPopupFlags_MouseButtonRight))
+			{
+				if (ImGui::MenuItem("Create Empty Entity"))
+					_Context->CreateEntity("Empty Entity");
+
+				ImGui::EndPopup();
+			}
+
 			_Context->GetRegistry().view<IdentityComponent, TransformComponent>().each(
 				[&](entt::entity entityID, IdentityComponent& id, TransformComponent& transform)
 				{
@@ -42,15 +50,6 @@ namespace TAGE {
 
 			if (ImGui::IsMouseDown(0) && ImGui::IsWindowHovered())
 				_SelectionContext = {};
-
-			if (ImGui::BeginPopupContextWindow(0, 1))
-			{
-				if (ImGui::MenuItem("Create Empty Entity"))
-					_Context->CreateEntity("Empty Entity");
-
-				ImGui::EndPopup();
-			}
-
 		}
 		ImGui::End();
 
@@ -62,20 +61,10 @@ namespace TAGE {
 	void SceneHierarchyPanel::DrawEntityNode(Entity entity)
 	{
 		bool entityDeleted = false;
-		if (entityDeleted) {
-			_Context->DestroyEntity(entity);
-			if (_SelectionContext == entity)
-				_SelectionContext = {};
-		}
-
 		auto& tag = entity.GetComponent<IdentityComponent>().Name;
 		ImGuiTreeNodeFlags flags = ((_SelectionContext == entity) ? ImGuiTreeNodeFlags_Selected : 0) | ImGuiTreeNodeFlags_OpenOnArrow;
 		flags |= ImGuiTreeNodeFlags_SpanAvailWidth;
 		bool opened = ImGui::TreeNodeEx((void*)(uint64_t)(uint32_t)entity, flags, tag.c_str());
-		if (ImGui::IsItemClicked()) {
-			_SelectionContext = entity;
-		}
-		
 		if (ImGui::BeginPopupContextItem()) {
 			if (ImGui::MenuItem("Delete Entity"))
 				entityDeleted = true;
@@ -85,6 +74,10 @@ namespace TAGE {
 			ImGui::EndPopup();
 		}
 
+		if (ImGui::IsItemClicked()) {
+			_SelectionContext = entity;
+		}
+	
 		if (ImGui::BeginDragDropTarget()) {
 			if (const ImGuiPayload* payload = ImGui::AcceptDragDropPayload("HIERARCHY_ENTITY"))
 			{
@@ -104,16 +97,19 @@ namespace TAGE {
 		if (opened)
 		{
 			ImGuiTreeNodeFlags flags = ImGuiTreeNodeFlags_OpenOnArrow | ImGuiTreeNodeFlags_SpanAvailWidth;
-			bool opened = ImGui::TreeNodeEx((void*)9817239, flags, tag.c_str());
 			for (UUID childUUID : rc.Children)
 			{
 				Entity childEntity = _Context->GetEntityByUUID(childUUID);
 				if (childEntity)
-				{
 					DrawEntityNode(childEntity);
-				}
 			}
 			ImGui::TreePop();
+		}
+
+		if (entityDeleted) {
+			_Context->DestroyEntity(entity);
+			if (_SelectionContext == entity)
+				_SelectionContext = {};
 		}
 	}
 
@@ -130,17 +126,12 @@ namespace TAGE {
 			{
 				tag = std::string(buffer);
 			}
-
-			if (ImGui::Button("Delete")) {
-				_SelectionContext = {};
-				_Context->DestroyEntity(entity);
-			}
 		}
 
 		ImGui::SameLine();
 		ImGui::PushItemWidth(-1);
 
-		if (ImGui::Button("Add Component"))
+		if (ImGui::Button("+"))
 			ImGui::OpenPopup("AddComponent");
 
 		if (ImGui::BeginPopup("AddComponent"))
@@ -150,6 +141,9 @@ namespace TAGE {
 			DisplayAddComponentEntry<CameraComponent>("Camera");
 			DisplayAddComponentEntry<RigidBodyComponent>("Rigidbody");
 			DisplayAddComponentEntry<ColliderComponent>("Collider");
+			DisplayAddComponentEntry<DirectionalLightComponent>("Direct Light");
+			DisplayAddComponentEntry<PointLightComponent>("Point Light");
+			DisplayAddComponentEntry<SpotLightComponent>("Spot Light");
 
 			ImGui::EndPopup();
 		}

@@ -61,6 +61,16 @@ namespace TARE {
 	{
 		_Shader->Use();
 
+		_Shader->SetUniform("u_HasMetallicMap",  HasTexture(TextureType::Metallic));
+		_Shader->SetUniform("u_HasRoughnessMap", HasTexture(TextureType::Roughness));
+		_Shader->SetUniform("u_HasSpecularMap",  HasTexture(TextureType::Specular));
+		_Shader->SetUniform("u_HasDiffuseMap", HasTexture(TextureType::Diffuse));
+
+		_Shader->SetUniform("u_Metallic",  _Scalars.Metallic);
+		_Shader->SetUniform("u_Roughness", _Scalars.Roughness);
+		_Shader->SetUniform("u_Specular",  _Scalars.Specular);
+		_Shader->SetUniform("u_DiffuseColor", _Colors.DiffuseColor);
+
 		BindTexture(TextureType::Diffuse,   0);
 		BindTexture(TextureType::Normal,    1);
 		BindTexture(TextureType::Specular,  2);

@@ -1,5 +1,78 @@
 Scene: defaultScene
 Entities:
+  - Entity: 3738587168368778071
+    IdentityComponent:
+      Name: Cam
+    Parent: 8416567542417761546
+    Children:
+      []
+    TransformComponent:
+      Position: [0.160230637, 0, -0.167986631]
+      Rotation: [0, 1.57045102, 0]
+      Scale: [1, 1, 1]
+    CameraComponent:
+      Camera:
+        AspectRatio: 1.77777779
+        FOV: 45
+        NearClip: 0.0500000007
+        FarClip: 250
+      IsActive: true
+  - Entity: 8416567542417761546
+    IdentityComponent:
+      Name: Car
+    Parent: 0
+    Children:
+      - Handle: 3738587168368778071
+    TransformComponent:
+      Position: [3.15380454, 0, 1.79638481]
+      Rotation: [0, 0, 0]
+      Scale: [1, 1, 1]
+    MeshComponent:
+      MeshHandle: 17573842862627198819
+  - Entity: 6214307391594653628
+    IdentityComponent:
+      Name: Cube
+    Parent: 0
+    Children:
+      []
+    TransformComponent:
+      Position: [0, -2.15204406, 0]
+      Rotation: [0, 0, 0]
+      Scale: [10.4442396, 1, 6.03642511]
+    MeshComponent:
+      MeshHandle: 2362948530972318913
+  - Entity: 7493461805939156739
+    IdentityComponent:
+      Name: Empty Entity
+    Parent: 0
+    Children:
+      []
+    TransformComponent:
+      Position: [0.284219384, 1.95132959, 0.201546893]
+      Rotation: [0, 0, 0]
+      Scale: [1, 1, 1]
+    PointLightComponent:
+      Color: [1, 1, 1]
+      Radius: 1
+      Intensity: 3
+      Falloff: 1
+      CastShadow: true
+  - Entity: 12312709246988818953
+    IdentityComponent:
+      Name: Point Lighter
+    Parent: 0
+    Children:
+      []
+    TransformComponent:
+      Position: [2.28945947, -4.67239352e-06, -2.08343625]
+      Rotation: [0, -0.351542532, 0]
+      Scale: [1, 1, 1]
+    PointLightComponent:
+      Color: [1, 1, 1]
+      Radius: 1
+      Intensity: 3
+      Falloff: 1
+      CastShadow: true
   - Entity: 5488920663105717540
     IdentityComponent:
       Name: Empty Entity
@@ -8,7 +81,7 @@ Entities:
       []
     TransformComponent:
       Position: [0, 0, 0]
-      Rotation: [0, 0, 0]
+      Rotation: [1.57079625, -0.785398245, 0]
       Scale: [1, 1, 1]
     MeshComponent:
-      MeshHandle: 11816440778213370278
+      MeshHandle: 165940221320681385

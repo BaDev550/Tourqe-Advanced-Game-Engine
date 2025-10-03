@@ -40,17 +40,23 @@ layout(location = 2) in vec2 TexCoords;
 
 layout(location = 1) uniform float u_Metallic;
 layout(location = 2) uniform float u_Roughness;
-layout(location = 3) uniform bool u_HasMetallicMap;
-layout(location = 4) uniform bool u_HasRoughnessMap;
-layout(location = 5) uniform int u_EntityID;
+layout(location = 3) uniform float u_Specular;
+layout(location = 4) uniform bool u_HasDiffuseMap;
+layout(location = 5) uniform bool u_HasMetallicMap;
+layout(location = 6) uniform bool u_HasRoughnessMap;
+layout(location = 7) uniform bool u_HasSpecularMap;
+layout(location = 8) uniform int u_EntityID;
+layout(location = 9) uniform vec3 u_DiffuseColor;
 
 void main()
 {
+    vec4 diffuseColor = u_HasDiffuseMap ? texture(u_DiffuseMap, TexCoords) : vec4(u_DiffuseColor, 1.0f);
     gPosition = vec4(FragPos, 1.0f);
     gNormal = vec4(normalize(Normal), 1.0f);
-    gAlbedo = texture(u_DiffuseMap, TexCoords);
+    gAlbedo = diffuseColor;
     float roughness = u_HasRoughnessMap ? texture(u_RoughnessMap, TexCoords).r : u_Roughness;
     float metallic = u_HasMetallicMap ? texture(u_MetallicMap, TexCoords).r : u_Metallic;
-    gMetallicRoughness = vec4(roughness, 0.0f, 0.0f, metallic);
+    float specular = u_HasSpecularMap ? texture(u_SpecularMap, TexCoords).r : u_Specular;
+    gMetallicRoughness = vec4(roughness, specular, 0.0f, metallic);
     gEntityID = u_EntityID;
 }

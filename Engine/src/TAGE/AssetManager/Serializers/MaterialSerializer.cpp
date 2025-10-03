@@ -29,6 +29,8 @@ namespace TAGE {
             return false;
         }
         const auto& textures = material->GetTextures();
+		const auto& scalars = material->GetScalars();
+		const auto& colors = material->GetColors();
 
         std::ofstream out(path, std::ios::binary | std::ios::trunc);
         if (!out.is_open()) {
@@ -41,6 +43,9 @@ namespace TAGE {
         out.write(reinterpret_cast<const char*>(&magic), sizeof(magic));
         out.write(reinterpret_cast<const char*>(&version), sizeof(version));
         out.write(reinterpret_cast<const char*>(&textures), sizeof(TARE::TextureMaps));
+		out.write(reinterpret_cast<const char*>(&scalars), sizeof(TARE::ScalarMaps));
+        out.write(reinterpret_cast<const char*>(&colors), sizeof(TARE::ColorMaps));
+		out.close();
 		return true;
     }
 
@@ -63,10 +68,16 @@ namespace TAGE {
         }
 
         TARE::TextureMaps maps{};
+		TARE::ColorMaps colors{};
+		TARE::ScalarMaps scalars{};
         in.read(reinterpret_cast<char*>(&maps), sizeof(maps));
+		in.read(reinterpret_cast<char*>(&scalars), sizeof(scalars));
+		in.read(reinterpret_cast<char*>(&colors), sizeof(colors));
 
         auto material = TARE::Material::Create();
         material->SetTextures(maps);
+		material->SetScalars(scalars);
+		material->SetColors(colors);
 
         return material;
     }

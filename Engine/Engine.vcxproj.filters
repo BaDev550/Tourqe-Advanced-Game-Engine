@@ -1680,6 +1680,7 @@
     <ClInclude Include="src\TARE\Model\Grid.h" />
     <ClInclude Include="src\TARE\Buffers\Framebuffer.h" />
     <ClInclude Include="src\Platform\OpenGL\OpenGL_Framebuffer.h" />
+    <ClInclude Include="src\TARE\Types\Light.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\Platform\OpenGL\OpenGL_Buffers.cpp">

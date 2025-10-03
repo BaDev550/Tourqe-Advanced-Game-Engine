@@ -26,6 +26,26 @@ layout(binding = 3) uniform sampler2D u_gMetallicRoughness;
 void main()
 {
     vec3 FPos = texture(u_gPos, TexCoords).rgb;
+    vec4 MetalicRoughnes = texture(u_gMetallicRoughness, TexCoords);
     vec3 A = texture(u_gAlbedo, TexCoords).rgb;
-    FragColor = vec4(A, 1.0);
+	vec3 N = texture(u_gNormal, TexCoords).rgb;
+    float M = MetalicRoughnes.a;
+	float S = MetalicRoughnes.g;
+    float R = MetalicRoughnes.r;
+
+    vec3 F0 = vec3(0.04);
+    F0 = mix(F0, A, M);
+    vec3 VDir = normalize(u_CameraPos - FPos);
+    vec3 Lo = vec3(0.0f);
+
+    for (int i = 0; i < PointLightCount; i++) {
+        Lo += CalculatePointBPBR(u_PointLights[i], A, VDir, FPos, N, R, M, F0);
+    }
+    vec3 ambient = vec3(0.03) * A;
+    vec3 color = ambient + Lo;
+
+    color = color / (color + vec3(1.0));
+    color = pow(color, vec3(1.0/2.2)); 
+
+    FragColor = vec4(color, 1.0);
 }

@@ -91,7 +91,12 @@ namespace TAGE {
             MEM::Ref<TARE::Material> material = nullptr;
             if (matHandle != 0) {
                 material = AssetManager::GetAsset<TARE::Material>(matHandle);
-                material->_handle = matHandle;
+                if (!material) {
+                    LOG_WARN("Material with handle {} not found for StaticMesh: {}", (int)matHandle, path.string());
+                }
+                else {
+                    material->_handle = matHandle;
+                }
             }
 
             auto mesh = MEM::MakeRef<TARE::Mesh>(vertices, indices, material);

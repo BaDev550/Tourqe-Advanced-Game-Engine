@@ -178,14 +178,12 @@ namespace TAGE {
 
 						ImGui::SameLine();
 						{
-#if 0
 							AssetHandle currentIndex = 0;
 							if (GUI::ComboBox("Material", currentIndex, AssetType::Material, material->_handle)) {
 								auto& material = AssetManager::GetAsset<TARE::Material>(currentIndex);
 								mesh->SetMaterial(material);
 								Project::GetActive()->GetEditorAssetManager()->SaveAsset(component.Handle->_handle);
 							}
-#endif
 						}
 						ImGui::PopID();
 						meshIndex++;
@@ -298,6 +296,28 @@ namespace TAGE {
 				else
 					component.ResponseType = CollisionResponseType::BLOCK;
 
+			});
+
+		DrawComponent<DirectionalLightComponent>("Directional Light", entity, [](DirectionalLightComponent& component)
+			{
+				ImGui::DragFloat("Intensity", &component.Intensity, 0.1f, 0.1f, 100.0f);
+				GUI::DrawColorControl("Color", component.Color);
+			});
+
+		DrawComponent<PointLightComponent>("Point Light", entity, [](PointLightComponent& component)
+			{
+				ImGui::DragFloat("Intensity", &component.Intensity, 0.1f, 0.1f, 100.0f);
+				ImGui::DragFloat("Radius", &component.Radius, 0.1f, 0.1f, 100.0f);
+				ImGui::DragFloat("Falloff", &component.Falloff, 0.1f, 0.1f, 100.0f);
+				GUI::DrawColorControl("Color", component.Color);
+			});
+
+		DrawComponent<SpotLightComponent>("Spot Light", entity, [](SpotLightComponent& component)
+			{
+				ImGui::DragFloat("Intensity", &component.Intensity, 0.1f, 0.1f, 100.0f);
+				ImGui::DragFloat("Range",   &component.Range, 0.1f, 0.1f, 100.0f);
+				ImGui::DragFloat("Falloff", &component.Falloff, 0.1f, 0.1f, 100.0f);
+				GUI::DrawColorControl("Color", component.Color);
 			});
 	}
 }

@@ -13,6 +13,7 @@ namespace TAGE {
 	private:
 		void Render(const MEM::Ref<TARE::Camera>& cam, float dt, bool runtime = false);
 		void RenderObjects(bool runtime);
+		void CollectLights();
 	private:
 		MEM::Ref<TARE::EditorCamera> _EditorCamera;
 		float _DeltaTime = 0.0f;

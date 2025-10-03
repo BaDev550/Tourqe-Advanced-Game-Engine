@@ -4,9 +4,9 @@
 #include "Model/Model.h"
 #include "Model/Grid.h"
 #include "Camera/Camera.h"
+#include "Types/Light.h"
 #include "Buffers/Framebuffer.h"
 
-#define MAX_LIGHTS 64
 #define MAX_BONES 124
 #define MAX_MATERIALS 32
 #define MAX_INSTANCES 1024
@@ -15,6 +15,14 @@
 #define SHADOW_MAP_RESOLUTION 4056
 
 namespace TARE {
+	struct SceneLightEnviroment {
+		DirectionalLight DirectionalLight[MAX_DIRECTIONAL_LIGHTS];
+		std::vector<PointLight> PointLights;
+		std::vector<SpotLight> SpotLights;
+		_NODISCARD uint GetPointLightCount() const { return (uint)(PointLights.size() * sizeof(PointLight)); }
+		_NODISCARD uint GetSpotLightCount() const {  return (uint)(SpotLights.size() * sizeof(SpotLight)); }
+	};
+
 	struct CameraUniformBufferData {
 		glm::mat4 ViewMatrix;
 		glm::mat4 ProjectionMatrix;
@@ -26,9 +34,12 @@ namespace TARE {
 		glm::vec3 CameraDirection;
 		glm::vec3 CameraUp;
 	};
+
 	struct SceneData {
 		CameraUniformBufferData CameraData;
+		SceneLightEnviroment LightEnviroment;
 	};
+
 	class TARE3D
 	{
 	public:
@@ -36,8 +47,6 @@ namespace TARE {
 		static void Destroy();
 		static void Resize(uint width, uint height);
 
-		static void BeginForwardRender(const TAGE::MEM::Ref<Camera>& camera);
-		static void EndForwardRender();
 		static void BeginDeferredRender(const TAGE::MEM::Ref<Camera>& camera);
 		static void EndDeferredRender();
 
@@ -46,12 +55,17 @@ namespace TARE {
 
 		static ShaderLibrary& GetShaderLibrary() { return _ShaderLibrary; }
 		static SceneData& GetSceneData() { return _SceneData; }
+		static SceneLightEnviroment& GetLightEnviroment() { return _SceneData.LightEnviroment; }
 
 		static TAGE::MEM::Ref<Framebuffer> GetGBuffer() { return _GBuffer; }
 		static TAGE::MEM::Ref<Framebuffer> GetFinalBuffer() { return _FinalBuffer; }
 	private:
 		static ShaderLibrary _ShaderLibrary;
 		static SceneData _SceneData;
+
+		static UniformBufferDirectionalLight _UBODirectionalLight;
+		static UniformBufferPointLights _UBOPointLights;   // to-do : move this variables another class
+		static UniformBufferSpotLights _UBOSpotLights;
 
 		static TAGE::MEM::Ref<Framebuffer> _GBuffer;
 		static TAGE::MEM::Ref<Framebuffer> _FinalBuffer;

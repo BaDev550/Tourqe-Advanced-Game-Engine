@@ -129,6 +129,7 @@ namespace TAGE::Editor {
 		if (_ProjectSettingsPanel.IsOpen())
 			_ProjectSettingsPanel.OnImGuiRender();
 
+		UI_DrawRenderDebug();
 		UI_DrawViewport();
 
 		UI_EndDockspace();
@@ -637,5 +638,24 @@ namespace TAGE::Editor {
 
 		ImGui::End();
 		ImGui::PopStyleVar();
+	}
+
+	void EditorLayer::UI_DrawRenderDebug()
+	{
+		ImGui::Begin("Render Debug");
+		if (ImGui::CollapsingHeader("GBuffer")) {
+			ImGui::Text("GBuffer - Pos");
+			ImGui::Image((void*)(uintptr_t)TARE::TARE3D::GetGBuffer()->GetColorAttachment(0), ImVec2(256, 256), ImVec2{ 0, 1 }, ImVec2{ 1, 0 });
+			ImGui::Text("GBuffer - Normal");
+			ImGui::Image((void*)(uintptr_t)TARE::TARE3D::GetGBuffer()->GetColorAttachment(1), ImVec2(256, 256), ImVec2{ 0, 1 }, ImVec2{ 1, 0 });
+			ImGui::Text("GBuffer - Albedo");
+			ImGui::Image((void*)(uintptr_t)TARE::TARE3D::GetGBuffer()->GetColorAttachment(2), ImVec2(256, 256), ImVec2{ 0, 1 }, ImVec2{ 1, 0 });
+			ImGui::Text("GBuffer - Metallic Roughnes");
+			ImGui::Image((void*)(uintptr_t)TARE::TARE3D::GetGBuffer()->GetColorAttachment(3), ImVec2(256, 256), ImVec2{ 0, 1 }, ImVec2{ 1, 0 });
+		}
+		if (ImGui::Button("Reload Light Shader")) {
+			TARE::TARE3D::GetShaderLibrary().GetShader("DeferredLightingPBR")->Reload();
+		}
+		ImGui::End();
 	}
 }

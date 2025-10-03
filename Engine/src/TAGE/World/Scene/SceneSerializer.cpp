@@ -218,26 +218,42 @@ namespace TAGE {
 			out << YAML::EndMap;
 		}
 
-		//if (entity.HasComponent<LightComponent>()) {
-		//	out << YAML::Key << "LightComponent";
-		//	out << YAML::BeginMap;
-		//	auto& light = entity.GetComponent<LightComponent>();
-		//	out << YAML::Key << "Type" << YAML::Value << (int)light.Handle.Type;
-		//	out << YAML::Key << "Color" << YAML::Value << light.Handle.Color;
-		//	out << YAML::Key << "Range" << YAML::Value << light.Handle.Range;
-		//	out << YAML::Key << "Intensity" << YAML::Value << light.Handle.Intensity;
-		//	out << YAML::Key << "CastShadow" << YAML::Value << light.Handle.CastShadow;
+		if (entity.HasComponent<PointLightComponent>()) {
+			out << YAML::Key << "PointLightComponent";
+			out << YAML::BeginMap;
+			auto& light = entity.GetComponent<PointLightComponent>();
+			out << YAML::Key << "Color" << YAML::Value << light.Color;
+			out << YAML::Key << "Radius" << YAML::Value << light.Radius;
+			out << YAML::Key << "Intensity" << YAML::Value << light.Intensity;
+			out << YAML::Key << "Falloff" << YAML::Value << light.Falloff;
+			out << YAML::Key << "CastShadow" << YAML::Value << light.CastShadows;
 
-		//	out << YAML::EndMap;
-		//}
+			out << YAML::EndMap;
+		}
 
-		//if (entity.HasComponent<SkyboxComponent>()) {
-		//	out << YAML::Key << "SkyboxComponent";
-		//	out << YAML::BeginMap;
-		//	auto& skybox = entity.GetComponent<SkyboxComponent>();
-		//	out << YAML::Key << "TexturePath" << YAML::Value << skybox.Handle->GetTexture()->GetPath();
-		//	out << YAML::EndMap;
-		//}
+		if (entity.HasComponent<SpotLightComponent>()) {
+			out << YAML::Key << "SpotLightComponent";
+			out << YAML::BeginMap;
+			auto& light = entity.GetComponent<SpotLightComponent>();
+			out << YAML::Key << "Color" << YAML::Value << light.Color;
+			out << YAML::Key << "Range" << YAML::Value << light.Range;
+			out << YAML::Key << "Intensity" << YAML::Value << light.Intensity;
+			out << YAML::Key << "Falloff" << YAML::Value << light.Falloff;
+			out << YAML::Key << "CastShadow" << YAML::Value << light.CastShadows;
+
+			out << YAML::EndMap;
+		}
+
+		if (entity.HasComponent<DirectionalLightComponent>()) {
+			out << YAML::Key << "DirectionalLightComponent";
+			out << YAML::BeginMap;
+			auto& light = entity.GetComponent<DirectionalLightComponent>();
+			out << YAML::Key << "Color" << YAML::Value << light.Color;
+			out << YAML::Key << "Intensity" << YAML::Value << light.Intensity;
+			out << YAML::Key << "CastShadow" << YAML::Value << light.CastShadows;
+
+			out << YAML::EndMap;
+		}
 
 		if (entity.HasComponent<RigidBodyComponent>()) {
 			out << YAML::Key << "RigidBodyComponent";
@@ -400,21 +416,45 @@ namespace TAGE {
 					camera.IsActive = cameraComponent["IsActive"].as<bool>();
 				}
 
-				auto lightComponent = entity["LightComponent"];
-				if (lightComponent) {
-					//LightType type = (LightType)lightComponent["Type"].as<int>();
-					/*glm::vec4 color = lightComponent["Color"].as<glm::vec4>();*/
-					//glm::vec4 color = glm::vec4(1.0f);
-					//float range = lightComponent["Range"].as<float>();
-					//float intensity = lightComponent["Intensity"].as<float>();
-					//bool castShadow = lightComponent["CastShadow"].as<bool>();
-					//auto& light = deserializedEntity.AddOrReplaceComponent<LightComponent>(Light(type, castShadow, intensity, range, {}, {}, color));
+				auto pointlightComponent = entity["PointLightComponent"];
+				if (pointlightComponent) {
+					glm::vec3 color = pointlightComponent["Color"].as<glm::vec3>();
+					float radius = pointlightComponent["Radius"].as<float>();
+					float intensity = pointlightComponent["Intensity"].as<float>();
+					float falloff = pointlightComponent["Falloff"].as<float>();
+					bool castShadow = pointlightComponent["CastShadow"].as<bool>();
+					auto& light = deserializedEntity.AddOrReplaceComponent<PointLightComponent>();
+					light.CastShadows = castShadow;
+					light.Color = color;
+					light.Radius = radius;
+					light.Intensity = intensity;
+					light.Falloff = falloff;
 				}
 
-				auto skyboxComponent = entity["SkyboxComponent"];
-				if (skyboxComponent) {
-					//auto& texturePath = skyboxComponent["TexturePath"].as<std::string>();
-					//auto& skybox = deserializedEntity.AddOrReplaceComponent<SkyboxComponent>(texturePath);
+				auto spotlightComponent = entity["SpotLightComponent"];
+				if (spotlightComponent) {
+					glm::vec3 color = spotlightComponent["Color"].as<glm::vec3>();
+					float range = spotlightComponent["Range"].as<float>();
+					float intensity = spotlightComponent["Intensity"].as<float>();
+					float falloff = spotlightComponent["Falloff"].as<float>();
+					bool castShadow = spotlightComponent["CastShadow"].as<bool>();
+					auto& light = deserializedEntity.AddOrReplaceComponent<SpotLightComponent>();
+					light.CastShadows = castShadow;
+					light.Color = color;
+					light.Range = range;
+					light.Intensity = intensity;
+					light.Falloff = falloff;
+				}
+
+				auto dirlightComponent = entity["DirectionalLightComponent"];
+				if (dirlightComponent) {
+					glm::vec3 color = dirlightComponent["Color"].as<glm::vec3>();
+					float intensity = dirlightComponent["Intensity"].as<float>();
+					bool castShadow = dirlightComponent["CastShadow"].as<bool>();
+					auto& light = deserializedEntity.AddOrReplaceComponent<DirectionalLightComponent>(); // Add constructor later to get rid of initialization on scene serializer
+					light.CastShadows = castShadow;
+					light.Color = color;
+					light.Intensity = intensity;
 				}
 
 				auto colliderComponent = entity["ColliderComponent"];

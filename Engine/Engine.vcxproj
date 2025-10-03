@@ -199,6 +199,7 @@
     <ClInclude Include="src\TARE\Texture\Texture.h" />
     <ClInclude Include="src\TARE\Texture\Texture2D.h" />
     <ClInclude Include="src\tagepch.h" />
+    <ClInclude Include="src\TARE\Types\Light.h" />
     <ClInclude Include="vendor\glm\glm\common.hpp" />
     <ClInclude Include="vendor\glm\glm\detail\_features.hpp" />
     <ClInclude Include="vendor\glm\glm\detail\_fixes.hpp" />

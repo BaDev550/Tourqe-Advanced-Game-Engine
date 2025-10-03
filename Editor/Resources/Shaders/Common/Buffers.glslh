@@ -17,4 +17,46 @@ layout(std140, set = 0, binding = 5) uniform CameraData
     float u_FarPlane;
 };
 
+struct DirectionalLight {
+    vec3 Direction;
+    vec3 Color;
+    float Intensity;
+};
+
+layout(std140, set = 0, binding = 6) uniform DirectionalLightData
+{
+    DirectionalLight u_DirectionalLight;
+};
+
+struct PointLight { // 32 byte 16 alignment
+	vec3 Position;
+	float Intensity;
+    vec3 Color;
+	float Radius;
+	float Falloff;
+    bool CastsShadows;
+};
+
+layout(std140, set = 0, binding = 7) uniform PointLightData
+{
+    uint PointLightCount;
+    PointLight u_PointLights[1000];
+};
+
+struct SpotLight {
+	vec3 Position;
+	float Intensity;
+	vec3 Direction;
+	float Range;
+    vec3 Color;
+	float Falloff;
+    bool CastsShadows;
+};
+
+layout(std140, set = 0, binding = 8) uniform SpotLightData
+{
+    uint SpotLightCount;
+    SpotLight u_SpotLights[1024];
+};
+
 #endif

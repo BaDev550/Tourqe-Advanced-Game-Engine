@@ -7,7 +7,11 @@
 		2. Vertex Buffer Object, Element Buffer Object
 		3. Vertex Array Object
 		4. Framebuffer
-	## Physically Based Rendering (PBR) [Working-on]
+	## Better Light System [Completed]
+		1. Light Struct
+		2. Multiple light types (directional, point, spot)
+		3. GPU Side light structers
+	## Physically Based Rendering (PBR) [Working-On]
 
 	## HDR (High Dynamic Range) [Not-Implemented]
 		1. Tonemapping (Reinhard, ACES)    [Not-Implemented]

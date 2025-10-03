@@ -1,24 +1,87 @@
 AssetRegistry:
+  - Handle: 71260643565457452
+    FilePath: Sponza/4871783166746854860.jpg
+    Type: Texture
   - Handle: 165940221320681385
     FilePath: helmet/DamagedHelmet.tmesh
     Type: StaticMesh
   - Handle: 193429391912109802
     FilePath: mario_2.obj
     Type: MeshSource
-  - Handle: 980420389367139357
-    FilePath: helmet/DamagedHelmet.gltf
-    Type: MeshSource
+  - Handle: 488539362469121605
+    FilePath: Sponza/3455394979645218238.jpg
+    Type: Texture
+  - Handle: 824533319309959708
+    FilePath: Sponza/7815564343179553343.jpg
+    Type: Texture
+  - Handle: 950126523416367108
+    FilePath: Sponza/2775690330959970771.jpg
+    Type: Texture
   - Handle: 1151823588935974509
     FilePath: hair.jpg
+    Type: Texture
+  - Handle: 1157870625462955068
+    FilePath: Sponza/9916269861720640319.jpg
     Type: Texture
   - Handle: 1173940223621108111
     FilePath: helmet/Material_MR.tmat
     Type: Material
+  - Handle: 1945153519997453370
+    FilePath: cube/Material.tmat
+    Type: Material
+  - Handle: 2040398837166655454
+    FilePath: Sponza/332936164838540657.jpg
+    Type: Texture
+  - Handle: 2362948530972318913
+    FilePath: cube/cube.tmesh
+    Type: StaticMesh
   - Handle: 2389336678456586226
     FilePath: eye1.jpg
     Type: Texture
+  - Handle: 2460210261254612148
+    FilePath: Sponza/13824894030729245199.jpg
+    Type: Texture
   - Handle: 2563204470750864214
     FilePath: helmet/Default_metalRoughness.jpg
+    Type: Texture
+  - Handle: 2610944195719650399
+    FilePath: Sponza/2051777328469649772.jpg
+    Type: Texture
+  - Handle: 2621091748422302772
+    FilePath: Sponza/10388182081421875623.jpg
+    Type: Texture
+  - Handle: 3001621280132870737
+    FilePath: Sponza/5061699253647017043.png
+    Type: Texture
+  - Handle: 3321148003670421209
+    FilePath: Sponza/17556969131407844942.jpg
+    Type: Texture
+  - Handle: 3327993703888505432
+    FilePath: Sponza/4477655471536070370.jpg
+    Type: Texture
+  - Handle: 3792011452101145099
+    FilePath: Sponza/5823059166183034438.jpg
+    Type: Texture
+  - Handle: 3795422856154490005
+    FilePath: Sponza/6593109234861095314.jpg
+    Type: Texture
+  - Handle: 3798202262359038666
+    FilePath: Sponza/9288698199695299068.jpg
+    Type: Texture
+  - Handle: 3911668069482731726
+    FilePath: Sponza/white.png
+    Type: Texture
+  - Handle: 3998973723006126467
+    FilePath: Sponza/4910669866631290573.jpg
+    Type: Texture
+  - Handle: 4094611394071418513
+    FilePath: Sponza/14170708867020035030.jpg
+    Type: Texture
+  - Handle: 4239921504886552985
+    FilePath: ToyCar/ToyCar_basecolor.png
+    Type: Texture
+  - Handle: 4385530273523041608
+    FilePath: Sponza/7441062115984513793.jpg
     Type: Texture
   - Handle: 4521034690773063589
     FilePath: helmet/Default_normal.jpg
@@ -26,11 +89,92 @@ AssetRegistry:
   - Handle: 4788567584162122569
     FilePath: defaultScene.scene
     Type: Scene
+  - Handle: 4831389349481696683
+    FilePath: ToyCar/Fabric_normal.png
+    Type: Texture
+  - Handle: 4887581780957886192
+    FilePath: cube/cube.obj
+    Type: MeshSource
+  - Handle: 5060028606665194997
+    FilePath: Sponza/8783994986360286082.jpg
+    Type: Texture
+  - Handle: 5143766104167788347
+    FilePath: Sponza/14267839433702832875.jpg
+    Type: Texture
+  - Handle: 5206165696421539338
+    FilePath: Sponza/8750083169368950601.jpg
+    Type: Texture
+  - Handle: 5325698961858823305
+    FilePath: Sponza/17876391417123941155.jpg
+    Type: Texture
+  - Handle: 5427965846501761064
+    FilePath: ToyCar/ToyCar.gltf
+    Type: MeshSource
   - Handle: 5562626955961339861
     FilePath: mat_3-hat.tmat
     Type: Material
+  - Handle: 5899937706682440557
+    FilePath: Sponza/3827035219084910048.jpg
+    Type: Texture
+  - Handle: 5947801072585614553
+    FilePath: Sponza/8773302468495022225.jpg
+    Type: Texture
+  - Handle: 5965395600831544886
+    FilePath: Sponza/4975155472559461469.jpg
+    Type: Texture
+  - Handle: 6148775700862245189
+    FilePath: Sponza/11872827283454512094.jpg
+    Type: Texture
+  - Handle: 6302116181504476350
+    FilePath: Sponza/7268504077753552595.jpg
+    Type: Texture
+  - Handle: 6305086573763569589
+    FilePath: Sponza/3628158980083700836.jpg
+    Type: Texture
+  - Handle: 6383080710721206079
+    FilePath: Sponza/15295713303328085182.jpg
+    Type: Texture
+  - Handle: 7009252735412167357
+    FilePath: ToyCar/ToyCar_occlusion_roughness_metallic.png
+    Type: Texture
+  - Handle: 7103332174184911971
+    FilePath: Sponza/11490520546946913238.jpg
+    Type: Texture
+  - Handle: 7150043253386944109
+    FilePath: Sponza/16299174074766089871.jpg
+    Type: Texture
+  - Handle: 7304916172083406721
+    FilePath: Sponza/4601176305987539675.jpg
+    Type: Texture
+  - Handle: 7417359507100479023
+    FilePath: ToyCar/ToyCar_normal.png
+    Type: Texture
+  - Handle: 7531569282693589948
+    FilePath: Sponza/8481240838833932244.jpg
+    Type: Texture
+  - Handle: 7566167066457874498
+    FilePath: Sponza/16885566240357350108.jpg
+    Type: Texture
+  - Handle: 9680440889847234854
+    FilePath: ToyCar/ToyCar.tmesh
+    Type: StaticMesh
+  - Handle: 9756314411122402471
+    FilePath: ToyCar/Fabric.tmat
+    Type: Material
+  - Handle: 9792850611878114668
+    FilePath: Sponza/8503262930880235456.jpg
+    Type: Texture
   - Handle: 9956781267956307193
     FilePath: helmet/Default_AO.jpg
+    Type: Texture
+  - Handle: 9980420570977272808
+    FilePath: Sponza/15722799267630235092.jpg
+    Type: Texture
+  - Handle: 10317041140446267321
+    FilePath: Sponza/11968150294050148237.jpg
+    Type: Texture
+  - Handle: 10646215797890516987
+    FilePath: Sponza/5792855332885324923.jpg
     Type: Texture
   - Handle: 10697569038813926612
     FilePath: mat_0-pupil.tmat
@@ -38,33 +182,135 @@ AssetRegistry:
   - Handle: 11112505009538077359
     FilePath: mat_5-body.tmat
     Type: Material
+  - Handle: 11246306353582249175
+    FilePath: Sponza/8006627369776289000.png
+    Type: Texture
+  - Handle: 11273439680876697114
+    FilePath: Sponza/2411100444841994089.jpg
+    Type: Texture
+  - Handle: 11491551653697586971
+    FilePath: ToyCar/ToyCar.tmat
+    Type: Material
+  - Handle: 11518351210365381493
+    FilePath: ToyCar/Glass.tmat
+    Type: Material
+  - Handle: 11615016033673396957
+    FilePath: Sponza/13196865903111448057.jpg
+    Type: Texture
+  - Handle: 11676869949706008376
+    FilePath: ToyCar/Fabric_occlusion.png
+    Type: Texture
   - Handle: 11736764115714360220
     FilePath: pupil.jpg
+    Type: Texture
+  - Handle: 11905210635980907821
+    FilePath: Sponza/13982482287905699490.jpg
+    Type: Texture
+  - Handle: 12282543691325864944
+    FilePath: Sponza/1219024358953944284.jpg
+    Type: Texture
+  - Handle: 12314678704138545918
+    FilePath: Sponza/7645212358685992005.jpg
+    Type: Texture
+  - Handle: 12330998297845435228
+    FilePath: Sponza/8051790464816141987.jpg
+    Type: Texture
+  - Handle: 12768685040377955844
+    FilePath: Sponza/16275776544635328252.png
     Type: Texture
   - Handle: 13048286934168915248
     FilePath: face.jpg
     Type: Texture
+  - Handle: 13474771155060311653
+    FilePath: Sponza/14118779221266351425.jpg
+    Type: Texture
+  - Handle: 13478561106534295688
+    FilePath: Sponza/6772804448157695701.jpg
+    Type: Texture
+  - Handle: 13835517081464477135
+    FilePath: Sponza/8747919177698443163.jpg
+    Type: Texture
+  - Handle: 13866198370939842023
+    FilePath: Sponza/4675343432951571524.jpg
+    Type: Texture
+  - Handle: 13915510582483562455
+    FilePath: Sponza/2299742237651021498.jpg
+    Type: Texture
+  - Handle: 14153355372800217348
+    FilePath: Sponza/6667038893015345571.jpg
+    Type: Texture
   - Handle: 14251658400130948010
     FilePath: mat_4-eye1.tmat
     Type: Material
+  - Handle: 14258713118182088372
+    FilePath: Sponza/7056944414013900257.jpg
+    Type: Texture
+  - Handle: 14421299117568580322
+    FilePath: Sponza/759203620573749278.jpg
+    Type: Texture
+  - Handle: 14548779409237048316
+    FilePath: Sponza/10381718147657362067.jpg
+    Type: Texture
+  - Handle: 14785366058395660342
+    FilePath: Sponza/11474523244911310074.jpg
+    Type: Texture
+  - Handle: 14965494697014247134
+    FilePath: Sponza/715093869573992647.jpg
+    Type: Texture
   - Handle: 15193404214728276290
     FilePath: mat_6-hair.tmat
     Type: Material
+  - Handle: 15508299115526333300
+    FilePath: Sponza/14650633544276105767.jpg
+    Type: Texture
   - Handle: 16043937048310483247
     FilePath: mat_2-face.tmat
     Type: Material
+  - Handle: 16196031712110197707
+    FilePath: Sponza/466164707995436622.jpg
+    Type: Texture
+  - Handle: 16350627510758431980
+    FilePath: Sponza/3371964815757888145.jpg
+    Type: Texture
+  - Handle: 16504323351308873343
+    FilePath: Sponza/8114461559286000061.jpg
+    Type: Texture
   - Handle: 16648943999108670197
     FilePath: glove.jpg
     Type: Texture
   - Handle: 16760318513130142643
     FilePath: mat_1-glove.tmat
     Type: Material
+  - Handle: 16877194485330195827
+    FilePath: Sponza/12501374198249454378.jpg
+    Type: Texture
+  - Handle: 17022020409975683930
+    FilePath: Sponza/2374361008830720677.jpg
+    Type: Texture
+  - Handle: 17217532465476547842
+    FilePath: ToyCar/Fabric_baseColor.png
+    Type: Texture
   - Handle: 17512761443826138909
     FilePath: hat.jpg
     Type: Texture
   - Handle: 17573842862627198819
     FilePath: mario_2.tmesh
     Type: StaticMesh
+  - Handle: 17668559181716096270
+    FilePath: Sponza/6151467286084645207.jpg
+    Type: Texture
+  - Handle: 17766175225423148639
+    FilePath: Sponza/6047387724914829168.jpg
+    Type: Texture
+  - Handle: 17951379448298677535
+    FilePath: Sponza/2185409758123873465.jpg
+    Type: Texture
+  - Handle: 18032297758415920170
+    FilePath: Sponza/2969916736137545357.jpg
+    Type: Texture
+  - Handle: 18066885559204719875
+    FilePath: Sponza/755318871556304029.jpg
+    Type: Texture
   - Handle: 18136746154302256514
     FilePath: helmet/Default_albedo.jpg
     Type: Texture

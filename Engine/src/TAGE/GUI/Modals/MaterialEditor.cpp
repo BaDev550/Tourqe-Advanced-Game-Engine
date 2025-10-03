@@ -6,6 +6,7 @@
 #include "TAGE/Utilities/Platform.h"
 
 #include "TAGE/GUI/GUIUtils.h"
+#include "TARE/Texture/Texture.h"
 
 namespace TAGE {
     static bool s_OpenMaterialModal = false;
@@ -17,7 +18,6 @@ namespace TAGE {
     }
 
     void MaterialEditor::Render() {
-#if 0
         if (s_OpenMaterialModal) {
             if (ImGui::Begin("Material Editor", &s_OpenMaterialModal, ImGuiWindowFlags_AlwaysAutoResize)) {
                 ImGui::Text("Material Editor");
@@ -25,8 +25,8 @@ namespace TAGE {
 				auto& s_CurrentMaterial = AssetManager::GetAsset<TARE::Material>(s_CurrentMaterialHandle);
 
                 if (s_CurrentMaterial) {
-                    auto textures = s_CurrentMaterial->GetTextureMaps();
-                    auto showTexture = [=](TAGE::AssetHandle handle, const char* label, TextureType type) {
+                    auto textures = s_CurrentMaterial->GetTextures();
+                    auto showTexture = [=](TAGE::AssetHandle handle, const char* label, TARE::TextureType type) {
                         auto texture = AssetManager::GetAsset<TARE::Texture2D>(handle);
                         if (texture) {
                             ImGui::Image((ImTextureID)(void*)texture->GetID(), { 64, 64 }, { 1, 0 }, { 0, 1 });
@@ -70,16 +70,35 @@ namespace TAGE {
                         }
                         };
 
-                    showTexture(textures.Diffuse, "Diffuse", TextureType::DIFFUSE);
-                    showTexture(textures.Specular, "Specular", TextureType::SPECULAR);
-                    showTexture(textures.Normal, "Normal", TextureType::NORMAL);
-                    showTexture(textures.Roughness, "Roughness", TextureType::ROUGHNESS);
-                    showTexture(textures.Metallic, "Metallic", TextureType::METALLIC);
-                    showTexture(textures.AmbientOcclusion, "AO", TextureType::AMBIENT_OCCLUSION);
+                    if (s_CurrentMaterial->HasTexture(TARE::TextureType::Diffuse)) {
+                        showTexture(textures.DiffuseMap, "DiffuseMap", TARE::TextureType::Diffuse);
+                    }
+                    else {
+                        showTexture(textures.DiffuseMap, "Texture", TARE::TextureType::Diffuse);
+						ImGui::SameLine();
+						glm::vec3 color = s_CurrentMaterial->GetColors().DiffuseColor;
+                        if (GUI::DrawColorControl("DiffuseColor", color)) {
+                            s_CurrentMaterial->SetDiffuseColor(color);
+                        }
+                    }
+                    showTexture(textures.SpecularMap, "SpecularMap",   TARE::TextureType::Specular);
+                    showTexture(textures.NormalMap, "NormalMap",       TARE::TextureType::Normal);
+                    showTexture(textures.RoughnessMap, "RoughnessMap", TARE::TextureType::Roughness);
+                    showTexture(textures.NormalMap, "MetallicMap",     TARE::TextureType::Metallic);
 
-					glm::vec3 color = glm::vec3(s_CurrentMaterial->GetColors().Diffuse);
-                    if (ImGui::ColorEdit3("Diffuse Color", glm::value_ptr(color))) {
-						s_CurrentMaterial->SetColor(TextureType::DIFFUSE, glm::vec4(color, 1.0f));
+					float metallic = s_CurrentMaterial->GetScalars().Metallic;
+                    if (ImGui::DragFloat("Metallic", &metallic, 0.1f)) {
+						s_CurrentMaterial->SetMetallic(metallic);
+                    }
+
+                    float roughness = s_CurrentMaterial->GetScalars().Roughness;
+                    if (ImGui::DragFloat("Roughness", &roughness, 0.1f)) {
+                        s_CurrentMaterial->SetRoughness(roughness);
+                    }
+
+                    float specular = s_CurrentMaterial->GetScalars().Specular;
+                    if (ImGui::DragFloat("Specular", &specular, 0.1f)) {
+                        s_CurrentMaterial->SetSpecular(specular);
                     }
 
                     if (ImGui::Button("Save")) {
@@ -90,6 +109,5 @@ namespace TAGE {
                 ImGui::End();
             }
         }
-#endif
     }
 }
