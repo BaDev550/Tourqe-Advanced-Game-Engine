@@ -1,26 +1,13 @@
 #pragma once
 #include "TAGE/Common/TDefines.h"
+#include "TARE/Texture/Texture.h"
 
 namespace TARE {
-	enum class FramebufferTextureFormat : uint8 {
-		NONE = 0,
-		RGBA,
-		RGBA8,
-		RGBA16F,
-		R16F,
-		R8,
-		RED_INTEGER,
-		DEPTH24STENCIL8,
-		DEPTH32F,
-		DEPTH24,
-		DEPTH_ARRAY
-	};
-
 	struct FramebufferTextureSpecification {
-		FramebufferTextureFormat format = FramebufferTextureFormat::RGBA8;
+		TextureFormat format = TextureFormat::RGBA8;
 
 		FramebufferTextureSpecification() = default;
-		FramebufferTextureSpecification(FramebufferTextureFormat fmt) : format(fmt) {}
+		FramebufferTextureSpecification(TextureFormat fmt) : format(fmt) {}
 	};
 
 	struct FramebufferAttachmentSpecification {
@@ -53,6 +40,7 @@ namespace TARE {
 		virtual int Read(uint attachment, int x, int y) const = 0;
 		virtual void ClearAttachment(uint attachment, int value) = 0;
 		virtual const FramebufferSpecification& GetSpecification() const = 0;
+		virtual void AttachCubemapFace(const TAGE::MEM::Ref<TextureCube>& cubemap, uint faceIndex) = 0;
 
 		virtual void BindColorAttachment(uint index = 0, int slot = 0) const = 0;
 		virtual uint GetColorAttachment(uint index = 0) const = 0;

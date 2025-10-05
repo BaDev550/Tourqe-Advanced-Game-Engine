@@ -144,7 +144,8 @@ namespace TAGE {
 			DisplayAddComponentEntry<DirectionalLightComponent>("Direct Light");
 			DisplayAddComponentEntry<PointLightComponent>("Point Light");
 			DisplayAddComponentEntry<SpotLightComponent>("Spot Light");
-
+			DisplayAddComponentEntry<SkyLightComponent>("Sky Light");
+			
 			ImGui::EndPopup();
 		}
 

@@ -7,6 +7,9 @@ layout(binding = 2) uniform sampler2D u_SpecularMap;
 layout(binding = 3) uniform sampler2D u_MetallicMap;
 layout(binding = 4) uniform sampler2D u_RoughnessMap;
 
+layout(binding = 5) uniform samplerCube u_RadianceMap;
+layout(binding = 6) uniform samplerCube u_IrradianceMap;
+
 #include "Common.glslh"
 #include "Buffers.glslh"
 

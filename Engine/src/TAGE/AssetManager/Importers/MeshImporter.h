@@ -21,7 +21,7 @@ namespace TAGE {
 	private:
 		MEM::Ref<TARE::Mesh> ProcessMesh(MEM::Ref<TARE::Model>& model, aiMesh* mesh, const aiScene* scene);
 		MEM::Ref<TARE::Material> LoadMaterials(aiMesh* mesh, const aiScene* scene);
-		void LoadTextureToMaterial(TARE::TextureType type, aiMaterial* material, MEM::Ref<TARE::Material>& outMaterial);
+		void LoadTextureToMaterial(TARE::MaterialTextureType type, aiMaterial* material, MEM::Ref<TARE::Material>& outMaterial);
 		
 		std::filesystem::path _SourcePath;
 	};

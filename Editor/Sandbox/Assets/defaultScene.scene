@@ -1,5 +1,25 @@
 Scene: defaultScene
 Entities:
+  - Entity: 7878474574195585380
+    IdentityComponent:
+      Name: Empty Entity
+    Parent: 0
+    Children:
+      []
+    TransformComponent:
+      Position: [0, 0, 0]
+      Rotation: [0, 0, 0]
+      Scale: [1, 1, 1]
+  - Entity: 1750059302588502698
+    IdentityComponent:
+      Name: Empty Entity
+    Parent: 0
+    Children:
+      []
+    TransformComponent:
+      Position: [0, 0, 0]
+      Rotation: [0, 0, 0]
+      Scale: [1, 1, 1]
   - Entity: 3738587168368778071
     IdentityComponent:
       Name: Cam
@@ -12,7 +32,7 @@ Entities:
       Scale: [1, 1, 1]
     CameraComponent:
       Camera:
-        AspectRatio: 1.77777779
+        AspectRatio: 1.60912979
         FOV: 45
         NearClip: 0.0500000007
         FarClip: 250
@@ -24,11 +44,11 @@ Entities:
     Children:
       - Handle: 3738587168368778071
     TransformComponent:
-      Position: [3.15380454, 0, 1.79638481]
-      Rotation: [0, 0, 0]
+      Position: [1.57038617, 0, 2.81658435]
+      Rotation: [0, 0.785398245, 0]
       Scale: [1, 1, 1]
     MeshComponent:
-      MeshHandle: 17573842862627198819
+      MeshHandle: 2362948530972318913
   - Entity: 6214307391594653628
     IdentityComponent:
       Name: Cube
@@ -48,13 +68,13 @@ Entities:
     Children:
       []
     TransformComponent:
-      Position: [0.284219384, 1.95132959, 0.201546893]
+      Position: [1.06072938, 3.27211046, 0.788466096]
       Rotation: [0, 0, 0]
       Scale: [1, 1, 1]
     PointLightComponent:
       Color: [1, 1, 1]
       Radius: 1
-      Intensity: 3
+      Intensity: 14.1000004
       Falloff: 1
       CastShadow: true
   - Entity: 12312709246988818953
@@ -64,7 +84,7 @@ Entities:
     Children:
       []
     TransformComponent:
-      Position: [2.28945947, -4.67239352e-06, -2.08343625]
+      Position: [2.12961912, -2.97384122e-06, -1.81158519]
       Rotation: [0, -0.351542532, 0]
       Scale: [1, 1, 1]
     PointLightComponent:

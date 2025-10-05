@@ -653,9 +653,28 @@ namespace TAGE::Editor {
 			ImGui::Text("GBuffer - Metallic Roughnes");
 			ImGui::Image((void*)(uintptr_t)TARE::TARE3D::GetGBuffer()->GetColorAttachment(3), ImVec2(256, 256), ImVec2{ 0, 1 }, ImVec2{ 1, 0 });
 		}
-		if (ImGui::Button("Reload Light Shader")) {
-			TARE::TARE3D::GetShaderLibrary().GetShader("DeferredLightingPBR")->Reload();
+		if (ImGui::CollapsingHeader("Shaders")) {
+			if (ImGui::Button("Reload DeferredLightingPBR Shader")) {
+				TARE::TARE3D::GetShaderLibrary().GetShader("DeferredLightingPBR")->Reload();
+			}
+			if (ImGui::Button("Reload IrradianceConvolution Shader")) {
+				TARE::TARE3D::GetShaderLibrary().GetShader("IrradianceConvolution")->Reload();
+			}
+			if (ImGui::Button("Reload EquirectangularCubemap Shader")) {
+				TARE::TARE3D::GetShaderLibrary().GetShader("EquirectangularCubemap")->Reload();
+			}
 		}
+		if (ImGui::CollapsingHeader("IBL")) {
+			if (TARE::TARE3D::HasEnviromentMap()) {
+				ImGui::Text("EquirectangularMap");
+				ImGui::Image((void*)(uintptr_t)TARE::TARE3D::GetEnviromentMap().EquirectangularMap->GetID(), ImVec2(256, 256), ImVec2{ 0, 1 }, ImVec2{ 1, 0 });
+				ImGui::Text("RadianceMap");
+				ImGui::Image((void*)(uintptr_t)TARE::TARE3D::GetEnviromentMap().RadianceMap->GetID(), ImVec2(256, 256), ImVec2{ 0, 1 }, ImVec2{ 1, 0 });
+				ImGui::Text("IrradianceMap");
+				ImGui::Image((void*)(uintptr_t)TARE::TARE3D::GetEnviromentMap().IrradianceMap->GetID(), ImVec2(256, 256), ImVec2{ 0, 1 }, ImVec2{ 1, 0 });
+			}
+		}
+
 		ImGui::End();
 	}
 }

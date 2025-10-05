@@ -7,49 +7,74 @@
 namespace TAGE {
 	struct Buffer
 	{
-		uint8* Data = nullptr;
-		uint64 Size = 0;
+		void* Data = nullptr;
+		uint64_t Size = 0;
 
 		Buffer() = default;
 
-		Buffer(uint64 size)
-		{
-			Allocate(size);
+		Buffer(const void* data, uint64_t size = 0)
+			: Data((void*)data), Size(size) {
 		}
 
-		Buffer(const void* data, uint64 size)
-			: Data((uint8*)data), Size(size)
+		static Buffer Copy(const Buffer& other)
 		{
+			Buffer buffer;
+			buffer.Allocate(other.Size);
+			memcpy(buffer.Data, other.Data, other.Size);
+			return buffer;
 		}
 
-		Buffer(const Buffer&) = default;
-
-		static Buffer Copy(Buffer other)
+		static Buffer Copy(const void* data, uint64_t size)
 		{
-			Buffer result(other.Size);
-			memcpy(result.Data, other.Data, other.Size);
-			return result;
+			Buffer buffer;
+			buffer.Allocate(size);
+			memcpy(buffer.Data, data, size);
+			return buffer;
 		}
 
-		void Allocate(uint64 size)
+		void Allocate(uint64_t size)
 		{
-			Release();
-
-			Data = (uint8*)malloc(size);
+			delete[](uint8*)Data;
+			Data = nullptr;
 			Size = size;
+
+			if (size == 0)
+				return;
+
+			Data = new uint8[size];
 		}
 
 		void Release()
 		{
-			free(Data);
+			delete[](uint8*)Data;
 			Data = nullptr;
 			Size = 0;
 		}
 
 		template<typename T>
-		T* As()
+		T& Read(uint64_t offset = 0)
 		{
-			return (T*)Data;
+			return *(T*)((uint8*)Data + offset);
+		}
+
+		template<typename T>
+		const T& Read(uint64_t offset = 0) const
+		{
+			return *(T*)((uint8*)Data + offset);
+		}
+
+		uint8* ReadBytes(uint64_t size, uint64_t offset) const
+		{
+			ASSERT(offset + size <= Size, "Buffer overflow!");
+			uint8* buffer = new uint8[size];
+			memcpy(buffer, (uint8*)Data + offset, size);
+			return buffer;
+		}
+
+		void Write(const void* data, uint64_t size, uint64_t offset = 0)
+		{
+			ASSERT(offset + size <= Size, "Buffer overflow!");
+			memcpy((uint8*)Data + offset, data, size);
 		}
 
 		operator bool() const
@@ -57,38 +82,22 @@ namespace TAGE {
 			return (bool)Data;
 		}
 
-	};
-
-	struct ScopedBuffer
-	{
-		ScopedBuffer(Buffer buffer)
-			: _Buffer(buffer)
+		uint8& operator[](int index)
 		{
+			return ((uint8*)Data)[index];
 		}
 
-		ScopedBuffer(uint64 size)
-			: _Buffer(size)
+		uint8 operator[](int index) const
 		{
+			return ((uint8*)Data)[index];
 		}
-
-		~ScopedBuffer()
-		{
-			_Buffer.Release();
-		}
-
-		uint8* Data() { return _Buffer.Data; }
-		uint64 Size() { return _Buffer.Size; }
 
 		template<typename T>
-		T* As()
+		T* As() const
 		{
-			return _Buffer.As<T>();
+			return (T*)Data;
 		}
 
-		operator bool() const { return _Buffer; }
-	private:
-		Buffer _Buffer;
+		inline uint64_t GetSize() const { return Size; }
 	};
-
-
 }

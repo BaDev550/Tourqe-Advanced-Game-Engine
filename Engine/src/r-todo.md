@@ -11,6 +11,12 @@
 		1. Light Struct
 		2. Multiple light types (directional, point, spot)
 		3. GPU Side light structers
+	## Materials [Working-On] --
+		1. Basic Material Struct
+		2. Texture loading (stb_image)
+		3. Texture library
+		4. Material Instances
+		5. Material library
 	## Physically Based Rendering (PBR) [Working-On]
 
 	## HDR (High Dynamic Range) [Not-Implemented]

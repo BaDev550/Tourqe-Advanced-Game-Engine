@@ -108,11 +108,14 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
+    <None Include="Resources\Shaders\Background.glsl" />
     <None Include="Resources\Shaders\Common\Buffers.glslh" />
     <None Include="Resources\Shaders\Common\Common.glslh" />
     <None Include="Resources\Shaders\Common\PBR.glslh" />
+    <None Include="Resources\Shaders\EquirectangularCubemap.glsl" />
     <None Include="Resources\Shaders\Grid.glsl" />
     <None Include="Resources\Shaders\ForwardBase.glsl" />
+    <None Include="Resources\Shaders\IrradianceConvolution.glsl" />
   </ItemGroup>
   <ItemGroup>
     <Text Include="Resources\Shaders\DeferredGBuffer.glsl" />

@@ -11,8 +11,10 @@ namespace TARE::OpenGL {
 	{
 		_ShaderPath = shaderPath;
 		OpenGL_ShaderCompiler compiler(_ShaderPath);
-		compiler.Compile();
-		_ID = compiler.GetProgram();
+		if (compiler.Compile())
+			_ID = compiler.GetProgram();
+		else
+			LOG_CRITICAL("Failed to compile shader: {}", shaderPath);
 	}
 
 	OpenGL_Shader::~OpenGL_Shader()
@@ -22,6 +24,9 @@ namespace TARE::OpenGL {
 
 	void OpenGL_Shader::Use() const
 	{
+		if (_ID == 0)
+			return;
+
 		glUseProgram(_ID);
 	}
 

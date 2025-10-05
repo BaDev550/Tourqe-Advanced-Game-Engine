@@ -13,12 +13,10 @@ namespace TARE
 	}
 
 	void Grid::Draw() {
-		RenderCommand::BlendTest(true);
 		RenderCommand::DepthTest(false);
 		TARE::TARE3D::GetShaderLibrary().GetShader("Grid")->Use();
 		RenderCommand::DrawVertex(_VAO);
 		RenderCommand::DepthTest(true);
-		RenderCommand::BlendTest(false);
 	}
 
 	void Grid::InitGridBuffers()

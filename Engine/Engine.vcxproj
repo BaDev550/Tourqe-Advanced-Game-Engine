@@ -101,7 +101,9 @@
     </Lib>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClInclude Include="src\Platform\OpenGL\OpenGL_TextureCube.h" />
     <ClInclude Include="src\Platform\OpenGL\OpenGL_Framebuffer.h" />
+    <ClInclude Include="src\Platform\OpenGL\OpenGL_TextureUtils.h" />
     <ClInclude Include="src\TARE\Buffers\Framebuffer.h" />
     <ClInclude Include="src\TARE\Model\Grid.h" />
     <ClInclude Include="src\Platform\OpenGL\OpenGL_Buffers.h" />
@@ -199,7 +201,9 @@
     <ClInclude Include="src\TARE\Texture\Texture.h" />
     <ClInclude Include="src\TARE\Texture\Texture2D.h" />
     <ClInclude Include="src\tagepch.h" />
+    <ClInclude Include="src\TARE\Types\EnviromentMap.h" />
     <ClInclude Include="src\TARE\Types\Light.h" />
+    <ClInclude Include="src\TARE\Texture\TextureCube.h" />
     <ClInclude Include="vendor\glm\glm\common.hpp" />
     <ClInclude Include="vendor\glm\glm\detail\_features.hpp" />
     <ClInclude Include="vendor\glm\glm\detail\_fixes.hpp" />
@@ -622,6 +626,7 @@
     <ClInclude Include="vendor\stb\stb_image_write.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="src\Platform\OpenGL\OpenGL_TextureCube.cpp" />
     <ClCompile Include="src\Platform\OpenGL\OpenGL_Framebuffer.cpp" />
     <ClCompile Include="src\TARE\Buffers\Framebuffer.cpp" />
     <ClCompile Include="src\TARE\Model\Grid.cpp" />
@@ -699,6 +704,7 @@
     <ClCompile Include="src\tagepch.cpp">
       <PrecompiledHeader>Create</PrecompiledHeader>
     </ClCompile>
+    <ClCompile Include="src\TARE\Texture\TextureCube.cpp" />
     <ClCompile Include="vendor\stb\stb_image.cpp" />
   </ItemGroup>
   <ItemGroup>

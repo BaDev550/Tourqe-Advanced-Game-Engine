@@ -37,6 +37,9 @@ namespace TARE {
 		inline static void DrawFullScreenQuad() {
 			_API->DrawFullScreenQuad();
 		}
+		inline static void RenderCube() {
+			_API->RenderCube();
+		}
 	private:
 		static inline RenderAPI* _API = nullptr;
 	};

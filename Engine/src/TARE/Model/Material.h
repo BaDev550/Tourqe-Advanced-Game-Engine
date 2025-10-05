@@ -4,6 +4,15 @@
 #include "TARE/Texture/Texture2D.h"
 
 namespace TARE {
+	enum class MaterialTextureType {
+		Diffuse,
+		Specular,
+		Roughness,
+		Normal,
+		Metallic,
+		AmbientOcclusion
+	};
+
 	struct TextureMaps {
 		TAGE::AssetHandle DiffuseMap = 0;
 		TAGE::AssetHandle NormalMap = 0;
@@ -28,7 +37,7 @@ namespace TARE {
 		Material(const TAGE::MEM::Ref<Shader>& shader);
 
 		void Use();
-		void SetTexture(TextureType type, TAGE::AssetHandle handle);
+		void SetTexture(MaterialTextureType type, TAGE::AssetHandle handle);
 
 		TAGE::MEM::Ref<Texture2D> GetDiffuseTexture();
 		void SetDiffuseTexture(TAGE::AssetHandle texture);
@@ -52,7 +61,7 @@ namespace TARE {
 		void SetDiffuseColor(const glm::vec3& color) { _Colors.DiffuseColor = color; }
 		void SetSpecularColor(const glm::vec3& color) { _Colors.SpecularColor = color; }
 
-		bool HasTexture(TextureType type) const;
+		bool HasTexture(MaterialTextureType type) const;
 		void ResetAll();
 
 		TextureMaps GetTextures() const { return _Maps; }
@@ -72,6 +81,6 @@ namespace TARE {
 		ColorMaps _Colors;
 		TAGE::MEM::Ref<Shader> _Shader = nullptr;
 
-		void BindTexture(TextureType type, uint8 slot);
+		void BindTexture(MaterialTextureType type, uint8 slot);
 	};
 }

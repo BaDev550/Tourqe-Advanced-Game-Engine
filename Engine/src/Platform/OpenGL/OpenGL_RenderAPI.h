@@ -17,5 +17,6 @@ namespace TARE::OpenGL {
 		virtual void DrawVertex(const TAGE::MEM::Ref<VertexArrayObject>& VAO)  override;
 		virtual void DrawLine(const TAGE::MEM::Ref<VertexArrayObject>& VAO, uint vertexCount) override;
 		virtual void DrawFullScreenQuad() override;
+		virtual void RenderCube() override;
 	};
 }

@@ -17,6 +17,7 @@ namespace TARE::OpenGL {
 		virtual int Read(uint attachment, int x, int y) const override;
 		virtual void ClearAttachment(uint attachment, int value) override;
 		virtual const FramebufferSpecification& GetSpecification() const override { return _Specification; }
+		virtual void AttachCubemapFace(const TAGE::MEM::Ref<TextureCube>& cubemap, uint faceIndex) override;
 
 		virtual void BindColorAttachment(uint index = 0, int slot = 0) const override;
 		virtual uint GetColorAttachment(uint index = 0) const override { CHECKF(index < _ColorAttachments.size(), "Index out of bounds for color attachments!"); return _ColorAttachments[index]; }
@@ -30,12 +31,12 @@ namespace TARE::OpenGL {
 		virtual void BindRead() const override;
 		virtual void BindWrite() const override;
 	private:
-		uint _BufferID;
+		uint _BufferID = 0;
 
 		FramebufferSpecification _Specification;
 		std::vector<FramebufferTextureSpecification> _ColorAttachmentSpecifications;
 		std::vector<uint> _ColorAttachments;
 		uint _DepthAttachment = 0;
-		FramebufferTextureSpecification _DepthAttachmentSpecification = FramebufferTextureFormat::NONE;
+		FramebufferTextureSpecification _DepthAttachmentSpecification = TextureFormat::NONE;
 	};
 }

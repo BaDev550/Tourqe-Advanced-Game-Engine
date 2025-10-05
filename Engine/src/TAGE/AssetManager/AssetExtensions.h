@@ -6,6 +6,7 @@ namespace TAGE {
     static std::map<std::filesystem::path, AssetType> s_AssetExtensionMap = {
         { ".png", AssetType::Texture },
         { ".jpg", AssetType::Texture },
+        { ".hdr", AssetType::EnviromentMap },
 
         { ".fbx", AssetType::MeshSource },
         { ".obj", AssetType::MeshSource },

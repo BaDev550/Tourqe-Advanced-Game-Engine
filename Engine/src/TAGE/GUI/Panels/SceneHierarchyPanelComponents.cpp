@@ -4,6 +4,7 @@
 #include "TAGE/Scripting/ScriptEngine.h"
 #include "TAGE/Utilities/Platform.h"
 #include "TAGE/GUI/GUIUtils.h"
+#include "TARE/TARE3D.h"
 #include "TAGE/GUI/Modals/MaterialEditor.h"
 #include "TAGE/AssetManager/AssetManager.h"
 
@@ -318,6 +319,18 @@ namespace TAGE {
 				ImGui::DragFloat("Range",   &component.Range, 0.1f, 0.1f, 100.0f);
 				ImGui::DragFloat("Falloff", &component.Falloff, 0.1f, 0.1f, 100.0f);
 				GUI::DrawColorControl("Color", component.Color);
+			});
+
+		DrawComponent<SkyLightComponent>("Sky Light", entity, [](SkyLightComponent& component)
+			{
+				AssetHandle selectedAsset;
+				if (GUI::ComboBox("Environment Map", selectedAsset, AssetType::EnviromentMap, component.EnvironmentMap)) {
+					component.EnvironmentMap = selectedAsset;
+
+					auto& envMap = AssetManager::GetAsset<TARE::EnviromentMap>(component.EnvironmentMap);
+					TARE::TARE3D::SetEnviromentMap(envMap.get());
+				}
+				ImGui::DragFloat("Intensity", &component.Intensity, 0.1f, 0.1f, 100.0f);
 			});
 	}
 }

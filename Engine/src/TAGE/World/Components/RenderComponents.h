@@ -68,6 +68,12 @@ namespace TAGE {
 		SpotLightComponent() = default;
 	};
 
+	struct SkyLightComponent
+	{
+		AssetHandle EnvironmentMap;
+		float Intensity = 1.0f;
+	};
+
 	struct CameraComponent {
 		MEM::Ref<TARE::Camera> Handle;
 		bool IsActive = true;

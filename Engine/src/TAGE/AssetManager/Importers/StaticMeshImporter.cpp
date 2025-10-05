@@ -24,19 +24,19 @@ namespace TAGE {
 		}
 	}
 
-	aiTextureType ToAiTextureType(TARE::TextureType type) {
+	aiTextureType ToAiTextureType(TARE::MaterialTextureType type) {
 		switch (type) {
-		case TextureType::Diffuse:            return aiTextureType_DIFFUSE;
-		case TextureType::Specular:           return aiTextureType_SPECULAR;
-		case TextureType::Normal:             return aiTextureType_NORMALS;
-		case TextureType::Roughness:          return aiTextureType_DIFFUSE_ROUGHNESS;
-		case TextureType::Metallic:           return aiTextureType_METALNESS;
-		case TextureType::AmbientOcclusion:   return aiTextureType_LIGHTMAP;
+		case MaterialTextureType::Diffuse:            return aiTextureType_DIFFUSE;
+		case MaterialTextureType::Specular:           return aiTextureType_SPECULAR;
+		case MaterialTextureType::Normal:             return aiTextureType_NORMALS;
+		case MaterialTextureType::Roughness:          return aiTextureType_DIFFUSE_ROUGHNESS;
+		case MaterialTextureType::Metallic:           return aiTextureType_METALNESS;
+		case MaterialTextureType::AmbientOcclusion:   return aiTextureType_LIGHTMAP;
 		default:                              return aiTextureType_NONE;
 		}
 	}
 
-	void StaticMeshImporter::LoadTextureToMaterial(TextureType type, aiMaterial* material, MEM::Ref<TARE::Material>& outMaterial)
+	void StaticMeshImporter::LoadTextureToMaterial(MaterialTextureType type, aiMaterial* material, MEM::Ref<TARE::Material>& outMaterial)
 	{
 		aiTextureType aiType = ToAiTextureType(type);
 
@@ -73,12 +73,12 @@ namespace TAGE {
 		{
 			aiMaterial* mat = scene->mMaterials[mesh->mMaterialIndex];
 			materialName = mat->GetName().C_Str();
-			LoadTextureToMaterial(TextureType::Diffuse, mat, material);
-			LoadTextureToMaterial(TextureType::Specular, mat, material);
-			LoadTextureToMaterial(TextureType::Normal, mat, material);
-			LoadTextureToMaterial(TextureType::Roughness, mat, material);
-			LoadTextureToMaterial(TextureType::Metallic, mat, material);
-			LoadTextureToMaterial(TextureType::AmbientOcclusion, mat, material);
+			LoadTextureToMaterial(MaterialTextureType::Diffuse, mat, material);
+			LoadTextureToMaterial(MaterialTextureType::Specular, mat, material);
+			LoadTextureToMaterial(MaterialTextureType::Normal, mat, material);
+			LoadTextureToMaterial(MaterialTextureType::Roughness, mat, material);
+			LoadTextureToMaterial(MaterialTextureType::Metallic, mat, material);
+			LoadTextureToMaterial(MaterialTextureType::AmbientOcclusion, mat, material);
 			mat->Clear();
 		}
 		std::filesystem::path cleanMaterialName = materialName;

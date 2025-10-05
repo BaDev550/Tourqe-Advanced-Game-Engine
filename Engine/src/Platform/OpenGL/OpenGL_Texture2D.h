@@ -6,10 +6,11 @@ namespace TARE::OpenGL {
 	class OpenGL_Texture2D : public Texture2D
 	{
 	public:
-		OpenGL_Texture2D(const TextureSpecs& specs, TAGE::Buffer data = TAGE::Buffer());
+		OpenGL_Texture2D(const TextureSpecs& specs, TAGE::Buffer& data = TAGE::Buffer());
 		~OpenGL_Texture2D();
 		virtual void Bind(uint8 slot = 0) const override;
 		virtual void Unbind() const override;
+		virtual void GenerateMipmap() const override;
 
 		virtual uint GetID() const override { return _ID; }
 		virtual int GetWidth() const override { return _Specification.Width; }

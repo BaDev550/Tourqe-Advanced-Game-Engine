@@ -18,6 +18,9 @@
     <None Include="Resources\Shaders\Common\PBR.glslh" />
     <None Include="Resources\Shaders\Common\Common.glslh" />
     <None Include="Resources\Shaders\Common\Buffers.glslh" />
+    <None Include="Resources\Shaders\EquirectangularCubemap.glsl" />
+    <None Include="Resources\Shaders\IrradianceConvolution.glsl" />
+    <None Include="Resources\Shaders\Background.glsl" />
   </ItemGroup>
   <ItemGroup>
     <Text Include="Resources\Shaders\DeferredGBuffer.glsl" />

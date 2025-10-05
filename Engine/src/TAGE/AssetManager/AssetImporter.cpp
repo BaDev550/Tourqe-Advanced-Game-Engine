@@ -13,6 +13,7 @@ namespace TAGE {
 	using AssetSerializeFunction = std::function<bool(const MEM::Ref<Asset>&, const std::filesystem::path&)>;
 	static std::map<AssetType, AssetImportFunction> s_AssetImportFunctions = {
 		{ AssetType::Texture, TextureImporter::ImportTexture2D },
+		{ AssetType::EnviromentMap, EnviromentMapImporter::ImportEnviromentMap },
 		{ AssetType::Scene,     SceneImporter::ImportScene },
 		{ AssetType::MeshSource, MeshImporter::ImportSourceModel },
 		{ AssetType::StaticMesh, MeshImporter::ImportStaticMesh },

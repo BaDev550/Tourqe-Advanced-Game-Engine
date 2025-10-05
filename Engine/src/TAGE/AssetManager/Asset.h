@@ -9,6 +9,7 @@ namespace TAGE {
 		StaticMesh,
 		SkeletalMesh,
 		Texture,
+		EnviromentMap,
 		Audio,
 		Material
 	};

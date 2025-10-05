@@ -26,7 +26,7 @@ namespace TAGE {
 
                 if (s_CurrentMaterial) {
                     auto textures = s_CurrentMaterial->GetTextures();
-                    auto showTexture = [=](TAGE::AssetHandle handle, const char* label, TARE::TextureType type) {
+                    auto showTexture = [=](TAGE::AssetHandle handle, const char* label, TARE::MaterialTextureType type) {
                         auto texture = AssetManager::GetAsset<TARE::Texture2D>(handle);
                         if (texture) {
                             ImGui::Image((ImTextureID)(void*)texture->GetID(), { 64, 64 }, { 1, 0 }, { 0, 1 });
@@ -70,21 +70,21 @@ namespace TAGE {
                         }
                         };
 
-                    if (s_CurrentMaterial->HasTexture(TARE::TextureType::Diffuse)) {
-                        showTexture(textures.DiffuseMap, "DiffuseMap", TARE::TextureType::Diffuse);
+                    if (s_CurrentMaterial->HasTexture(TARE::MaterialTextureType::Diffuse)) {
+                        showTexture(textures.DiffuseMap, "DiffuseMap", TARE::MaterialTextureType::Diffuse);
                     }
                     else {
-                        showTexture(textures.DiffuseMap, "Texture", TARE::TextureType::Diffuse);
+                        showTexture(textures.DiffuseMap, "Texture", TARE::MaterialTextureType::Diffuse);
 						ImGui::SameLine();
 						glm::vec3 color = s_CurrentMaterial->GetColors().DiffuseColor;
                         if (GUI::DrawColorControl("DiffuseColor", color)) {
                             s_CurrentMaterial->SetDiffuseColor(color);
                         }
                     }
-                    showTexture(textures.SpecularMap, "SpecularMap",   TARE::TextureType::Specular);
-                    showTexture(textures.NormalMap, "NormalMap",       TARE::TextureType::Normal);
-                    showTexture(textures.RoughnessMap, "RoughnessMap", TARE::TextureType::Roughness);
-                    showTexture(textures.NormalMap, "MetallicMap",     TARE::TextureType::Metallic);
+                    showTexture(textures.SpecularMap, "SpecularMap",   TARE::MaterialTextureType::Specular);
+                    showTexture(textures.NormalMap, "NormalMap",       TARE::MaterialTextureType::Normal);
+                    showTexture(textures.RoughnessMap, "RoughnessMap", TARE::MaterialTextureType::Roughness);
+                    showTexture(textures.NormalMap, "MetallicMap",     TARE::MaterialTextureType::Metallic);
 
 					float metallic = s_CurrentMaterial->GetScalars().Metallic;
                     if (ImGui::DragFloat("Metallic", &metallic, 0.1f)) {

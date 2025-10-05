@@ -1681,6 +1681,10 @@
     <ClInclude Include="src\TARE\Buffers\Framebuffer.h" />
     <ClInclude Include="src\Platform\OpenGL\OpenGL_Framebuffer.h" />
     <ClInclude Include="src\TARE\Types\Light.h" />
+    <ClInclude Include="src\TARE\Texture\TextureCube.h" />
+    <ClInclude Include="src\Platform\OpenGL\OpenGL_TextureCube.h" />
+    <ClInclude Include="src\TARE\Types\EnviromentMap.h" />
+    <ClInclude Include="src\Platform\OpenGL\OpenGL_TextureUtils.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\Platform\OpenGL\OpenGL_Buffers.cpp">
@@ -1905,5 +1909,7 @@
     <ClCompile Include="src\TARE\Model\Grid.cpp" />
     <ClCompile Include="src\TARE\Buffers\Framebuffer.cpp" />
     <ClCompile Include="src\Platform\OpenGL\OpenGL_Framebuffer.cpp" />
+    <ClCompile Include="src\TARE\Texture\TextureCube.cpp" />
+    <ClCompile Include="src\Platform\OpenGL\OpenGL_TextureCube.cpp" />
   </ItemGroup>
 </Project>

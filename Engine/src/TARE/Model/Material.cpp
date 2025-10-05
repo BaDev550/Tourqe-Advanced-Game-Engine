@@ -20,37 +20,37 @@ namespace TARE {
 		return std::move(mat);
 	}
 
-	void Material::BindTexture(TextureType type, uint8 slot)
+	void Material::BindTexture(MaterialTextureType type, uint8 slot)
 	{
 		if (HasTexture(type)) {
 			switch (type)
 			{
-			case TARE::TextureType::Diffuse: {
+			case TARE::MaterialTextureType::Diffuse: {
 				GetDiffuseTexture()->Bind(slot);
 				_Shader->SetUniform(MATERIAL_DIFFUSE_MAP_NAME, slot);
 				break;
 			}
-			case TARE::TextureType::Specular: {
+			case TARE::MaterialTextureType::Specular: {
 				GetSpecularTexture()->Bind(slot);
 				_Shader->SetUniform(MATERIAL_SPECULAR_MAP_NAME, slot);
 				break;
 			}
-			case TARE::TextureType::Roughness: {
+			case TARE::MaterialTextureType::Roughness: {
 				GetRoughnessTexture()->Bind(slot);
 				_Shader->SetUniform(MATERIAL_ROUGHNESS_MAP_NAME, slot);
 				break;
 			}
-			case TARE::TextureType::Normal: {
+			case TARE::MaterialTextureType::Normal: {
 				GetNormalTexture()->Bind(slot);
 				_Shader->SetUniform(MATERIAL_NORMAL_MAP_NAME, slot);
 				break;
 			}
-			case TARE::TextureType::Metallic: {
+			case TARE::MaterialTextureType::Metallic: {
 				GetMetalnessTexture()->Bind(slot);
 				_Shader->SetUniform(MATERIAL_METALLIC_MAP_NAME, slot);
 				break;
 			}
-			case TARE::TextureType::AmbientOcclusion: {
+			case TARE::MaterialTextureType::AmbientOcclusion: {
 				break;
 			}
 			}
@@ -61,32 +61,32 @@ namespace TARE {
 	{
 		_Shader->Use();
 
-		_Shader->SetUniform("u_HasMetallicMap",  HasTexture(TextureType::Metallic));
-		_Shader->SetUniform("u_HasRoughnessMap", HasTexture(TextureType::Roughness));
-		_Shader->SetUniform("u_HasSpecularMap",  HasTexture(TextureType::Specular));
-		_Shader->SetUniform("u_HasDiffuseMap", HasTexture(TextureType::Diffuse));
+		_Shader->SetUniform("u_HasMetallicMap",  HasTexture(MaterialTextureType::Metallic));
+		_Shader->SetUniform("u_HasRoughnessMap", HasTexture(MaterialTextureType::Roughness));
+		_Shader->SetUniform("u_HasSpecularMap",  HasTexture(MaterialTextureType::Specular));
+		_Shader->SetUniform("u_HasDiffuseMap", HasTexture(MaterialTextureType::Diffuse));
 
 		_Shader->SetUniform("u_Metallic",  _Scalars.Metallic);
 		_Shader->SetUniform("u_Roughness", _Scalars.Roughness);
 		_Shader->SetUniform("u_Specular",  _Scalars.Specular);
 		_Shader->SetUniform("u_DiffuseColor", _Colors.DiffuseColor);
 
-		BindTexture(TextureType::Diffuse,   0);
-		BindTexture(TextureType::Normal,    1);
-		BindTexture(TextureType::Specular,  2);
-		BindTexture(TextureType::Metallic,  3);
-		BindTexture(TextureType::Roughness, 4);
+		BindTexture(MaterialTextureType::Diffuse,   0);
+		BindTexture(MaterialTextureType::Normal,    1);
+		BindTexture(MaterialTextureType::Specular,  2);
+		BindTexture(MaterialTextureType::Metallic,  3);
+		BindTexture(MaterialTextureType::Roughness, 4);
 	}
 
-	void Material::SetTexture(TextureType type, TAGE::AssetHandle handle)
+	void Material::SetTexture(MaterialTextureType type, TAGE::AssetHandle handle)
 	{
 		switch (type)
 		{
-		case TextureType::Diffuse:   SetDiffuseTexture(handle); break;
-		case TextureType::Specular:  SetSpecularTexture(handle); break;
-		case TextureType::Roughness: SetRoughnessTexture(handle); break;
-		case TextureType::Normal:    SetNormalTexture(handle); break;
-		case TextureType::Metallic:  SetMetalnessTexture(handle); break;
+		case MaterialTextureType::Diffuse:   SetDiffuseTexture(handle); break;
+		case MaterialTextureType::Specular:  SetSpecularTexture(handle); break;
+		case MaterialTextureType::Roughness: SetRoughnessTexture(handle); break;
+		case MaterialTextureType::Normal:    SetNormalTexture(handle); break;
+		case MaterialTextureType::Metallic:  SetMetalnessTexture(handle); break;
 		default:
 			break;
 		}
@@ -119,15 +119,15 @@ namespace TARE {
 		_Maps.MetalnessMap = texture;
 	}
 
-	bool Material::HasTexture(TextureType type) const
+	bool Material::HasTexture(MaterialTextureType type) const
 	{
 		switch (type)
 		{
-		case TextureType::Diffuse:   return _Maps.DiffuseMap != 0;
-		case TextureType::Specular:  return _Maps.SpecularMap != 0;
-		case TextureType::Roughness: return _Maps.RoughnessMap != 0;
-		case TextureType::Normal:    return _Maps.NormalMap != 0;
-		case TextureType::Metallic:  return _Maps.MetalnessMap != 0;
+		case MaterialTextureType::Diffuse:   return _Maps.DiffuseMap != 0;
+		case MaterialTextureType::Specular:  return _Maps.SpecularMap != 0;
+		case MaterialTextureType::Roughness: return _Maps.RoughnessMap != 0;
+		case MaterialTextureType::Normal:    return _Maps.NormalMap != 0;
+		case MaterialTextureType::Metallic:  return _Maps.MetalnessMap != 0;
 		default:
 			break;
 		}

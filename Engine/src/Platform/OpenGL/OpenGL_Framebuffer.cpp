@@ -6,61 +6,67 @@
 namespace TARE::OpenGL {
 	static const uint s_MaxFramebufferSize = 8192;
 	namespace Utils {
-		static GLenum TextureFormatTo_OpenGLFormat(FramebufferTextureFormat format)
+		static GLenum TextureFormatTo_OpenGLFormat(TextureFormat format)
 		{
 			switch (format)
 			{
-			case FramebufferTextureFormat::RGBA8:        return GL_RGBA;
-			case FramebufferTextureFormat::RGBA16F:		 return GL_RGBA;
-			case FramebufferTextureFormat::RGBA:		 return GL_RGBA;
-			case FramebufferTextureFormat::RED_INTEGER:  return GL_RED_INTEGER;
-			case FramebufferTextureFormat::R8:           return GL_RED;
-			case FramebufferTextureFormat::R16F:         return GL_RED;
+			case TextureFormat::RGBA8:        return GL_RGBA;
+			case TextureFormat::RGBA16F:		 return GL_RGBA;
+			case TextureFormat::RGBA:		 return GL_RGBA;
+			case TextureFormat::RGB16F:     return GL_RGB;
+			case TextureFormat::RED_INTEGER:  return GL_RED_INTEGER;
+			case TextureFormat::R8:           return GL_RED;
+			case TextureFormat::R16F:         return GL_RED;
+			case TextureFormat::CUBE_MAP:    return GL_RGBA;
 			}
 
 			ASSERT_NOMSG(false);
 			return 0;
 		}
 
-		static GLenum TextureFormatTo_OpenGLType(FramebufferTextureFormat format)
+		static GLenum TextureFormatTo_OpenGLType(TextureFormat format)
 		{
 			switch (format)
 			{
-			case FramebufferTextureFormat::RGBA8:         return GL_UNSIGNED_BYTE;
-			case FramebufferTextureFormat::RGBA16F:       return GL_HALF_FLOAT;
-			case FramebufferTextureFormat::RGBA:          return GL_FLOAT;
-			case FramebufferTextureFormat::RED_INTEGER:   return GL_INT;
-			case FramebufferTextureFormat::R8:            return GL_UNSIGNED_BYTE;
-			case FramebufferTextureFormat::R16F:          return GL_HALF_FLOAT;
+			case TextureFormat::RGBA8:         return GL_UNSIGNED_BYTE;
+			case TextureFormat::RGBA16F:       return GL_HALF_FLOAT;
+			case TextureFormat::RGBA:          return GL_FLOAT;
+			case TextureFormat::RGB16F:        return GL_HALF_FLOAT;
+			case TextureFormat::RED_INTEGER:   return GL_INT;
+			case TextureFormat::R8:            return GL_UNSIGNED_BYTE;
+			case TextureFormat::R16F:          return GL_HALF_FLOAT;
+			case TextureFormat::CUBE_MAP:     return GL_UNSIGNED_BYTE;
 			}
 
 			ASSERT_NOMSG(false);
 			return 0;
 		}
 
-		static GLenum TextureFormatTo_OpenGLInternal(FramebufferTextureFormat format)
+		static GLenum TextureFormatTo_OpenGLInternal(TextureFormat format)
 		{
 			switch (format)
 			{
-			case FramebufferTextureFormat::RGBA8:        return GL_RGBA8;
-			case FramebufferTextureFormat::RGBA16F:      return GL_RGBA16F;
-			case FramebufferTextureFormat::RGBA:         return GL_RGBA32F;
-			case FramebufferTextureFormat::RED_INTEGER:  return GL_R32I;
-			case FramebufferTextureFormat::R8:           return GL_R8;
-			case FramebufferTextureFormat::R16F:         return GL_R16F;
+			case TextureFormat::RGBA8:        return GL_RGBA8;
+			case TextureFormat::RGBA16F:      return GL_RGBA16F;
+			case TextureFormat::RGB16F:       return GL_RGB16F;
+			case TextureFormat::RGBA:         return GL_RGBA32F;
+			case TextureFormat::RED_INTEGER:  return GL_R32I;
+			case TextureFormat::R8:           return GL_R8;
+			case TextureFormat::R16F:         return GL_R16F;
+			case TextureFormat::CUBE_MAP:    return GL_RGBA8;
 			}
 			ASSERT_NOMSG(false);
 			return 0;
 		}
 
-		static bool IsDepthFormat(FramebufferTextureFormat format)
+		static bool IsDepthFormat(TextureFormat format)
 		{
 			switch (format)
 			{
-			case FramebufferTextureFormat::DEPTH24STENCIL8:  return true;
-			case FramebufferTextureFormat::DEPTH24:  return true;
-			case FramebufferTextureFormat::DEPTH32F:  return true;
-			case FramebufferTextureFormat::DEPTH_ARRAY:  return true;
+			case TextureFormat::DEPTH24STENCIL8:  return true;
+			case TextureFormat::DEPTH24:  return true;
+			case TextureFormat::DEPTH32F:  return true;
+			case TextureFormat::DEPTH_ARRAY:  return true;
 			}
 
 			return false;
@@ -72,7 +78,7 @@ namespace TARE::OpenGL {
 		}
 		static void CreateTextures(bool multisampled, uint* outID, uint count, bool array = false) { glCreateTextures(TextureTarget(multisampled, array), count, outID); }
 		static void BindTexture(bool multisampled, uint id, bool array = false) { glBindTexture(TextureTarget(multisampled, array), id); }
-		static void AttachColorTexture(uint id, int samples, FramebufferTextureFormat formatEnum, GLenum internalFormat, GLenum format, uint width, uint height, int index)
+		static void AttachColorTexture(uint id, int samples, TextureFormat formatEnum, GLenum internalFormat, GLenum format, uint width, uint height, int index)
 		{
 			bool multisampled = samples > 1;
 			if (multisampled)
@@ -194,23 +200,23 @@ namespace TARE::OpenGL {
 			}
 		}
 
-		if (_DepthAttachmentSpecification.format != FramebufferTextureFormat::NONE)
+		if (_DepthAttachmentSpecification.format != TextureFormat::NONE)
 		{
-			bool array = _DepthAttachmentSpecification.format == FramebufferTextureFormat::DEPTH_ARRAY;
+			bool array = _DepthAttachmentSpecification.format == TextureFormat::DEPTH_ARRAY;
 			Utils::CreateTextures(multisample, &_DepthAttachment, 1, array);
 			Utils::BindTexture(multisample, _DepthAttachment, array);
 			switch (_DepthAttachmentSpecification.format)
 			{
-			case FramebufferTextureFormat::DEPTH24STENCIL8:
+			case TextureFormat::DEPTH24STENCIL8:
 				Utils::AttachDepthTexture(_DepthAttachment, _Specification.Samples, GL_DEPTH24_STENCIL8, GL_DEPTH_STENCIL_ATTACHMENT, _Specification.Width, _Specification.Height);
 				break;
-			case FramebufferTextureFormat::DEPTH32F:
+			case TextureFormat::DEPTH32F:
 				Utils::AttachDepthTexture(_DepthAttachment, _Specification.Samples, GL_DEPTH_COMPONENT32F, GL_DEPTH_ATTACHMENT, _Specification.Width, _Specification.Height);
 				break;
-			case FramebufferTextureFormat::DEPTH24:
+			case TextureFormat::DEPTH24:
 				Utils::AttachDepthTexture(_DepthAttachment, _Specification.Samples, GL_DEPTH_COMPONENT24, GL_DEPTH_ATTACHMENT, _Specification.Width, _Specification.Height);
 				break;
-			case FramebufferTextureFormat::DEPTH_ARRAY:
+			case TextureFormat::DEPTH_ARRAY:
 				Utils::AttachDepthTextureArray(_DepthAttachment, _Specification.DepthArrayLayers, _Specification.Samples, GL_DEPTH_COMPONENT32F, GL_DEPTH_ATTACHMENT, _Specification.Width, _Specification.Height);
 				break;
 			}
@@ -280,6 +286,12 @@ namespace TARE::OpenGL {
 		GLenum type = Utils::TextureFormatTo_OpenGLType(spec.format);
 
 		glClearTexImage(_ColorAttachments[attachment], 0, format, type, &value);
+	}
+
+	void OpenGL_Framebuffer::AttachCubemapFace(const TAGE::MEM::Ref<TextureCube>& cubemap, uint faceIndex)
+	{
+		ASSERT(faceIndex < 6, "Face index out of bounds for cubemap attachment!");
+		glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_CUBE_MAP_POSITIVE_X + faceIndex, cubemap->GetID(), 0);
 	}
 
 	void OpenGL_Framebuffer::BindColorAttachment(uint index,int slot) const

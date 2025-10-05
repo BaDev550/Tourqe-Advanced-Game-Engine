@@ -8,12 +8,18 @@ AssetRegistry:
   - Handle: 193429391912109802
     FilePath: mario_2.obj
     Type: MeshSource
+  - Handle: 203042805392620119
+    FilePath: skybox.hdr
+    Type: None
   - Handle: 488539362469121605
     FilePath: Sponza/3455394979645218238.jpg
     Type: Texture
   - Handle: 824533319309959708
     FilePath: Sponza/7815564343179553343.jpg
     Type: Texture
+  - Handle: 886166245113735956
+    FilePath: skybox.hdr
+    Type: None
   - Handle: 950126523416367108
     FilePath: Sponza/2775690330959970771.jpg
     Type: Texture
@@ -26,18 +32,33 @@ AssetRegistry:
   - Handle: 1173940223621108111
     FilePath: helmet/Material_MR.tmat
     Type: Material
+  - Handle: 1182481421776831237
+    FilePath: skybox.hdr
+    Type: None
+  - Handle: 1635717035488279408
+    FilePath: skybox2.hdr
+    Type: None
+  - Handle: 1711639724041974394
+    FilePath: skybox.hdr
+    Type: None
   - Handle: 1945153519997453370
     FilePath: cube/Material.tmat
     Type: Material
   - Handle: 2040398837166655454
     FilePath: Sponza/332936164838540657.jpg
     Type: Texture
+  - Handle: 2340554025416403661
+    FilePath: skybox2.hdr
+    Type: None
   - Handle: 2362948530972318913
     FilePath: cube/cube.tmesh
     Type: StaticMesh
   - Handle: 2389336678456586226
     FilePath: eye1.jpg
     Type: Texture
+  - Handle: 2428887163890613138
+    FilePath: skybox.hdr
+    Type: None
   - Handle: 2460210261254612148
     FilePath: Sponza/13824894030729245199.jpg
     Type: Texture
@@ -53,12 +74,30 @@ AssetRegistry:
   - Handle: 3001621280132870737
     FilePath: Sponza/5061699253647017043.png
     Type: Texture
+  - Handle: 3084355121037701210
+    FilePath: skybox.hdr
+    Type: None
+  - Handle: 3144988196876739877
+    FilePath: skybox2.hdr
+    Type: None
+  - Handle: 3153129571546761247
+    FilePath: skybox.hdr
+    Type: None
+  - Handle: 3294368582470397967
+    FilePath: skybox2.hdr
+    Type: None
+  - Handle: 3319882310636959993
+    FilePath: skybox.hdr
+    Type: None
   - Handle: 3321148003670421209
     FilePath: Sponza/17556969131407844942.jpg
     Type: Texture
   - Handle: 3327993703888505432
     FilePath: Sponza/4477655471536070370.jpg
     Type: Texture
+  - Handle: 3596708078139389066
+    FilePath: skybox.hdr
+    Type: None
   - Handle: 3792011452101145099
     FilePath: Sponza/5823059166183034438.jpg
     Type: Texture
@@ -68,6 +107,9 @@ AssetRegistry:
   - Handle: 3798202262359038666
     FilePath: Sponza/9288698199695299068.jpg
     Type: Texture
+  - Handle: 3823323218100650680
+    FilePath: skybox.hdr
+    Type: None
   - Handle: 3911668069482731726
     FilePath: Sponza/white.png
     Type: Texture
@@ -80,24 +122,39 @@ AssetRegistry:
   - Handle: 4239921504886552985
     FilePath: ToyCar/ToyCar_basecolor.png
     Type: Texture
+  - Handle: 4269607750479566342
+    FilePath: skybox2.hdr
+    Type: None
   - Handle: 4385530273523041608
     FilePath: Sponza/7441062115984513793.jpg
     Type: Texture
+  - Handle: 4498213309081066725
+    FilePath: skybox.hdr
+    Type: None
   - Handle: 4521034690773063589
     FilePath: helmet/Default_normal.jpg
     Type: Texture
   - Handle: 4788567584162122569
     FilePath: defaultScene.scene
     Type: Scene
+  - Handle: 4806758588802479652
+    FilePath: skybox.hdr
+    Type: None
   - Handle: 4831389349481696683
     FilePath: ToyCar/Fabric_normal.png
     Type: Texture
   - Handle: 4887581780957886192
     FilePath: cube/cube.obj
     Type: MeshSource
+  - Handle: 4921373729218653404
+    FilePath: skybox.hdr
+    Type: None
   - Handle: 5060028606665194997
     FilePath: Sponza/8783994986360286082.jpg
     Type: Texture
+  - Handle: 5110884366869376133
+    FilePath: skybox.hdr
+    Type: None
   - Handle: 5143766104167788347
     FilePath: Sponza/14267839433702832875.jpg
     Type: Texture
@@ -122,6 +179,12 @@ AssetRegistry:
   - Handle: 5965395600831544886
     FilePath: Sponza/4975155472559461469.jpg
     Type: Texture
+  - Handle: 6101928295113925038
+    FilePath: skybox2.hdr
+    Type: None
+  - Handle: 6135628939498745948
+    FilePath: skybox.hdr
+    Type: None
   - Handle: 6148775700862245189
     FilePath: Sponza/11872827283454512094.jpg
     Type: Texture
@@ -134,6 +197,21 @@ AssetRegistry:
   - Handle: 6383080710721206079
     FilePath: Sponza/15295713303328085182.jpg
     Type: Texture
+  - Handle: 6776234534406275791
+    FilePath: skybox2.hdr
+    Type: None
+  - Handle: 6799750195136300306
+    FilePath: skybox2.hdr
+    Type: None
+  - Handle: 6901252881355438232
+    FilePath: skybox.hdr
+    Type: None
+  - Handle: 6922427963115511322
+    FilePath: skybox.hdr
+    Type: None
+  - Handle: 6983944377759753117
+    FilePath: skybox.hdr
+    Type: None
   - Handle: 7009252735412167357
     FilePath: ToyCar/ToyCar_occlusion_roughness_metallic.png
     Type: Texture
@@ -149,21 +227,69 @@ AssetRegistry:
   - Handle: 7417359507100479023
     FilePath: ToyCar/ToyCar_normal.png
     Type: Texture
+  - Handle: 7446284018602384811
+    FilePath: skybox.hdr
+    Type: None
+  - Handle: 7481480523743089264
+    FilePath: skybox.hdr
+    Type: None
   - Handle: 7531569282693589948
     FilePath: Sponza/8481240838833932244.jpg
     Type: Texture
   - Handle: 7566167066457874498
     FilePath: Sponza/16885566240357350108.jpg
     Type: Texture
+  - Handle: 8083992765892588070
+    FilePath: skybox2.hdr
+    Type: None
+  - Handle: 8108362837686543386
+    FilePath: skybox.hdr
+    Type: None
+  - Handle: 8272701697487603899
+    FilePath: skybox.hdr
+    Type: None
+  - Handle: 8575520849352663932
+    FilePath: skybox.hdr
+    Type: None
+  - Handle: 8688453395522761414
+    FilePath: skybox.hdr
+    Type: None
+  - Handle: 8703033133950457340
+    FilePath: skybox2.hdr
+    Type: None
+  - Handle: 8769715605406419402
+    FilePath: skybox2.hdr
+    Type: None
+  - Handle: 9001699350849433246
+    FilePath: skybox2.hdr
+    Type: None
+  - Handle: 9011571695230054161
+    FilePath: skybox2.hdr
+    Type: <Invalid>
+  - Handle: 9183427848783947982
+    FilePath: skybox.hdr
+    Type: None
   - Handle: 9680440889847234854
     FilePath: ToyCar/ToyCar.tmesh
     Type: StaticMesh
+  - Handle: 9706402527837668748
+    FilePath: skybox.hdr
+    Type: None
+  - Handle: 9707679559367206918
+    FilePath: skybox.hdr
+    Type: None
+  - Handle: 9737880437622333658
+    FilePath: skybox.hdr
+    Type: None
   - Handle: 9756314411122402471
     FilePath: ToyCar/Fabric.tmat
     Type: Material
   - Handle: 9792850611878114668
     FilePath: Sponza/8503262930880235456.jpg
     Type: Texture
+  - Handle: 9826891712598610447
+    FilePath: skybox.hdr
+    Type: None
   - Handle: 9956781267956307193
     FilePath: helmet/Default_AO.jpg
     Type: Texture
@@ -173,12 +299,18 @@ AssetRegistry:
   - Handle: 10317041140446267321
     FilePath: Sponza/11968150294050148237.jpg
     Type: Texture
+  - Handle: 10425819396158048392
+    FilePath: skybox2.hdr
+    Type: None
   - Handle: 10646215797890516987
     FilePath: Sponza/5792855332885324923.jpg
     Type: Texture
   - Handle: 10697569038813926612
     FilePath: mat_0-pupil.tmat
     Type: Material
+  - Handle: 10702595730658678445
+    FilePath: skybox.hdr
+    Type: None
   - Handle: 11112505009538077359
     FilePath: mat_5-body.tmat
     Type: Material
@@ -188,6 +320,9 @@ AssetRegistry:
   - Handle: 11273439680876697114
     FilePath: Sponza/2411100444841994089.jpg
     Type: Texture
+  - Handle: 11361298720565984652
+    FilePath: skybox.hdr
+    Type: None
   - Handle: 11491551653697586971
     FilePath: ToyCar/ToyCar.tmat
     Type: Material
@@ -197,15 +332,30 @@ AssetRegistry:
   - Handle: 11615016033673396957
     FilePath: Sponza/13196865903111448057.jpg
     Type: Texture
+  - Handle: 11647154154653942935
+    FilePath: skybox2.hdr
+    Type: None
   - Handle: 11676869949706008376
     FilePath: ToyCar/Fabric_occlusion.png
     Type: Texture
   - Handle: 11736764115714360220
     FilePath: pupil.jpg
     Type: Texture
+  - Handle: 11744362211936128694
+    FilePath: skybox.hdr
+    Type: None
   - Handle: 11905210635980907821
     FilePath: Sponza/13982482287905699490.jpg
     Type: Texture
+  - Handle: 11963390817510377241
+    FilePath: skybox2.hdr
+    Type: None
+  - Handle: 12170311304424725300
+    FilePath: skybox2.hdr
+    Type: None
+  - Handle: 12190341292815213362
+    FilePath: skybox.hdr
+    Type: None
   - Handle: 12282543691325864944
     FilePath: Sponza/1219024358953944284.jpg
     Type: Texture
@@ -215,9 +365,18 @@ AssetRegistry:
   - Handle: 12330998297845435228
     FilePath: Sponza/8051790464816141987.jpg
     Type: Texture
+  - Handle: 12380505869529272192
+    FilePath: skybox.hdr
+    Type: None
+  - Handle: 12473776597004411073
+    FilePath: skybox.hdr
+    Type: None
   - Handle: 12768685040377955844
     FilePath: Sponza/16275776544635328252.png
     Type: Texture
+  - Handle: 12883130134270173210
+    FilePath: skybox.hdr
+    Type: None
   - Handle: 13048286934168915248
     FilePath: face.jpg
     Type: Texture
@@ -227,6 +386,12 @@ AssetRegistry:
   - Handle: 13478561106534295688
     FilePath: Sponza/6772804448157695701.jpg
     Type: Texture
+  - Handle: 13485711901018345623
+    FilePath: skybox.hdr
+    Type: None
+  - Handle: 13522808645680719376
+    FilePath: skybox.hdr
+    Type: None
   - Handle: 13835517081464477135
     FilePath: Sponza/8747919177698443163.jpg
     Type: Texture
@@ -236,6 +401,12 @@ AssetRegistry:
   - Handle: 13915510582483562455
     FilePath: Sponza/2299742237651021498.jpg
     Type: Texture
+  - Handle: 14000557610175371843
+    FilePath: skybox.hdr
+    Type: None
+  - Handle: 14042072404996666622
+    FilePath: skybox2.hdr
+    Type: None
   - Handle: 14153355372800217348
     FilePath: Sponza/6667038893015345571.jpg
     Type: Texture
@@ -245,33 +416,60 @@ AssetRegistry:
   - Handle: 14258713118182088372
     FilePath: Sponza/7056944414013900257.jpg
     Type: Texture
+  - Handle: 14327004430674644910
+    FilePath: skybox.hdr
+    Type: None
+  - Handle: 14395375663385822099
+    FilePath: skybox.hdr
+    Type: None
   - Handle: 14421299117568580322
     FilePath: Sponza/759203620573749278.jpg
     Type: Texture
   - Handle: 14548779409237048316
     FilePath: Sponza/10381718147657362067.jpg
     Type: Texture
+  - Handle: 14566077062462265506
+    FilePath: skybox2.hdr
+    Type: None
+  - Handle: 14643777975242973569
+    FilePath: skybox.hdr
+    Type: None
   - Handle: 14785366058395660342
     FilePath: Sponza/11474523244911310074.jpg
     Type: Texture
+  - Handle: 14853203485389353127
+    FilePath: skybox2.hdr
+    Type: None
   - Handle: 14965494697014247134
     FilePath: Sponza/715093869573992647.jpg
     Type: Texture
   - Handle: 15193404214728276290
     FilePath: mat_6-hair.tmat
     Type: Material
+  - Handle: 15305432219852169971
+    FilePath: skybox2.hdr
+    Type: None
   - Handle: 15508299115526333300
     FilePath: Sponza/14650633544276105767.jpg
     Type: Texture
+  - Handle: 15837522432312648976
+    FilePath: skybox2.hdr
+    Type: None
   - Handle: 16043937048310483247
     FilePath: mat_2-face.tmat
     Type: Material
   - Handle: 16196031712110197707
     FilePath: Sponza/466164707995436622.jpg
     Type: Texture
+  - Handle: 16213259017616160178
+    FilePath: skybox.hdr
+    Type: None
   - Handle: 16350627510758431980
     FilePath: Sponza/3371964815757888145.jpg
     Type: Texture
+  - Handle: 16370544686058730552
+    FilePath: skybox.hdr
+    Type: None
   - Handle: 16504323351308873343
     FilePath: Sponza/8114461559286000061.jpg
     Type: Texture
@@ -290,15 +488,30 @@ AssetRegistry:
   - Handle: 17217532465476547842
     FilePath: ToyCar/Fabric_baseColor.png
     Type: Texture
+  - Handle: 17283696664767500381
+    FilePath: skybox.hdr
+    Type: None
+  - Handle: 17413314861719100237
+    FilePath: skybox.hdr
+    Type: None
   - Handle: 17512761443826138909
     FilePath: hat.jpg
     Type: Texture
+  - Handle: 17526021301077241253
+    FilePath: skybox.hdr
+    Type: None
   - Handle: 17573842862627198819
     FilePath: mario_2.tmesh
     Type: StaticMesh
   - Handle: 17668559181716096270
     FilePath: Sponza/6151467286084645207.jpg
     Type: Texture
+  - Handle: 17716414118000253896
+    FilePath: skybox.hdr
+    Type: None
+  - Handle: 17733100374974763642
+    FilePath: skybox.hdr
+    Type: None
   - Handle: 17766175225423148639
     FilePath: Sponza/6047387724914829168.jpg
     Type: Texture
@@ -317,3 +530,6 @@ AssetRegistry:
   - Handle: 18137987321592696403
     FilePath: body.jpg
     Type: Texture
+  - Handle: 18317773382545739862
+    FilePath: skybox2.hdr
+    Type: None

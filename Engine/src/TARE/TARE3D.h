@@ -5,6 +5,7 @@
 #include "Model/Grid.h"
 #include "Camera/Camera.h"
 #include "Types/Light.h"
+#include "Types/EnviromentMap.h"
 #include "Buffers/Framebuffer.h"
 
 #define MAX_BONES 124
@@ -38,6 +39,7 @@ namespace TARE {
 	struct SceneData {
 		CameraUniformBufferData CameraData;
 		SceneLightEnviroment LightEnviroment;
+		EnviromentMap* Enviroment = nullptr;
 	};
 
 	class TARE3D
@@ -46,19 +48,26 @@ namespace TARE {
 		static void Init();
 		static void Destroy();
 		static void Resize(uint width, uint height);
-
+		
 		static void BeginDeferredRender(const TAGE::MEM::Ref<Camera>& camera);
 		static void EndDeferredRender();
 
 		static void DrawStaticMesh(TAGE::MEM::Ref<Model> model, const glm::mat4& transform);
 		static void DrawEntityStaticMesh(TAGE::MEM::Ref<Model> model, const glm::mat4& transform, int EntityID);
+		static void DrawSkybox();
 
 		static ShaderLibrary& GetShaderLibrary() { return _ShaderLibrary; }
 		static SceneData& GetSceneData() { return _SceneData; }
 		static SceneLightEnviroment& GetLightEnviroment() { return _SceneData.LightEnviroment; }
+		static EnviromentMap& GetEnviromentMap() { return *_SceneData.Enviroment; }
+		static bool HasEnviromentMap() { return _SceneData.Enviroment != nullptr; }
 
 		static TAGE::MEM::Ref<Framebuffer> GetGBuffer() { return _GBuffer; }
 		static TAGE::MEM::Ref<Framebuffer> GetFinalBuffer() { return _FinalBuffer; }
+
+		static void SetEnviromentMap(EnviromentMap* env) { _SceneData.Enviroment = env; }
+		static TAGE::MEM::Ref<TARE::TextureCube> EquirectangularToCubemap(TAGE::MEM::Ref<TARE::Texture2D> equirectangularMap);
+		static TAGE::MEM::Ref<TARE::TextureCube> CreateIrradianceMap(TAGE::MEM::Ref<TARE::TextureCube> envCubemap);
 	private:
 		static ShaderLibrary _ShaderLibrary;
 		static SceneData _SceneData;

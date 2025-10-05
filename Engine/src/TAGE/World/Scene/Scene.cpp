@@ -427,4 +427,9 @@ template<typename T>
 	void Scene::OnComponentAdded<SpotLightComponent>(Entity entity, SpotLightComponent& component)
 	{
 	}
+
+	template<>
+	void Scene::OnComponentAdded<SkyLightComponent>(Entity entity, SkyLightComponent& component)
+	{
+	}
 }
